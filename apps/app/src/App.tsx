@@ -1,5 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router';
+import {
+  Navigate,
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+} from 'react-router';
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
 import { ThemeProvider } from 'next-themes';
 import { Toaster as Sonner } from '@/components/ui/sonner';
@@ -9,7 +14,11 @@ import AppLayout from '@/components/AppLayout';
 
 export const router = createBrowserRouter([
   {
-    //element: <RootLayout />,
+    element: (
+      <NuqsAdapter>
+        <Outlet />
+      </NuqsAdapter>
+    ),
     children: [
       {
         index: true,
@@ -180,9 +189,7 @@ const App = () => (
         <Toaster />
         <Sonner />
 
-        <NuqsAdapter>
-          <RouterProvider router={router} />
-        </NuqsAdapter>
+        <RouterProvider router={router} />
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
