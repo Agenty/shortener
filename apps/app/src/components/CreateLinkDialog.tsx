@@ -118,7 +118,7 @@ export function CreateLinkDialog() {
       <DialogTrigger asChild>
         <Button><Plus className="mr-2 h-4 w-4" /> Create Link</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden p-0">
+      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-hidden p-0">
         <div className="flex flex-col h-full max-h-[90vh]">
           <DialogHeader className="px-6 pt-6 pb-4">
             <DialogTitle className="text-xl">Short Link Builder</DialogTitle>

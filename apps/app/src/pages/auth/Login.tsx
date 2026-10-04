@@ -42,7 +42,7 @@ export default function Login() {
           <CardTitle className="text-2xl">Welcome back</CardTitle>
           <CardDescription>Sign in to your idm.in account</CardDescription>
         </CardHeader>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className="space-y-6">
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

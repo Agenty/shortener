@@ -42,7 +42,7 @@ export function CreateApiKeyDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">
+        <Button>
           <Plus className="mr-2 h-4 w-4" /> Create Key
         </Button>
       </DialogTrigger>
