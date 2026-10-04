@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { Trash2, Loader2 } from "lucide-react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { useState } from 'react';
+import { Trash2, Loader2 } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,26 +14,26 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
-import { api } from "@/lib/api";
-import { CreateApiKeyDialog } from "@/components/CreateApiKeyDialog";
-import { formatDistanceToNow } from "date-fns";
+} from '@/components/ui/alert-dialog';
+import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from 'sonner';
+import { api } from '@/lib/api';
+import { CreateApiKeyDialog } from '@/components/CreateApiKeyDialog';
+import { formatDistanceToNow } from 'date-fns';
 
 export default function ApiKeys() {
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["apikeys"],
+    queryKey: ['apikeys'],
     queryFn: () => api.apikeys.list(),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => api.apikeys.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["apikeys"] });
-      toast.success("API key deleted");
+      queryClient.invalidateQueries({ queryKey: ['apikeys'] });
+      toast.success('API key deleted');
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -44,7 +44,9 @@ export default function ApiKeys() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">API Keys</h1>
-        <p className="text-muted-foreground">Manage your API keys for programmatic access</p>
+        <p className="text-muted-foreground">
+          Manage your API keys for programmatic access
+        </p>
       </div>
 
       <div className="flex items-center justify-end">
@@ -75,12 +77,17 @@ export default function ApiKeys() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <p className="font-medium">{apiKey.name}</p>
-                    <Badge variant={apiKey.is_enabled ? "default" : "secondary"}>
-                      {apiKey.is_enabled ? "Enabled" : "Disabled"}
+                    <Badge
+                      variant={apiKey.is_enabled ? 'default' : 'secondary'}
+                    >
+                      {apiKey.is_enabled ? 'Enabled' : 'Disabled'}
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Created {formatDistanceToNow(new Date(apiKey.created_at), { addSuffix: true })}
+                    Created{' '}
+                    {formatDistanceToNow(new Date(apiKey.created_at), {
+                      addSuffix: true,
+                    })}
                     {apiKey.updated_at &&
                       ` · Updated ${formatDistanceToNow(new Date(apiKey.updated_at), { addSuffix: true })}`}
                   </p>
@@ -101,8 +108,8 @@ export default function ApiKeys() {
                         <AlertDialogTitle>Delete API Key</AlertDialogTitle>
                         <AlertDialogDescription>
                           Are you sure you want to delete "{apiKey.name}"? This
-                          action cannot be undone and any integrations using this
-                          key will stop working.
+                          action cannot be undone and any integrations using
+                          this key will stop working.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>

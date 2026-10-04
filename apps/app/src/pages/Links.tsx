@@ -1,34 +1,62 @@
-import { useState } from "react";
-import { useQueryState } from "nuqs";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Search, Copy, ExternalLink, MoreHorizontal, Trash2, Loader2, BarChart3, LayoutGrid, LayoutList } from "lucide-react";
-import { Link as RouterLink } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from 'react';
+import { useQueryState } from 'nuqs';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+  Search,
+  Copy,
+  ExternalLink,
+  MoreHorizontal,
+  Trash2,
+  Loader2,
+  BarChart3,
+  LayoutGrid,
+  LayoutList,
+} from 'lucide-react';
+import { Link as RouterLink } from 'react-router';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { toast } from "sonner";
-import { CreateLinkDialog } from "@/components/CreateLinkDialog";
-import { ApiExamplesSheet } from "@/components/ApiExamplesSheet";
-import { api } from "@/lib/api";
-import { useViewPreference } from "@/hooks/use-view-preference";
-import type { Link } from "@/types/link";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { toast } from 'sonner';
+import { CreateLinkDialog } from '@/components/CreateLinkDialog';
+import { ApiExamplesSheet } from '@/components/ApiExamplesSheet';
+import { api } from '@/lib/api';
+import { useViewPreference } from '@/hooks/use-view-preference';
+import type { Link } from '@/types/link';
 
 const PER_PAGE = 25;
 
 function getDomain(url: string) {
-  try { return new URL(url).hostname; } catch { return ""; }
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return '';
+  }
 }
 
 function LinkFavicon({ url }: { url: string }) {
@@ -39,12 +67,22 @@ function LinkFavicon({ url }: { url: string }) {
       src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`}
       alt=""
       className="h-4 w-4 rounded-sm shrink-0"
-      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+      onError={(e) => {
+        (e.target as HTMLImageElement).style.display = 'none';
+      }}
     />
   );
 }
 
-function LinkActions({ link, onCopy, onDelete }: { link: Link; onCopy: (key: string) => void; onDelete: (key: string) => void }) {
+function LinkActions({
+  link,
+  onCopy,
+  onDelete,
+}: {
+  link: Link;
+  onCopy: (key: string) => void;
+  onDelete: (key: string) => void;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -61,7 +99,10 @@ function LinkActions({ link, onCopy, onDelete }: { link: Link; onCopy: (key: str
             <ExternalLink className="mr-2 h-4 w-4" /> Open
           </a>
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-destructive" onClick={() => onDelete(link.key)}>
+        <DropdownMenuItem
+          className="text-destructive"
+          onClick={() => onDelete(link.key)}
+        >
           <Trash2 className="mr-2 h-4 w-4" /> Delete
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -69,16 +110,34 @@ function LinkActions({ link, onCopy, onDelete }: { link: Link; onCopy: (key: str
   );
 }
 
-function LinksGrid({ links, onCopy, onDelete }: { links: Link[]; onCopy: (key: string) => void; onDelete: (key: string) => void }) {
+function LinksGrid({
+  links,
+  onCopy,
+  onDelete,
+}: {
+  links: Link[];
+  onCopy: (key: string) => void;
+  onDelete: (key: string) => void;
+}) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
       {links.map((link) => (
-        <div key={link.key} className="border rounded-lg p-4 space-y-3 hover:bg-accent/50 transition-colors">
+        <div
+          key={link.key}
+          className="border rounded-lg p-4 space-y-3 hover:bg-accent/50 transition-colors"
+        >
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
               <LinkFavicon url={link.url} />
-              <span className="text-primary font-medium truncate">idm.in/{link.key}</span>
-              <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0" onClick={() => onCopy(link.key)}>
+              <span className="text-primary font-medium truncate">
+                idm.in/{link.key}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6 shrink-0"
+                onClick={() => onCopy(link.key)}
+              >
                 <Copy className="h-3 w-3" />
               </Button>
             </div>
@@ -101,7 +160,10 @@ function LinksGrid({ links, onCopy, onDelete }: { links: Link[]; onCopy: (key: s
               <span>Analytics</span>
             </RouterLink>
             <div className="flex items-center gap-2">
-              <Badge variant={link.status === "active" ? "default" : "secondary"} className="text-xs">
+              <Badge
+                variant={link.status === 'active' ? 'default' : 'secondary'}
+                className="text-xs"
+              >
                 {link.status}
               </Badge>
               <span className="text-xs text-muted-foreground">
@@ -115,7 +177,15 @@ function LinksGrid({ links, onCopy, onDelete }: { links: Link[]; onCopy: (key: s
   );
 }
 
-function LinksTable({ links, onCopy, onDelete }: { links: Link[]; onCopy: (key: string) => void; onDelete: (key: string) => void }) {
+function LinksTable({
+  links,
+  onCopy,
+  onDelete,
+}: {
+  links: Link[];
+  onCopy: (key: string) => void;
+  onDelete: (key: string) => void;
+}) {
   return (
     <div className="border rounded-lg">
       <Table>
@@ -136,7 +206,12 @@ function LinksTable({ links, onCopy, onDelete }: { links: Link[]; onCopy: (key: 
                 <div className="flex items-center gap-2">
                   <LinkFavicon url={link.url} />
                   <span className="text-primary">idm.in/{link.key}</span>
-                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => onCopy(link.key)}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={() => onCopy(link.key)}
+                  >
                     <Copy className="h-3 w-3" />
                   </Button>
                 </div>
@@ -161,7 +236,9 @@ function LinksTable({ links, onCopy, onDelete }: { links: Link[]; onCopy: (key: 
                 </RouterLink>
               </TableCell>
               <TableCell className="hidden sm:table-cell">
-                <Badge variant={link.status === "active" ? "default" : "secondary"}>
+                <Badge
+                  variant={link.status === 'active' ? 'default' : 'secondary'}
+                >
                   {link.status}
                 </Badge>
               </TableCell>
@@ -180,29 +257,30 @@ function LinksTable({ links, onCopy, onDelete }: { links: Link[]; onCopy: (key: 
 }
 
 export default function Links() {
-  const [search, setSearch] = useQueryState("q", { defaultValue: "" });
-  const [page, setPage] = useQueryState("page", { defaultValue: "1" });
+  const [search, setSearch] = useQueryState('q', { defaultValue: '' });
+  const [page, setPage] = useQueryState('page', { defaultValue: '1' });
   const [deleteKey, setDeleteKey] = useState<string | null>(null);
-  const [view, setView] = useViewPreference("links-view");
+  const [view, setView] = useViewPreference('links-view');
   const queryClient = useQueryClient();
 
   const currentPage = parseInt(page) || 1;
   const offset = (currentPage - 1) * PER_PAGE;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["links", search, currentPage],
-    queryFn: () => api.links.list({ offset, limit: PER_PAGE, search: search || undefined }),
+    queryKey: ['links', search, currentPage],
+    queryFn: () =>
+      api.links.list({ offset, limit: PER_PAGE, search: search || undefined }),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (key: string) => api.links.delete(key),
     onSuccess: () => {
-      toast.success("Link deleted successfully!");
-      queryClient.invalidateQueries({ queryKey: ["links"] });
+      toast.success('Link deleted successfully!');
+      queryClient.invalidateQueries({ queryKey: ['links'] });
       setDeleteKey(null);
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to delete link");
+      toast.error(error.message || 'Failed to delete link');
     },
   });
 
@@ -212,7 +290,7 @@ export default function Links() {
 
   const copyLink = (key: string) => {
     navigator.clipboard.writeText(`https://idm.in/${key}`);
-    toast.success("Link copied to clipboard!");
+    toast.success('Link copied to clipboard!');
   };
 
   return (
@@ -225,7 +303,13 @@ export default function Links() {
             <p className="text-muted-foreground">Manage your shortened links</p>
           </div>
           <div className="flex items-center gap-2">
-            <ToggleGroup type="single" value={view} onValueChange={(v) => v && setView(v as "list" | "grid")} size="sm" variant="outline">
+            <ToggleGroup
+              type="single"
+              value={view}
+              onValueChange={(v) => v && setView(v as 'list' | 'grid')}
+              size="sm"
+              variant="outline"
+            >
               <ToggleGroupItem value="list" aria-label="List view">
                 <LayoutList className="h-4 w-4" />
               </ToggleGroupItem>
@@ -241,7 +325,7 @@ export default function Links() {
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
-                  setPage("1");
+                  setPage('1');
                 }}
               />
             </div>
@@ -255,7 +339,10 @@ export default function Links() {
       {isLoading && (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4 p-4 border rounded-lg">
+            <div
+              key={i}
+              className="flex items-center gap-4 p-4 border rounded-lg"
+            >
               <Skeleton className="h-4 w-4 rounded-sm" />
               <Skeleton className="h-4 w-32" />
               <Skeleton className="h-4 w-48 hidden md:block" />
@@ -265,18 +352,25 @@ export default function Links() {
         </div>
       )}
       {error && (
-        <div className="text-center py-8 text-destructive">Failed to load links</div>
+        <div className="text-center py-8 text-destructive">
+          Failed to load links
+        </div>
       )}
 
       {/* Content */}
       {!isLoading && !error && links.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground">No links found</div>
+        <div className="text-center py-8 text-muted-foreground">
+          No links found
+        </div>
       )}
-      {!isLoading && !error && links.length > 0 && (
-        view === "grid"
-          ? <LinksGrid links={links} onCopy={copyLink} onDelete={setDeleteKey} />
-          : <LinksTable links={links} onCopy={copyLink} onDelete={setDeleteKey} />
-      )}
+      {!isLoading &&
+        !error &&
+        links.length > 0 &&
+        (view === 'grid' ? (
+          <LinksGrid links={links} onCopy={copyLink} onDelete={setDeleteKey} />
+        ) : (
+          <LinksTable links={links} onCopy={copyLink} onDelete={setDeleteKey} />
+        ))}
 
       {/* Pagination */}
       {totalPages > 1 && (
@@ -285,10 +379,20 @@ export default function Links() {
             Page {currentPage} of {totalPages}
           </p>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" disabled={currentPage <= 1} onClick={() => setPage(String(currentPage - 1))}>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage <= 1}
+              onClick={() => setPage(String(currentPage - 1))}
+            >
               Previous
             </Button>
-            <Button variant="outline" size="sm" disabled={currentPage >= totalPages} onClick={() => setPage(String(currentPage + 1))}>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage >= totalPages}
+              onClick={() => setPage(String(currentPage + 1))}
+            >
               Next
             </Button>
           </div>
@@ -296,12 +400,19 @@ export default function Links() {
       )}
 
       {/* Delete confirmation */}
-      <AlertDialog open={!!deleteKey} onOpenChange={(open) => !open && setDeleteKey(null)}>
+      <AlertDialog
+        open={!!deleteKey}
+        onOpenChange={(open) => !open && setDeleteKey(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete link?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete <span className="font-medium text-foreground">idm.in/{deleteKey}</span>. This action cannot be undone.
+              This will permanently delete{' '}
+              <span className="font-medium text-foreground">
+                idm.in/{deleteKey}
+              </span>
+              . This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -311,7 +422,9 @@ export default function Links() {
               disabled={deleteMutation.isPending}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {deleteMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {deleteMutation.isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
