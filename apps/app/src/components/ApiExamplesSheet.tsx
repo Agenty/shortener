@@ -122,10 +122,8 @@ function CopyButton({ text }: { text: string }) {
 export function ApiExamplesSheet() {
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Code className="h-4 w-4" />
-        </Button>
+      <SheetTrigger render={<Button variant="outline" size="icon" />}>
+        <Code className="h-4 w-4" />
       </SheetTrigger>
       <SheetContent className="sm:max-w-lg w-full overflow-y-auto">
         <SheetHeader>
@@ -157,11 +155,14 @@ export function ApiExamplesSheet() {
           </Tabs>
 
           <div className="pt-2">
-            <Button variant="outline" className="w-full" asChild>
-              <a href="https://idm.in/docs/api" target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="mr-2 h-4 w-4" />
-                Full API Reference
-              </a>
+            <Button
+              variant="outline"
+              className="w-full"
+              nativeButton={false}
+              render={<a href="https://idm.in/docs/api" target="_blank" rel="noopener noreferrer" />}
+            >
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Full API Reference
             </Button>
           </div>
         </div>

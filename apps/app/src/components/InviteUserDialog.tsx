@@ -27,8 +27,14 @@ interface Props {
   user?: User;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  trigger?: React.ReactNode;
+  trigger?: React.ReactElement;
 }
+
+const ROLES = [
+  { label: "Admin", value: "admin" },
+  { label: "Member", value: "member" },
+  { label: "Viewer", value: "viewer" },
+];
 
 export function InviteUserDialog({ user, open: controlledOpen, onOpenChange, trigger }: Props) {
   const [internalOpen, setInternalOpen] = useState(false);
@@ -82,12 +88,10 @@ export function InviteUserDialog({ user, open: controlledOpen, onOpenChange, tri
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {trigger ? (
-        <DialogTrigger asChild>{trigger}</DialogTrigger>
+        <DialogTrigger render={trigger} />
       ) : !isEdit ? (
-        <DialogTrigger asChild>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" /> Invite Member
-          </Button>
+        <DialogTrigger render={<Button />}>
+          <Plus className="mr-2 h-4 w-4" /> Invite Member
         </DialogTrigger>
       ) : null}
       <DialogContent>
@@ -115,14 +119,16 @@ export function InviteUserDialog({ user, open: controlledOpen, onOpenChange, tri
           </div>
           <div className="space-y-2">
             <Label>Role</Label>
-            <Select value={role} onValueChange={setRole}>
+            <Select items={ROLES} value={role} onValueChange={(v) => v && setRole(v)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="admin">Admin</SelectItem>
-                <SelectItem value="member">Member</SelectItem>
-                <SelectItem value="viewer">Viewer</SelectItem>
+                {ROLES.map((r) => (
+                  <SelectItem key={r.value} value={r.value}>
+                    {r.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

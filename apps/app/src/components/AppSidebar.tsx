@@ -70,16 +70,19 @@ export function AppSidebar() {
             <SidebarMenu>
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.url}
-                      end
-                      className="hover:bg-accent/50 flex items-center w-full"
-                      activeClassName="bg-accent text-accent-foreground font-medium"
-                    >
-                      <item.icon className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    render={
+                      <NavLink
+                        to={item.url}
+                        end
+                        className="hover:bg-accent/50"
+                        activeClassName="bg-accent text-accent-foreground font-medium"
+                      />
+                    }
+                  >
+                    <item.icon />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -87,34 +90,35 @@ export function AppSidebar() {
               {/* Settings with submenu */}
               <Collapsible defaultOpen={isSettingsActive} className="group/collapsible">
                 <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      className={`hover:bg-accent/50 w-full justify-between ${isSettingsActive ? "bg-accent text-accent-foreground font-medium" : ""}`}
-                    >
-                      <span className="flex items-center">
-                        <Settings className="mr-2 h-4 w-4" />
-                        {!collapsed && <span>Settings</span>}
-                      </span>
-                      {!collapsed && (
-                        <ChevronRight className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-90" />
-                      )}
-                    </SidebarMenuButton>
+                  <CollapsibleTrigger
+                    render={
+                      <SidebarMenuButton
+                        tooltip="Settings"
+                        className={`hover:bg-accent/50 ${isSettingsActive ? "bg-accent text-accent-foreground font-medium" : ""}`}
+                      />
+                    }
+                  >
+                    <Settings />
+                    <span>Settings</span>
+                    <ChevronRight className="ml-auto transition-transform group-data-open/collapsible:rotate-90" />
                   </CollapsibleTrigger>
                   {!collapsed && (
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {settingsSubItems.map((sub) => (
                           <SidebarMenuSubItem key={sub.title}>
-                            <SidebarMenuSubButton asChild>
-                              <NavLink
-                                to={sub.url}
-                                end
-                                className="hover:bg-accent/50"
-                                activeClassName="bg-accent text-accent-foreground font-medium"
-                              >
-                                <sub.icon className="mr-2 h-3.5 w-3.5" />
-                                <span>{sub.title}</span>
-                              </NavLink>
+                            <SidebarMenuSubButton
+                              render={
+                                <NavLink
+                                  to={sub.url}
+                                  end
+                                  className="hover:bg-accent/50"
+                                  activeClassName="bg-accent text-accent-foreground font-medium"
+                                />
+                              }
+                            >
+                              <sub.icon />
+                              <span>{sub.title}</span>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
@@ -131,39 +135,49 @@ export function AppSidebar() {
       <SidebarFooter className="p-3 space-y-1">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <NavLink
-                to="/billings"
-                end
-                className="hover:bg-accent/50 flex items-center w-full"
-                activeClassName="bg-accent text-accent-foreground font-medium"
-              >
-                <CreditCard className="mr-2 h-4 w-4" />
-                {!collapsed && <span>Billings</span>}
-              </NavLink>
+            <SidebarMenuButton
+              tooltip="Billings"
+              render={
+                <NavLink
+                  to="/billings"
+                  end
+                  className="hover:bg-accent/50"
+                  activeClassName="bg-accent text-accent-foreground font-medium"
+                />
+              }
+            >
+              <CreditCard />
+              <span>Billings</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a
-                href="https://idm.in/docs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:bg-accent/50 flex items-center w-full"
-              >
-                <BookOpen className="mr-2 h-4 w-4" />
-                {!collapsed && <span>Docs</span>}
-              </a>
+            <SidebarMenuButton
+              tooltip="Docs"
+              render={
+                <a
+                  href="https://idm.in/docs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:bg-accent/50"
+                />
+              }
+            >
+              <BookOpen />
+              <span>Docs</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
         <Separator />
         <div className="flex items-center justify-between">
-          <Button variant="ghost" size="sm" className="flex-1 justify-start" asChild>
-            <NavLink to="/login">
-              <LogOut className="mr-2 h-4 w-4" />
-              {!collapsed && <span>Logout</span>}
-            </NavLink>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex-1 justify-start"
+            nativeButton={false}
+            render={<NavLink to="/login" />}
+          >
+            <LogOut />
+            {!collapsed && <span>Logout</span>}
           </Button>
           {!collapsed && <ThemeToggle />}
         </div>

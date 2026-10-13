@@ -287,7 +287,11 @@ export default function Analytics() {
           <p className="text-muted-foreground">Track your link performance</p>
         </div>
 
-        <Select value={interval} onValueChange={setInterval}>
+        <Select
+          items={INTERVALS.map((i) => ({ value: i.value, label: `Last ${i.label}` }))}
+          value={interval}
+          onValueChange={(v) => v && setInterval(v)}
+        >
           <SelectTrigger className="w-[120px]">
             <SelectValue />
           </SelectTrigger>
@@ -318,7 +322,7 @@ export default function Analytics() {
               <Switch id="show-labels" checked={showLabels} onCheckedChange={setShowLabels} />
               <Label htmlFor="show-labels" className="text-xs text-muted-foreground">Labels</Label>
             </div>
-            <ToggleGroup type="single" value={chartType} onValueChange={(v) => v && setChartType(v as typeof chartType)} size="sm">
+            <ToggleGroup value={[chartType]} onValueChange={(v) => v[0] && setChartType(v[0] as typeof chartType)} size="sm">
               <ToggleGroupItem value="area" aria-label="Area chart"><AreaChartIcon className="h-4 w-4" /></ToggleGroupItem>
               <ToggleGroupItem value="bar" aria-label="Bar chart"><BarChart3 className="h-4 w-4" /></ToggleGroupItem>
               <ToggleGroupItem value="line" aria-label="Line chart"><LineChartIcon className="h-4 w-4" /></ToggleGroupItem>

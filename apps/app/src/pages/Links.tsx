@@ -85,19 +85,15 @@ function LinkActions({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
+      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8" />}>
+        <MoreHorizontal className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => onCopy(link.key)}>
           <Copy className="mr-2 h-4 w-4" /> Copy
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <a href={link.url} target="_blank" rel="noopener noreferrer">
-            <ExternalLink className="mr-2 h-4 w-4" /> Open
-          </a>
+        <DropdownMenuItem render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}>
+          <ExternalLink className="mr-2 h-4 w-4" /> Open
         </DropdownMenuItem>
         <DropdownMenuItem
           className="text-destructive"
@@ -304,9 +300,8 @@ export default function Links() {
           </div>
           <div className="flex items-center gap-2">
             <ToggleGroup
-              type="single"
-              value={view}
-              onValueChange={(v) => v && setView(v as 'list' | 'grid')}
+              value={[view]}
+              onValueChange={(v) => v[0] && setView(v[0] as 'list' | 'grid')}
               size="sm"
               variant="outline"
             >
