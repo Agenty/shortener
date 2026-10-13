@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "shortner",
+  "name": "shortener-app",
   "compatibility_date": "2025-04-01",
   "placement": { "mode": "smart" },
   "assets": {
