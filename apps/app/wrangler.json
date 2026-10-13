@@ -6,5 +6,10 @@
   "assets": {
     "not_found_handling": "single-page-application",
     "directory": "./dist/"
+  },
+  "previews": {
+    "placement": {
+      "mode": "smart"
+    }
   }
 }
