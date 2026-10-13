@@ -41,7 +41,7 @@ export default function Billings() {
             <CardFooter>
               <Button
                 className="w-full"
-                variant={plan.current ? "outline-solid" : plan.popular ? "default" : "outline-solid"}
+                variant={plan.current ? "outline" : plan.popular ? "default" : "outline"}
                 disabled={plan.current}
                 onClick={() => toast.success(`Upgraded to ${plan.name}!`)}
               >

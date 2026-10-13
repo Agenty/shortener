@@ -8,7 +8,6 @@ import {
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
 import { ThemeProvider } from 'next-themes';
 import { Toaster as Sonner } from '@/components/ui/sonner';
-import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import AppLayout from '@/components/AppLayout';
 
@@ -186,7 +185,6 @@ const App = () => (
       disableTransitionOnChange
     >
       <TooltipProvider>
-        <Toaster />
         <Sonner />
 
         <RouterProvider router={router} />

@@ -115,8 +115,8 @@ export function CreateLinkDialog() {
 
   return (
     <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
-      <DialogTrigger asChild>
-        <Button><Plus className="mr-2 h-4 w-4" /> Create Link</Button>
+      <DialogTrigger render={<Button />}>
+        <Plus className="mr-2 h-4 w-4" /> Create Link
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-hidden p-0">
         <div className="flex flex-col h-full max-h-[90vh]">
@@ -170,7 +170,7 @@ export function CreateLinkDialog() {
               {/* Options Accordion */}
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Options</p>
-                <Accordion type="single" collapsible className="space-y-1">
+                <Accordion className="space-y-1">
                   {/* Expiration */}
                   <AccordionItem value="expiration" className="border rounded-lg px-4">
                     <AccordionTrigger className="text-sm font-medium py-3">

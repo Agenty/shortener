@@ -21,6 +21,12 @@ import { api } from "@/lib/api";
 import * as Flags from "country-flag-icons/react/3x2";
 
 const LIMIT = 25;
+const DEVICES = [
+  { label: "All Devices", value: "all" },
+  { label: "Desktop", value: "desktop" },
+  { label: "Mobile", value: "mobile" },
+  { label: "Tablet", value: "tablet" },
+];
 const flagComponents = Flags as any as Record<string, React.FC<any>>;
 
 function CountryFlag({ code }: { code: string }) {
@@ -70,15 +76,16 @@ export default function Reports() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Select value={device} onValueChange={setDevice}>
+          <Select items={DEVICES} value={device} onValueChange={(v) => v && setDevice(v)}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Device" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Devices</SelectItem>
-              <SelectItem value="desktop">Desktop</SelectItem>
-              <SelectItem value="mobile">Mobile</SelectItem>
-              <SelectItem value="tablet">Tablet</SelectItem>
+              {DEVICES.map((d) => (
+                <SelectItem key={d.value} value={d.value}>
+                  {d.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Button variant="outline" size="sm" onClick={() => toast.success("Report exported!")}>

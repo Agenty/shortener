@@ -189,7 +189,7 @@ export default function Settings() {
                   <Select
                     value={billing.tax_name}
                     onValueChange={(v) =>
-                      setBilling((b) => ({ ...b, tax_name: v }))
+                      v && setBilling((b) => ({ ...b, tax_name: v }))
                     }
                   >
                     <SelectTrigger id="taxName">
