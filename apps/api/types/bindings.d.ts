@@ -1,0 +1,24 @@
+export type Bindings = {
+  ASSETS: Fetcher;
+  DB: D1Database;
+  LINKS: KVNamespace;
+  KVCACHE: KVNamespace;
+  BUCKET: R2Bucket;
+  ENVIRONMENT: string;
+  CACHE_TTL: number;
+  MANDRILL_KEY: string;
+  JWT_SECRET: string;
+  IDM_ANALYTICS: AnalyticsEngineDataset;
+  CF_ACCOUNT_ID: string;
+  CF_API_KEY: string;
+  GOOGLE_CLIENT_ID: string;
+  API_URL: string;
+  APP_URL: string;
+  DOMAIN: string;
+  VIRUSTOTAL_APIKEY: string;
+  GOOGLE_SAFEBROWSE_KEY: string;
+  SCAN_QUEUE: Queue<any>;
+  STRIPE_SECRET_KEY: string;
+  RECAPTCHA_KEY: string;
+  AGENTY_KEY: string;
+};
