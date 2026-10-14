@@ -1,5 +1,5 @@
 {
-  "name": "shortener.dev",
+  "name": "shortener-api",
   "version": "0.0.0",
   "description": "An open-source URL shortener to create shorten link with Cloudflare worker and pages. Deploy on Cloudflare for custom domain for free!",
   "private": true,
@@ -11,23 +11,22 @@
     "devsql": "wrangler d1 execute idm --file=schema/query.sql --local"
   },
   "dependencies": {
-    "@hono/zod-openapi": "^0.16.0",
-    "cheerio": "^1.0.0-rc.12",
-    "dayjs": "^1.11.10",
-    "hono": "^4.6.3",
-    "lodash": "^4.17.21",
-    "mime": "^4.0.4",
-    "nanoid": "^5.0.3",
-    "papaparse": "^5.4.1",
-    "stripe": "^14.9.0",
-    "tldts": "^6.1.50",
-    "ua-parser-js": "^1.0.37",
-    "zod": "^3.22.4"
+    "@hono/zod-openapi": "^1.6.3",
+    "cheerio": "^1.2.0",
+    "dayjs": "^1.11.23",
+    "hono": "^4.13.13",
+    "lodash": "^4.18.1",
+    "mime": "^4.1.1",
+    "nanoid": "^6.0.2",
+    "papaparse": "^5.7.0",
+    "stripe": "^23.0.0",
+    "tldts": "^7.4.18",
+    "ua-parser-js": "^2.0.10"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240925.0",
-    "@types/lodash": "^4.14.202",
+    "@cloudflare/workers-types": "^5.20261014.1",
+    "@types/lodash": "^4.17.26",
     "@types/ua-parser-js": "^0.7.39",
-    "wrangler": "^4.147.0"
+    "wrangler": "^4.151.0"
   }
 }
