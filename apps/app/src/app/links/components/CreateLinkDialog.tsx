@@ -93,7 +93,7 @@ export function CreateLinkDialog() {
 
   const copyKey = () => {
     if (!link.key) return;
-    navigator.clipboard.writeText(`https://idm.in/${link.key}`);
+    navigator.clipboard.writeText(`https://shortener.dev/${link.key}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -144,7 +144,7 @@ export function CreateLinkDialog() {
                   <Label htmlFor="key">Short Link</Label>
                   <div className="flex items-center gap-0">
                     <span className="inline-flex items-center h-10 px-3 rounded-l-md border border-r-0 bg-muted text-sm text-muted-foreground">
-                      idm.in/
+                      shortener.dev/
                     </span>
                     <Input
                       id="key"
@@ -195,7 +195,7 @@ export function CreateLinkDialog() {
                     </AccordionTrigger>
                     <AccordionContent className="pb-4 space-y-3">
                       {[
-                        { key: "ref", label: "Referral (ref)", placeholder: "idm.in" },
+                        { key: "ref", label: "Referral (ref)", placeholder: "shortener.dev" },
                         { key: "utm_source", label: "UTM Source", placeholder: "twitter, instagram" },
                         { key: "utm_medium", label: "UTM Medium", placeholder: "social, email" },
                         { key: "utm_campaign", label: "UTM Campaign", placeholder: "christmas_sale" },

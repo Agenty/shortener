@@ -52,7 +52,7 @@ export default function Login() {
             <Link2 className="h-8 w-8 text-primary" />
           </div>
           <CardTitle className="text-2xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to your idm.in account</CardDescription>
+          <CardDescription>Sign in to your shortener.dev account</CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin} className="space-y-6">
           <CardContent className="space-y-4">

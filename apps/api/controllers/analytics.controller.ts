@@ -87,10 +87,10 @@ const BREAKDOWNS = [
   {
     path: '/top',
     field: 'url',
-    column: `format('https://idm.in/{}', blob2)`,
+    column: `format('https://shortener.dev/{}', blob2)`,
     summary: 'Top short links',
     description: 'Get the 10 most clicked short links in the selected period.',
-    example: 'https://idm.in/summer-sale',
+    example: 'https://shortener.dev/summer-sale',
   },
   {
     path: '/referer',

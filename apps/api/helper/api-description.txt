@@ -1,10 +1,10 @@
-URL shortener API by IDM allows you to shorten your links using programming languages like Node.js, Python, C#, Java or more. 
+URL shortener API by Shortener.dev allows you to shorten your links using programming languages like Node.js, Python, C#, Java or more. 
 You can use our RESTful interface to integrate link shortening tool into your applications.
 
-The API can be used to [create short URL](https://idm.in/), QR code etc:
+The API can be used to [create short URL](https://shortener.dev/), QR code etc:
 
 - Shorten long URLs into unique, shorter aliases(free plan)
-- Create short link with customizable alias, expiration, UTM parameters to track conversion on Google ads and [more options](https://idm.in/docs/t/url-shortening/403)
+- Create short link with customizable alias, expiration, UTM parameters to track conversion on Google ads and [more options](https://shortener.dev/docs/t/url-shortening/403)
 - Get analytics report to track click statistics (paid plan)
 
 ![URL shortener API](/static/img/url-shortener-api.png)
@@ -12,18 +12,18 @@ The API can be used to [create short URL](https://idm.in/), QR code etc:
 The API documentation includes information on how to authorize your request and sample responses JSON for each endpoint.
 
 ## Base URL
-The root endpoint of IDM API is: `https://api.idm.com/v1` and can be accessed over `https` only.
+The root endpoint of Shortener.dev API is: `https://api.shortener.dev/v1` and can be accessed over `https` only.
 
 
 ## Authentication Types
 To authorize your requests, you must be sending the `Authorization` header with your API key.
 
-- [Get your api key](https://app.idm.in/settings/apikeys) from here.
+- [Get your api key](https://app.shortener.dev/settings/apikeys) from here.
 
 Authorization example:
 ```
 curl -X GET \
-  https://api.idm.in/v1/links \
+  https://api.shortener.dev/v1/links \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer: YOUR_API_KEY_HERE' \
 

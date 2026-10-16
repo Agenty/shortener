@@ -61,7 +61,7 @@ export const removeDomainInPaths = (openapiSpec: any) => {
   }
 
   Object.keys(openapiSpec.paths).forEach((path) => {
-    const modifiedPath = path.replace('/api.idm.in/v1/', '/');
+    const modifiedPath = path.replace('/api.shortener.dev/v1/', '/');
     if (modifiedPath !== path) {
       openapiSpec.paths[modifiedPath] = openapiSpec.paths[path];
       delete openapiSpec.paths[path];

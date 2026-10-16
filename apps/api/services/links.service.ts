@@ -9,7 +9,7 @@ import { isEmpty } from 'lodash';
 import { format, subMonths } from 'date-fns';
 import { assertVerifiedDestinations } from './domain.service';
 
-const SHORT_DOMAIN = 'idm.in';
+const SHORT_DOMAIN = 'shortener.dev';
 
 const nanoid = customAlphabet(
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',

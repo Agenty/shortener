@@ -59,7 +59,7 @@ export function AppSidebar() {
       <SidebarHeader className="p-4">
         <NavLink to="/links" className="flex items-center gap-2 font-bold text-lg">
           <Link2 className="h-6 w-6 text-primary" />
-          {!collapsed && <span>idm.in</span>}
+          {!collapsed && <span>shortener.dev</span>}
         </NavLink>
       </SidebarHeader>
 
@@ -155,7 +155,7 @@ export function AppSidebar() {
               tooltip="Docs"
               render={
                 <a
-                  href="https://idm.in/docs"
+                  href="https://shortener.dev/docs"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:bg-accent/50"

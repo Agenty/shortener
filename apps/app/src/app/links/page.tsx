@@ -116,7 +116,7 @@ function LinksGrid({
             <div className="flex items-center gap-2 min-w-0">
               <LinkFavicon url={link.url} />
               <span className="text-primary font-medium truncate">
-                idm.in/{link.key}
+                shortener.dev/{link.key}
               </span>
               <Button
                 variant="ghost"
@@ -191,7 +191,7 @@ function LinksTable({
               <TableCell className="font-medium">
                 <div className="flex items-center gap-2">
                   <LinkFavicon url={link.url} />
-                  <span className="text-primary">idm.in/{link.key}</span>
+                  <span className="text-primary">shortener.dev/{link.key}</span>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -275,7 +275,7 @@ export default function Links() {
   const totalPages = Math.ceil(total / PER_PAGE);
 
   const copyLink = (key: string) => {
-    navigator.clipboard.writeText(`https://idm.in/${key}`);
+    navigator.clipboard.writeText(`https://shortener.dev/${key}`);
     toast.success('Link copied to clipboard!');
   };
 
@@ -395,7 +395,7 @@ export default function Links() {
             <AlertDialogDescription>
               This will permanently delete{' '}
               <span className="font-medium text-foreground">
-                idm.in/{deleteKey}
+                shortener.dev/{deleteKey}
               </span>
               . This action cannot be undone.
             </AlertDialogDescription>

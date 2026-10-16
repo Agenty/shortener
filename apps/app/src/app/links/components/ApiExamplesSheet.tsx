@@ -160,7 +160,7 @@ export function ApiExamplesSheet() {
               variant="outline"
               className="w-full"
               nativeButton={false}
-              render={<a href="https://idm.in/docs/api" target="_blank" rel="noopener noreferrer" />}
+              render={<a href="https://shortener.dev/docs/api" target="_blank" rel="noopener noreferrer" />}
             >
               <ExternalLink className="mr-2 h-4 w-4" />
               Full API Reference

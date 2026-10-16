@@ -139,7 +139,7 @@ export default function Reports() {
                 <TableCell className="hidden md:table-cell">
                   <div className="flex items-center gap-1.5">
                     <img
-                      src={`https://app.idm.in/assets/icon/browsers/${r.browser?.toLowerCase()}.png`}
+                      src={`https://app.shortener.dev/assets/icon/browsers/${r.browser?.toLowerCase()}.png`}
                       alt={r.browser}
                       className="h-3.5 w-3.5"
                       onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}

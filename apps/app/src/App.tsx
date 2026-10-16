@@ -16,6 +16,7 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import DashboardLayout from '@/app/layout';
 import { ApiError, EMAIL_NOT_VERIFIED } from '@/lib/api';
+import { DocumentTitle } from '@/components/DocumentTitle';
 
 type PageModule = { default: React.ComponentType };
 
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
   {
     element: (
       <NuqsAdapter>
+        <DocumentTitle />
         <Outlet />
       </NuqsAdapter>
     ),

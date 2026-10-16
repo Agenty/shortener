@@ -270,7 +270,7 @@ export default function Analytics() {
         clicks: Number(d.clicks),
         icon: (
           <img
-            src={`https://app.idm.in/assets/icon/browsers/${d.browser}.png`}
+            src={`https://app.shortener.dev/assets/icon/browsers/${d.browser}.png`}
             alt={d.browser}
             className="h-4 w-4"
             onError={(e) => {
@@ -289,7 +289,7 @@ export default function Analytics() {
         clicks: Number(d.clicks),
         icon: (
           <img
-            src={`https://app.idm.in/assets/icon/os/${d.os}.png`}
+            src={`https://app.shortener.dev/assets/icon/os/${d.os}.png`}
             alt={d.os}
             className="h-4 w-4"
             onError={(e) => {
@@ -308,7 +308,7 @@ export default function Analytics() {
         clicks: Number(d.clicks),
         icon: (
           <img
-            src={`https://app.idm.in/assets/icon/types/${d.device}.png`}
+            src={`https://app.shortener.dev/assets/icon/types/${d.device}.png`}
             alt={d.device}
             className="h-4 w-4"
             onError={(e) => {

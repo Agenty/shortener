@@ -49,7 +49,7 @@ export default function Signup() {
             <Link2 className="h-8 w-8 text-primary" />
           </div>
           <CardTitle className="text-2xl">Create an account</CardTitle>
-          <CardDescription>Get started with idm.in</CardDescription>
+          <CardDescription>Get started with shortener.dev</CardDescription>
         </CardHeader>
         <form onSubmit={handleSignup} className="space-y-6">
           <CardContent className="space-y-4">

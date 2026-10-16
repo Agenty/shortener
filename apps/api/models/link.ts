@@ -73,7 +73,7 @@ export const linkSchema = z
     key: z.string().max(32).optional().openapi({
       example: 'summer-sale',
       description:
-        'Custom alias (back-half) of the short URL, e.g. `idm.in/summer-sale`. Auto-generated when not provided',
+        'Custom alias (back-half) of the short URL, e.g. `shortener.dev/summer-sale`. Auto-generated when not provided',
     }),
     project_id: z.number().int().positive().optional().nullable().openapi({
       example: 1,
@@ -91,7 +91,7 @@ export const linkSchema = z
           'Long destination URL to shorten. The domain must be [verified](#tag/Domains) in your account or whitelisted',
       }),
     short_url: z.string().optional().openapi({
-      example: 'https://idm.in/summer-sale',
+      example: 'https://shortener.dev/summer-sale',
       description: 'The generated short URL to share',
       readOnly: true,
     }),
@@ -139,7 +139,7 @@ export const linkSchema = z
     password: z.string().max(32).nullable().optional().openapi({
       example: 's3cret',
       description:
-        'Restrict access with a [password protected short link](https://idm.in/docs/t/how-to-create-password-protected-short-links/413)',
+        'Restrict access with a [password protected short link](https://shortener.dev/docs/t/how-to-create-password-protected-short-links/413)',
     }),
     ios: optionalDestinationUrl.openapi({
       example: 'https://apps.apple.com/us/app/example/id000000000',
@@ -159,7 +159,7 @@ export const linkSchema = z
       .default([])
       .openapi({
         description:
-          'Redirect visitors by country with [geo-targeted short links](https://idm.in/docs/t/how-to-create-geo-targeted-short-links/414)',
+          'Redirect visitors by country with [geo-targeted short links](https://shortener.dev/docs/t/how-to-create-geo-targeted-short-links/414)',
       }),
     is_enabled: z
       .union([z.boolean(), z.number().int().min(0).max(1)])

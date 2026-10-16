@@ -52,7 +52,7 @@ admin.get('/top-links', async (ctx) => {
   let limit = Number(ctx.req.query('limit')) || 100;
 
   const sqlQuery = `SELECT
-  format('https://idm.in/{}', blob2) as url,
+  format('https://shortener.dev/{}', blob2) as url,
   count() as clicks
     FROM SHORTENER_ANALYTICS
     WHERE
