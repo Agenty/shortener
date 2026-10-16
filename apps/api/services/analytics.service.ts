@@ -13,7 +13,7 @@ export const setAnalytics = (
 
   if (!link.account_id || !env.SHORTENER_ANALYTICS) return;
 
-  if (isbot(parseResult.ua)) return;
+  if (!parseResult.ua || isbot(parseResult.ua)) return;
 
   try {
     const { browser, os, device } = parseResult;
