@@ -40,7 +40,7 @@ export const captchaGuard = async (env: CloudflareBindings, recaptchaToken: stri
 
   if (capthcaResult.score < 0.3) {
     throw new HTTPException(400, {
-      message: `Are you a human? Our system detected you as a bot and access denied. Contact support@idm.in to access this site`,
+      message: `Are you a human? Our system detected you as a bot and access denied. Contact support if you think this is a mistake.`,
     });
   }
   return capthcaResult;

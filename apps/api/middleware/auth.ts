@@ -40,9 +40,9 @@ export const jwtAuth = (): MiddlewareHandler => {
         throw new HTTPException(401, { message: `Unauthorized` });
       }
 
-      // Email not verified
+      // Email not verified, 428 lets the app redirect to onboarding
       if (!authUser.is_verified && !url.includes('/otp')) {
-        throw new HTTPException(400, {
+        throw new HTTPException(428, {
           message: 'Email not verified',
         });
       }

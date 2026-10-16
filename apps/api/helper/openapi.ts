@@ -26,6 +26,7 @@ const ERRORS = {
   402: ['Payment required, the current plan limit has been reached', 'The Free plan is limited to 10 links only, please upgrade'],
   403: ['Forbidden, the domain or resource is not allowed', 'Domain not verified: example.com'],
   404: ['Not found, no record exists with the given id', 'No data found'],
+  428: ['Precondition required, the email address is not verified yet', 'Email not verified'],
   429: ['Too many requests, rate limit exceeded', 'Too many requests'],
 } as const;
 

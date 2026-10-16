@@ -24,6 +24,16 @@ import type { User, UsersResponse, UserCreatePayload, UserUpdatePayload } from "
 
 const BASE_URL = env.API_URL;
 
+/** API returns 428 when the signed in user has not verified their email */
+export const EMAIL_NOT_VERIFIED = 428;
+
+export class ApiError extends Error {
+  constructor(message: string, public status: number) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
+
 async function request<T>(
   endpoint: string,
   options: RequestInit = {}
@@ -46,7 +56,7 @@ async function request<T>(
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ message: res.statusText }));
-    throw new Error(error.message || res.statusText);
+    throw new ApiError(error.message || res.statusText, res.status);
   }
 
   return res.json();
@@ -56,7 +66,7 @@ async function request<T>(
 
 export const api = {
   auth: {
-    signin(data: { email: string; password: string }) {
+    signin(data: { email: string; password: string; recaptcha: string }) {
       return request<AuthResponse>("/auth/signin", {
         method: "POST",
         body: JSON.stringify(data),
@@ -66,10 +76,29 @@ export const api = {
       });
     },
 
-    signup(data: { name: string; email: string; password: string }) {
+    signup(data: { name: string; email: string; password: string; recaptcha: string }) {
       return request<AuthResponse>("/auth/signup", {
         method: "POST",
         body: JSON.stringify(data),
+      }).then((res) => {
+        Cookies.set("token", res.token, { expires: 7 });
+        return res;
+      });
+    },
+
+    /** Emails a 6 digit code to verify the signed up email */
+    sendOtp() {
+      return request<{ message: string }>("/otp/send", {
+        method: "POST",
+        body: JSON.stringify({ purpose: "signup" }),
+      });
+    },
+
+    /** Verifies the signup code, the response has a fresh token */
+    verifyOtp(code: number) {
+      return request<AuthResponse>("/otp/verify", {
+        method: "POST",
+        body: JSON.stringify({ purpose: "signup", code }),
       }).then((res) => {
         Cookies.set("token", res.token, { expires: 7 });
         return res;

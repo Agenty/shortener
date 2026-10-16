@@ -1,4 +1,9 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import {
   Navigate,
   Outlet,
@@ -10,6 +15,7 @@ import { ThemeProvider } from 'next-themes';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import DashboardLayout from '@/app/layout';
+import { ApiError, EMAIL_NOT_VERIFIED } from '@/lib/api';
 
 type PageModule = { default: React.ComponentType };
 
@@ -42,6 +48,10 @@ export const router = createBrowserRouter([
         path: 'reset-password',
         ...page(() => import('@/app/auth/reset-password/page'), 'Reset Password'),
       },
+      {
+        path: 'onboarding',
+        ...page(() => import('@/app/auth/onboarding/page'), 'Verify Email'),
+      },
 
       // dashboard, shares the sidebar layout
       {
@@ -73,7 +83,29 @@ export const router = createBrowserRouter([
   },
 ]);
 
-const queryClient = new QueryClient();
+/** Any API call made before the email is verified sends the user to onboarding */
+const onApiError = (error: Error) => {
+  if (
+    error instanceof ApiError &&
+    error.status === EMAIL_NOT_VERIFIED &&
+    router.state.location.pathname !== '/onboarding'
+  ) {
+    router.navigate('/onboarding', { replace: true });
+  }
+};
+
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({ onError: onApiError }),
+  mutationCache: new MutationCache({ onError: onApiError }),
+  defaultOptions: {
+    queries: {
+      // Retrying won't help until the email is verified
+      retry: (failureCount, error) =>
+        !(error instanceof ApiError && error.status === EMAIL_NOT_VERIFIED) &&
+        failureCount < 3,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -84,7 +116,7 @@ const App = () => (
       disableTransitionOnChange
     >
       <TooltipProvider>
-        <Sonner />
+        <Sonner closeButton={true} richColors={true} />
 
         <RouterProvider router={router} />
       </TooltipProvider>

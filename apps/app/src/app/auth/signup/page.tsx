@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router";
 import { Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
+import { useRecaptcha } from "@/hooks/use-recaptcha";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -14,6 +16,7 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { executeRecaptcha } = useRecaptcha();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,9 +26,14 @@ export default function Signup() {
     }
     setLoading(true);
     try {
-      await api.auth.signup({ name, email, password });
-      toast.success("Account created successfully!");
-      navigate("/links");
+      const recaptcha = await executeRecaptcha("signup");
+      if (!recaptcha) {
+        toast.error("reCAPTCHA is still loading, please try again");
+        return;
+      }
+      await api.auth.signup({ name, email, password, recaptcha });
+      toast.success("Account created, please verify your email");
+      navigate("/onboarding", { replace: true, state: { email } });
     } catch (err: any) {
       toast.error(err.message || "Signup failed");
     } finally {
@@ -43,19 +51,19 @@ export default function Signup() {
           <CardTitle className="text-2xl">Create an account</CardTitle>
           <CardDescription>Get started with idm.in</CardDescription>
         </CardHeader>
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handleSignup} className="space-y-6">
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>
-              <Input id="name" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} />
+              <Input id="name" autoComplete="name" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input id="email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+              <PasswordInput id="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">

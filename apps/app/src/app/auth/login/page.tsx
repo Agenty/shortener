@@ -3,16 +3,19 @@ import { Link, useNavigate } from "react-router";
 import { Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
+import { useRecaptcha } from "@/hooks/use-recaptcha";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { executeRecaptcha } = useRecaptcha();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +25,16 @@ export default function Login() {
     }
     setLoading(true);
     try {
-      await api.auth.signin({ email, password });
+      const recaptcha = await executeRecaptcha("login");
+      if (!recaptcha) {
+        toast.error("reCAPTCHA is still loading, please try again");
+        return;
+      }
+      const user = await api.auth.signin({ email, password, recaptcha });
+      if (!user.is_verified) {
+        navigate("/onboarding", { replace: true, state: { email } });
+        return;
+      }
       toast.success("Logged in successfully!");
       navigate("/links");
     } catch (err: any) {
@@ -46,7 +58,7 @@ export default function Login() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input id="email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -55,7 +67,7 @@ export default function Login() {
                   Forgot password?
                 </Link>
               </div>
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+              <PasswordInput id="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">

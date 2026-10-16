@@ -14,6 +14,7 @@ import {
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
 import type { GlobalDomain, GlobalDomainType } from '@/types/domain';
+import { DomainFavicon } from './DomainFavicon';
 
 interface GlobalDomainsProps {
   type: GlobalDomainType;
@@ -89,7 +90,7 @@ export function GlobalDomains({ type, isAdmin }: GlobalDomainsProps) {
       {isLoading ? (
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-14 rounded-lg" />
+            <Skeleton key={i} className="h-13 rounded-xl" />
           ))}
         </div>
       ) : domains.length === 0 ? (
@@ -99,14 +100,10 @@ export function GlobalDomains({ type, isAdmin }: GlobalDomainsProps) {
       ) : (
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {domains.map((d) => (
-            <Card key={d.domain} size="sm">
-              <CardContent className="flex items-center justify-between gap-2 px-4 py-3">
-                <div className="flex items-center gap-2 min-w-0">
-                  {type === 'whitelisted' ? (
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                  ) : (
-                    <Ban className="h-4 w-4 shrink-0 text-destructive" />
-                  )}
+            <Card key={d.domain} size="sm" className="gap-0 rounded-xl py-0 shadow-xs">
+              <CardContent className="flex items-center justify-between gap-2 px-3 py-2.5">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <DomainFavicon domain={d.domain} className="h-8 w-8" />
                   <span className="text-sm font-medium truncate">{d.domain}</span>
                   {d.is_builtin && <Badge variant="outline">Built-in</Badge>}
                 </div>

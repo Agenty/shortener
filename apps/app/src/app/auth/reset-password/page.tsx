@@ -34,11 +34,11 @@ export default function ResetPassword() {
           </CardDescription>
         </CardHeader>
         {!sent ? (
-          <form onSubmit={handleReset}>
+          <form onSubmit={handleReset} className="space-y-6">
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input id="email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">

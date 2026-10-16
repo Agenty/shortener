@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   AlertCircle,
   CheckCircle2,
-  Globe,
   Loader2,
   MoreVertical,
   Star,
@@ -33,6 +32,7 @@ import {
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
 import type { Domain } from '@/types/domain';
+import { DomainFavicon } from './DomainFavicon';
 
 interface MyDomainsProps {
   onVerify: (domain: Domain) => void;
@@ -68,11 +68,11 @@ export function MyDomains({ onVerify }: MyDomainsProps) {
 
   if (isLoading) {
     return (
-      <div className="grid gap-3">
+      <div className="grid gap-2">
         {Array.from({ length: 3 }).map((_, i) => (
-          <Card key={i}>
-            <CardContent className="flex items-center gap-3 p-4">
-              <Skeleton className="h-5 w-5 rounded" />
+          <Card key={i} className="gap-0 rounded-xl py-0 shadow-xs">
+            <CardContent className="flex items-center gap-3 px-4 py-3">
+              <Skeleton className="h-9 w-9 rounded-lg" />
               <div className="space-y-2 flex-1">
                 <Skeleton className="h-4 w-40" />
                 <Skeleton className="h-3 w-24" />
@@ -93,12 +93,12 @@ export function MyDomains({ onVerify }: MyDomainsProps) {
   }
 
   return (
-    <div className="grid gap-3">
+    <div className="grid gap-2">
       {domains.map((d) => (
-        <Card key={d.domain_id}>
-          <CardContent className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4">
+        <Card key={d.domain_id} className="gap-0 rounded-xl py-0 shadow-xs">
+          <CardContent className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3">
             <div className="flex items-center gap-3 min-w-0">
-              <Globe className="h-5 w-5 shrink-0 text-muted-foreground" />
+              <DomainFavicon domain={d.domain} />
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <p className="font-medium truncate">{d.domain}</p>
@@ -109,7 +109,7 @@ export function MyDomains({ onVerify }: MyDomainsProps) {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 self-end sm:self-auto">
               {d.is_verified ? (
                 <Badge>
                   <CheckCircle2 className="mr-1 h-3 w-3" /> Verified

@@ -292,7 +292,7 @@ export default function Links() {
   return (
     <div className="space-y-4">
       {/* Sticky header */}
-      <div className="sticky top-0 z-10 bg-background pb-4 pt-1 -mt-1 border-b">
+      <div className="sticky top-0 z-10 bg-background pb-4 pt-1 -mt-1">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Links</h1>
