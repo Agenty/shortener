@@ -7,8 +7,8 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "check-types": "tsc --noEmit",
-    "sql": "wrangler d1 execute idm --file=schema/query.sql",
-    "devsql": "wrangler d1 execute idm --file=schema/query.sql --local",
+    "sql": "wrangler d1 execute shortener --file=schema/query.sql",
+    "sql:dev": "wrangler d1 execute shortener --file=schema/query.sql --local",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {

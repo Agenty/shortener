@@ -8,6 +8,7 @@ import {
   getDomains,
   getSearchConsoleConsentUri,
   getStateSecret,
+  getWhitelistedDomains,
   sendDomainOtp,
   updateDomain,
   verifyDomainOtp,
@@ -18,6 +19,7 @@ import {
   domainOtpSchema,
   domainSchema,
   domainVerifySchema,
+  globalDomainSchema,
 } from '../models/domain';
 import {
   createApi,
@@ -120,6 +122,32 @@ domains.openapi(
     const domain = ctx.req.valid('json') as Domain;
     const result = await createDomain(ctx.env, authUser, domain);
     return ctx.json(result, 200);
+  }
+);
+
+domains.openapi(
+  createRoute({
+    tags: ['Domains'],
+    method: 'get',
+    path: '/whitelisted',
+    summary: 'List whitelisted domains',
+    description:
+      'Popular domains (e.g. `linkedin.com`, `youtube.com`) allowed for every account without ownership verification, including their subdomains.',
+    responses: {
+      200: {
+        description: 'List of whitelisted domains',
+        content: {
+          'application/json': {
+            schema: tableSchema(globalDomainSchema),
+          },
+        },
+      },
+      ...errorResponses(401),
+    } as any,
+  }),
+  async (ctx) => {
+    const data = await getWhitelistedDomains(ctx.env);
+    return ctx.json(toTableResult(data, 0, data.length), 200);
   }
 );
 

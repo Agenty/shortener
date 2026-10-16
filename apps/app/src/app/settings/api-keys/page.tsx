@@ -18,7 +18,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
-import { CreateApiKeyDialog } from '@/components/CreateApiKeyDialog';
+import { CreateApiKeyDialog } from './components/CreateApiKeyDialog';
 import { formatDistanceToNow } from 'date-fns';
 
 export default function ApiKeys() {

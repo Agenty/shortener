@@ -9,7 +9,17 @@ import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
 import { ThemeProvider } from 'next-themes';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import AppLayout from '@/components/AppLayout';
+import DashboardLayout from '@/app/layout';
+
+type PageModule = { default: React.ComponentType };
+
+/** Lazy route for a `page.tsx` in the app directory */
+const page = (load: () => Promise<PageModule>, title: string) => ({
+  lazy: async () => {
+    const { default: Component } = await load();
+    return { Component, handle: { title } };
+  },
+});
 
 export const router = createBrowserRouter([
   {
@@ -25,151 +35,40 @@ export const router = createBrowserRouter([
         handle: { title: 'Login' },
       },
 
-      {
-        path: 'login',
-        lazy: async () => {
-          const { default: Component } = await import('@/pages/auth/Login');
-
-          return {
-            Component,
-            handle: { title: 'Login' },
-          };
-        },
-      },
-      {
-        path: 'signup',
-        lazy: async () => {
-          const { default: Component } = await import('@/pages/auth/Signup');
-
-          return {
-            Component,
-            handle: { title: 'Sign Up' },
-          };
-        },
-      },
+      // auth
+      { path: 'login', ...page(() => import('@/app/auth/login/page'), 'Login') },
+      { path: 'signup', ...page(() => import('@/app/auth/signup/page'), 'Sign Up') },
       {
         path: 'reset-password',
-        lazy: async () => {
-          const { default: Component } =
-            await import('@/pages/auth/ResetPassword');
-
-          return {
-            Component,
-            handle: { title: 'Reset Password' },
-          };
-        },
+        ...page(() => import('@/app/auth/reset-password/page'), 'Reset Password'),
       },
 
+      // dashboard, shares the sidebar layout
       {
-        element: <AppLayout />,
+        element: <DashboardLayout />,
         children: [
-          {
-            index: true,
-            element: <Navigate to="/links" replace />,
-          },
-          {
-            path: 'links',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Links');
-
-              return {
-                Component,
-                handle: { title: 'Links' },
-              };
-            },
-          },
+          { index: true, element: <Navigate to="/links" replace /> },
+          { path: 'links', ...page(() => import('@/app/links/page'), 'Links') },
           {
             path: 'analytics',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Analytics');
-
-              return {
-                Component,
-                handle: { title: 'Analytics' },
-              };
-            },
+            ...page(() => import('@/app/analytics/page'), 'Analytics'),
           },
-          {
-            path: 'reports',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Reports');
-
-              return {
-                Component,
-                handle: { title: 'Reports' },
-              };
-            },
-          },
-          {
-            path: 'domains',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Domains');
-
-              return {
-                Component,
-                handle: { title: 'Domains' },
-              };
-            },
-          },
-          {
-            path: 'users',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/UsersPage');
-
-              return {
-                Component,
-                handle: { title: 'Users' },
-              };
-            },
-          },
-          {
-            path: 'billings',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Billings');
-
-              return {
-                Component,
-                handle: { title: 'Billing' },
-              };
-            },
-          },
+          { path: 'reports', ...page(() => import('@/app/reports/page'), 'Reports') },
+          { path: 'domains', ...page(() => import('@/app/domains/page'), 'Domains') },
+          { path: 'users', ...page(() => import('@/app/users/page'), 'Users') },
+          { path: 'billings', ...page(() => import('@/app/billings/page'), 'Billing') },
           {
             path: 'settings',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Settings');
-
-              return {
-                Component,
-                handle: { title: 'Settings' },
-              };
-            },
+            ...page(() => import('@/app/settings/page'), 'Settings'),
           },
           {
             path: 'settings/api-keys',
-            lazy: async () => {
-              const { default: Component } =
-                await import('@/pages/settings/ApiKeys');
-
-              return {
-                Component,
-                handle: { title: 'API Keys' },
-              };
-            },
+            ...page(() => import('@/app/settings/api-keys/page'), 'API Keys'),
           },
         ],
       },
 
-      {
-        path: '*',
-        lazy: async () => {
-          const { default: Component } = await import('@/pages/NotFound');
-
-          return {
-            Component,
-            handle: { title: 'Not Found' },
-          };
-        },
-      },
+      { path: '*', ...page(() => import('@/app/not-found'), 'Not Found') },
     ],
   },
 ]);

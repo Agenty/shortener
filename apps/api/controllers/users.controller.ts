@@ -6,7 +6,12 @@ import {
   updateUser,
   getUserCount,
 } from '../services/user.service';
-import { User, userSchema } from '../models/user';
+import {
+  User,
+  UserUpdate,
+  userSchema,
+  userUpdateSchema,
+} from '../models/user';
 import { AuthUser } from '../models/auth-user';
 import { createRoute, z } from '@hono/zod-openapi';
 import { pagedSchema } from '../models/paged';
@@ -145,14 +150,14 @@ users.openapi(
     path: '/{id}',
     summary: 'Update a team member',
     description:
-      'Change the name, email, role or status of a team member. Set `status` to `disabled` to revoke access.',
+      'Change the name, role or status of a team member. Email cannot be changed. Set `status` to `disabled` to revoke access.',
     request: {
       params: idParamSchema,
       body: {
         required: true,
         content: {
           'application/json': {
-            schema: userSchema,
+            schema: userUpdateSchema,
             example: API_SAMPLES.users.put,
           },
         },
@@ -171,14 +176,15 @@ users.openapi(
     } as any,
   }),
   async (ctx) => {
-    const data = ctx.req.valid('json') as User;
+    const data = ctx.req.valid('json') as UserUpdate;
     const { id } = ctx.req.valid('param');
     const authUser: AuthUser = ctx.req['user'];
     const result = await updateUser(ctx.env, authUser, id, data);
     if (!result) {
       throw new HTTPException(404, { message: `No user found with id: ${id}` });
     }
-    return ctx.json({ ...data, user_id: id, updated_at: new Date() }, 200);
+    const user = await getUserById(ctx.env, authUser, id);
+    return ctx.json(user, 200);
   }
 );
 

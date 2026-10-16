@@ -4,7 +4,7 @@ import { Subscription } from '../models/subscription';
 export const getSubscritions = async (env: CloudflareBindings, authUser: AuthUser) => {
   const sqlQuery = env.DB.prepare(
     `Select subscription_id, account_id, plan, plan_id, amount, currency, frequency, 
-     payment_gateway, payment_gateway_subscr_id as pg_subscr_id, payment_gateway_customer_id as pg_customer_id, status, 
+     payment_gateway, pg_subscr_id, pg_customer_id, status, 
      start_date, last_pay_date, next_pay_date, cancel_date, is_recent 
      From Subscriptions Where account_id = ? 
      Order by subscription_id DESC`
@@ -22,7 +22,7 @@ export const getSubscriptionById = async (
 ) => {
   const sqlQuery = env.DB.prepare(
     `Select subscription_id, account_id, plan, plan_id, amount, currency, frequency, 
-    payment_gateway, payment_gateway_subscr_id as pg_subscr_id, payment_gateway_customer_id as pg_customer_id, status, 
+    payment_gateway, pg_subscr_id, pg_customer_id, status, 
     start_date, last_pay_date, next_pay_date, cancel_date, is_recent 
     From Subscriptions Where subscription_id = ? and account_id = ?`
   ).bind(subscription_id, authUser.account_id);
@@ -36,7 +36,7 @@ export const createSubscription = async (
   const sqlQuery = env.DB.prepare(
     `INSERT INTO Subscriptions(
     account_id, plan, plan_id, amount, currency, frequency,
-    payment_gateway, payment_gateway_subscr_id, payment_gateway_customer_id, status,
+    payment_gateway, pg_subscr_id, pg_customer_id, status,
     start_date, last_pay_date, next_pay_date, cancel_date)
     Values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
@@ -65,7 +65,7 @@ export const updateSubscription = async (env: CloudflareBindings, subscription: 
      account_id = ?, plan = ?, plan_id = ?, amount = ?,
      currency = ?, frequency = ?, payment_gateway = ?, status = ?,
      start_date = ?, last_pay_date = ?, next_pay_date = ?, cancel_date = ?
-     WHERE payment_gateway_subscr_id = ? and payment_gateway_customer_id = ?`
+     WHERE pg_subscr_id = ? and pg_customer_id = ?`
   ).bind(
     subscription.account_id,
     subscription.plan,
@@ -90,7 +90,7 @@ export const updateSubscription = async (env: CloudflareBindings, subscription: 
 export const cancelSubscription = async (env: CloudflareBindings, subscription: Subscription) => { 
   const sqlQuery = env.DB.prepare(
     `UPDATE Subscriptions SET status = ? , cancel_date = ?  
-     Where payment_gateway_subscr_id = ? and payment_gateway_customer_id = ?`
+     Where pg_subscr_id = ? and pg_customer_id = ?`
   ).bind(
     subscription.status,
     subscription.cancel_date,
@@ -117,8 +117,8 @@ export const getSubscriptionByCustomerId = async (
 ) => {
   const sqlQuery = env.DB.prepare(
     `SELECT subscription_id, account_id, user_id, plan, amount, currency, 
-     frequency, start_date, next_pay_date, payment_gateway_subscr_id as pg_subscr_id
-     FROM Subscriptions where payment_gateway_customer_id = ? 
+     frequency, start_date, next_pay_date, pg_subscr_id
+     FROM Subscriptions where pg_customer_id = ? 
      Order by subscription_id DESC LIMIT 1`
   ).bind(customer_id);
   return await sqlQuery.first();

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
+import { AppSidebar } from "./components/AppSidebar";
 
 export default function AppLayout() {
   return (

@@ -19,8 +19,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_id": "78c50cb7-a076-4232-944a-d4b32ac64b8e",
-      "database_name": "idm",
+      "database_id": "90f71b57-075c-4677-aeaf-9e05edc7ff15",
+      "database_name": "shortener",
       "preview_database_id": "DB",
       "migrations_dir": "drizzle/migrations"
     }

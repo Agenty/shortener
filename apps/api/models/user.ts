@@ -44,6 +44,14 @@ export const userSchema = z
     description: 'A team member with access to the account short links',
   });
 
+export const userUpdateSchema = userSchema
+  .pick({ name: true, role: true, status: true })
+  .openapi('UserUpdate', {
+    description: 'Fields of a team member that can be updated',
+  });
+
+export type UserUpdate = z.infer<typeof userUpdateSchema>;
+
 export type User = Omit<
   z.infer<typeof userSchema>,
   'created_at' | 'updated_at' | 'last_login_at'

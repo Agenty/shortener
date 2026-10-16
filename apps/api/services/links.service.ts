@@ -9,6 +9,8 @@ import { isEmpty } from 'lodash';
 import { format, subMonths } from 'date-fns';
 import { assertVerifiedDestinations } from './domain.service';
 
+const SHORT_DOMAIN = 'idm.in';
+
 const nanoid = customAlphabet(
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
   7
@@ -25,6 +27,8 @@ export const convertToLink = (item: any): Link | undefined => {
   return {
     ...item,
     ...d,
+    short_url: `https://${SHORT_DOMAIN}/${item.key}`,
+    is_enabled: item.is_enabled === undefined ? undefined : !!item.is_enabled,
     created_at: toISOformat(item.created_at) || new Date(),
     updated_at: toISOformat(item.updated_at),
     expire_at: toISOformat(item.expire_at),
@@ -45,17 +49,16 @@ export const getLinks = async (
   paged: Paged
 ): Promise<Array<Link>> => {
   let sqlQuery: D1PreparedStatement;
-  const domains = ['idm.in/', 'idm.li/'];
+  const domains = [`${SHORT_DOMAIN}/`, 'idm.li/'];
   if (!isEmpty(paged.search)) {
     const search = domains.some((x) => paged.search.includes(x))
       ? paged.search.split('/').pop()
       : paged.search.split('?')[0];
     sqlQuery = env.DB.prepare(
       `
-        SELECT key, project_id, user_id, url, short_url, expire_at, data, status, created_at, updated_at
+        SELECT key, project_id, user_id, url, expire_at, data, is_enabled, created_at, updated_at
         FROM Links
         Where account_id = ?
-        and type = 'link'
         and (key = ? or url like ?)
         Order by created_at DESC
         LIMIT ?, ?`
@@ -69,10 +72,9 @@ export const getLinks = async (
   } else {
     sqlQuery = env.DB.prepare(
       `
-        SELECT key, project_id, user_id, url, short_url, expire_at, data, status, created_at, updated_at
+        SELECT key, project_id, user_id, url, expire_at, data, is_enabled, created_at, updated_at
         FROM Links
         Where account_id = ?
-        and type = 'link'
         Order by created_at DESC
         LIMIT ?, ?`
     ).bind(authUser.account_id, paged.offset, paged.limit);
@@ -89,7 +91,7 @@ export const getLinkByKey = async (
 ): Promise<Link> => {
   const sqlQuery = env.DB.prepare(
     `
-      SELECT key, account_id, user_id, project_id, url, short_url, expire_at, data, created_at, updated_at
+      SELECT key, account_id, user_id, project_id, url, expire_at, data, is_enabled, created_at, updated_at
       FROM Links
       WHERE key = ? and account_id = ? and type = 'link'`
   ).bind(key, authUser.account_id);
@@ -108,7 +110,7 @@ export const createLink = async (
   link.key = link.key ? slugify(link.key) : nanoid(7).toLowerCase();
   link.account_id = authUser.account_id;
   link.user_id = authUser.user_id;
-  link.short_url = `https://idm.in/${link.key}`;
+  link.is_enabled = link.is_enabled ?? true;
   link.created_at = new Date().toISOString();
   const data = {
     params: link.params,
@@ -123,7 +125,7 @@ export const createLink = async (
   try {
     await env.DB.prepare(
       `
-      INSERT INTO Links (key, account_id, user_id, project_id, url, short_url, expire_at, data, type) 
+      INSERT INTO Links (key, account_id, user_id, project_id, url, expire_at, data, is_enabled, type) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'link')`
     )
       .bind(
@@ -132,9 +134,9 @@ export const createLink = async (
         link.user_id,
         link.project_id || null,
         link.url,
-        link.short_url,
         link.expire_at || null,
-        data ? JSON.stringify(data) : null
+        data ? JSON.stringify(data) : null,
+        link.is_enabled ? 1 : 0
       )
       .run();
   } catch (err) {
@@ -146,7 +148,7 @@ export const createLink = async (
       throw err;
     }
   }
-  return link;
+  return convertToLink(link);
 };
 
 export const updateLink = async (
@@ -158,7 +160,6 @@ export const updateLink = async (
   await assertVerifiedDestinations(env, authUser, getDestinations(link));
 
   link.key = key;
-  link.short_url = `https://idm.in/${link.key}`;
   link.account_id = authUser.account_id;
   link.user_id = authUser.user_id;
   link.updated_at = new Date().toISOString();
@@ -176,7 +177,8 @@ export const updateLink = async (
   const { meta } = await env.DB.prepare(
     `
       UPDATE Links
-      SET user_id = ?, project_id = ?, url = ?, expire_at = ?, data = ?, updated_at = CURRENT_TIMESTAMP
+      SET user_id = ?, project_id = ?, url = ?, expire_at = ?, data = ?,
+        is_enabled = COALESCE(?, is_enabled), updated_at = CURRENT_TIMESTAMP
       WHERE key = ? and account_id = ?`
   )
     .bind(
@@ -185,12 +187,13 @@ export const updateLink = async (
       link.url,
       link.expire_at || null,
       JSON.stringify(data),
+      link.is_enabled === undefined ? null : link.is_enabled ? 1 : 0,
       link.key,
       link.account_id
     )
     .run();
 
-  return meta.changes > 0 ? link : null;
+  return meta.changes > 0 ? convertToLink(link) : null;
 };
 
 export const deleteLink = async (
@@ -210,15 +213,6 @@ export const deleteLink = async (
     await env.LINKS.delete(key);
   }
   return success;
-};
-
-export const blockLink = async (env: CloudflareBindings, link: Link) => {
-  await Promise.all([
-    env.DB.prepare(`Update Links set status = 'blocked' WHERE key = ?`)
-      .bind(link.key)
-      .run(),
-    env.LINKS.delete(link.key),
-  ]);
 };
 
 export const getLinkCount = async (
@@ -241,70 +235,4 @@ export const getLinkCount = async (
   }
   const { total } = await sqlQuery.first();
   return Number(total);
-};
-
-const convertToILink = (item: any): Link | undefined => {
-  if (!item) return;
-  if (item.type == 'link') {
-    const d =
-      item.data && typeof item.data == 'string'
-        ? JSON.parse(item.data)
-        : item.data;
-    delete item.data;
-    return {
-      ...item,
-      ...d,
-      created_at: toISOformat(item.created_at) || new Date(),
-      updated_at: toISOformat(item.updated_at),
-      expire_at: toISOformat(item.expire_at),
-    };
-  } else {
-    return {
-      ...item,
-      data:
-        item.data && typeof item.data == 'string'
-          ? JSON.parse(item.data)
-          : item.data,
-      created_at: toISOformat(item.created_at) || new Date(),
-      updated_at: toISOformat(item.updated_at),
-      expire_at: toISOformat(item.expire_at),
-    };
-  }
-};
-
-export const getCachedLink = async (
-  env: CloudflareBindings,
-  key: string,
-  cacheTtl = 300
-): Promise<Link> => {
-  let link: Link;
-  if (cacheTtl) {
-    const value = await env.LINKS.get(key, {
-      type: 'json',
-    });
-    link = convertToILink(value);
-  }
-  // Get from D1
-  if (!link || !link.type) {
-    const sqlQuery = env.DB.prepare(
-      `
-        SELECT key, account_id, user_id, project_id, url, short_url, name, type, expire_at, data, status, created_at, updated_at
-        FROM Links
-        WHERE key = ?`
-    ).bind(key);
-
-    const value = await sqlQuery.first();
-    link = convertToILink(value);
-
-    // Cache for 5 min
-    if (link && cacheTtl) {
-      await env.LINKS.put(key, JSON.stringify(link), {
-        expirationTtl: cacheTtl < 60 ? 60 : cacheTtl,
-      });
-    }
-  }
-  if (link) {
-    link.key = link.key || key;
-  }
-  return link;
 };

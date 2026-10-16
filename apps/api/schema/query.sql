@@ -24,13 +24,16 @@ CREATE TABLE IF NOT EXISTS Users (
   password TEXT,
   role TEXT NOT NULL,
   level TEXT,
-  ip_address TEXT,
   is_verified INTEGER DEFAULT 0,
   is_subscribed INTEGER DEFAULT 1,
   guid TEXT NOT NULL,
   last_login_at DATETIME,
   status TEXT,
   avatar TEXT,
+  ip_address TEXT,
+  city TEXT,
+  country TEXT,
+  utm_tracker TEXT,
   password_reset_at DATETIME,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME,
@@ -38,6 +41,8 @@ CREATE TABLE IF NOT EXISTS Users (
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS unique_email ON Users(email);
+CREATE INDEX IF NOT EXISTS idx_users_account ON Users(account_id);
+CREATE INDEX IF NOT EXISTS idx_users_ip_created ON Users(ip_address, created_at);
 
 
 CREATE TABLE IF NOT EXISTS ApiKeys (
@@ -52,6 +57,9 @@ CREATE TABLE IF NOT EXISTS ApiKeys (
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
+CREATE INDEX IF NOT EXISTS idx_apikeys_account_user ON ApiKeys(account_id, user_id);
+CREATE INDEX IF NOT EXISTS idx_apikeys_user ON ApiKeys(user_id);
+
 CREATE TABLE IF NOT EXISTS Projects(
   project_id INTEGER PRIMARY KEY,
   account_id INTEGER NOT NULL,
@@ -65,30 +73,29 @@ CREATE TABLE IF NOT EXISTS Projects(
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
+CREATE INDEX IF NOT EXISTS idx_projects_account_created ON Projects(account_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_projects_user ON Projects(user_id);
+
+-- Account domains (type = user) and admin managed domains for every account
+-- (type = whitelisted | blocked, account_id IS NULL) in one table for a single lookup
 CREATE TABLE IF NOT EXISTS Domains(
   domain_id INTEGER PRIMARY KEY,
-  account_id INTEGER NOT NULL,
+  account_id INTEGER,
   user_id INTEGER,
   domain VARCHAR(253) NOT NULL,
+  type TEXT NOT NULL DEFAULT 'user',
   is_default INTEGER DEFAULT 0,
   is_verified INTEGER NOT NULL DEFAULT 0,
-  verification_method TEXT,
-  verified_email TEXT,
-  verified_at DATETIME,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME,
   FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE SET NULL
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS unique_account_domain ON Domains(account_id, domain);
-
--- Domains allowed for every account without ownership verification
-CREATE TABLE IF NOT EXISTS WhitelistedDomains(
-  domain VARCHAR(253) PRIMARY KEY,
-  user_id INTEGER,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+CREATE UNIQUE INDEX IF NOT EXISTS unique_global_domain ON Domains(domain) WHERE account_id IS NULL;
+CREATE INDEX IF NOT EXISTS idx_domains_domain ON Domains(domain);
+CREATE INDEX IF NOT EXISTS idx_domains_user ON Domains(user_id);
 
 CREATE TABLE IF NOT EXISTS Links(
   key VARCHAR(32) PRIMARY KEY,
@@ -96,7 +103,6 @@ CREATE TABLE IF NOT EXISTS Links(
   user_id INTEGER NOT NULL,
   project_id INTEGER NULL,
   url TEXT NOT NULL,
-  short_url TEXT NULL,
   expire_at DATETIME,
   type TEXT,
   data TEXT,
@@ -108,13 +114,18 @@ CREATE TABLE IF NOT EXISTS Links(
   ios TEXT,
   android TEXT,
   geo TEXT,
-  status TEXT DEFAULT 'active', 
+  is_enabled INTEGER NOT NULL DEFAULT 1,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME,
   FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (project_id) REFERENCES Projects(project_id) ON DELETE CASCADE
 );
+
+CREATE INDEX IF NOT EXISTS idx_links_account_created ON Links(account_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_links_account_type_created ON Links(account_id, type, created_at);
+CREATE INDEX IF NOT EXISTS idx_links_project ON Links(project_id);
+CREATE INDEX IF NOT EXISTS idx_links_user ON Links(user_id);
 
 CREATE TABLE IF NOT EXISTS Subscriptions (
   subscription_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -126,8 +137,8 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
   currency TEXT,
   frequency TEXT NOT NULL,
   payment_gateway TEXT,
-  payment_gateway_subscr_id TEXT,
-  payment_gateway_customer_id TEXT,
+  pg_subscr_id TEXT,
+  pg_customer_id TEXT,
   status TEXT,
   start_date DATETIME NOT NULL,
   last_pay_date DATETIME,
@@ -137,3 +148,6 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
   cancel_reason TEXT,
   FOREIGN KEY (account_id) REFERENCES Accounts (account_id) ON DELETE CASCADE
 );
+
+CREATE INDEX IF NOT EXISTS idx_subscriptions_account ON Subscriptions(account_id);
+CREATE INDEX IF NOT EXISTS idx_subscriptions_gateway ON Subscriptions(pg_customer_id, pg_subscr_id);

@@ -17,7 +17,7 @@ import { reports } from './controllers/reports.controller';
 import { webhook } from './controllers/webhook.controller';
 import { admin } from './controllers/admin.controller';
 import { otp } from './controllers/otp.controller';
-import { meta } from './controllers/meta.controller';
+import { publicApi } from './controllers/public.controller';
 import { projects } from './controllers/projects.controller';
 import { domains } from './controllers/domains.controller';
 import { files } from './controllers/files.controller';
@@ -193,7 +193,7 @@ app.get("/openapi.json", async (ctx) => {
 });
 
 // Public API
-app.route(`/v1/meta`, meta);
+app.route(`/v1/public`, publicApi);
 app.route(`/v1/auth`, auth);
 app.route(`/v1/oauth`, oauth);
 app.route(`/v1/webhook`, webhook);

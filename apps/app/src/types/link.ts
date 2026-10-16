@@ -51,7 +51,7 @@ export interface Link {
   user_id: number;
   url: string;
   short_url: string;
-  status: string;
+  is_enabled: boolean;
   created_at: string;
   params: Record<string, string>;
   geo: GeoTarget[];

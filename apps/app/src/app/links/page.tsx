@@ -43,8 +43,8 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { toast } from 'sonner';
-import { CreateLinkDialog } from '@/components/CreateLinkDialog';
-import { ApiExamplesSheet } from '@/components/ApiExamplesSheet';
+import { CreateLinkDialog } from './components/CreateLinkDialog';
+import { ApiExamplesSheet } from './components/ApiExamplesSheet';
 import { api } from '@/lib/api';
 import { useViewPreference } from '@/hooks/use-view-preference';
 import type { Link } from '@/types/link';
@@ -157,10 +157,10 @@ function LinksGrid({
             </RouterLink>
             <div className="flex items-center gap-2">
               <Badge
-                variant={link.status === 'active' ? 'default' : 'secondary'}
+                variant={link.is_enabled ? 'default' : 'secondary'}
                 className="text-xs"
               >
-                {link.status}
+                {link.is_enabled ? 'Enabled' : 'Disabled'}
               </Badge>
               <span className="text-xs text-muted-foreground">
                 {new Date(link.created_at).toLocaleDateString()}
@@ -233,9 +233,9 @@ function LinksTable({
               </TableCell>
               <TableCell className="hidden sm:table-cell">
                 <Badge
-                  variant={link.status === 'active' ? 'default' : 'secondary'}
+                  variant={link.is_enabled ? 'default' : 'secondary'}
                 >
-                  {link.status}
+                  {link.is_enabled ? 'Enabled' : 'Disabled'}
                 </Badge>
               </TableCell>
               <TableCell className="hidden sm:table-cell text-muted-foreground text-sm">

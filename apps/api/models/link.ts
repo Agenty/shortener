@@ -1,11 +1,6 @@
 import { z } from '@hono/zod-openapi';
 import { addMinutes, getUnixTime } from 'date-fns';
-
-export enum LinkStatus {
-  active = 'active',
-  expired = 'expired',
-  blocked = 'blocked',
-}
+import { isBlockedHost, parseHost } from './domain';
 
 const urlValidator = (value: string) => {
   if (typeof value !== 'string' || !value.length) return true;
@@ -21,17 +16,8 @@ const urlValidator = (value: string) => {
     }
 
     // Ensure not a blocked domain or tld
-    const blocked = [
-      '.workers.dev',
-      '.vercel.app',
-      '.idm.in',
-      '.pages.dev',
-      '.ko.gl',
-      '.bitly.ws',
-      '.sbs',
-      '.bubbleapps.io',
-    ];
-    return !blocked.some((d) => uri.hostname.includes(d));
+    const host = parseHost(uri.href);
+    return !host || !isBlockedHost(host);
   } catch (err) {
     return false;
   }
@@ -175,11 +161,13 @@ export const linkSchema = z
         description:
           'Redirect visitors by country with [geo-targeted short links](https://idm.in/docs/t/how-to-create-geo-targeted-short-links/414)',
       }),
-    status: z.enum(LinkStatus).optional().openapi({
-      example: LinkStatus.active,
-      description: 'Current status of the short link',
-      readOnly: true,
-    }),
+    is_enabled: z
+      .union([z.boolean(), z.number().int().min(0).max(1)])
+      .optional()
+      .openapi({
+        example: true,
+        description: 'Disabled short links stop redirecting visitors',
+      }),
     created_at: z.string().nullable().optional().openapi({
       example: '2026-01-01T10:00:00Z',
       description: 'UTC date-time when the short link was created',

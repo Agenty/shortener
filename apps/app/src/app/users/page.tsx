@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
-import { InviteUserDialog } from "@/components/InviteUserDialog";
+import { InviteUserDialog } from "./components/InviteUserDialog";
 import type { User } from "@/types/user";
 
 export default function UsersPage() {

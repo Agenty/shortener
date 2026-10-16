@@ -3,7 +3,6 @@ import { HTTPException } from 'hono/http-exception';
 import { upgradeSchema } from '../models/upgrade';
 import { jsonValidator } from '../helper/validator';
 import {
-  applyStripeCoupon,
   cancelStripeSubscription,
   createCheckoutSession,
 } from '../services/stripe.service';
@@ -75,22 +74,6 @@ subscription.delete('/:id', async (ctx) => {
     );
   }
   return ctx.json({ message: 'Subscription cancelled successfully' }, 200);
-});
-
-subscription.get('/:id/coupon', async (ctx) => {
-  const id = Number(ctx.req.param('id'));
-  const authUser: AuthUser = ctx.req['user'];
-  const subscriptions = await getSubscritions(ctx.env, authUser);
-  if (!subscriptions || !subscriptions.length) {
-    throw new HTTPException(404, { message: 'No subscription found' });
-  }
-  const subscription = subscriptions.find((x) => x.subscription_id === id);
-  if (!subscription) {
-    throw new HTTPException(404, { message: 'No subscription found' });
-  }
-
-  await applyStripeCoupon(ctx.env, subscription);
-  return ctx.json({ message: 'Coupon applied successfully' }, 200);
 });
 
 export { subscription };

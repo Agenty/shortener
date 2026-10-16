@@ -66,7 +66,6 @@ apiKeys.openapi(
         content: {
           'application/json': {
             schema: apiKeySchema,
-            example: API_SAMPLES.apikeys.post,
           },
         },
       },
@@ -144,7 +143,6 @@ apiKeys.openapi(
         content: {
           'application/json': {
             schema: apiKeySchema,
-            example: API_SAMPLES.apikeys.put,
           },
         },
       },

@@ -39,7 +39,6 @@ export const createCheckoutSession = async (
 
   const options: Stripe.Checkout.SessionCreateParams = {
     currency: upgrade.currency,
-    payment_method_types: ['card'],
     line_items: [
       {
         price: price.id,
@@ -348,34 +347,6 @@ export const cancelStripeSubscription = async (
   await stripe.subscriptions.cancel(subscription.pg_subscr_id);
 };
 
-export const applyStripeCoupon = async (
-  env: CloudflareBindings,
-  subscription: Subscription
-) => {
-  const stripe = stripeClient(env);
-  const couponId = env.ENVIRONMENT === 'production' ? '7TJQPeht' : 'tOVdTnfA';
-  // Fetch subscription details from Stripe
-  const stripeSubscription = await stripe.subscriptions.retrieve(
-    subscription.pg_subscr_id
-  );
-
-  // Check if the coupon has already been applied
-  if (
-    stripeSubscription.discount &&
-    stripeSubscription.discount.coupon.id === couponId
-  ) {
-    throw new HTTPException(400, {
-      message:
-        'This coupon has already been used. Click on manage subscription button to see discounted prices.',
-    });
-  }
-
-  // Apply the coupon if it hasn't been used
-  await stripe.subscriptions.update(subscription.pg_subscr_id, {
-    coupon: couponId,
-  });
-};
-
 export const getPlan = (value: string) => {
   if (!value) return PlanType.Free;
   const keys = Object.keys(PlanType);
@@ -442,7 +413,7 @@ export const paypalSubscriptionWebhook = async (
   payPalObject: any
 ) => {
   const { subscription, paypal } = parsePaypal(payPalObject);
-  
+
   // Get customer details from existing subscriptions, if empty
   if (!subscription.account_id) {
     const customer: any = await getSubscriptionByCustomerId(

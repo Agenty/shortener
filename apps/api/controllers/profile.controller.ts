@@ -16,6 +16,10 @@ profile.get('/', async (ctx) => {
   return ctx.json(data, 200);
 });
 
+profile.get('/me', async (ctx) => {
+  return ctx.json(ctx.req['user'] as AuthUser, 200);
+});
+
 profile.put('/', jsonValidator(profileSchema), async (ctx) => {
   const data = ctx.req.valid('json');
   const authUser: AuthUser = ctx.req['user'];

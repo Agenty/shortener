@@ -19,7 +19,6 @@ import {
   isVerifiedInSearchConsole,
   markDomainVerified,
 } from '../services/domain.service';
-import { DomainVerificationMethod } from '../models/domain';
 
 const oauth = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -140,12 +139,7 @@ oauth.get('/google/search-console', async (ctx) => {
     });
   }
 
-  await markDomainVerified(
-    ctx.env,
-    account,
-    domain.domain_id,
-    DomainVerificationMethod.google
-  );
+  await markDomainVerified(ctx.env, account, domain.domain_id);
   return redirect({ verified: domain.domain });
 });
 

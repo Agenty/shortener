@@ -3,15 +3,19 @@ import { HTTPException } from 'hono/http-exception';
 import { AuthUser } from '../models/auth-user';
 import {
   Domain,
-  DomainVerificationMethod,
-  WhitelistedDomain,
+  DomainType,
+  GlobalDomain,
+  ParsedHost,
+  isBlockedHost,
+  isWhitelistedHost,
   normalizeDomain,
+  parseHost,
 } from '../models/domain';
-import whitelistDomains from '../data/whitelist.json';
 import { sendDomainOtpEmail } from './emailer.service';
 import { isDisposableEmail } from './auth.service';
+import { WHITELISTED_DOMAINS } from '../data/whitelisted';
 
-const DOMAIN_COLUMNS = `domain_id, user_id, domain, is_default, is_verified, verification_method, verified_at, created_at, updated_at`;
+const DOMAIN_COLUMNS = `domain_id, user_id, domain, is_default, is_verified, created_at, updated_at`;
 
 // Mailbox providers anyone can sign up for, they don't prove domain ownership
 const PUBLIC_EMAIL_DOMAINS = [
@@ -40,7 +44,6 @@ const OTP_MAX_ATTEMPTS = 5;
 
 type DomainOtpCache = {
   code: number;
-  email: string;
   attempts: number;
   sent_at: number;
 };
@@ -111,8 +114,8 @@ export const createDomain = async (
   try {
     const { meta } = await env.DB.prepare(
       `
-          INSERT INTO Domains (account_id, user_id, domain, is_default, is_verified, created_at)
-          VALUES (?, ?, ?, ?, 0, ?)`
+          INSERT INTO Domains (account_id, user_id, domain, type, is_default, is_verified, created_at)
+          VALUES (?, ?, ?, '${DomainType.user}', ?, 0, ?)`
     )
       .bind(
         domain.account_id,
@@ -176,18 +179,15 @@ export const deleteDomain = async (
 export const markDomainVerified = async (
   env: CloudflareBindings,
   authUser: Pick<AuthUser, 'account_id'>,
-  domainId: number,
-  method: DomainVerificationMethod,
-  email: string | null = null
+  domainId: number
 ): Promise<boolean> => {
-  const now = new Date().toISOString();
   const { meta } = await env.DB.prepare(
     `
         UPDATE Domains
-        SET is_verified = 1, verification_method = ?, verified_email = ?, verified_at = ?, updated_at = ?
+        SET is_verified = 1, updated_at = ?
         WHERE domain_id = ? AND account_id = ?`
   )
-    .bind(method, email, now, now, domainId, authUser.account_id)
+    .bind(new Date().toISOString(), domainId, authUser.account_id)
     .run();
   return meta.changes > 0;
 };
@@ -225,14 +225,19 @@ export const sendDomainOtp = async (
 
   const otp: DomainOtpCache = {
     code: _.random(100000, 999999),
-    email: email.toLowerCase(),
     attempts: 0,
     sent_at: Date.now(),
   };
   await env.KVCACHE.put(cacheKey, JSON.stringify(otp), {
     expirationTtl: OTP_TTL,
   });
-  await sendDomainOtpEmail(env, authUser, otp.email, domain.domain, otp.code);
+  await sendDomainOtpEmail(
+    env,
+    authUser,
+    email.toLowerCase(),
+    domain.domain,
+    otp.code
+  );
 };
 
 export const verifyDomainOtp = async (
@@ -264,13 +269,7 @@ export const verifyDomainOtp = async (
   }
 
   await env.KVCACHE.delete(cacheKey);
-  await markDomainVerified(
-    env,
-    authUser,
-    domain.domain_id,
-    DomainVerificationMethod.email,
-    otp.email
-  );
+  await markDomainVerified(env, authUser, domain.domain_id);
 };
 
 /* ------------------------- Google Search Console ------------------------ */
@@ -335,41 +334,59 @@ export const isVerifiedInSearchConsole = (
     }
   });
 
-/* ------------------------------ Whitelist ------------------------------ */
+/* ---------------------- Whitelisted & blocked domains --------------------- */
 
-export const getWhitelist = async (
+export const getGlobalDomains = async (
   env: CloudflareBindings,
+  type?: DomainType,
   offset: number = 0,
   limit: number = 1000
-): Promise<Array<WhitelistedDomain>> => {
+): Promise<Array<GlobalDomain>> => {
   const { results } = await env.DB.prepare(
-    `SELECT domain, created_at FROM WhitelistedDomains ORDER BY domain LIMIT ?, ?`
+    `SELECT domain, type, created_at FROM Domains
+     WHERE account_id IS NULL AND (?1 IS NULL OR type = ?1)
+     ORDER BY domain LIMIT ?2, ?3`
   )
-    .bind(offset, limit)
-    .all<WhitelistedDomain>();
+    .bind(type || null, offset, limit)
+    .all<GlobalDomain>();
   return results;
 };
 
-export const addWhitelist = async (
-  env: CloudflareBindings,
-  authUser: AuthUser,
-  domain: string
-): Promise<WhitelistedDomain> => {
-  const created_at = new Date().toISOString();
-  await env.DB.prepare(
-    `INSERT OR IGNORE INTO WhitelistedDomains (domain, user_id, created_at) VALUES (?, ?, ?)`
-  )
-    .bind(domain, authUser.user_id, created_at)
-    .run();
-  return { domain, created_at };
+/** Built-in popular domains followed by the ones whitelisted by admin */
+export const getWhitelistedDomains = async (
+  env: CloudflareBindings
+): Promise<Array<GlobalDomain>> => {
+  const custom = await getGlobalDomains(env, DomainType.whitelisted);
+  const builtin = [...WHITELISTED_DOMAINS]
+    .filter((domain) => !custom.some((d) => d.domain === domain))
+    .map((domain): GlobalDomain => ({ domain, type: DomainType.whitelisted, is_builtin: true }));
+  return [...custom, ...builtin];
 };
 
-export const deleteWhitelist = async (
+/** Adds a global domain, or changes the type of an existing one */
+export const upsertGlobalDomain = async (
+  env: CloudflareBindings,
+  authUser: AuthUser,
+  { domain, type }: GlobalDomain
+): Promise<GlobalDomain> => {
+  const created_at = new Date().toISOString();
+  await env.DB.prepare(
+    `INSERT INTO Domains (account_id, user_id, domain, type, created_at)
+     VALUES (NULL, ?, ?, ?, ?)
+     ON CONFLICT(domain) WHERE account_id IS NULL
+     DO UPDATE SET type = excluded.type, user_id = excluded.user_id, updated_at = excluded.created_at`
+  )
+    .bind(authUser.user_id, domain, type, created_at)
+    .run();
+  return { domain, type, created_at };
+};
+
+export const deleteGlobalDomain = async (
   env: CloudflareBindings,
   domain: string
 ): Promise<boolean> => {
   const { meta } = await env.DB.prepare(
-    `DELETE FROM WhitelistedDomains WHERE domain = ?`
+    `DELETE FROM Domains WHERE account_id IS NULL AND domain = ?`
   )
     .bind(domain)
     .run();
@@ -378,53 +395,61 @@ export const deleteWhitelist = async (
 
 /* --------------------------- Link destinations -------------------------- */
 
-const getWhitelistedHosts = async (
-  env: CloudflareBindings,
-  hostnames: Array<string>
-): Promise<Array<string>> => {
-  const staticHosts = hostnames.filter((h) => whitelistDomains.includes(h));
-  const pending = hostnames.filter((h) => !staticHosts.includes(h));
-  if (!pending.length) return staticHosts;
-
-  const { results } = await env.DB.prepare(
-    `SELECT domain FROM WhitelistedDomains WHERE domain IN (${pending
-      .map(() => '?')
-      .join()})`
-  )
-    .bind(...pending)
-    .all<{ domain: string }>();
-  return [...staticHosts, ...results.map((x) => x.domain)];
-};
-
 /**
  * Short links can be created only for destination URLs on a domain that is
- * verified by the account, or whitelisted by admin (e.g. linkedin.com)
+ * verified by the account, or whitelisted (e.g. linkedin.com). Blocked domains,
+ * TLDs and their subdomains are denied even when verified. The in-memory
+ * lists are checked first, the database only for the remaining hosts
  */
 export const assertVerifiedDestinations = async (
   env: CloudflareBindings,
   authUser: AuthUser,
   urls: Array<string | null | undefined>
 ) => {
-  const hostnames = _.uniq(
-    urls.filter(Boolean).map((url) => normalizeDomain(new URL(url).hostname))
-  ).filter(Boolean);
-  if (!hostnames.length) return;
+  const hosts = _.uniqBy(
+    urls.filter(Boolean).map((url) => parseHost(url) || { hostname: url }),
+    'hostname'
+  );
 
-  const whitelisted = await getWhitelistedHosts(env, hostnames);
-  let pending = hostnames.filter((h) => !whitelisted.includes(h));
-  if (!pending.length) return;
+  const invalid = hosts.filter((h) => !('domain' in h)).map((h) => h.hostname);
+  if (invalid.length) {
+    throw new HTTPException(400, {
+      message: `Invalid destination: ${invalid.join(', ')}. IP addresses and local hosts are not allowed`,
+    });
+  }
 
-  const { results } = await env.DB.prepare(
-    `SELECT domain FROM Domains WHERE account_id = ? AND is_verified = 1`
-  )
-    .bind(authUser.account_id)
-    .all<{ domain: string }>();
-  const verified = results.map((x) => x.domain);
-  pending = pending.filter((h) => !verified.some((d) => isCoveredBy(h, d)));
+  const parsed = hosts as Array<ParsedHost>;
+  const blocked = parsed.filter(isBlockedHost);
+  const pending = parsed.filter((h) => !isBlockedHost(h) && !isWhitelistedHost(h));
 
+  let rows: Array<{ domain: string; type: DomainType }> = [];
   if (pending.length) {
+    const candidates = _.uniq(pending.flatMap((h) => h.candidates));
+    ({ results: rows } = await env.DB.prepare(
+      `SELECT domain, type FROM Domains
+       WHERE domain IN (${candidates.map(() => '?').join()})
+       AND (account_id IS NULL OR (account_id = ? AND is_verified = 1))`
+    )
+      .bind(...candidates, authUser.account_id)
+      .all<{ domain: string; type: DomainType }>());
+  }
+
+  const matches = (h: ParsedHost, type: DomainType) =>
+    rows.some((r) => r.type === type && h.candidates.includes(r.domain));
+
+  blocked.push(...pending.filter((h) => matches(h, DomainType.blocked)));
+  if (blocked.length) {
     throw new HTTPException(403, {
-      message: `Domain not verified: ${pending.join(', ')}. Add and verify the domain ownership via email OTP or Google Search Console to create short links for it`,
+      message: `Domain blocked: ${blocked.map((h) => h.hostname).join(', ')}. Short links cannot be created for this domain`,
+    });
+  }
+
+  const unverified = pending.filter(
+    (h) => !matches(h, DomainType.whitelisted) && !matches(h, DomainType.user)
+  );
+  if (unverified.length) {
+    throw new HTTPException(403, {
+      message: `Domain not verified: ${unverified.map((h) => h.hostname).join(', ')}. Add and verify the domain ownership via email OTP or Google Search Console to create short links for it`,
     });
   }
 };

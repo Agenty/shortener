@@ -1,4 +1,4 @@
-import { User } from '../models/user';
+import { User, UserUpdate } from '../models/user';
 import { AuthUser, UserStatus } from '../models/auth-user';
 import { TableResult, toTableResult } from '../models/table';
 import { nanoid } from 'nanoid';
@@ -74,17 +74,16 @@ export const updateUser = async (
   env: CloudflareBindings,
   authUser: AuthUser,
   user_id: number,
-  data: User
+  data: UserUpdate
 ): Promise<boolean> => {
   const { meta } = await env.DB.prepare(
     `
       UPDATE Users 
-      SET name = ?, email = ?, role = ?, status = ?
+      SET name = ?, role = ?, status = ?
       WHERE account_id = ? AND user_id = ?`
   )
     .bind(
       data.name,
-      data.email,
       data.role,
       data.status,
       authUser.account_id,

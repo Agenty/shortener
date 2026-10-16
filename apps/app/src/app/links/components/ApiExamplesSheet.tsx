@@ -6,8 +6,9 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { env } from "@/env";
 
-const API_BASE = "https://api.idm.in/v1";
+const API_BASE = env.API_URL;
 
 const examples = {
   curl: `curl -X POST "${API_BASE}/links" \\

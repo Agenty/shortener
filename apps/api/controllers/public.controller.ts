@@ -2,7 +2,7 @@ import { createRoute, z } from '@hono/zod-openapi';
 import { extractMetadata } from '../services/meta.service';
 import { createApi, errorResponses } from '../helper/openapi';
 
-const meta = createApi();
+const publicApi = createApi();
 
 const metadataSchema = z
   .object({
@@ -21,11 +21,11 @@ const metadataSchema = z
     description: 'Open Graph and SEO meta tags of a web page',
   });
 
-meta.openapi(
+publicApi.openapi(
   createRoute({
     tags: ['Tools'],
     method: 'get',
-    path: '/',
+    path: '/meta',
     summary: 'Get page metadata',
     description:
       'Extract the title, description, Open Graph image, favicon and site name of any web page. Use it to prefill the social media preview of a short link.',
@@ -56,4 +56,4 @@ meta.openapi(
   }
 );
 
-export { meta };
+export { publicApi };

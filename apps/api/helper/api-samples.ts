@@ -60,23 +60,8 @@ export const API_SAMPLES = {
     },
     put: {
       name: 'John Smith',
-      email: 'john@example.com',
       role: 'Admin',
       status: 'active',
-    },
-  },
-  apikeys: {
-    post: {
-      name: 'Production server',
-    },
-    put: {
-      name: 'Production server',
-      is_enabled: false,
-    },
-  },
-  whitelist: {
-    post: {
-      domain: 'linkedin.com',
     },
   },
 };

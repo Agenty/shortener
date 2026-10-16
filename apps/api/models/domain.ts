@@ -1,9 +1,16 @@
 import { z } from '@hono/zod-openapi';
 import { parse } from 'tldts';
+import { BLOCKED_DOMAINS, BLOCKED_TLDS } from '../data/blocked';
+import { WHITELISTED_DOMAINS } from '../data/whitelisted';
 
-export enum DomainVerificationMethod {
-  email = 'email',
-  google = 'google',
+/**
+ * `user` domains belong to an account, `whitelisted` and `blocked` domains
+ * are managed by admin and apply to every account (account_id is NULL)
+ */
+export enum DomainType {
+  user = 'user',
+  whitelisted = 'whitelisted',
+  blocked = 'blocked',
 }
 
 /** Normalizes `https://www.Example.com/path` into `example.com` */
@@ -15,6 +22,40 @@ export const normalizeDomain = (value: string): string | undefined => {
   if (!hostname || !domain || isIp) return;
   return hostname.replace(/^www\./, '');
 };
+
+export type ParsedHost = {
+  /** `blog.example.co.uk` */
+  hostname: string;
+  /** Registrable domain, `example.co.uk` */
+  domain: string;
+  /** Last label, `uk` */
+  tld: string;
+  /** Hostname and its parents up to the registrable domain, used for lookups */
+  candidates: Array<string>;
+};
+
+/** Extracts the hostname, registrable domain and TLD of a URL with tldts */
+export const parseHost = (url: string): ParsedHost | undefined => {
+  const { hostname, domain, publicSuffix, isIp } = parse(url.trim().toLowerCase());
+  if (!hostname || !domain || !publicSuffix || isIp) return;
+  const host = hostname.replace(/^www\./, '');
+  // `a.blog.example.com` => [`a.blog.example.com`, `blog.example.com`, `example.com`]
+  const labels = host.split('.');
+  const depth = labels.length - domain.split('.').length + 1;
+  return {
+    hostname: host,
+    domain,
+    tld: publicSuffix.split('.').pop(),
+    candidates: labels.slice(0, depth).map((_, i) => labels.slice(i).join('.')),
+  };
+};
+
+export const isBlockedHost = (host: ParsedHost) =>
+  BLOCKED_TLDS.has(host.tld) ||
+  host.candidates.some((d) => BLOCKED_DOMAINS.has(d));
+
+export const isWhitelistedHost = (host: ParsedHost) =>
+  host.candidates.some((d) => WHITELISTED_DOMAINS.has(d));
 
 const domainName = z
   .string()
@@ -55,17 +96,6 @@ export const domainSchema = z
         'Short links can be created only for destination URLs on verified domains',
       readOnly: true,
     }),
-    verification_method: z.enum(DomainVerificationMethod).nullable().optional().openapi({
-      example: DomainVerificationMethod.email,
-      description:
-        'How the ownership was verified: `email` OTP or `google` Search Console',
-      readOnly: true,
-    }),
-    verified_at: z.string().nullable().optional().openapi({
-      example: '2026-01-01T10:00:00Z',
-      description: 'UTC date-time when the domain ownership was verified',
-      readOnly: true,
-    }),
     created_at: z.string().nullable().optional().openapi({
       example: '2026-01-01T10:00:00Z',
       description: 'UTC date-time when the domain was added',
@@ -84,7 +114,6 @@ export const domainSchema = z
 
 export type Domain = z.infer<typeof domainSchema> & {
   account_id?: number;
-  verified_email?: string | null;
 };
 
 export const domainOtpSchema = z
@@ -110,16 +139,24 @@ export const domainVerifySchema = z
 
 export type DomainVerify = z.infer<typeof domainVerifySchema>;
 
-export const whitelistSchema = z
+export const globalDomainSchema = z
   .object({
     domain: domainName.openapi({
       type: 'string',
       example: 'linkedin.com',
       description:
-        'Domain allowed for every account without verification, e.g. popular social networks',
+        'Domain allowed (`whitelisted`) or denied (`blocked`) for every account, including its subdomains',
+    }),
+    type: z.enum([DomainType.whitelisted, DomainType.blocked]).openapi({
+      example: DomainType.whitelisted,
     }),
     created_at: z.string().nullable().optional().openapi({ readOnly: true }),
+    is_builtin: z.boolean().optional().openapi({
+      description:
+        'Whitelisted in code (popular domains), cannot be removed from the API',
+      readOnly: true,
+    }),
   })
-  .openapi('WhitelistedDomain');
+  .openapi('GlobalDomain');
 
-export type WhitelistedDomain = z.infer<typeof whitelistSchema>;
+export type GlobalDomain = z.infer<typeof globalDomainSchema>;
