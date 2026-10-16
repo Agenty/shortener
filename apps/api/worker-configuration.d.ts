@@ -29,6 +29,7 @@ interface __BaseEnv_CloudflareBindings {
 	VIRUSTOTAL_APIKEY: string;
 	STRIPE_SECRET_KEY: string;
 	RECAPTCHA_KEY: string;
+    AGENTY_KEY: string;
 }
 declare namespace Cloudflare {
 	interface GlobalProps {

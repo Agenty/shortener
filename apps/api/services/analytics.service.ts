@@ -1,24 +1,29 @@
 import { Link } from '../models/link';
+import { IResult } from "ua-parser-js";
+import { isbot } from "isbot";
 
 export const setAnalytics = (
   env: CloudflareBindings,
   link: Link,
-  parseResult: UAParser.IResult,
+  parseResult: IResult,
   cf: any,
   referer: string,
   ip: string
 ) => {
+
   if (!link.account_id || !env.SHORTENER_ANALYTICS) return;
+
+  if (isbot(parseResult.ua)) return;
 
   try {
     const { browser, os, device } = parseResult;
+
     const isDesktop =
       device.type === undefined ||
       !['wearable', 'mobile'].includes(device.type);
+
     env.SHORTENER_ANALYTICS.writeDataPoint({
       blobs: [
-        `${link.account_id}`,
-        link.key,
         cf.country,
         cf.city,
         cf.region,
@@ -29,11 +34,12 @@ export const setAnalytics = (
         ip,
       ],
       doubles: [
-        Number(cf.metroCode),
-        Number(cf.longitude),
-        Number(cf.latitude),
+        Number(link.account_id),
+        Number(cf.metroCode ?? 0),
+        Number(cf.longitude ?? 0),
+        Number(cf.latitude ?? 0),
       ],
-      indexes: [`${link.account_id}`],
+      indexes: [link.key],
     });
   } catch (e) {
     console.error('Error in worker analytics', e);
