@@ -1,10 +1,9 @@
 import { AuthUser } from '../models/auth-user';
-import { Bindings } from '../types/bindings';
 import { Project } from '../models/project';
 import { getRandomColor } from '../helper/utility';
 
 export const getProjects = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   offset: number = 0,
   limit: number = 25
@@ -29,7 +28,7 @@ export const getProjects = async (
   return results as unknown as Array<Project>;
 };
 
-export const getProjectCount = async (env: Bindings, authUser: AuthUser) => {
+export const getProjectCount = async (env: CloudflareBindings, authUser: AuthUser) => {
   const sqlQuery = env.DB.prepare(
     `Select count(1) as total from Projects Where account_id = ?`
   ).bind(authUser.account_id);
@@ -39,7 +38,7 @@ export const getProjectCount = async (env: Bindings, authUser: AuthUser) => {
 };
 
 export const getProjectById = async (
-  env: Bindings,
+  env: CloudflareBindings,
   projectId: number,
   authUser: AuthUser
 ): Promise<Project | null> => {
@@ -55,7 +54,7 @@ export const getProjectById = async (
 };
 
 export const createProject = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   project: Project
 ): Promise<Project> => {
@@ -83,7 +82,7 @@ export const createProject = async (
 };
 
 export const updateProject = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   projectId: number,
   project: Project
@@ -109,7 +108,7 @@ export const updateProject = async (
 };
 
 export const deleteProject = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   projectId: number
 ): Promise<boolean> => {

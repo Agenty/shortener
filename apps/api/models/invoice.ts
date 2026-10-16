@@ -9,7 +9,7 @@ export interface InvoiceItem {
   total?: number;
 }
 
-export class Invoice {
+export interface Invoice {
   invoice_id?: number;
   initial: string;
   invoice_number?: string;
@@ -25,7 +25,7 @@ export class Invoice {
   tax_percent?: number;
   tax_amount?: number;
   status?: string;
-  created_at?: Date;
+  created_at?: Date | string;
   paid_at?: Date | string;
   period_start_at?: Date | string;
   period_end_at?: Date | string;

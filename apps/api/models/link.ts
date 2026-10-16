@@ -1,24 +1,10 @@
 import { z } from '@hono/zod-openapi';
-import dayjs from 'dayjs';
-import { BaseLink } from './baselink';
+import { addMinutes, getUnixTime } from 'date-fns';
 
-export class Link extends BaseLink {
-  url?: string;
-  expire_at?: Date | string;
-  data?: Record<string, string>;
-  params?: Record<string, string> = {};
-  title?: string;
-  description?: string;
-  image?: string;
-  password?: string;
-  ios?: string;
-  android?: string;
-  geo?: Array<Geo> = new Array<Geo>();
-}
-
-export class Geo {
-  country?: string;
-  url?: string;
+export enum LinkStatus {
+  active = 'active',
+  expired = 'expired',
+  blocked = 'blocked',
 }
 
 const urlValidator = (value: string) => {
@@ -53,8 +39,8 @@ const urlValidator = (value: string) => {
 
 const expireAtValidator = (value: string) => {
   if (!value || !value.length) return true;
-  const expireAt = dayjs(value).unix();
-  if (expireAt <= dayjs().add(5, 'minutes').unix()) {
+  const expireAt = getUnixTime(new Date(value));
+  if (expireAt <= getUnixTime(addMinutes(new Date(), 5))) {
     return false;
   }
   return true;
@@ -70,58 +56,88 @@ const imageUrlValidator = (url: string): boolean => {
   );
 };
 
+const destinationUrl = z
+  .url()
+  .refine((value) => urlValidator(value), {
+    message: 'blocked',
+  });
+
+const optionalDestinationUrl = destinationUrl
+  .nullable()
+  .optional()
+  .or(z.literal(''));
+
+export const geoSchema = z
+  .object({
+    country: z.string().length(2).nullable().openapi({
+      example: 'US',
+      description: 'ISO 3166-1 alpha-2 country code of the visitor',
+    }),
+    url: destinationUrl.openapi({
+      example: 'https://example.com/us',
+      description: 'Destination URL for visitors from this country',
+    }),
+  })
+  .openapi('GeoTarget');
+
+export type Geo = z.infer<typeof geoSchema>;
+
 export const linkSchema = z
   .object({
     key: z.string().max(32).optional().openapi({
-      example: 'github',
+      example: 'summer-sale',
       description:
-        'To provide custom aliases for short links. It will be auto-generated if not provided',
+        'Custom alias (back-half) of the short URL, e.g. `idm.in/summer-sale`. Auto-generated when not provided',
     }),
-    project_id: z.number().positive().optional().nullable().openapi({
+    project_id: z.number().int().positive().optional().nullable().openapi({
       example: 1,
-      description: 'To create a short link within a project',
+      description: 'Project to organize the short link in',
     }),
     url: z
-      .string()
-      .min(10)
       .url()
+      .min(10)
       .refine((value) => urlValidator(value), {
         message: 'blocked',
       })
       .openapi({
-        example: 'https://github.com/dayschedule/idm',
-        description: 'A valid destination URL to generate a short link',
+        example: 'https://example.com/blog/url-shortener-guide',
+        description:
+          'Long destination URL to shorten. The domain must be [verified](#tag/Domains) in your account or whitelisted',
       }),
+    short_url: z.string().optional().openapi({
+      example: 'https://idm.in/summer-sale',
+      description: 'The generated short URL to share',
+      readOnly: true,
+    }),
     expire_at: z
-      .string()
-      .datetime()
+      .iso.datetime({ offset: true, local: true })
       .optional()
+      .nullable()
       .refine((value) => expireAtValidator(value), {
         message: 'Must be greater then current date time + 5 minutes or empty',
       })
       .openapi({
-        default: null,
-        example: '2023-20-12T08:40:00',
+        example: '2030-12-31T23:59:00Z',
         description:
-          'To expire the short link automatically on a given date time, or leave blank for no expiration.',
+          'Expire the short link automatically at this UTC date-time. Leave empty for a link that never expires',
       }),
     params: z
-      .record(z.string())
+      .record(z.string(), z.string())
       .optional()
       .openapi({
-        example: {
-          utm_source: 'ads',
-        },
-        description: 'UTM parameters for conversion tracking',
+        example: { utm_source: 'newsletter', utm_medium: 'email' },
+        description:
+          'UTM parameters appended to the destination URL for campaign conversion tracking in Google Analytics',
       }),
     title: z.string().max(60).nullable().optional().openapi({
-      example: 'Social media preview title',
+      example: 'The complete guide to URL shortening',
+      description: 'Social media preview (Open Graph) title',
     }),
     description: z.string().max(155).nullable().optional().openapi({
-      example: 'Social media preview description',
+      example: 'Learn how to create branded short links and track clicks.',
+      description: 'Social media preview (Open Graph) description',
     }),
     image: z
-      .string()
       .url()
       .nullable()
       .optional()
@@ -130,85 +146,60 @@ export const linkSchema = z
         message: 'Image url must ends with .jpg, .png etc',
       })
       .openapi({
-        example: 'https://example.com/banner.png',
+        example: 'https://example.com/images/og-banner.png',
+        description:
+          'Social media preview (Open Graph) image URL. Must end with .jpg, .png, .gif, .bmp or .webp',
       }),
     password: z.string().max(32).nullable().optional().openapi({
-      example: '***',
+      example: 's3cret',
       description:
-        'To restrict access of your [short link with a custom password](https://idm.in/docs/t/how-to-create-password-protected-short-links/413)',
+        'Restrict access with a [password protected short link](https://idm.in/docs/t/how-to-create-password-protected-short-links/413)',
     }),
-    ios: z
-      .string()
-      .url()
-      .nullable()
-      .optional()
-      .or(z.literal(''))
-      .refine((value) => urlValidator(value), {
-        message: 'blocked',
-      })
-      .openapi({
-        example:
-          'https://apps.apple.com/us/app/dayschedule-appointment-app/id6444792037',
-        description:
-          'A valid URL to redirect the iOS users to a different link. e.g your iOS app on Apple App store.',
-      }),
-    android: z
-      .string()
-      .url()
-      .nullable()
-      .optional()
-      .or(z.literal(''))
-      .refine((value) => urlValidator(value), {
-        message: 'blocked',
-      })
-      .openapi({
-        example:
-          'https://play.google.com/store/apps/details?id=com.dayschedule',
-        description:
-          'A valid URL to redirect the Android users to a different link. e.g your android app on Playstore.',
-      }),
+    ios: optionalDestinationUrl.openapi({
+      example: 'https://apps.apple.com/us/app/example/id000000000',
+      description:
+        'Deep link for iPhone and iPad visitors, e.g. your app on the Apple App Store',
+    }),
+    android: optionalDestinationUrl.openapi({
+      example: 'https://play.google.com/store/apps/details?id=com.example',
+      description:
+        'Deep link for Android visitors, e.g. your app on Google Play Store',
+    }),
     geo: z
-      .array(
-        z.object({
-          country: z.string().length(2).nullable().openapi({
-            example: 'US',
-            description: 'ISO 2 country code',
-          }),
-          url: z
-            .string()
-            .url()
-            .refine((value) => urlValidator(value), {
-              message: 'blocked',
-            }),
-        })
-      )
+      .array(geoSchema)
       .max(195)
       .nullable()
       .optional()
       .default([])
       .openapi({
-        example: [
-          {
-            country: 'UK',
-            url: 'https://example.co.uk',
-          },
-          {
-            country: 'IN',
-            url: 'https://example.in',
-          },
-        ],
         description:
-          'To enable the [geographic targeting short links](https://idm.in/docs/t/how-to-create-geo-targeted-short-links/414) and redirect users based on their location',
+          'Redirect visitors by country with [geo-targeted short links](https://idm.in/docs/t/how-to-create-geo-targeted-short-links/414)',
       }),
-    created_at: z
-      .string()
-      .nullable()
-      .optional()
-      .openapi({ example: new Date().toISOString(), readOnly: true }),
-    updated_at: z
-      .string()
-      .nullable()
-      .optional()
-      .openapi({ example: new Date().toISOString(), readOnly: true }),
+    status: z.enum(LinkStatus).optional().openapi({
+      example: LinkStatus.active,
+      description: 'Current status of the short link',
+      readOnly: true,
+    }),
+    created_at: z.string().nullable().optional().openapi({
+      example: '2026-01-01T10:00:00Z',
+      description: 'UTC date-time when the short link was created',
+      readOnly: true,
+    }),
+    updated_at: z.string().nullable().optional().openapi({
+      example: '2026-01-02T10:00:00Z',
+      description: 'UTC date-time when the short link was last updated',
+      readOnly: true,
+    }),
   })
-  .openapi('Links');
+  .openapi('Link', {
+    description:
+      'A short link that redirects visitors to a long destination URL, with optional UTM tracking, expiration, password, app deep links and geo-targeting',
+  });
+
+export type Link = z.infer<typeof linkSchema> & {
+  account_id?: number;
+  user_id?: number;
+  name?: string;
+  type?: string;
+  data?: Record<string, any>;
+};

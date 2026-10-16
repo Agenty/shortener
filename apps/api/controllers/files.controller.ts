@@ -1,11 +1,10 @@
 import { Hono } from 'hono';
-import { Bindings } from '../types/bindings';
 import { AuthUser } from '../models/auth-user';
 import { HTTPException } from 'hono/http-exception';
 import { nanoid } from 'nanoid';
 import mime from 'mime';
 
-const files = new Hono<{ Bindings: Bindings }>();
+const files = new Hono<{ Bindings: CloudflareBindings }>();
 
 const mimeTypes = [
   'application/pdf',
@@ -20,6 +19,9 @@ files.post('/', async (ctx) => {
   const authUser: AuthUser = ctx.req['user'];
   const formData = await ctx.req.formData();
   const file = formData.get('file') as any;
+  if (!file || typeof file === 'string') {
+    throw new HTTPException(400, { message: 'A file is required' });
+  }
   const mimeType = mime.getType(file.name);
   if (!mimeType || !mimeTypes.includes(mimeType)) {
     throw new HTTPException(400, {

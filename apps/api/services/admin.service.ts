@@ -1,10 +1,10 @@
-import { TableResult } from '../models/table';
-import { Bindings } from '../types/bindings';
+import { TableResult, toTableResult } from '../models/table';
 import { User } from '../models/user';
-import { sendTemplate } from './emailer.service';
+import { sendEmail } from './emailer.service';
+import { announcementEmailHtml } from '../emails/announcement-email';
 
 export const getAllUsers = async (
-  env: Bindings,
+  env: CloudflareBindings,
   offset: number = 0,
   limit: number = 100
 ): Promise<TableResult> => {
@@ -17,10 +17,10 @@ export const getAllUsers = async (
   ).bind(offset, limit);
 
   const { results } = await sqlQuery.all();
-  return new TableResult(results, offset, limit);
+  return toTableResult(results, offset, limit);
 };
 
-export const countUsers = async (env: Bindings): Promise<number> => {
+export const countUsers = async (env: CloudflareBindings): Promise<number> => {
   const sqlQuery = env.DB.prepare(
     `
         SELECT count(user_id) as total
@@ -33,7 +33,7 @@ export const countUsers = async (env: Bindings): Promise<number> => {
 };
 
 export const getEmails = async (
-  env: Bindings,
+  env: CloudflareBindings,
   offset = 0,
   limit = 2500
 ): Promise<Array<User>> => {
@@ -51,66 +51,36 @@ export const getEmails = async (
 };
 
 const emailSender = async (
-  env: Bindings,
-  users: Array<User>,
-  message: any,
-  sendAt: string
+  env: CloudflareBindings,
+  user: User,
+  message: any
 ) => {
-  const emailTo = [];
-  const mergeVars = [];
+  const unsubscribeUrl = `${env.APP_URL}/unsubscribe?email=${encodeURIComponent(
+    user.email
+  )}&uid=${user.guid}`;
 
-  users.forEach((x: User) => {
-    emailTo.push({
-      email: x.email,
-      name: x.name,
-      type: 'to',
-    });
-
-    mergeVars.push({
-      rcpt: x.email,
-      vars: [
-        { name: 'name', content: x.name },
-        { name: 'uid', content: x.guid },
-      ],
-    });
-  });
-
-  const templateContent = [
-    {
-      name: 'body',
-      content: message.description.replace(/(<p><br><\/p>)+/g, ''),
-    },
-  ];
-
-  await sendTemplate({
-    key: env.MANDRILL_KEY,
-    message: {
-      from_email: message.from_email,
-      from_name: message.from_name,
-      to: emailTo,
+  await sendEmail(env, {
+    from: { email: message.from_email, name: message.from_name },
+    to: { email: user.email, name: user.name },
+    subject: message.subject,
+    headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>` },
+    html: await announcementEmailHtml({
+      name: user.name,
       subject: message.subject,
-      preserve_recipients: false,
-      merge_vars: mergeVars,
-    },
-    template_name: 'idm-announcement',
-    template_content: templateContent,
-    send_at: sendAt,
+      body: message.description.replace(/(<p><br><\/p>)+/g, ''),
+      unsubscribeUrl,
+    }),
   });
 };
 
 export const bulkEmailer = async (
-  env: Bindings,
+  env: CloudflareBindings,
   users: Array<User>,
-  message: any,
-  sendAt: string
+  message: any
 ) => {
-  if (users.length > 1000) {
-    let i: number;
-    for (i = 0; i < users.length; i += 1000) {
-      const arrayChunk = users.slice(i, i + 1000);
-      await emailSender(env, arrayChunk, message, sendAt);
-    }
-  } else {
-    await emailSender(env, users, message, sendAt);
+  // Each recipient gets a personalized email; send in small batches
+  for (let i = 0; i < users.length; i += 10) {
+    const chunk = users.slice(i, i + 10);
+    await Promise.allSettled(chunk.map((user) => emailSender(env, user, message)));
   }
 };

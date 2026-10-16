@@ -1,20 +1,11 @@
-import { z } from 'zod';
+import { z } from '@hono/zod-openapi';
 
-export class Upgrade {
-  plan?: string = 'Basic';
-  frequency: string = 'month';
-  currency: string = 'USD';
-  price: number = 7;
-  total: number = 1;
-}
-
-const PlanEnum = z.enum(['Basic', 'Pro', 'Business', 'Lifetime']);
-const CurrencyEnum = z.enum(['USD', 'INR']);
-const FrequencyEnum = z.enum(['month', 'year']);
-
+// Internal: checkout request for a paid plan
 export const upgradeSchema = z.object({
-  plan: PlanEnum.default('Basic'),
-  currency: CurrencyEnum.default('USD'),
+  plan: z.enum(['Basic', 'Pro', 'Business', 'Lifetime']).default('Basic'),
+  currency: z.enum(['USD', 'INR']).default('USD'),
   price: z.number().min(7, 'Invalid plan'),
-  frequency: FrequencyEnum.default('month'),
+  frequency: z.enum(['month', 'year']).default('month'),
 });
+
+export type Upgrade = z.infer<typeof upgradeSchema>;

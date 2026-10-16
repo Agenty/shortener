@@ -1,16 +1,14 @@
-import { z } from 'zod';
+import { z } from '@hono/zod-openapi';
 
 export enum OTPPurpose {
   signup = 'signup',
   delete_account = 'delete_account',
 }
 
-export class OtpVerification {
-  code?: number;
-  purpose?: OTPPurpose;
-}
-
+// Internal: email OTP for sign up and account deletion
 export const otpSchema = z.object({
-  purpose: z.nativeEnum(OTPPurpose),
+  purpose: z.enum(OTPPurpose),
   code: z.number().int().nullable().optional(),
 });
+
+export type OtpVerification = z.infer<typeof otpSchema>;

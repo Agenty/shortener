@@ -1,6 +1,6 @@
 import { ZodError, ZodIssue } from 'zod';
 import { Link } from '../models/link';
-import dayjs from 'dayjs';
+import { getUnixTime } from 'date-fns';
 
 export const isValidUrl = (url: string) => {
   if (!url || !url.length) return false;
@@ -94,7 +94,7 @@ export const generateMd5 = async (value: string) => {
 
 export const getExpiration = (link: Link) => {
   if (!link.expire_at) return;
-  const expireAt = link.expire_at ? dayjs(link.expire_at).unix() : undefined;
+  const expireAt = link.expire_at ? getUnixTime(new Date(link.expire_at)) : undefined;
   return expireAt > 2147483647 ? undefined : expireAt;
 };
 

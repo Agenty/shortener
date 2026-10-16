@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import { validator } from 'hono/validator';
-import { Bindings } from '../types/bindings';
-import { Upgrade, upgradeSchema } from '../models/upgrade';
+import { HTTPException } from 'hono/http-exception';
+import { upgradeSchema } from '../models/upgrade';
+import { jsonValidator } from '../helper/validator';
 import {
   applyStripeCoupon,
   cancelStripeSubscription,
@@ -16,19 +16,13 @@ import {
   SubscriptionGateway,
   SubscriptionStatus,
 } from '../models/subscription';
-import { contactEmail, supportEmail } from '../services/emailer.service';
+import { supportEmail } from '../services/emailer.service';
 
-const subscription = new Hono<{ Bindings: Bindings }>();
+const subscription = new Hono<{ Bindings: CloudflareBindings }>();
 
 subscription.post(
   '/create-checkout-session',
-  validator('json', (value, ctx) => {
-    const parsed = upgradeSchema.safeParse(value);
-    if (!parsed.success) {
-      return ctx.json(parsed, 400);
-    }
-    return parsed.data as Upgrade;
-  }),
+  jsonValidator(upgradeSchema),
   async (ctx) => {
     const { cf } = ctx.req.raw;
     const authUser: AuthUser = ctx.req['user'];
@@ -36,7 +30,7 @@ subscription.post(
     upgrade.currency = cf.country == 'IN' ? 'INR' : 'USD';
     const subscriptions = await getSubscritions(ctx.env, authUser);
     const session = await createCheckoutSession(
-      ctx,
+      ctx.env,
       upgrade,
       authUser,
       subscriptions
@@ -49,7 +43,7 @@ subscription.get('/', async (ctx) => {
   const authUser: AuthUser = ctx.req['user'];
   const subscriptions = await getSubscritions(ctx.env, authUser);
   if (!subscriptions) {
-    return ctx.json({ message: 'No subscription' }, 404);
+    throw new HTTPException(404, { message: 'No subscription' });
   }
   return ctx.json(subscriptions, 200);
 });
@@ -60,11 +54,11 @@ subscription.delete('/:id', async (ctx) => {
   const authUser: AuthUser = ctx.req['user'];
   const subscriptions = await getSubscritions(ctx.env, authUser);
   if (!subscriptions || !subscriptions.length) {
-    return ctx.json({ message: 'No subscription found' }, 404);
+    throw new HTTPException(404, { message: 'No subscription found' });
   }
   const subscription = subscriptions.find((x) => x.subscription_id === id);
   if (!subscription) {
-    return ctx.json({ message: 'No subscription found' }, 404);
+    throw new HTTPException(404, { message: 'No subscription found' });
   }
 
   subscription.status = SubscriptionStatus.cancellation_requested;
@@ -88,11 +82,11 @@ subscription.get('/:id/coupon', async (ctx) => {
   const authUser: AuthUser = ctx.req['user'];
   const subscriptions = await getSubscritions(ctx.env, authUser);
   if (!subscriptions || !subscriptions.length) {
-    return ctx.json({ message: 'No subscription found' }, 404);
+    throw new HTTPException(404, { message: 'No subscription found' });
   }
   const subscription = subscriptions.find((x) => x.subscription_id === id);
   if (!subscription) {
-    return ctx.json({ message: 'No subscription found' }, 404);
+    throw new HTTPException(404, { message: 'No subscription found' });
   }
 
   await applyStripeCoupon(ctx.env, subscription);

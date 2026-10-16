@@ -8,7 +8,7 @@ export enum SubscriptionFrequency {
   month = 'month',
   quarter = 'quarter',
   year = 'year',
-  lifetime = 'lifetime'
+  lifetime = 'lifetime',
 }
 
 export enum SubscriptionStatus {
@@ -18,7 +18,7 @@ export enum SubscriptionStatus {
   cancellation_requested = 'cancellation_requested',
 }
 
-export class Subscription {
+export interface Subscription {
   subscription_id?: number;
   account_id?: number;
   user_id?: number;

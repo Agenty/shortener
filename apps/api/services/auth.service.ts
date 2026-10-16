@@ -1,26 +1,24 @@
-import { Context } from 'hono';
 import { AuthUser, RoleType, UserStatus } from '../models/auth-user';
 import { nanoid } from 'nanoid';
 import { createAccount } from './account.service';
 import { PlanType } from '../models/plan';
 import { welcomeEmail } from './emailer.service';
 import { HTTPException } from 'hono/http-exception';
-import { Bindings } from '../types/bindings';
-import dayjs from 'dayjs';
+import { format, isBefore, subDays, subWeeks } from 'date-fns';
 import { getCache, setCache } from './caching.service';
 
 export const getUserById = async (
-  ctx: Context,
+  env: CloudflareBindings,
   user_id: number,
   account_id: number
 ) => {
   const cacheKey = `authUser-${user_id}`;
-  const cacheValue = await getCache(ctx.env, cacheKey);
+  const cacheValue = await getCache(env, cacheKey);
   if (cacheValue) {
     return cacheValue;
   }
 
-  const sqlQuery = ctx.env.DB.prepare(
+  const sqlQuery = env.DB.prepare(
     `SELECT u.user_id, u.name, u.email, u.role, u.level, u.is_verified, u.is_subscribed,
     u.password_reset_at, u.created_at, u.updated_at, u.status, u.avatar, u.password, 
     a.account_id, a.plan, a.trial_end_at
@@ -37,13 +35,13 @@ export const getUserById = async (
     });
   }
   if (authUser && authUser.is_verified) {
-    ctx.executionCtx.waitUntil(setCache(ctx.env, cacheKey, authUser));
+    await setCache(env, cacheKey, authUser);
   }
   return authUser;
 };
 
-export const getUserByEmail = async (ctx: Context, email: string) => {
-  const sqlQuery = ctx.env.DB.prepare(
+export const getUserByEmail = async (env: CloudflareBindings, email: string) => {
+  const sqlQuery = env.DB.prepare(
     `SELECT u.user_id, u.name, u.email, u.role, u.level, u.is_verified, u.is_subscribed,
     u.password_reset_at, u.created_at, u.updated_at, u.status, u.avatar, u.password, 
     a.account_id, a.plan, a.trial_end_at
@@ -62,16 +60,16 @@ export const getUserByEmail = async (ctx: Context, email: string) => {
 };
 
 export const getUserByApiKeyId = async (
-  ctx: Context<{ Bindings: Bindings }>,
+  env: CloudflareBindings,
   key_id: number
 ) => {
   const cacheKey = `authKey-${key_id}`;
-  const cacheValue = await getCache(ctx.env, cacheKey);
+  const cacheValue = await getCache(env, cacheKey);
   if (cacheValue) {
     return cacheValue;
   }
 
-  const sqlQuery = ctx.env.DB.prepare(
+  const sqlQuery = env.DB.prepare(
     `SELECT u.user_id, u.name, u.email, u.role, u.level, u.is_verified, u.is_subscribed,
     u.password_reset_at, u.created_at, u.updated_at, u.status, u.avatar, u.password, 
     a.account_id, a.plan, a.trial_end_at
@@ -91,22 +89,22 @@ export const getUserByApiKeyId = async (
     });
   }
   if (authUser && authUser.is_verified) {
-    ctx.executionCtx.waitUntil(setCache(ctx.env, cacheKey, authUser));
+    await setCache(env, cacheKey, authUser);
   }
   return authUser;
 };
 
-export const getUserCountByIP = async (env: Bindings, ip: string) => {
+export const getUserCountByIP = async (env: CloudflareBindings, ip: string) => {
   const sqlQuery = env.DB.prepare(
     `Select count(1) as total from Users Where ip_address = ? and date(created_at) > date(?)`
-  ).bind(ip || null, dayjs().subtract(1, 'week').format('YYYY-MM-DD'));
+  ).bind(ip || null, format(subWeeks(new Date(), 1), 'yyyy-MM-dd'));
 
   const { total } = await sqlQuery.first();
   return Number(total);
 };
 
 export const unsubscribe = async (
-  env: Bindings,
+  env: CloudflareBindings,
   email: string,
   guid: string
 ) => {
@@ -118,13 +116,11 @@ export const unsubscribe = async (
 };
 
 export const registerUser = async (
-  ctx: Context<{
-    Bindings: Bindings;
-  }>,
+  env: CloudflareBindings,
   authUser: AuthUser
 ): Promise<number | null> => {
   authUser.is_verified = authUser.password ? false : true;
-  const { meta } = await ctx.env.DB.prepare(
+  const { meta } = await env.DB.prepare(
     `
           Insert Into Users (account_id, name, email, password, last_login_at, role, status, is_verified, guid, ip_address) 
           Values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
@@ -144,17 +140,17 @@ export const registerUser = async (
     .run();
 
   if (meta.last_row_id && authUser.is_verified) {
-    await welcomeEmail(ctx, authUser);
+    await welcomeEmail(env, authUser);
   }
   return meta.last_row_id;
 };
 
 export const resetPassword = async (
-  ctx: Context,
+  env: CloudflareBindings,
   password: string,
   authUser: AuthUser
 ): Promise<boolean> => {
-  const { success } = await ctx.env.DB.prepare(
+  const { success } = await env.DB.prepare(
     `UPDATE Users Set password = ?, password_reset_at = ? where user_id = ? AND account_id = ?`
   )
     .bind(
@@ -168,10 +164,10 @@ export const resetPassword = async (
 };
 
 export const updateLastLoginDetails = async (
-  ctx: Context,
+  env: CloudflareBindings,
   user_id: number
 ): Promise<boolean> => {
-  const { success } = await ctx.env.DB.prepare(
+  const { success } = await env.DB.prepare(
     `UPDATE Users Set last_login_at = ? Where user_id = ?`
   )
     .bind(new Date().toISOString(), user_id)
@@ -180,10 +176,10 @@ export const updateLastLoginDetails = async (
 };
 
 export const verifyUser = async (
-  ctx: Context,
+  env: CloudflareBindings,
   user_id: number
 ): Promise<boolean> => {
-  const { success } = await ctx.env.DB.prepare(
+  const { success } = await env.DB.prepare(
     `UPDATE Users set is_verified = ? Where user_id = ?`
   )
     .bind(1, user_id)
@@ -192,28 +188,32 @@ export const verifyUser = async (
   return success;
 };
 
-export const getGoogleConsentUri = (ctx: Context) => {
+export const getGoogleConsentUri = (env: CloudflareBindings) => {
   const random = Math.floor(Math.random() * 100000 + 1);
   const scopes = [
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
   ];
-  const redirectUri = `${ctx.env.API_URL}/v1/oauth/google`;
+  const redirectUri = `${env.API_URL}/v1/oauth/google`;
   const consentUri = `https://accounts.google.com/o/oauth2/v2/auth?scope=${scopes.join(
     ' '
   )}&access_type=offline&include_granted_scopes=true&response_type=code&state=${random}&redirect_uri=${redirectUri}&client_id=${
-    ctx.env.GOOGLE_CLIENT_ID
+    env.GOOGLE_CLIENT_ID
   }`;
   return consentUri;
 };
 
-export const getAccessTokenFromCode = async (ctx: Context, code: string) => {
+export const getAccessTokenFromCode = async (
+  env: CloudflareBindings,
+  code: string,
+  redirectPath = '/v1/oauth/google'
+) => {
   const res = await fetch(`https://oauth2.googleapis.com/token`, {
     method: 'POST',
     body: JSON.stringify({
-      client_id: ctx.env.GOOGLE_CLIENT_ID,
-      client_secret: ctx.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${ctx.env.API_URL}/v1/oauth/google`,
+      client_id: env.GOOGLE_CLIENT_ID,
+      client_secret: env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${env.API_URL}${redirectPath}`,
       grant_type: 'authorization_code',
       code,
     }),
@@ -225,7 +225,7 @@ export const getAccessTokenFromCode = async (ctx: Context, code: string) => {
   }
 };
 
-const getGoogleUserInfo = async (ctx: Context, access_token: string) => {
+const getGoogleUserInfo = async (env: CloudflareBindings, access_token: string) => {
   const res = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
     method: 'GET',
     headers: {
@@ -239,23 +239,26 @@ const getGoogleUserInfo = async (ctx: Context, access_token: string) => {
   }
 };
 
-export const getGithubConsentUri = (ctx: Context) => {
+export const getGithubConsentUri = (env: CloudflareBindings) => {
   const random = Math.floor(Math.random() * 100000 + 1);
-  const redirectUri = `${ctx.env.API_URL}/v1/oauth/github`;
-  const consentUri = `https://github.com/login/oauth/authorize?scope=user:email&client_id=${ctx.env.GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}`;
+  const redirectUri = `${env.API_URL}/v1/oauth/github`;
+  const consentUri = `https://github.com/login/oauth/authorize?scope=user:email&client_id=${env.GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}`;
   return consentUri;
 };
 
-export const googleCallBack = async (ctx: Context, access_token: string) => {
-  const profile = await getGoogleUserInfo(ctx, access_token);
+export const googleCallBack = async (
+  env: CloudflareBindings,
+  access_token: string,
+  ip: string,
+  country: string
+) => {
+  const profile = await getGoogleUserInfo(env, access_token);
   if (!profile) {
     throw new HTTPException(401, {
       message: `No consent received from Google, try again.`,
     });
   }
 
-  const { cf } = ctx.req.raw;
-  const ip = ctx.req.header('CF-Connecting-IP');
   const authUser: AuthUser = {
     last_login_at: new Date(),
     ip_address: ip,
@@ -263,10 +266,10 @@ export const googleCallBack = async (ctx: Context, access_token: string) => {
     name: profile.name,
     email: profile.email.toLowerCase(),
     avatar: profile.picture,
-    country: `${cf.country}`,
+    country: `${country}`,
   };
 
-  const existingUser = await getUserByEmail(ctx, authUser.email);
+  const existingUser = await getUserByEmail(env, authUser.email);
   if (existingUser) {
     return existingUser;
   } else {
@@ -274,8 +277,8 @@ export const googleCallBack = async (ctx: Context, access_token: string) => {
     authUser.role = RoleType.Owner;
     authUser.status = UserStatus.active;
     authUser.plan = PlanType.Free;
-    authUser.account_id = await createAccount(ctx, authUser);
-    authUser.user_id = await registerUser(ctx, authUser);
+    authUser.account_id = await createAccount(env, authUser);
+    authUser.user_id = await registerUser(env, authUser);
     return authUser;
   }
 };
@@ -299,7 +302,7 @@ export const getDisposableDomains = async () => {
   return [];
 };
 
-export const isDisposableEmail = async (env: Bindings, email: string) => {
+export const isDisposableEmail = async (env: CloudflareBindings, email: string) => {
   const domain = email.split('@').pop();
 
   const cacheKey = `disposableDomains`;
@@ -314,7 +317,7 @@ export const isDisposableEmail = async (env: Bindings, email: string) => {
   const { refreshed_at } = metadata || {};
   if (
     !value ||
-    (refreshed_at && dayjs(refreshed_at).isBefore(dayjs().subtract(7, 'day')))
+    (refreshed_at && isBefore(new Date(refreshed_at), subDays(new Date(), 7)))
   ) {
     const domains = await getDisposableDomains();
     if (domains.length) {

@@ -1,9 +1,8 @@
 import { MiddlewareHandler } from 'hono';
 import { getUserByApiKeyId, getUserById } from '../services/auth.service';
 import { HTTPException } from 'hono/http-exception';
-import { AuthResponse } from '../models/auth-response';
-import { AuthUser } from '../models/auth-user';
-import { decode, sign, verify } from 'hono/jwt';
+import { AuthUser, toAuthResponse } from '../models/auth-user';
+import { decode, verify } from 'hono/jwt';
 
 export const jwtAuth = (): MiddlewareHandler => {
   return async (ctx, next) => {
@@ -15,7 +14,7 @@ export const jwtAuth = (): MiddlewareHandler => {
       }
       const bearerToken = headerToken.split(' ').pop();
       try {
-        const result = await verify(bearerToken, ctx.env.JWT_SECRET);
+        const result = await verify(bearerToken, ctx.env.JWT_SECRET, 'HS256');
         if (!result) {
           throw new HTTPException(401, { message: `Unauthorized` });
         }
@@ -26,10 +25,10 @@ export const jwtAuth = (): MiddlewareHandler => {
       let authUser: AuthUser;
       if (payload.account_id) {
         const { user_id, account_id } = payload as any;
-        authUser = await getUserById(ctx, user_id, account_id);
+        authUser = await getUserById(ctx.env, user_id, account_id);
       } else if (payload.key_id) {
         const { key_id } = payload as any;
-        authUser = await getUserByApiKeyId(ctx, key_id);
+        authUser = await getUserByApiKeyId(ctx.env, key_id);
       }
 
       if (!authUser) {
@@ -48,7 +47,7 @@ export const jwtAuth = (): MiddlewareHandler => {
         });
       }
 
-      ctx.req['user'] = new AuthResponse(authUser);
+      ctx.req['user'] = toAuthResponse(authUser);
     }
 
     //console.log('u', ctx.req['user']);

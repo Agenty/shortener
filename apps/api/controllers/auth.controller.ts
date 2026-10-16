@@ -1,14 +1,17 @@
-import { Hono } from 'hono';
-import { Signup, signupSchema } from '../models/signup';
-import { validator } from 'hono/validator';
-import { AuthUser, RoleType, UserStatus } from '../models/auth-user';
-import { formatZodError, hashPassword } from '../helper/utility';
-import { Login, loginSchema } from '../models/login';
+import { createRoute, z } from '@hono/zod-openapi';
 import {
-  ForgotPassword,
-  forgetPasswordSchema,
-} from '../models/forgot-password';
-import { ResetPassword, resetPasswordSchema } from '../models/reset-password';
+  forgotPasswordSchema,
+  loginSchema,
+  resetPasswordSchema,
+  signupSchema,
+} from '../models/auth';
+import {
+  AuthUser,
+  RoleType,
+  UserStatus,
+  toAuthResponse,
+} from '../models/auth-user';
+import { hashPassword } from '../helper/utility';
 import {
   registerUser,
   getUserByEmail,
@@ -19,26 +22,65 @@ import {
   isDisposableEmail,
 } from '../services/auth.service';
 import { createAccount } from '../services/account.service';
-import { Bindings } from '../types/bindings';
 import { nanoid } from 'nanoid';
 import { PlanType } from '../models/plan';
-import { AuthResponse } from '../models/auth-response';
-import dayjs from 'dayjs';
+import { addDays, addMinutes, getUnixTime } from 'date-fns';
 import { HTTPException } from 'hono/http-exception';
 import { sendPasswordResetEmail } from '../services/emailer.service';
 import { captchaGuard } from '../services/captcha.service';
-import { decode, sign, verify } from 'hono/jwt';
+import { sign, verify } from 'hono/jwt';
+import { createApi, errorResponses, messageSchema } from '../helper/openapi';
+import { API_SAMPLES } from '../helper/api-samples';
 
-const auth = new Hono<{ Bindings: Bindings }>();
+const auth = createApi();
 
-auth.post(
-  '/signup',
-  validator('json', (value, ctx) => {
-    const parsed = signupSchema.safeParse(value);
-    if (parsed.success === false) {
-      throw new HTTPException(403, { message: formatZodError(parsed.error) });
-    }
-    return parsed.data as Signup;
+const tokenSchema = z.object({
+  token: z.string().openapi({
+    description:
+      'JWT bearer token, send it in the `Authorization: Bearer <token>` header',
+  }),
+});
+
+const signToken = (env: CloudflareBindings, authUser: AuthUser) =>
+  sign(
+    {
+      user_id: authUser.user_id,
+      account_id: authUser.account_id,
+      exp: getUnixTime(addDays(new Date(), 15)),
+    },
+    env.JWT_SECRET
+  );
+
+auth.openapi(
+  createRoute({
+    tags: ['Authentication'],
+    method: 'post',
+    path: '/signup',
+    summary: 'Sign up',
+    description:
+      'Create a free URL shortener account with name, email and password. A one-time code is sent to verify the email address before the API can be used.',
+    request: {
+      body: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: signupSchema,
+            example: API_SAMPLES.auth.signup,
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: 'Account created, returns the bearer token',
+        content: {
+          'application/json': {
+            schema: tokenSchema,
+          },
+        },
+      },
+      ...errorResponses(400, 429),
+    } as any,
   }),
   async (ctx) => {
     const data = ctx.req.valid('json');
@@ -49,180 +91,210 @@ auth.post(
     await captchaGuard(ctx.env, data.recaptcha);
 
     const [existingUser, totalByIP, disposableEmail] = await Promise.all([
-      getUserByEmail(ctx, data.email),
+      getUserByEmail(ctx.env, data.email),
       getUserCountByIP(ctx.env, ip),
       isDisposableEmail(ctx.env, data.email),
     ]);
 
     if (existingUser) {
-      return ctx.json(
-        {
-          message:
-            'User with this email already exist, plesae sign in or use the forgot password option',
-        },
-        400
-      );
+      throw new HTTPException(400, {
+        message:
+          'User with this email already exist, please sign in or use the forgot password option',
+      });
     }
     if (totalByIP > 0) {
-      return ctx.json(
-        {
-          message:
-            'Multiple account creation attempts have been detected, please upgrade your existing account to add more links, users etc.',
-        },
-        400
-      );
+      throw new HTTPException(400, {
+        message:
+          'Multiple account creation attempts have been detected, please upgrade your existing account to add more links, users etc.',
+      });
     }
-
     if (disposableEmail) {
-      return ctx.json(
-        {
-          message: 'Invalid email, disposable email not supported',
-        },
-        400
-      );
+      throw new HTTPException(400, {
+        message: 'Invalid email, disposable email not supported',
+      });
     }
 
-    const passwordHash = await hashPassword(data.password);
     const authUser: AuthUser = {
-      ...data,
+      name: data.name,
+      email: data.email,
       ip_address: ip,
       last_login_at: new Date(),
       role: RoleType.Owner,
       status: UserStatus.active,
       is_verified: false,
       plan: PlanType.Free,
-      password: passwordHash,
+      password: await hashPassword(data.password),
       guid: nanoid(32),
       country: `${cf.country}`,
     };
 
-    authUser.account_id = await createAccount(ctx, authUser);
-    authUser.user_id = await registerUser(ctx, authUser);
-    const token = await sign(
-      {
-        user_id: authUser.user_id,
-        account_id: authUser.account_id,
-        exp: dayjs().add(15, 'days').unix(),
-      },
-      ctx.env.JWT_SECRET
-    );
+    authUser.account_id = await createAccount(ctx.env, authUser);
+    authUser.user_id = await registerUser(ctx.env, authUser);
+    const token = await signToken(ctx.env, authUser);
     return ctx.json({ token: token }, 200);
   }
 );
 
-auth.post(
-  '/signin',
-  validator('json', (value, ctx) => {
-    const parsed = loginSchema.safeParse(value);
-    if (parsed.success === false) {
-      throw new HTTPException(403, { message: formatZodError(parsed.error) });
-    }
-    return parsed.data as Login;
+auth.openapi(
+  createRoute({
+    tags: ['Authentication'],
+    method: 'post',
+    path: '/signin',
+    summary: 'Sign in',
+    description:
+      'Sign in with email and password to get a bearer token (valid for 15 days) along with the user profile and plan limits. Use an [API key](#tag/API-Keys) for server-to-server integrations instead.',
+    request: {
+      body: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: loginSchema,
+            example: API_SAMPLES.auth.signin,
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description:
+          'Signed in user profile with plan limits and the bearer `token`',
+        content: {
+          'application/json': {
+            schema: tokenSchema,
+          },
+        },
+      },
+      ...errorResponses(400, 401, 429),
+    } as any,
   }),
   async (ctx) => {
     const data = ctx.req.valid('json');
-    const authUser = await getUserByEmail(ctx, data.email);
-    if (!authUser) {
-      return ctx.json({ message: 'Invalid username or password' }, 400);
-    }
+    const authUser = await getUserByEmail(ctx.env, data.email);
     const hashedPassword = await hashPassword(data.password);
-    if (hashedPassword !== authUser.password) {
-      return ctx.json({ message: 'Email or password does not match' }, 400);
+    if (!authUser || hashedPassword !== authUser.password) {
+      throw new HTTPException(400, {
+        message: 'Invalid email or password',
+      });
     }
 
-    await updateLastLoginDetails(ctx, authUser.user_id);
-
-    const token = await sign(
-      {
-        user_id: authUser.user_id,
-        account_id: authUser.account_id,
-        exp: dayjs().add(15, 'days').unix(),
-      },
-      ctx.env.JWT_SECRET
-    );
-    const authResponse = new AuthResponse(authUser, token);
-    return ctx.json(authResponse, 200);
+    await updateLastLoginDetails(ctx.env, authUser.user_id);
+    const token = await signToken(ctx.env, authUser);
+    return ctx.json(toAuthResponse(authUser, token), 200);
   }
 );
 
-auth.post(
-  'forgot-password',
-  validator('json', (value, ctx) => {
-    const parsed = forgetPasswordSchema.safeParse(value);
-    if (parsed.success === false) {
-      throw new HTTPException(403, { message: formatZodError(parsed.error) });
-    }
-    return parsed.data as ForgotPassword;
+auth.openapi(
+  createRoute({
+    tags: ['Authentication'],
+    method: 'post',
+    path: '/forgot-password',
+    summary: 'Forgot password',
+    description:
+      'Send a password reset link to the registered email address. The link is valid for 15 minutes.',
+    request: {
+      body: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: forgotPasswordSchema,
+            example: API_SAMPLES.auth.forgotPassword,
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: 'Password reset email sent',
+        content: {
+          'application/json': {
+            schema: messageSchema,
+          },
+        },
+      },
+      ...errorResponses(400, 429),
+    } as any,
   }),
   async (ctx) => {
     const data = ctx.req.valid('json');
-    const authUser = await getUserByEmail(ctx, data.email);
+    const authUser = await getUserByEmail(ctx.env, data.email);
     if (!authUser) {
-      return ctx.json(
-        {
-          message:
-            'If you are a registered client, you will receive an email to reset your password',
-        },
-        400
-      );
+      throw new HTTPException(400, {
+        message:
+          'If you are a registered client, you will receive an email to reset your password',
+      });
     }
     const token = await sign(
       {
         user_id: authUser.user_id,
         account_id: authUser.account_id,
-        exp: dayjs().add(15, 'minutes').unix(),
+        exp: getUnixTime(addMinutes(new Date(), 15)),
       },
       ctx.env.JWT_SECRET
     );
 
     await sendPasswordResetEmail(ctx.env, authUser, token);
-
     return ctx.json({ message: 'Password reset email sent' }, 200);
   }
 );
 
-auth.post(
-  'reset-password',
-  validator('json', (value, ctx) => {
-    const parsed = resetPasswordSchema.safeParse(value);
-    if (parsed.success === false) {
-      throw new HTTPException(403, { message: formatZodError(parsed.error) });
-    }
-    return parsed.data as ResetPassword;
+auth.openapi(
+  createRoute({
+    tags: ['Authentication'],
+    method: 'post',
+    path: '/reset-password',
+    summary: 'Reset password',
+    description:
+      'Set a new password using the token received in the password reset email.',
+    request: {
+      body: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: resetPasswordSchema,
+            example: API_SAMPLES.auth.resetPassword,
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: 'Password updated',
+        content: {
+          'application/json': {
+            schema: messageSchema,
+          },
+        },
+      },
+      ...errorResponses(400, 429),
+    } as any,
   }),
   async (ctx) => {
     const data = ctx.req.valid('json');
-    if (data.password !== data.confirm_password) {
-      return ctx.json(
-        { message: 'Password and confirm password does not match' },
-        400
-      );
-    }
 
-    let tokenData: any = {};
+    let tokenData: { user_id?: number; account_id?: number } = {};
     try {
-      const isVerified = await verify(data.token, ctx.env.JWT_SECRET);
-      if (!isVerified) {
-        return ctx.json({ message: 'Invalid token' }, 400);
-      }
-      const { payload } = decode(data.token);
-      tokenData = { user_id: payload.user_id, account_id: payload.account_id };
+      const payload = await verify(data.token, ctx.env.JWT_SECRET, 'HS256');
+      tokenData = {
+        user_id: Number(payload.user_id),
+        account_id: Number(payload.account_id),
+      };
     } catch (err) {
-      return ctx.json({ message: 'Invalid token' }, 400);
+      throw new HTTPException(400, { message: 'Invalid token' });
     }
 
     const authUser = await getUserById(
-      ctx,
+      ctx.env,
       tokenData.user_id,
       tokenData.account_id
     );
-
     if (!authUser) {
-      return ctx.json({ message: 'Invalid token or no account found' }, 400);
+      throw new HTTPException(400, {
+        message: 'Invalid token or no account found',
+      });
     }
 
     const hash = await hashPassword(data.password);
-    await resetPassword(ctx, hash, authUser);
+    await resetPassword(ctx.env, hash, authUser);
     return ctx.json(
       {
         message:

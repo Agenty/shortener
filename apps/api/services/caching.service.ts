@@ -1,8 +1,6 @@
 // https://developers.cloudflare.com/workers/examples/cache-post-request/
 
-import { Bindings } from '../types/bindings';
-
-const getCacheKey = (env: Bindings, key: string) => {
+const getCacheKey = (env: CloudflareBindings, key: string) => {
   const cacheUrl = new URL(env.API_URL);
   cacheUrl.pathname = '/cache/' + key;
   const url = cacheUrl.toString().split('?')[0];
@@ -11,18 +9,18 @@ const getCacheKey = (env: Bindings, key: string) => {
   });
 };
 
-export const getCache = async (env: Bindings, key: string) => {
+export const getCache = async (env: CloudflareBindings, key: string) => {
   const cacheKey = getCacheKey(env, key);
-  const cache = caches.default;
+  const cache = (caches as CacheStorage & { default: Cache }).default;
   const response = await cache.match(cacheKey);
   if (response) {
     return await response.json();
   }
 };
 
-export const setCache = async (env: Bindings, key: string, data: any) => {
+export const setCache = async (env: CloudflareBindings, key: string, data: any) => {
   const cacheKey = getCacheKey(env, key);
-  const cache = caches.default;
+  const cache = (caches as CacheStorage & { default: Cache }).default;
   const response = new Response(JSON.stringify(data), {
     status: 200,
   });

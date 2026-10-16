@@ -1,23 +1,7 @@
-import { z } from 'zod';
+import { z } from '@hono/zod-openapi';
 import { PlanType } from './plan';
 
-export interface Account {
-  account_id?: number;
-  company_name?: string;
-  status?: string;
-  plan?: PlanType;
-  phone?: string;
-  website?: string;
-  country?: string;
-  billing_name?: string;
-  billing_address?: string;
-  tax_name?: string;
-  tax_number?: string;
-  trial_end_at?: Date | string;
-  updated_at?: Date;
-  created_at?: Date;
-}
-
+// Internal: billing details of the account, not part of the public API docs
 export const accountSchema = z.object({
   account_id: z.number().optional(),
   company_name: z.string().max(200),
@@ -29,3 +13,11 @@ export const accountSchema = z.object({
   tax_name: z.string().max(200).optional().nullable(),
   tax_number: z.string().max(200).optional().nullable(),
 });
+
+export type Account = Partial<z.infer<typeof accountSchema>> & {
+  status?: string;
+  plan?: PlanType;
+  trial_end_at?: Date | string;
+  created_at?: Date | string;
+  updated_at?: Date | string;
+};

@@ -2,15 +2,12 @@ import { Link } from '../models/link';
 import { AuthUser } from '../models/auth-user';
 import { customAlphabet } from 'nanoid';
 import { HTTPException } from 'hono/http-exception';
-import { Bindings } from '../types/bindings';
-import { cleanUri, slugify, toISOformat } from '../helper/utility';
+import { slugify, toISOformat } from '../helper/utility';
 import { PlanType } from '../models/plan';
 import { Paged } from '../models/paged';
 import { isEmpty } from 'lodash';
-import dayjs from 'dayjs';
-import { LinkType } from '../models/baselink';
-import whitelistDomains from '../data/whitelist.json';
-import { getDomain } from 'tldts';
+import { format, subMonths } from 'date-fns';
+import { assertVerifiedDestinations } from './domain.service';
 
 const nanoid = customAlphabet(
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
@@ -34,74 +31,16 @@ export const convertToLink = (item: any): Link | undefined => {
   };
 };
 
-// For trial purpose on home page, auto expire after 24 hours
-export const createTryLink = async (env: Bindings, link: Link) => {
-  let key = `t_${nanoid(7)}`.toLowerCase();
-  let exists = await env.LINKS.get(key);
-  while (exists) {
-    key = `t_${nanoid(7)}`.toLowerCase();
-    exists = await env.LINKS.get(key);
-  }
-  link.type = LinkType.link;
-  await env.LINKS.put(key, JSON.stringify(link), {
-    expirationTtl: 60 * 60 * 24 * 180,
-  });
-  return { ...link, key: key, short_url: `https://idm.in/${key}` };
-};
-
-export const isTrustPilotListed = async (domain: string) => {
-  const myHeaders = new Headers();
-  myHeaders.append('apikey', 'nZkt0UMZP2MeF99AOcviMZDmIfiI2L0x');
-  const requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow',
-    cf: {
-      cacheEverything: true,
-      cacheTtl: 7200, // Cache the response for 2 hours (in seconds)
-    },
-  };
-
-  const r = await fetch(
-    `https://api.trustpilot.com/v1/business-signup/domain-availability?domain=${domain}`,
-    requestOptions
-  );
-
-  const json: any = await r.json();
-  if (r.ok) {
-    return json.domainIsAvailable == false ? true : false;
-  }
-};
-
-export const isWhiteListed = async (env: Bindings, url: string) => {
-  const domain = new URL(url).hostname;
-  const staticWhitelist = whitelistDomains.includes(domain);
-  if (staticWhitelist) return true;
-
-  const sqlQuery = env.DB.prepare(
-    `SELECT id FROM Whitelist WHERE url = ? or url = ? or url = ?`
-  ).bind(cleanUri(url), domain, domain.replace('www.',''));
-  const result = await sqlQuery.first();
-  const dbWhitelist = result && result.id ? true : false;
-  if (dbWhitelist) return true;
-
-  // Check on Trustpilot API
-  const tldDomain = getDomain(url);
-  const isTrusted = await isTrustPilotListed(tldDomain);
-  if (isTrusted) {
-    await env.DB.prepare(`INSERT OR IGNORE INTO Whitelist(url) Values(?)`)
-      .bind(tldDomain)
-      .run();
-    return true;
-  }
-
-  throw new HTTPException(402, {
-    message: `The free plan is limited to white-listed domains only. Example: linkedin, facebook, youtube, shopify etc. Contact support to whitelist your domain or upgrade your plan`,
-  });
-};
+// Every URL a short link can redirect to
+const getDestinations = (link: Link) => [
+  link.url,
+  link.ios,
+  link.android,
+  ...(link.geo || []).map((x) => x.url),
+];
 
 export const getLinks = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   paged: Paged
 ): Promise<Array<Link>> => {
@@ -144,7 +83,7 @@ export const getLinks = async (
 };
 
 export const getLinkByKey = async (
-  env: Bindings,
+  env: CloudflareBindings,
   key: string,
   authUser: AuthUser
 ): Promise<Link> => {
@@ -160,12 +99,11 @@ export const getLinkByKey = async (
 };
 
 export const createLink = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   link: Link
 ): Promise<Link> => {
-  // Check domain whitelist
-  await isWhiteListed(env, link.url);
+  await assertVerifiedDestinations(env, authUser, getDestinations(link));
 
   link.key = link.key ? slugify(link.key) : nanoid(7).toLowerCase();
   link.account_id = authUser.account_id;
@@ -212,15 +150,12 @@ export const createLink = async (
 };
 
 export const updateLink = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   key: string,
   link: Link
 ): Promise<Link> => {
-  // Scan with Google safe browsing API
-  if (authUser.plan == PlanType.Free) {
-    await isWhiteListed(env, link.url);
-  }
+  await assertVerifiedDestinations(env, authUser, getDestinations(link));
 
   link.key = key;
   link.short_url = `https://idm.in/${link.key}`;
@@ -238,9 +173,9 @@ export const updateLink = async (
     geo: link.geo,
   };
 
-  const { success } = await env.DB.prepare(
+  const { meta } = await env.DB.prepare(
     `
-      UPDATE Links 
+      UPDATE Links
       SET user_id = ?, project_id = ?, url = ?, expire_at = ?, data = ?, updated_at = CURRENT_TIMESTAMP
       WHERE key = ? and account_id = ?`
   )
@@ -255,34 +190,29 @@ export const updateLink = async (
     )
     .run();
 
-  if (!success) {
-    const res = new Response(`No link found with key: ${link.key}`, {
-      status: 404,
-    });
-    throw new HTTPException(404, { res });
-  }
-  return link;
+  return meta.changes > 0 ? link : null;
 };
 
 export const deleteLink = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   key: string
 ): Promise<boolean> => {
-  const { success } = await env.DB.prepare(
+  const { meta } = await env.DB.prepare(
     `
-      DELETE FROM Links 
+      DELETE FROM Links
       WHERE key = ? and account_id = ?`
   )
     .bind(key, authUser.account_id)
     .run();
+  const success = meta.changes > 0;
   if (success) {
     await env.LINKS.delete(key);
   }
   return success;
 };
 
-export const blockLink = async (env: Bindings, link: Link) => {
+export const blockLink = async (env: CloudflareBindings, link: Link) => {
   await Promise.all([
     env.DB.prepare(`Update Links set status = 'blocked' WHERE key = ?`)
       .bind(link.key)
@@ -292,7 +222,7 @@ export const blockLink = async (env: Bindings, link: Link) => {
 };
 
 export const getLinkCount = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   countAll = false
 ) => {
@@ -306,7 +236,7 @@ export const getLinkCount = async (
       `Select count(1) as total from Links Where account_id = ? and type = 'link' and created_at >= date(?)`
     ).bind(
       authUser.account_id,
-      dayjs().subtract(1, 'month').format('YYYY-MM-DD')
+      format(subMonths(new Date(), 1), 'yyyy-MM-dd')
     );
   }
   const { total } = await sqlQuery.first();
@@ -315,7 +245,7 @@ export const getLinkCount = async (
 
 const convertToILink = (item: any): Link | undefined => {
   if (!item) return;
-  if (item.type == LinkType.link) {
+  if (item.type == 'link') {
     const d =
       item.data && typeof item.data == 'string'
         ? JSON.parse(item.data)
@@ -343,7 +273,7 @@ const convertToILink = (item: any): Link | undefined => {
 };
 
 export const getCachedLink = async (
-  env: Bindings,
+  env: CloudflareBindings,
   key: string,
   cacheTtl = 300
 ): Promise<Link> => {

@@ -1,13 +1,12 @@
 import { User } from '../models/user';
 import { AuthUser, UserStatus } from '../models/auth-user';
-import { TableResult } from '../models/table';
+import { TableResult, toTableResult } from '../models/table';
 import { nanoid } from 'nanoid';
 import { hashPassword } from '../helper/utility';
-import { Bindings } from '../types/bindings';
 import { HTTPException } from 'hono/http-exception';
 
 export const getUsers = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   offset: number = 0,
   limit: number = 1000
@@ -21,11 +20,11 @@ export const getUsers = async (
   ).bind(authUser.account_id, offset, limit);
 
   const { results } = await sqlQuery.all();
-  return new TableResult(results, offset, limit);
+  return toTableResult(results, offset, limit);
 };
 
 export const getUserById = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   user_id: number
 ): Promise<User> => {
@@ -40,7 +39,7 @@ export const getUserById = async (
 };
 
 export const createUser = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   data: User
 ): Promise<any> => {
@@ -72,12 +71,12 @@ export const createUser = async (
 };
 
 export const updateUser = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   user_id: number,
   data: User
 ): Promise<boolean> => {
-  const { success } = await env.DB.prepare(
+  const { meta } = await env.DB.prepare(
     `
       UPDATE Users 
       SET name = ?, email = ?, role = ?, status = ?
@@ -92,11 +91,11 @@ export const updateUser = async (
       user_id
     )
     .run();
-  return success;
+  return meta.changes > 0;
 };
 
 export const deleteUser = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   user_ids: Array<number>
 ): Promise<boolean> => {
@@ -109,10 +108,10 @@ export const deleteUser = async (
   const result = await env.DB.batch(
     user_ids.map((id) => stmt.bind(id, authUser.account_id))
   );
-  return result.every((x) => x.success == true);
+  return result.every((x) => x.meta.changes > 0);
 };
 
-export const getUserCount = async (env: Bindings, authUser: AuthUser) => {
+export const getUserCount = async (env: CloudflareBindings, authUser: AuthUser) => {
   const sqlQuery = env.DB.prepare(
     `Select count(1) as total from Users Where account_id = ?`
   ).bind(authUser.account_id);

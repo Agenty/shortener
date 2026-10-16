@@ -1,8 +1,7 @@
 import { Invoice } from '../models/invoice';
-import { Bindings } from '../types/bindings';
 import { getAccount } from './account.service';
 
-export const addInvoice = async (env: Bindings, invoice: Invoice) => {
+export const addInvoice = async (env: CloudflareBindings, invoice: Invoice) => {
   const account = await getAccount(env, invoice.account_id);
   invoice.billing_name = account.billing_name;
   invoice.billing_address = account.billing_address;

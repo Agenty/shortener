@@ -11,6 +11,9 @@
   "analytics_engine_datasets": [
     {
       "binding": "API_LOGS"
+    },
+    {
+      "binding": "SHORTENER_ANALYTICS"
     }
   ],
   "d1_databases": [
@@ -36,6 +39,10 @@
     {
       "binding": "KVCACHE",
       "id": "cdcbd6e8e3be4a6f9f2f6e610ab43ab2"
+    },
+    {
+      "binding": "LINKS",
+      "id": "90fb27447e004ee58024a39293e27e4a"
     }
   ],
   "ai": {

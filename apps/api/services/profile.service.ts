@@ -1,13 +1,11 @@
-import { Context } from 'hono';
 import { AuthUser } from '../models/auth-user';
-import { auth } from '../controllers/auth.controller';
-import { User } from '../models/user';
+import { Profile } from '../models/profile';
 
 export const getProfile = async (
-  ctx: Context,
+  env: CloudflareBindings,
   authUser: AuthUser
 ): Promise<AuthUser> => {
-  const sqlQuery = ctx.env.DB.prepare(
+  const sqlQuery = env.DB.prepare(
     `SELECT user_id, account_id, name, email, role, status, 
      last_login_at, is_verified, created_at, updated_at
      FROM Users
@@ -17,11 +15,11 @@ export const getProfile = async (
 };
 
 export const updateProfile = async (
-  ctx: Context,
+  env: CloudflareBindings,
   authUser: AuthUser,
-  data: User
+  data: Profile
 ): Promise<boolean> => {
-  const { success } = await ctx.env.DB.prepare(
+  const { success } = await env.DB.prepare(
     `UPDATE Users SET name = ?, is_subscribed = ?, avatar = ? 
          WHERE user_id = ? AND account_id = ?`
   )

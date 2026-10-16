@@ -1,13 +1,12 @@
 import { User } from '../models/user';
 import { AuthUser } from '../models/auth-user';
-import { TableResult } from '../models/table';
+import { TableResult, toTableResult } from '../models/table';
 import { ApiKey } from '../models/api-key';
-import dayjs from 'dayjs';
-import { Bindings } from '../types/bindings';
+import { addYears, getUnixTime } from 'date-fns';
 import { sign } from 'hono/jwt';
 
 export const getApiKeys = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   offset: number = 0,
   limit: number = 25
@@ -21,11 +20,11 @@ export const getApiKeys = async (
   ).bind(authUser.account_id, authUser.user_id, offset, limit);
 
   const { results } = await sqlQuery.all();
-  return new TableResult(results, offset, limit);
+  return toTableResult(results, offset, limit);
 };
 
 export const getApiKey = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   key_id: number
 ): Promise<User> => {
@@ -40,7 +39,7 @@ export const getApiKey = async (
 };
 
 export const createApiKey = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   data: ApiKey
 ): Promise<ApiKey> => {
@@ -58,7 +57,7 @@ export const createApiKey = async (
   data.key = await sign(
     {
       key_id: data.key_id,
-      exp: dayjs().add(100, 'year').unix(),
+      exp: getUnixTime(addYears(new Date(), 100)),
     },
     env.JWT_SECRET
   );
@@ -66,12 +65,12 @@ export const createApiKey = async (
 };
 
 export const updateApiKey = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   key_id: number,
   data: ApiKey
 ): Promise<boolean> => {
-  const { success } = await env.DB.prepare(
+  const { meta } = await env.DB.prepare(
     `
       UPDATE ApiKeys 
       SET name = ?, is_enabled = ?
@@ -79,11 +78,11 @@ export const updateApiKey = async (
   )
     .bind(data.name, data.is_enabled, key_id, authUser.user_id)
     .run();
-  return success;
+  return meta.changes > 0;
 };
 
 export const deleteApiKey = async (
-  env: Bindings,
+  env: CloudflareBindings,
   authUser: AuthUser,
   key_ids: Array<number>
 ): Promise<boolean> => {

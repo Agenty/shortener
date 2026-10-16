@@ -1,11 +1,10 @@
 import { Hono } from 'hono';
-import { Bindings } from '../types/bindings';
 import {
   paypalSubscriptionWebhook,
   stripeWebhookHandler,
 } from '../services/stripe.service';
 
-const webhook = new Hono<{ Bindings: Bindings }>();
+const webhook = new Hono<{ Bindings: CloudflareBindings }>();
 
 webhook.post('/stripe', async (ctx) => {
   const event = await ctx.req.json();

@@ -8,7 +8,7 @@
     "lib": ["ESNext", "dom", "es2020"],
     "types": ["@cloudflare/workers-types"],
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
+    "jsxImportSource": "react",
     "esModuleInterop": true,
   }
 }

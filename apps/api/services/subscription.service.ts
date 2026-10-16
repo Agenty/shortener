@@ -1,8 +1,7 @@
 import { AuthUser } from '../models/auth-user';
-import { Bindings } from '../types/bindings';
 import { Subscription } from '../models/subscription';
 
-export const getSubscritions = async (env: Bindings, authUser: AuthUser) => {
+export const getSubscritions = async (env: CloudflareBindings, authUser: AuthUser) => {
   const sqlQuery = env.DB.prepare(
     `Select subscription_id, account_id, plan, plan_id, amount, currency, frequency, 
      payment_gateway, payment_gateway_subscr_id as pg_subscr_id, payment_gateway_customer_id as pg_customer_id, status, 
@@ -17,7 +16,7 @@ export const getSubscritions = async (env: Bindings, authUser: AuthUser) => {
 };
 
 export const getSubscriptionById = async (
-  env: Bindings,
+  env: CloudflareBindings,
   subscription_id: number,
   authUser: AuthUser
 ) => {
@@ -31,7 +30,7 @@ export const getSubscriptionById = async (
 };
 
 export const createSubscription = async (
-  env: Bindings,
+  env: CloudflareBindings,
   subscription: Subscription
 ) => {  
   const sqlQuery = env.DB.prepare(
@@ -60,7 +59,7 @@ export const createSubscription = async (
   return result.meta.last_row_id;
 };
 
-export const updateSubscription = async (env: Bindings, subscription: Subscription) => {
+export const updateSubscription = async (env: CloudflareBindings, subscription: Subscription) => {
   const sqlQuery = env.DB.prepare(
     `UPDATE Subscriptions SET 
      account_id = ?, plan = ?, plan_id = ?, amount = ?,
@@ -88,7 +87,7 @@ export const updateSubscription = async (env: Bindings, subscription: Subscripti
   return success;
 };
 
-export const cancelSubscription = async (env: Bindings, subscription: Subscription) => { 
+export const cancelSubscription = async (env: CloudflareBindings, subscription: Subscription) => { 
   const sqlQuery = env.DB.prepare(
     `UPDATE Subscriptions SET status = ? , cancel_date = ?  
      Where payment_gateway_subscr_id = ? and payment_gateway_customer_id = ?`
@@ -102,7 +101,7 @@ export const cancelSubscription = async (env: Bindings, subscription: Subscripti
   return success;
 };
 
-export const cancelRequest = async (env: Bindings, data: Subscription) => {
+export const cancelRequest = async (env: CloudflareBindings, data: Subscription) => {
   const sqlQuery = env.DB.prepare(
     `UPDATE Subscriptions SET status = ? , cancel_date = now(), 
      cancel_reason = ? Where subscription_id = ?`
@@ -113,7 +112,7 @@ export const cancelRequest = async (env: Bindings, data: Subscription) => {
 };
 
 export const getSubscriptionByCustomerId = async (
-  env: Bindings,
+  env: CloudflareBindings,
   customer_id: string
 ) => {
   const sqlQuery = env.DB.prepare(

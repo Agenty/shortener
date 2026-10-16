@@ -1,5 +1,4 @@
 import { HTTPException } from 'hono/http-exception';
-import { Bindings } from '../types/bindings';
 
 const objectToUrlEncoded = (obj: any) => {
   const urlSearchParams = new URLSearchParams();
@@ -9,7 +8,7 @@ const objectToUrlEncoded = (obj: any) => {
   return urlSearchParams.toString();
 };
 
-export const captchaVerify = async (env: Bindings, recaptchaToken: string) => {
+export const captchaVerify = async (env: CloudflareBindings, recaptchaToken: string) => {
   const r = await fetch('https://www.google.com/recaptcha/api/siteverify', {
     method: 'POST',
     body: objectToUrlEncoded({
@@ -26,7 +25,7 @@ export const captchaVerify = async (env: Bindings, recaptchaToken: string) => {
   }
 };
 
-export const captchaGuard = async (env: Bindings, recaptchaToken: string) => {
+export const captchaGuard = async (env: CloudflareBindings, recaptchaToken: string) => {
   // Bypass captcha validation for Android/iOS app, dev env
   if (env.ENVIRONMENT !== 'production') {
     return;

@@ -1,4 +1,3 @@
-import { Context } from 'hono';
 import { AuthUser } from '../models/auth-user';
 import { Upgrade } from '../models/upgrade';
 import Stripe from 'stripe';
@@ -15,25 +14,24 @@ import {
   getSubscriptionByCustomerId,
   updateSubscription,
 } from './subscription.service';
-import { Bindings } from '../types/bindings';
 import { refreshAccountLimit } from './account.service';
 import { PlanType } from '../models/plan';
-import dayjs from '../lib/dayjsSetup';
+import { addMonths, addQuarters, addYears, isAfter } from 'date-fns';
 import { Invoice, InvoiceItem } from '../models/invoice';
 import { addInvoice } from './invoice.service';
 import stripe from 'stripe';
 
-const stripeClient = (env: Bindings) => {
+const stripeClient = (env: CloudflareBindings) => {
   return new Stripe(env.STRIPE_SECRET_KEY);
 };
 
 export const createCheckoutSession = async (
-  ctx: Context,
+  env: CloudflareBindings,
   upgrade: Upgrade,
   authUser: AuthUser,
   subscriptions: Array<Subscription>
 ) => {
-  const stripe = stripeClient(ctx.env);
+  const stripe = stripeClient(env);
   const price = await getPriceId(stripe, upgrade);
   if (!price) {
     throw new HTTPException(400, { message: 'Invalid plan' });
@@ -51,8 +49,8 @@ export const createCheckoutSession = async (
     metadata: { user_id: authUser.user_id, account_id: authUser.account_id },
     client_reference_id: `{account_id:${authUser.account_id},user_id:${authUser.user_id}}`,
     allow_promotion_codes: true,
-    success_url: `${ctx.env.APP_URL}/billings?return=success`,
-    cancel_url: `${ctx.env.APP_URL}/billings?return=error`,
+    success_url: `${env.APP_URL}/billings?return=success`,
+    cancel_url: `${env.APP_URL}/billings?return=error`,
     billing_address_collection: 'required',
   };
 
@@ -91,7 +89,7 @@ export const createCheckoutSession = async (
   // https://github.com/Agenty/dayschedule-api/issues/374
   if (
     authUser.trial_end_at &&
-    dayjs(dayjs()).isSameOrBefore(authUser.trial_end_at) &&
+    !isAfter(new Date(), new Date(authUser.trial_end_at)) &&
     !subscriptions?.length
   ) {
     options.subscription_data.trial_period_days = 7;
@@ -113,7 +111,7 @@ export const getPriceId = async (stripe: Stripe, upgrade: Upgrade) => {
 };
 
 export const retrieveSubscription = async (
-  env: Bindings,
+  env: CloudflareBindings,
   subscription: Subscription
 ) => {
   return await stripeClient(env).subscriptions.retrieve(
@@ -121,7 +119,7 @@ export const retrieveSubscription = async (
   );
 };
 
-const invoiceHandler = async (env: Bindings, event: stripe.Event) => {
+const invoiceHandler = async (env: CloudflareBindings, event: stripe.Event) => {
   // if (event.type == 'invoice.payment_action_required') {
   //   const invoice = event.data.object as stripe.Invoice;
   //   if (invoice.billing_reason == 'subscription_cycle') {
@@ -200,7 +198,7 @@ const invoiceHandler = async (env: Bindings, event: stripe.Event) => {
 };
 
 export const stripeWebhookHandler = async (
-  env: Bindings,
+  env: CloudflareBindings,
   stripeEvent: string,
   stripeObject: any
 ) => {
@@ -217,7 +215,7 @@ export const stripeWebhookHandler = async (
 };
 
 export const subscriptionHandler = async (
-  env: Bindings,
+  env: CloudflareBindings,
   stripeObject: any,
   stripeEvent: string
 ) => {
@@ -310,7 +308,7 @@ export const subscriptionHandler = async (
 };
 
 export const createLifetimeSubscription = async (
-  env: Bindings,
+  env: CloudflareBindings,
   stripeObject: any,
   stripeEvent: string
 ) => {
@@ -328,7 +326,7 @@ export const createLifetimeSubscription = async (
     frequency: SubscriptionFrequency.lifetime,
     start_date: new Date().toISOString(),
     last_pay_date: new Date().toISOString(),
-    next_pay_date: dayjs().add(100, 'years').toISOString(),
+    next_pay_date: addYears(new Date(), 100).toISOString(),
     cancel_date: null,
   };
 
@@ -343,7 +341,7 @@ export const createLifetimeSubscription = async (
 };
 
 export const cancelStripeSubscription = async (
-  env: Bindings,
+  env: CloudflareBindings,
   subscription: Subscription
 ) => {
   const stripe = stripeClient(env);
@@ -351,7 +349,7 @@ export const cancelStripeSubscription = async (
 };
 
 export const applyStripeCoupon = async (
-  env: Bindings,
+  env: CloudflareBindings,
   subscription: Subscription
 ) => {
   const stripe = stripeClient(env);
@@ -430,16 +428,17 @@ const parsePaypal = (queryString: any) => {
   subscription.frequency =
     subscription.frequency || SubscriptionFrequency.month;
 
-  subscription.next_pay_date = dayjs()
-    .add(1, subscription.frequency as dayjs.ManipulateType)
-    .toDate()
-    .toISOString();
+  const addPeriod = {
+    [SubscriptionFrequency.quarter]: addQuarters,
+    [SubscriptionFrequency.year]: addYears,
+  }[subscription.frequency] || addMonths;
+  subscription.next_pay_date = addPeriod(new Date(), 1).toISOString();
 
   return { subscription, paypal };
 };
 
 export const paypalSubscriptionWebhook = async (
-  env: Bindings,
+  env: CloudflareBindings,
   payPalObject: any
 ) => {
   const { subscription, paypal } = parsePaypal(payPalObject);

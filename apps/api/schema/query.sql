@@ -69,12 +69,25 @@ CREATE TABLE IF NOT EXISTS Domains(
   domain_id INTEGER PRIMARY KEY,
   account_id INTEGER NOT NULL,
   user_id INTEGER,
-  domain VARCHAR(64) NOT NULL,
+  domain VARCHAR(253) NOT NULL,
   is_default INTEGER DEFAULT 0,
+  is_verified INTEGER NOT NULL DEFAULT 0,
+  verification_method TEXT,
+  verified_email TEXT,
+  verified_at DATETIME,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME,
   FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS unique_account_domain ON Domains(account_id, domain);
+
+-- Domains allowed for every account without ownership verification
+CREATE TABLE IF NOT EXISTS WhitelistedDomains(
+  domain VARCHAR(253) PRIMARY KEY,
+  user_id INTEGER,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS Links(
@@ -123,10 +136,4 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
   is_recent INTEGER NOT NULL DEFAULT 0,
   cancel_reason TEXT,
   FOREIGN KEY (account_id) REFERENCES Accounts (account_id) ON DELETE CASCADE
-);
-
-
-CREATE TABLE IF NOT EXISTS Whitelist(
-  id INTEGER PRIMARY KEY,
-  url TEXT NOT NULL UNIQUE
 );

@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { Bindings } from '../types/bindings';
 import {
   countUsers,
   getEmails,
@@ -8,25 +7,32 @@ import {
 } from '../services/admin.service';
 import { AuthUser, LevelType } from '../models/auth-user';
 import { getLinks } from '../services/links.service';
-import dayjs from 'dayjs';
 import { getAnalytics } from '../services/analytics.service';
-import { TableResult } from '../models/table';
-import { Paged } from '../models/paged';
+import { toTableResult } from '../models/table';
+import { pagedSchema } from '../models/paged';
 import { User } from '../models/user';
+import { HTTPException } from 'hono/http-exception';
+import { jsonValidator } from '../helper/validator';
+import { normalizeDomain, whitelistSchema } from '../models/domain';
+import {
+  addWhitelist,
+  deleteWhitelist,
+  getWhitelist,
+} from '../services/domain.service';
 
-const admin = new Hono<{ Bindings: Bindings }>();
+const admin = new Hono<{ Bindings: CloudflareBindings }>();
 
 admin.get('/users', async (ctx) => {
   const users = await getAllUsers(ctx.env);
   if (!users) {
-    return ctx.json({ message: 'No users found' }, 404);
+    throw new HTTPException(404, { message: 'No users found' });
   }
   return ctx.json(users, 200);
 });
 
 admin.get('/links/:id', async (ctx) => {
   const id = Number(ctx.req.param('id'));
-  const paged = new Paged(ctx.req.queries());
+  const paged = pagedSchema.parse(ctx.req.query());
   const links = await getLinks(
     ctx.env,
     {
@@ -36,7 +42,7 @@ admin.get('/links/:id', async (ctx) => {
     paged
   );
   if (!links) {
-    return ctx.json({ message: 'No links found' }, 404);
+    throw new HTTPException(404, { message: 'No links found' });
   }
   return ctx.json(links, 200);
 });
@@ -48,15 +54,40 @@ admin.get('/top-links', async (ctx) => {
   const sqlQuery = `SELECT
   format('https://idm.in/{}', blob2) as url,
   count() as clicks
-    FROM IDM_ANALYTICS
+    FROM SHORTENER_ANALYTICS
     WHERE
   timestamp >= NOW() - INTERVAL '1' DAY
   GROUP BY url
   ORDER BY clicks DESC
   LIMIT ${limit}`;
 
-  const result = await getAnalytics(ctx, sqlQuery);
-  return ctx.json(new TableResult(result, offset, limit, result.length), 200);
+  const result = await getAnalytics(ctx.env, sqlQuery);
+  return ctx.json(toTableResult(result, offset, limit), 200);
+});
+
+// Domains allowed for every account without ownership verification
+admin.get('/whitelist', async (ctx) => {
+  const { offset, limit } = pagedSchema.parse(ctx.req.query());
+  const result = await getWhitelist(ctx.env, offset, limit);
+  return ctx.json(toTableResult(result, offset, limit), 200);
+});
+
+admin.post('/whitelist', jsonValidator(whitelistSchema), async (ctx) => {
+  const authUser: AuthUser = ctx.req['user'];
+  const { domain } = ctx.req.valid('json');
+  const result = await addWhitelist(ctx.env, authUser, domain);
+  return ctx.json(result, 200);
+});
+
+admin.delete('/whitelist/:domain', async (ctx) => {
+  const domain = normalizeDomain(ctx.req.param('domain'));
+  const isDeleted = domain && (await deleteWhitelist(ctx.env, domain));
+  if (!isDeleted) {
+    throw new HTTPException(404, {
+      message: `No whitelisted domain found: ${ctx.req.param('domain')}`,
+    });
+  }
+  return ctx.json({ message: `${domain} removed from whitelist` }, 200);
 });
 
 admin.get('/emails', async (ctx) => {
@@ -78,15 +109,11 @@ admin.post('/emails', async (ctx) => {
         name: message.from_name,
         email: message.from_email,
         guid: 'test',
-      },
+      } as User,
     ];
   }
 
-  const mDate = message.offset
-    ? dayjs().add(Number(message.offset) / 5000, 'hours')
-    : dayjs();
-
-  await bulkEmailer(ctx.env, users, message, mDate.toISOString());
+  await bulkEmailer(ctx.env, users, message);
 
   return ctx.json({
     message: `${users.length} email sent`,

@@ -1,23 +1,21 @@
-import { Context } from 'hono';
-import { Bindings } from '../types/bindings';
 import { Link } from '../models/link';
 
 export const setAnalytics = (
-  env: Bindings,
+  env: CloudflareBindings,
   link: Link,
   parseResult: UAParser.IResult,
   cf: any,
   referer: string,
   ip: string
 ) => {
-  if (!link.account_id || !env.IDM_ANALYTICS) return;
+  if (!link.account_id || !env.SHORTENER_ANALYTICS) return;
 
   try {
     const { browser, os, device } = parseResult;
     const isDesktop =
       device.type === undefined ||
       !['wearable', 'mobile'].includes(device.type);
-    env.IDM_ANALYTICS.writeDataPoint({
+    env.SHORTENER_ANALYTICS.writeDataPoint({
       blobs: [
         `${link.account_id}`,
         link.key,
@@ -46,16 +44,14 @@ export const setAnalytics = (
 // https://developers.cloudflare.com/workers/examples/cache-post-request/
 
 export const getAnalytics = async (
-  ctx: Context<{
-    Bindings: Bindings;
-  }>,
+  env: CloudflareBindings,
   query: string
 ) => {
-  const url = `https://api.cloudflare.com/client/v4/accounts/${ctx.env.CF_ACCOUNT_ID}/analytics_engine/sql`;
+  const url = `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/analytics_engine/sql`;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${ctx.env.CF_API_KEY}`,
+      Authorization: `Bearer ${env.CF_API_KEY}`,
     },
     body: query,
   });
