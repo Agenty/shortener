@@ -42,6 +42,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { DomainFavicon } from '@/components/DomainFavicon';
 import { toast } from 'sonner';
 import { CreateLinkDialog } from './components/CreateLinkDialog';
 import { ApiExamplesSheet } from './components/ApiExamplesSheet';
@@ -60,18 +61,7 @@ function getDomain(url: string) {
 }
 
 function LinkFavicon({ url }: { url: string }) {
-  const domain = getDomain(url);
-  if (!domain) return null;
-  return (
-    <img
-      src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`}
-      alt=""
-      className="h-4 w-4 rounded-sm shrink-0"
-      onError={(e) => {
-        (e.target as HTMLImageElement).style.display = 'none';
-      }}
-    />
-  );
+  return <DomainFavicon domain={getDomain(url)} size="sm" />;
 }
 
 function LinkActions({

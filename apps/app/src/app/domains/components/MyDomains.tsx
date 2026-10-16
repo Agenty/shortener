@@ -32,7 +32,7 @@ import {
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
 import type { Domain } from '@/types/domain';
-import { DomainFavicon } from './DomainFavicon';
+import { DomainFavicon } from '@/components/DomainFavicon';
 
 interface MyDomainsProps {
   onVerify: (domain: Domain) => void;

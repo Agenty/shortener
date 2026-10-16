@@ -14,7 +14,7 @@ import {
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
 import type { GlobalDomain, GlobalDomainType } from '@/types/domain';
-import { DomainFavicon } from './DomainFavicon';
+import { DomainFavicon } from '@/components/DomainFavicon';
 
 interface GlobalDomainsProps {
   type: GlobalDomainType;

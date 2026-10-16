@@ -4,28 +4,31 @@ import { cn } from 'cn';
 
 interface DomainFaviconProps {
   domain: string;
+  size?: 'default' | 'sm';
   className?: string;
 }
 
 /** Google favicon for a domain inside a tile, falls back to a globe icon */
-export function DomainFavicon({ domain, className }: DomainFaviconProps) {
+export function DomainFavicon({ domain, size = 'default', className }: DomainFaviconProps) {
   const [failed, setFailed] = useState(false);
+  const sm = size === 'sm';
 
   return (
     <div
       className={cn(
-        'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border bg-muted/40',
+        'flex shrink-0 items-center justify-center border bg-muted/40',
+        sm ? 'h-7 w-7 rounded-md' : 'h-9 w-9 rounded-lg',
         className
       )}
     >
-      {failed ? (
-        <Globe className="h-4 w-4 text-muted-foreground" />
+      {failed || !domain ? (
+        <Globe className={cn('text-muted-foreground', sm ? 'h-3.5 w-3.5' : 'h-4 w-4')} />
       ) : (
         <img
           src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`}
           alt=""
           loading="lazy"
-          className="h-5 w-5 rounded-sm"
+          className={cn('rounded-sm', sm ? 'h-4 w-4' : 'h-5 w-5')}
           onError={() => setFailed(true)}
         />
       )}
