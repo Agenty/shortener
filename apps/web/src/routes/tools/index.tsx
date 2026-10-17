@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ArrowUpRight } from 'lucide-react';
 import { PageHero } from '@/components/page-hero';
+import { ToolIcon } from '@/components/tool-icon';
 import { Section } from '@/components/section';
 import { otherTools, shortenerTools } from '@/data/tools';
 import { seo } from '@/lib/seo';
@@ -37,7 +38,7 @@ function Tools() {
               className="group flex min-h-44 flex-col bg-background p-5 transition-colors hover:bg-surface"
             >
               <div className="flex items-start justify-between">
-                <tool.icon className="size-5 text-muted-foreground" />
+                <ToolIcon domain={tool.domain} icon={tool.icon} size="default" />
                 <ArrowUpRight className="size-4 text-muted-foreground group-hover:text-foreground" />
               </div>
               <h3 className="mt-6 font-semibold">{tool.title}</h3>
@@ -55,7 +56,7 @@ function Tools() {
               className="group flex flex-col bg-background p-5 transition-colors hover:bg-surface"
             >
               <div className="flex items-start justify-between">
-                <tool.icon className="size-5 text-muted-foreground" />
+                <ToolIcon domain={tool.domain} icon={tool.icon} size="default" />
                 <ArrowUpRight className="size-4 text-muted-foreground group-hover:text-foreground" />
               </div>
               <h3 className="mt-6 font-semibold">{tool.title}</h3>

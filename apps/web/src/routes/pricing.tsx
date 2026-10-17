@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ArrowRight, Check, Minus } from 'lucide-react';
 import { Faq } from '@/components/faq';
+import { LifetimeOffer } from '@/components/lifetime-offer';
 import { PageHero } from '@/components/page-hero';
 import { PricingCards } from '@/components/pricing-cards';
 import { Section } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
-import { enterprise, lifetime, pricingFaqs } from '@/data/plans';
+import { enterprise, pricingFaqs } from '@/data/plans';
 import { faqJsonLd, seo } from '@/lib/seo';
 import { cn } from '@/lib/utils';
 
@@ -14,7 +15,7 @@ export const Route = createFileRoute('/pricing')({
     seo({
       title: 'Pricing',
       description:
-        'Shorten links for free, or choose a plan from $7 a month for custom domains, team members, click reports and API access. Enterprise adds unlimited links and compliance support.',
+        'Shorten links for free, or choose a plan from $29 a month for custom domains, team members, click reports and API access. Enterprise adds unlimited links and compliance support.',
       path: '/pricing',
       jsonLd: [faqJsonLd(pricingFaqs)],
     }),
@@ -22,12 +23,12 @@ export const Route = createFileRoute('/pricing')({
 });
 
 const matrix: Array<[string, ...Array<string | boolean>]> = [
-  ['Short links', '10', '500/mo', '1,000/mo', '5,000/mo', 'Unlimited'],
+  ['Short links', '10', '1,000/mo', '10,000/mo', '50,000/mo', 'Unlimited'],
   ['Clicks', 'Unlimited', 'Unlimited', 'Unlimited', 'Unlimited', 'Unlimited'],
-  ['Analytics history', '7 days', '7 days', '30 days', '60 days', '90 days'],
-  ['Custom domains', false, '1', '3', '5', 'Custom'],
-  ['Projects', false, '3', '5', '10', 'Custom'],
-  ['Team members', false, '2', '50', '10', 'Unlimited'],
+  ['Analytics history', '7 days', '30 days', '60 days', '90 days', '90 days'],
+  ['Custom domains', false, '3', '5', '10', 'Custom'],
+  ['Projects', false, '5', '10', '25', 'Custom'],
+  ['Team members', false, '5', '10', '20', 'Unlimited'],
   ['Click reports', false, true, true, true, true],
   ['API access', false, true, true, true, true],
   ['UTM builder and social preview', true, true, true, true, true],
@@ -56,6 +57,7 @@ function Pricing() {
       />
 
       <div className="container">
+        <LifetimeOffer className="mb-6" />
         <PricingCards />
 
         <div className="mt-4 grid gap-6 rounded-2xl border bg-neutral-950 p-6 text-white md:grid-cols-[1fr_1.6fr] md:p-8 dark:bg-card">
@@ -82,20 +84,6 @@ function Pricing() {
             ))}
           </ul>
         </div>
-
-        <div className="mt-4">
-          <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-surface p-6 sm:flex-row sm:items-center">
-            <div>
-              <h2 className="font-semibold">Lifetime deal · ${lifetime.price} once</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Basic plan features with {lifetime.links}, no subscription.
-              </p>
-            </div>
-            <Link to="/lifetime-deal" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'rounded-xl')}>
-              Details <ArrowRight data-icon="inline-end" />
-            </Link>
-          </div>
-        </div>
       </div>
 
       <Section>
@@ -107,7 +95,7 @@ function Pricing() {
                 <th scope="col" className="p-4 text-left font-medium text-muted-foreground">
                   Feature
                 </th>
-                {['Free', 'Basic', 'Pro', 'Business', 'Enterprise'].map((name) => (
+                {['Free', 'Pro', 'Business', 'Advanced', 'Enterprise'].map((name) => (
                   <th key={name} scope="col" className="p-4 text-center font-semibold">
                     {name}
                   </th>

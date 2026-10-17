@@ -1,3 +1,4 @@
+import { lifetime } from './plans';
 import { shortenerTools } from './tools';
 
 export const productNav = [
@@ -9,7 +10,7 @@ export const productNav = [
   {
     label: 'Lifetime deal',
     to: '/lifetime-deal',
-    description: 'Pay once for 500 links a month',
+    description: `Pay once for ${lifetime.links}`,
   },
   {
     label: 'Comparisons',

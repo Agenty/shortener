@@ -10,8 +10,8 @@ import {
   Zap,
 } from 'lucide-react';
 import { BrowserFrame, ThemedScreenshot } from '@/components/browser-frame';
-import { DomainFavicon } from '@/components/domain-favicon';
 import { Faq } from '@/components/faq';
+import { ToolIcon } from '@/components/tool-icon';
 import { LinkBuilder } from '@/components/link-builder';
 import { AnalyticsMockup, ApiMockup, TargetingMockup } from '@/components/mockups';
 import { PricingCards } from '@/components/pricing-cards';
@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     q: 'Is Shortener.dev free?',
-    a: 'Yes. The free plan includes 10 short links with click analytics, and you can shorten a link without an account from the form on this page. Paid plans start at $7 a month.',
+    a: 'Yes. The free plan includes 10 short links with click analytics, and you can shorten a link without an account from the form on this page. Paid plans start at $29 a month.',
   },
   {
     q: 'Can I change where a short link points after I share it?',
@@ -289,13 +289,7 @@ function Home() {
               params={{ slug: tool.slug }}
               className="group flex items-center gap-3 rounded-xl border bg-background px-4 py-3 text-sm transition-colors hover:border-foreground/20"
             >
-              {tool.domain ? (
-                <DomainFavicon domain={tool.domain} size="sm" />
-              ) : (
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-md border bg-muted/40">
-                  <tool.icon className="size-3.5 text-muted-foreground" />
-                </span>
-              )}
+              <ToolIcon domain={tool.domain} icon={tool.icon} />
               {tool.title}
             </Link>
           ))}
@@ -305,13 +299,7 @@ function Home() {
               to={tool.to}
               className="group flex items-center gap-3 rounded-xl border bg-background px-4 py-3 text-sm transition-colors hover:border-foreground/20"
             >
-              {tool.domain ? (
-                <DomainFavicon domain={tool.domain} size="sm" />
-              ) : (
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-md border bg-muted/40">
-                  <tool.icon className="size-3.5 text-muted-foreground" />
-                </span>
-              )}
+              <ToolIcon domain={tool.domain} icon={tool.icon} />
               {tool.title}
             </Link>
           ))}

@@ -38,7 +38,7 @@ export type FeatureKey =
   | 'hosting';
 
 export const comparisonFeatures: Array<{ key: FeatureKey; label: string; ours: string }> = [
-  { key: 'pricing', label: 'Pricing', ours: 'From $7 a month, or $149 one-time' },
+  { key: 'pricing', label: 'Pricing', ours: 'From $29 a month, or $149 one-time' },
   { key: 'free', label: 'Free plan', ours: '10 links with 7 days of analytics' },
   { key: 'domains', label: 'Custom domains', ours: '1 to 10 branded domains, by plan' },
   {
@@ -66,7 +66,7 @@ export const comparisonFeatures: Array<{ key: FeatureKey; label: string; ours: s
 ];
 
 const managedAngle = (name: string) =>
-  `Shortener.dev covers the link features most teams use from ${name} (branded domains, click analytics, UTM parameters, expiration, passwords, device and geo targeting) and keeps every link option available on every plan. Paid plans start at $7 a month, and there is a one-time lifetime option.`;
+  `Shortener.dev covers the link features most teams use from ${name} (branded domains, click analytics, UTM parameters, expiration, passwords, device and geo targeting) and keeps every link option available on every plan. Paid plans start at $29 a month, and there is a one-time lifetime option.`;
 
 export const alternatives: Alternative[] = [
   {

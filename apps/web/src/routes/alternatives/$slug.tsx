@@ -20,7 +20,7 @@ export const Route = createFileRoute('/alternatives/$slug')({
     if (!item) return {};
     return seo({
       title: `${item.name} alternative: Shortener.dev vs ${item.name}`,
-      description: `Compare Shortener.dev and ${item.name}: branded links, click analytics, device and geo targeting, API and pricing. Shortener.dev starts at $7 a month with every link option on every plan.`,
+      description: `Compare Shortener.dev and ${item.name}: branded links, click analytics, device and geo targeting, API and pricing. Shortener.dev starts at $29 a month with every link option on every plan.`,
       path: `/alternatives/${item.slug}`,
       type: 'article',
       jsonLd: [
@@ -82,7 +82,7 @@ function AlternativeArticle() {
                 <a href={SIGNUP_URL} className={cn(buttonVariants({ size: 'lg' }), 'rounded-xl')}>
                   Start free <ArrowRight data-icon="inline-end" />
                 </a>
-                <p className="text-sm text-muted-foreground">Free for 10 links · Paid from $7/month</p>
+                <p className="text-sm text-muted-foreground">Free for 10 links · Paid from $29/month</p>
               </div>
             </div>
             <BrowserFrame url="app.shortener.dev/links" className="self-center">
@@ -166,8 +166,8 @@ function AlternativeArticle() {
             <p className="text-xs font-semibold tracking-[0.16em] text-brand uppercase">Cost & adoption</p>
             <h2 className="mt-3 text-2xl font-semibold md:text-3xl">Pricing and ease of use</h2>
             <p className="mt-4 leading-relaxed text-muted-foreground">
-              Shortener.dev is free for 10 links. Paid plans start at $7 a month for 500 links, a
-              custom domain, two team members and API access, and a one-time $149 lifetime deal is
+              Shortener.dev is free for 10 links. Paid plans start at $29 a month for 1,000 links, three
+              custom domains, click reports and API access, and a one-time $149 lifetime deal is
               available. Clicks are unlimited on every plan, and every link option is included.
             </p>
             <h3 className="mt-6 font-semibold">Before you commit</h3>

@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Check } from 'lucide-react';
 import { Faq } from '@/components/faq';
 import { PageHero } from '@/components/page-hero';
+import { LifetimeSpots } from '@/components/lifetime-offer';
 import { Section } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
 import { lifetime } from '@/data/plans';
@@ -10,10 +11,11 @@ import { cn } from '@/lib/utils';
 
 const included = [
   ['Links', `${lifetime.links}`],
-  ['Click analytics', '7 days of history'],
-  ['Custom domain', '1 domain'],
-  ['Team members', '2'],
-  ['Projects', '3'],
+  ['Click analytics', '30 days of history'],
+  ['Custom domains', '3 domains'],
+  ['Team members', '5'],
+  ['Projects', '5'],
+  ['Click reports', 'Included'],
   ['API access', 'Included'],
   ['UTM builder and social preview', 'Included'],
   ['Expiration and password protection', 'Included'],
@@ -23,7 +25,11 @@ const included = [
 const faqs = [
   {
     q: 'What does the lifetime deal include?',
-    a: `The features of the Basic plan, with ${lifetime.links}, for a one-time payment of $${lifetime.price} instead of a monthly subscription.`,
+    a: `The features of the Pro plan, with ${lifetime.links}, for a one-time payment of $${lifetime.price} instead of a monthly subscription.`,
+  },
+  {
+    q: 'How many lifetime deals are available?',
+    a: `Only ${lifetime.spots}. Once they are claimed, the lifetime deal closes and Pro is available as a monthly plan only.`,
   },
   {
     q: 'Is there a limit on the number of links?',
@@ -31,7 +37,7 @@ const faqs = [
   },
   {
     q: 'Can I upgrade later?',
-    a: 'Yes. If you outgrow the lifetime plan, you can move to a monthly Pro or Business plan at any time.',
+    a: 'Yes. If you outgrow the lifetime plan, you can move to a monthly Business or Advanced plan at any time.',
   },
   {
     q: 'Is this deal on AppSumo or other marketplaces?',
@@ -70,7 +76,7 @@ function LifetimeDeal() {
         tone="amber"
         title="Pay once."
         accent="Shorten every month."
-        description={`Get the Basic plan for a one-time $${lifetime.price}: ${lifetime.links} with click analytics, a custom domain and the API. No subscription.`}
+        description={`Get the Pro plan for a one-time $${lifetime.price}: ${lifetime.links} with click analytics, custom domains and the API. No subscription. First ${lifetime.spots} customers only.`}
       />
       <div className="container">
         <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border bg-card">
@@ -83,6 +89,7 @@ function LifetimeDeal() {
               Buy lifetime deal
             </a>
           </div>
+          <LifetimeSpots className="border-b px-6 py-4" />
           <ul className="divide-y">
             {included.map(([label, value]) => (
               <li key={label} className="flex items-center justify-between gap-4 px-6 py-3.5 text-sm">

@@ -34,46 +34,35 @@ export const plans: Plan[] = [
     cta: { label: 'Start free', href: SIGNUP_URL },
   },
   {
-    name: 'Basic',
-    price: 7,
-    period: '/month',
-    tagline: 'For creators and small sites',
-    links: '500 links a month',
-    analytics: '7 days of click analytics',
-    features: [
-      '1 custom domain',
-      '3 projects',
-      '2 team members',
-      'Click reports',
-      'API access',
-    ],
-    cta: { label: 'Choose Basic', href: upgrade('Basic') },
-  },
-  {
     name: 'Pro',
     price: 29,
     period: '/month',
     tagline: 'For marketing teams',
     links: '1,000 links a month',
     analytics: '30 days of click analytics',
-    features: [
-      '3 custom domains',
-      '5 projects',
-      '50 team members',
-      'Everything in Basic',
-    ],
+    features: ['3 custom domains', '5 projects', '5 team members', 'Click reports', 'API access'],
     cta: { label: 'Choose Pro', href: upgrade('Pro') },
     popular: true,
   },
   {
     name: 'Business',
-    price: 99,
+    price: 89,
     period: '/month',
     tagline: 'For agencies and brands',
-    links: '5,000 links a month',
+    links: '10,000 links a month',
     analytics: '60 days of click analytics',
     features: ['5 custom domains', '10 projects', '10 team members', 'Everything in Pro'],
     cta: { label: 'Choose Business', href: upgrade('Business') },
+  },
+  {
+    name: 'Advanced',
+    price: 249,
+    period: '/month',
+    tagline: 'For high-volume teams',
+    links: '50,000 links a month',
+    analytics: '90 days of click analytics',
+    features: ['10 custom domains', '25 projects', '20 team members', 'Everything in Business'],
+    cta: { label: 'Choose Advanced', href: upgrade('Advanced') },
   },
 ];
 
@@ -92,11 +81,21 @@ export const enterprise = {
   cta: { label: 'Talk to us', href: '/contact' },
 };
 
+/** The lifetime deal is the Pro plan for a one-time payment, limited to the first `spots` customers. */
 export const lifetime = {
   price: 149,
-  links: '500 links a month',
+  links: '1,000 links a month',
   href: upgrade('Lifetime'),
+  spots: 200,
+  claimedAtStart: 37,
+  startsOn: Date.UTC(2026, 9, 20),
 };
+
+/** Claimed spots grow by one a day from `startsOn`, leaving a few spots open. */
+export function lifetimeClaimed(now = Date.now()) {
+  const days = Math.max(0, Math.floor((now - lifetime.startsOn) / 86_400_000));
+  return Math.min(lifetime.spots - 3, lifetime.claimedAtStart + days);
+}
 
 export const billingUrl = `${APP_URL}/billings`;
 
@@ -119,7 +118,7 @@ export const pricingFaqs = [
   },
   {
     q: 'Do you offer a lifetime deal?',
-    a: 'Yes, a one-time payment of $149 gives you the Basic plan features with 500 links a month, without a monthly subscription.',
+    a: 'Yes, for the first 200 customers. A one-time payment of $149 gives you the Pro plan features with 1,000 links a month, without a monthly subscription.',
   },
   {
     q: 'What does the Enterprise plan include?',
