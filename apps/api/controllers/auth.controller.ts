@@ -1,9 +1,11 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import {
   forgotPasswordSchema,
+  identifySchema,
   loginSchema,
   resetPasswordSchema,
   signupSchema,
+  verifyCodeSchema,
 } from '../models/auth';
 import {
   AuthUser,
@@ -20,17 +22,22 @@ import {
   updateLastLoginDetails,
   getUserCountByIP,
   isDisposableEmail,
+  verifyUser,
 } from '../services/auth.service';
 import { createAccount } from '../services/account.service';
 import { nanoid } from 'nanoid';
 import { PlanType } from '../models/plan';
 import { addDays, addMinutes, getUnixTime } from 'date-fns';
 import { HTTPException } from 'hono/http-exception';
-import { sendPasswordResetEmail } from '../services/emailer.service';
+import {
+  sendOtpEmail,
+  sendPasswordResetEmail,
+} from '../services/emailer.service';
 import { captchaGuard } from '../services/captcha.service';
 import { sign, verify } from 'hono/jwt';
 import { createApi, errorResponses, messageSchema } from '../helper/openapi';
 import { API_SAMPLES } from '../helper/api-samples';
+import _ from 'lodash';
 
 const auth = createApi();
 
@@ -302,6 +309,183 @@ auth.openapi(
       },
       200
     );
+  }
+);
+
+/** Pending email code of a passwordless sign in, valid for 10 minutes */
+type IdentifyCode = { code: string; attempts: number };
+const IDENTIFY_TTL_MINUTES = 10;
+const IDENTIFY_MAX_ATTEMPTS = 5;
+const identifyCacheKey = (email: string) => `identify-${email}`;
+
+auth.openapi(
+  createRoute({
+    tags: ['Authentication'],
+    method: 'post',
+    path: '/identify',
+    summary: 'Sign in with email code',
+    description:
+      'Send a one-time 6-digit code to the email address. Works for new and existing users, a new account is created when the code is verified. Returns a short-lived token to send with `POST /auth/verify`.',
+    request: {
+      body: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: identifySchema,
+            example: API_SAMPLES.auth.identify,
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: 'Code sent, returns the token to verify it with',
+        content: {
+          'application/json': {
+            schema: tokenSchema,
+          },
+        },
+      },
+      ...errorResponses(400, 429),
+    } as any,
+  }),
+  async (ctx) => {
+    const email = ctx.req.valid('json').email.trim().toLowerCase();
+    const existingUser = await getUserByEmail(ctx.env, email);
+    if (!existingUser && (await isDisposableEmail(ctx.env, email))) {
+      throw new HTTPException(400, {
+        message: 'Invalid email, disposable email not supported',
+      });
+    }
+
+    const code: IdentifyCode = {
+      code: String(_.random(100000, 999999)),
+      attempts: 0,
+    };
+    await ctx.env.KVCACHE.put(identifyCacheKey(email), JSON.stringify(code), {
+      expirationTtl: 60 * IDENTIFY_TTL_MINUTES,
+    });
+    await sendOtpEmail(
+      ctx.env,
+      { email, name: existingUser?.name || email.split('@')[0] },
+      Number(code.code)
+    );
+
+    // Identifies the email only, the auth middleware rejects it for the API
+    const token = await sign(
+      {
+        email,
+        purpose: 'identify',
+        exp: getUnixTime(addMinutes(new Date(), IDENTIFY_TTL_MINUTES)),
+      },
+      ctx.env.JWT_SECRET
+    );
+    return ctx.json({ token }, 200);
+  }
+);
+
+auth.openapi(
+  createRoute({
+    tags: ['Authentication'],
+    method: 'post',
+    path: '/verify',
+    summary: 'Verify email code',
+    description:
+      'Verify the one-time code sent by `POST /auth/identify`. Send the token it returned in the `Authorization: Bearer <token>` header. Returns the signed in user with a bearer token (valid for 15 days).',
+    request: {
+      body: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: verifyCodeSchema,
+            example: API_SAMPLES.auth.verify,
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description:
+          'Signed in user profile with plan limits and the bearer `token`',
+        content: {
+          'application/json': {
+            schema: tokenSchema,
+          },
+        },
+      },
+      ...errorResponses(400, 401, 429),
+    } as any,
+  }),
+  async (ctx) => {
+    const { code } = ctx.req.valid('json');
+    const bearer = ctx.req.header('Authorization')?.split(' ').pop();
+
+    let email: string;
+    try {
+      const payload = await verify(bearer, ctx.env.JWT_SECRET, 'HS256');
+      if (payload.purpose !== 'identify' || !payload.email) throw new Error();
+      email = String(payload.email);
+    } catch {
+      throw new HTTPException(401, {
+        message: 'Code expired, request a new one',
+      });
+    }
+
+    const cacheKey = identifyCacheKey(email);
+    const pending = await ctx.env.KVCACHE.get<IdentifyCode>(cacheKey, 'json');
+    if (!pending) {
+      throw new HTTPException(400, {
+        message: 'Code expired, request a new one',
+      });
+    }
+    if (pending.code !== code) {
+      pending.attempts += 1;
+      if (pending.attempts >= IDENTIFY_MAX_ATTEMPTS) {
+        await ctx.env.KVCACHE.delete(cacheKey);
+        throw new HTTPException(400, {
+          message: 'Too many invalid attempts, request a new code',
+        });
+      }
+      await ctx.env.KVCACHE.put(cacheKey, JSON.stringify(pending), {
+        expirationTtl: 60 * IDENTIFY_TTL_MINUTES,
+      });
+      throw new HTTPException(400, { message: 'Invalid code' });
+    }
+    await ctx.env.KVCACHE.delete(cacheKey);
+
+    let authUser = await getUserByEmail(ctx.env, email);
+    if (authUser) {
+      if (!authUser.is_verified) {
+        await verifyUser(ctx.env, authUser.user_id);
+        authUser.is_verified = true;
+      }
+      await updateLastLoginDetails(ctx.env, authUser.user_id);
+    } else {
+      const ip = ctx.req.header('CF-Connecting-IP');
+      if ((await getUserCountByIP(ctx.env, ip)) > 0) {
+        throw new HTTPException(400, {
+          message:
+            'Multiple account creation attempts have been detected, please upgrade your existing account to add more links, users etc.',
+        });
+      }
+      authUser = {
+        name: email.split('@')[0],
+        email,
+        ip_address: ip,
+        last_login_at: new Date(),
+        role: RoleType.Owner,
+        status: UserStatus.active,
+        plan: PlanType.Free,
+        guid: nanoid(32),
+        country: `${ctx.req.raw.cf?.country}`,
+      };
+      authUser.account_id = await createAccount(ctx.env, authUser);
+      // Passwordless users are verified by the email code
+      authUser.user_id = await registerUser(ctx.env, authUser);
+    }
+
+    const token = await signToken(ctx.env, authUser);
+    return ctx.json(toAuthResponse(authUser, token), 200);
   }
 );
 

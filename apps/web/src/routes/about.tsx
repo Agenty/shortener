@@ -10,7 +10,7 @@ export const Route = createFileRoute('/about')({
     seo({
       title: 'About us',
       description:
-        'Shortener.dev is a URL shortener with click analytics for marketing teams and developers, built on Cloudflare by Agenty Analytics.',
+        'Shortener.dev is a URL shortener with click analytics for marketing teams and developers, built by Agenty Analytics.',
       path: '/about',
       jsonLd: [
         {
@@ -37,9 +37,9 @@ function About() {
         <div className="grid gap-12 md:grid-cols-2 md:gap-20">
           <div className="space-y-5 text-lg leading-relaxed text-muted-foreground">
             <p>
-              We started as IDM (idm.in), a link shortener and analytics tool for marketing teams.
-              Shortener.dev is the next version: rebuilt on Cloudflare Workers so redirects are fast
-              everywhere, with a cleaner dashboard and a documented API.
+              Shortener.dev is a link shortener and analytics tool for marketing teams. Redirects are
+              served from a global edge network so they are fast everywhere, with a clean dashboard
+              and a documented API.
             </p>
             <p>
               Every link option, from UTM parameters to geo targeting, is on every plan. You pay for

@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     q: 'Is Shortener.dev free?',
-    a: 'Yes. The free plan includes 10 short links with click analytics, and you can shorten a link without an account from the form on this page. Paid plans start at $29 a month.',
+    a: 'Yes. The free plan includes 10 short links with click analytics, and you can sign in and shorten a link right from the form on this page. Paid plans start at $29 a month.',
   },
   {
     q: 'Can I change where a short link points after I share it?',
@@ -116,10 +116,10 @@ function Home() {
               bodyClassName="p-4 sm:p-6"
             >
               <p className="text-lg font-semibold tracking-tight">Shorten a link</p>
-              <p className="mb-4 text-sm text-muted-foreground">No account needed for a 24-hour link.</p>
+              <p className="mb-4 text-sm text-muted-foreground">Sign in free with Google or your email.</p>
               <LinkBuilder
                 className="border-0 bg-transparent p-0 shadow-none"
-                examples={[{ url: 'https://github.com/dayschedule/idm', key: 'github' }]}
+                examples={[{ url: 'https://github.com/Agenty/shortener', key: 'github' }]}
               />
             </BrowserFrame>
           </div>

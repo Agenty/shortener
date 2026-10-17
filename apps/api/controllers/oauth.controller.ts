@@ -22,10 +22,26 @@ import {
 
 const oauth = new Hono<{ Bindings: CloudflareBindings }>();
 
+/** Only our own sites can be returned to after sign in, anything else goes to the app */
+const safeReturnUrl = (env: CloudflareBindings, value?: string) => {
+  try {
+    const url = new URL(value);
+    const { hostname } = url;
+    if (
+      (url.protocol === 'https:' || hostname === 'localhost') &&
+      (hostname === env.DOMAIN || hostname.endsWith(`.${env.DOMAIN}`))
+    ) {
+      return url.toString();
+    }
+  } catch {}
+  return env.APP_URL;
+};
+
 oauth.get('/google', async (ctx) => {
-  const { code, reason } = ctx.req.query();
+  const { code, reason, redirect_uri, state } = ctx.req.query();
   if (reason && reason == 'consent') {
-    return ctx.redirect(getGoogleConsentUri(ctx.env), 302);
+    const returnTo = redirect_uri ? safeReturnUrl(ctx.env, redirect_uri) : undefined;
+    return ctx.redirect(getGoogleConsentUri(ctx.env, returnTo), 302);
   } else {
     if (!code) {
       throw new HTTPException(400, {
@@ -61,7 +77,7 @@ oauth.get('/google', async (ctx) => {
     };
     setCookie(ctx, 'auth_user', JSON.stringify(authResponse), options);
     setCookie(ctx, 'auth_token', token, options);
-    return ctx.redirect(ctx.env.APP_URL, 302);
+    return ctx.redirect(safeReturnUrl(ctx.env, state), 302);
   }
 });
 

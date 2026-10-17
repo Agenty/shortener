@@ -188,8 +188,11 @@ export const verifyUser = async (
   return success;
 };
 
-export const getGoogleConsentUri = (env: CloudflareBindings) => {
-  const random = Math.floor(Math.random() * 100000 + 1);
+/** `state` carries the page to return to after sign in, see `safeReturnUrl` */
+export const getGoogleConsentUri = (env: CloudflareBindings, returnTo?: string) => {
+  const state = encodeURIComponent(
+    returnTo || String(Math.floor(Math.random() * 100000 + 1))
+  );
   const scopes = [
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
@@ -197,7 +200,7 @@ export const getGoogleConsentUri = (env: CloudflareBindings) => {
   const redirectUri = `${env.API_URL}/v1/oauth/google`;
   const consentUri = `https://accounts.google.com/o/oauth2/v2/auth?scope=${scopes.join(
     ' '
-  )}&access_type=offline&include_granted_scopes=true&response_type=code&state=${random}&redirect_uri=${redirectUri}&client_id=${
+  )}&access_type=offline&include_granted_scopes=true&response_type=code&state=${state}&redirect_uri=${redirectUri}&client_id=${
     env.GOOGLE_CLIENT_ID
   }`;
   return consentUri;

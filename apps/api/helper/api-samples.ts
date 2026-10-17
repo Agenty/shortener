@@ -17,6 +17,12 @@ export const API_SAMPLES = {
     forgotPassword: {
       email: 'jane@example.com',
     },
+    identify: {
+      email: 'jane@example.com',
+    },
+    verify: {
+      code: '482913',
+    },
     resetPassword: {
       password: 'N3w-Pa55word',
       confirm_password: 'N3w-Pa55word',

@@ -95,7 +95,7 @@ function Privacy() {
       <p>
         We keep your information while your account is active and as long as needed for legal
         obligations, then delete it. Click analytics are available for the history your plan
-        includes. Links created without an account expire after 24 hours.
+        includes.
       </p>
 
       <h2>Cookies</h2>

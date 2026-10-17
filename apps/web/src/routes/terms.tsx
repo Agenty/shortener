@@ -70,7 +70,7 @@ function Terms() {
       <h2>Availability</h2>
       <p>
         We aim to keep short links redirecting at all times but do not guarantee uninterrupted
-        service. Links created without an account may expire and be deleted after 24 hours.
+        service.
       </p>
 
       <h2>Intellectual property</h2>

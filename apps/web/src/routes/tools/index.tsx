@@ -24,7 +24,7 @@ function Tools() {
         eyebrow="Free tools"
         tone="green"
         title="Free link tools"
-        accent="no account needed."
+        accent="for everything you share."
         description="Shorten links for the apps you share from, build WhatsApp chat links and check how a link looks before you post it."
       />
       <Section className="pt-0 md:pt-0">

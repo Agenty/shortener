@@ -34,7 +34,7 @@ export type ShortenerTool = {
 const commonFaqs = (platform: string): Faq[] => [
   {
     q: `Is the ${platform} link shortener free?`,
-    a: `Yes. Paste a ${platform} URL in the form above to get a short link for free. Links created without an account expire after 24 hours, so sign up for a free account to keep them and see click analytics.`,
+    a: `Yes. Paste a ${platform} URL in the form above to get a short link for free. Sign in free with Google or your email, and the link is saved to your account with click analytics.`,
   },
   {
     q: 'Can I choose my own short link?',

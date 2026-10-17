@@ -87,11 +87,11 @@ export function SiteFooter({ hideCta }: { hideCta?: boolean }) {
         <div className="grid grid-cols-2 gap-10 border-t border-white/10 py-14 md:grid-cols-[1.2fr_repeat(4,1fr)]">
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2" aria-label="Shortener.dev home">
-              <LogoMark className="[&_path]:stroke-neutral-950 [&_rect]:fill-white" />
-              <Wordmark className="text-xl" />
+              <LogoMark className="size-8 [&_path]:stroke-neutral-950 [&_rect]:fill-white" />
+              <Wordmark />
             </Link>
             <p className="mt-4 max-w-56 text-sm leading-relaxed text-white/60">
-              Short links with click analytics, built on Cloudflare.
+              Short links with click analytics, for marketing teams and developers.
             </p>
             <div className="mt-6 flex items-center gap-3">
               <ThemeToggle className="border-white/15 [&_button]:text-white/60 [&_button:hover]:text-white [&_button[aria-checked=true]]:bg-white/10 [&_button[aria-checked=true]]:text-white" />

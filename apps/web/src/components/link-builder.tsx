@@ -1,8 +1,10 @@
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { ArrowRight, Check, Copy, Link2, Loader2, X } from 'lucide-react';
 import { DomainFavicon } from '@/components/domain-favicon';
+import { LoginDialog } from '@/components/login-dialog';
 import { Button } from '@/components/ui/button';
-import { API_URL, SHORT_HOST, SIGNUP_URL } from '@/lib/site';
+import { clearAuth, useAuth } from '@/lib/auth';
+import { API_URL, APP_URL, SHORT_HOST } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
 export type ShortLink = {
@@ -15,6 +17,8 @@ export type ShortLink = {
 };
 
 const STORAGE_KEY = 'shortener:links';
+/** URL to shorten once the visitor is back from Google sign in */
+const PENDING_KEY = 'shortener:pending-url';
 
 const readStored = (): ShortLink[] => {
   try {
@@ -32,6 +36,24 @@ const writeStored = (links: ShortLink[]) => {
   } catch {
     // Storage can be blocked, the list still works for this visit
   }
+};
+
+const session = {
+  get: (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  set: (key: string, value: string | null) => {
+    try {
+      if (value === null) sessionStorage.removeItem(key);
+      else sessionStorage.setItem(key, value);
+    } catch {
+      // Storage can be blocked, the visitor is asked again next time
+    }
+  },
 };
 
 /** Adds https:// when the visitor pastes `example.com/page` */
@@ -66,6 +88,8 @@ export type LinkBuilderProps = {
 /**
  * Public short link form. Used on the home page and every
  * `/tools/*-link-shortener` page, so keep it free of page-specific copy.
+ *
+ * Links are created in the visitor's account, so shortening asks to sign in first.
  */
 export function LinkBuilder({
   placeholder = 'Paste a long URL, e.g. https://example.com/blog/my-post',
@@ -82,6 +106,10 @@ export function LinkBuilder({
   const [error, setError] = useState<string | null>(null);
   const [created, setCreated] = useState<ShortLink[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const auth = useAuth();
+  const createdRef = useRef(created);
+  createdRef.current = created;
 
   useEffect(() => setCreated(readStored()), []);
   useEffect(() => setUrl(defaultUrl), [defaultUrl]);
@@ -97,7 +125,57 @@ export function LinkBuilder({
   const host = hostOf(destination);
   const offHost = Boolean(expectHost && host && !host.endsWith(expectHost));
 
-  const submit = async (event: React.FormEvent) => {
+  /** Creates the link in the signed in visitor's account */
+  const shorten = async (target: string, token: string) => {
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/links`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ url: target }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        clearAuth();
+        setLoginOpen(true);
+        throw new Error('Your session has expired. Sign in again to save this link to your account.');
+      }
+      if (!res.ok) {
+        throw new Error(
+          res.status === 429
+            ? 'Too many links in a minute. Wait a moment and try again.'
+            : json.message || 'Could not shorten this link.'
+        );
+      }
+      const link: ShortLink = {
+        key: json.key,
+        url: json.url ?? target,
+        short_url: json.short_url,
+        expire_at: json.expire_at,
+      };
+      const next = [link, ...createdRef.current.filter((item) => item.key !== link.key)];
+      setCreated(next);
+      writeStored(next);
+      setUrl('');
+      onCreated?.(link);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not shorten this link.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Back from Google sign in: shorten the URL the visitor submitted before leaving
+  useEffect(() => {
+    const pending = session.get(PENDING_KEY);
+    if (!auth || !pending) return;
+    session.set(PENDING_KEY, null);
+    setUrl(pending);
+    shorten(pending, auth.token);
+  }, [auth]);
+
+  const submit = (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
 
@@ -108,39 +186,8 @@ export function LinkBuilder({
       return;
     }
 
-    setLoading(true);
-    try {
-      const res = await fetch(`${API_URL}/public/links`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: destination }),
-      });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(
-          res.status === 429
-            ? 'Too many links in a minute. Wait a moment, or sign up for higher limits.'
-            : res.status === 401 || res.status === 404
-              ? 'Shortening without an account is not available right now.'
-              : json.message || 'Could not shorten this link.'
-        );
-      }
-      const link: ShortLink = {
-        key: json.key,
-        url: json.url ?? destination,
-        short_url: json.short_url,
-        expire_at: json.expire_at,
-      };
-      const next = [link, ...created.filter((item) => item.key !== link.key)];
-      setCreated(next);
-      writeStored(next);
-      setUrl('');
-      onCreated?.(link);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not shorten this link.');
-    } finally {
-      setLoading(false);
-    }
+    if (auth) shorten(destination, auth.token);
+    else setLoginOpen(true);
   };
 
   const copy = async (shortUrl: string) => {
@@ -158,6 +205,8 @@ export function LinkBuilder({
     setCreated(next);
     writeStored(next);
   };
+
+  const textButton = 'font-medium text-foreground underline underline-offset-2';
 
   return (
     <div className={cn('rounded-2xl border bg-card p-3 text-left shadow-sm sm:p-4', className)}>
@@ -196,13 +245,7 @@ export function LinkBuilder({
 
       {error && (
         <p id={`${inputId}-error`} role="alert" className="mt-2 px-1 text-sm text-destructive">
-          {error}{' '}
-          <a
-            href={`${SIGNUP_URL}?url=${encodeURIComponent(destination)}`}
-            className="font-medium text-foreground underline underline-offset-2"
-          >
-            Sign up free to shorten it in your account
-          </a>
+          {error}
         </p>
       )}
 
@@ -255,12 +298,35 @@ export function LinkBuilder({
       )}
 
       <p className="mt-3 px-1 text-xs text-muted-foreground">
-        Links created here expire after 24 hours.{' '}
-        <a href={SIGNUP_URL} className="font-medium text-foreground underline underline-offset-2">
-          Sign up free
-        </a>{' '}
-        to keep them, pick the back-half and see click analytics.
+        {auth ? (
+          <>
+            Signed in{auth.email ? ` as ${auth.email}` : ''}. Links are saved to your account.{' '}
+            <a href={APP_URL} className={textButton}>
+              Open dashboard
+            </a>{' '}
+            ·{' '}
+            <button type="button" onClick={clearAuth} className="underline underline-offset-2 hover:text-foreground">
+              Sign out
+            </button>
+          </>
+        ) : (
+          <>
+            <button type="button" onClick={() => setLoginOpen(true)} className={textButton}>
+              Sign in free
+            </button>{' '}
+            to shorten links, pick the back-half and see click analytics.
+          </>
+        )}
       </p>
+
+      <LoginDialog
+        open={loginOpen}
+        onOpenChange={setLoginOpen}
+        title={destination ? 'Sign in to save your link' : undefined}
+        description={destination ? 'Sign in to shorten it. The link and its clicks are saved to your account.' : undefined}
+        onSuccess={(user) => destination && shorten(destination, user.token)}
+        onBeforeRedirect={() => destination && session.set(PENDING_KEY, destination)}
+      />
     </div>
   );
 }

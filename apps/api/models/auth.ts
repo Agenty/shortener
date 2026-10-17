@@ -83,3 +83,38 @@ export const resetPasswordSchema = z
   .openapi('ResetPassword');
 
 export type ResetPassword = z.infer<typeof resetPasswordSchema>;
+
+export const identifySchema = z
+  .object({
+    email: z
+      .email()
+      .max(100)
+      .refine(
+        (email) => !blockedEmailDomains.includes(email.split('@')[1]),
+        { message: 'Domain blocked' }
+      )
+      .openapi({
+        example: 'jane@example.com',
+        description:
+          'Email address to sign in or sign up with. A one-time code is sent to this email',
+      }),
+  })
+  .openapi('Identify', {
+    description: 'Passwordless sign in with a one-time email code',
+  });
+
+export type Identify = z.infer<typeof identifySchema>;
+
+export const verifyCodeSchema = z
+  .object({
+    code: z
+      .string()
+      .regex(/^\d{6}$/, { message: 'Enter the 6-digit code' })
+      .openapi({
+        example: '482913',
+        description: 'One-time code received by email',
+      }),
+  })
+  .openapi('VerifyCode');
+
+export type VerifyCode = z.infer<typeof verifyCodeSchema>;

@@ -5,7 +5,7 @@ export const API_URL = import.meta.env.DEV
   ? 'http://localhost:8787/v1'
   : 'https://api.shortener.dev/v1';
 export const SUPPORT_EMAIL = 'support@shortener.dev';
-export const GITHUB_URL = 'https://github.com/dayschedule/idm';
+export const GITHUB_URL = 'https://github.com/Agenty/shortener';
 export const OG_IMAGE = `${SITE_URL}/og.png`;
 
 export const SIGNUP_URL = `${APP_URL}/signup`;
