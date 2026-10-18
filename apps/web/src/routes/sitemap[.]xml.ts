@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { alternatives } from '@/data/alternatives';
 import { otherTools, shortenerTools } from '@/data/tools';
+import { docPath, docs } from '@/lib/docs';
 import { SITE_URL } from '@/lib/site';
 
 const staticPaths = [
@@ -25,6 +26,8 @@ export const Route = createFileRoute('/sitemap.xml')({
           ...staticPaths,
           ...alternatives.map((item) => `/alternatives/${item.slug}`),
           ...[...shortenerTools, ...otherTools].map((tool) => `/tools/${tool.slug}`),
+          ...docs.map((doc) => docPath(doc.slug)),
+          '/docs/api',
         ];
         const urls = paths
           .map((path) => `  <url><loc>${SITE_URL}${path === '/' ? '' : path}</loc></url>`)

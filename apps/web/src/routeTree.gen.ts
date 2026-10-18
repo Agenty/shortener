@@ -14,6 +14,8 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ErrorRouteImport } from './routes/error'
 import { Route as LifetimeDealRouteImport } from './routes/lifetime-deal'
+import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReportRouteImport } from './routes/report'
@@ -23,6 +25,10 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as AlternativesIndexRouteImport } from './routes/alternatives/index'
 import { Route as AlternativesSlugRouteImport } from './routes/alternatives/$slug'
+import { Route as DocsIndexRouteImport } from './routes/docs/index'
+import { Route as DocsSlugRouteImport } from './routes/docs/$slug'
+import { Route as DocsApiRouteImport } from './routes/docs/api'
+import { Route as DocsChar123slugChar125DotmdRouteImport } from './routes/docs/{$slug}[.]md'
 import { Route as ToolsIndexRouteImport } from './routes/tools/index'
 import { Route as ToolsSlugRouteImport } from './routes/tools/$slug'
 import { Route as ToolsSocialSharePreviewRouteImport } from './routes/tools/social-share-preview'
@@ -51,6 +57,16 @@ const ErrorRoute = ErrorRouteImport.update({
 const LifetimeDealRoute = LifetimeDealRouteImport.update({
   id: '/lifetime-deal',
   path: '/lifetime-deal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
+  id: '/llms-full.txt',
+  path: '/llms-full.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -98,6 +114,27 @@ const AlternativesSlugRoute = AlternativesSlugRouteImport.update({
   path: '/alternatives/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsIndexRoute = DocsIndexRouteImport.update({
+  id: '/docs/',
+  path: '/docs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsSlugRoute = DocsSlugRouteImport.update({
+  id: '/docs/$slug',
+  path: '/docs/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsApiRoute = DocsApiRouteImport.update({
+  id: '/docs/api',
+  path: '/docs/api',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsChar123slugChar125DotmdRoute =
+  DocsChar123slugChar125DotmdRouteImport.update({
+    id: '/docs/{$slug}.md',
+    path: '/docs/{$slug}.md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ToolsIndexRoute = ToolsIndexRouteImport.update({
   id: '/tools/',
   path: '/tools/',
@@ -126,6 +163,8 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/error': typeof ErrorRoute
   '/lifetime-deal': typeof LifetimeDealRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
@@ -134,10 +173,14 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
+  '/docs/$slug': typeof DocsSlugRoute
+  '/docs/api': typeof DocsApiRoute
+  '/docs/{$slug}.md': typeof DocsChar123slugChar125DotmdRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/tools/social-share-preview': typeof ToolsSocialSharePreviewRoute
   '/tools/whatsapp-link-generator': typeof ToolsWhatsappLinkGeneratorRoute
   '/alternatives/': typeof AlternativesIndexRoute
+  '/docs/': typeof DocsIndexRoute
   '/tools/': typeof ToolsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -146,6 +189,8 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/error': typeof ErrorRoute
   '/lifetime-deal': typeof LifetimeDealRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
@@ -154,10 +199,14 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
+  '/docs/$slug': typeof DocsSlugRoute
+  '/docs/api': typeof DocsApiRoute
+  '/docs/{$slug}.md': typeof DocsChar123slugChar125DotmdRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/tools/social-share-preview': typeof ToolsSocialSharePreviewRoute
   '/tools/whatsapp-link-generator': typeof ToolsWhatsappLinkGeneratorRoute
   '/alternatives': typeof AlternativesIndexRoute
+  '/docs': typeof DocsIndexRoute
   '/tools': typeof ToolsIndexRoute
 }
 export interface FileRoutesById {
@@ -167,6 +216,8 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/error': typeof ErrorRoute
   '/lifetime-deal': typeof LifetimeDealRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
@@ -175,10 +226,14 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/alternatives/$slug': typeof AlternativesSlugRoute
+  '/docs/$slug': typeof DocsSlugRoute
+  '/docs/api': typeof DocsApiRoute
+  '/docs/{$slug}.md': typeof DocsChar123slugChar125DotmdRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/tools/social-share-preview': typeof ToolsSocialSharePreviewRoute
   '/tools/whatsapp-link-generator': typeof ToolsWhatsappLinkGeneratorRoute
   '/alternatives/': typeof AlternativesIndexRoute
+  '/docs/': typeof DocsIndexRoute
   '/tools/': typeof ToolsIndexRoute
 }
 export interface FileRouteTypes {
@@ -189,6 +244,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/error'
     | '/lifetime-deal'
+    | '/llms-full.txt'
+    | '/llms.txt'
     | '/pricing'
     | '/privacy'
     | '/report'
@@ -197,10 +254,14 @@ export interface FileRouteTypes {
     | '/terms'
     | '/unsubscribe'
     | '/alternatives/$slug'
+    | '/docs/$slug'
+    | '/docs/api'
+    | '/docs/{$slug}.md'
     | '/tools/$slug'
     | '/tools/social-share-preview'
     | '/tools/whatsapp-link-generator'
     | '/alternatives/'
+    | '/docs/'
     | '/tools/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -209,6 +270,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/error'
     | '/lifetime-deal'
+    | '/llms-full.txt'
+    | '/llms.txt'
     | '/pricing'
     | '/privacy'
     | '/report'
@@ -217,10 +280,14 @@ export interface FileRouteTypes {
     | '/terms'
     | '/unsubscribe'
     | '/alternatives/$slug'
+    | '/docs/$slug'
+    | '/docs/api'
+    | '/docs/{$slug}.md'
     | '/tools/$slug'
     | '/tools/social-share-preview'
     | '/tools/whatsapp-link-generator'
     | '/alternatives'
+    | '/docs'
     | '/tools'
   id:
     | '__root__'
@@ -229,6 +296,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/error'
     | '/lifetime-deal'
+    | '/llms-full.txt'
+    | '/llms.txt'
     | '/pricing'
     | '/privacy'
     | '/report'
@@ -237,10 +306,14 @@ export interface FileRouteTypes {
     | '/terms'
     | '/unsubscribe'
     | '/alternatives/$slug'
+    | '/docs/$slug'
+    | '/docs/api'
+    | '/docs/{$slug}.md'
     | '/tools/$slug'
     | '/tools/social-share-preview'
     | '/tools/whatsapp-link-generator'
     | '/alternatives/'
+    | '/docs/'
     | '/tools/'
   fileRoutesById: FileRoutesById
 }
@@ -250,6 +323,8 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   ErrorRoute: typeof ErrorRoute
   LifetimeDealRoute: typeof LifetimeDealRoute
+  LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ReportRoute: typeof ReportRoute
@@ -258,10 +333,14 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   AlternativesSlugRoute: typeof AlternativesSlugRoute
+  DocsSlugRoute: typeof DocsSlugRoute
+  DocsApiRoute: typeof DocsApiRoute
+  DocsChar123slugChar125DotmdRoute: typeof DocsChar123slugChar125DotmdRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   ToolsSocialSharePreviewRoute: typeof ToolsSocialSharePreviewRoute
   ToolsWhatsappLinkGeneratorRoute: typeof ToolsWhatsappLinkGeneratorRoute
   AlternativesIndexRoute: typeof AlternativesIndexRoute
+  DocsIndexRoute: typeof DocsIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
 }
 
@@ -300,6 +379,20 @@ declare module '@tanstack/react-router' {
       path: '/lifetime-deal'
       fullPath: '/lifetime-deal'
       preLoaderRoute: typeof LifetimeDealRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms-full.txt': {
+      id: '/llms-full.txt'
+      path: '/llms-full.txt'
+      fullPath: '/llms-full.txt'
+      preLoaderRoute: typeof LlmsFullDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -365,6 +458,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AlternativesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/': {
+      id: '/docs/'
+      path: '/docs'
+      fullPath: '/docs/'
+      preLoaderRoute: typeof DocsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/$slug': {
+      id: '/docs/$slug'
+      path: '/docs/$slug'
+      fullPath: '/docs/$slug'
+      preLoaderRoute: typeof DocsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/api': {
+      id: '/docs/api'
+      path: '/docs/api'
+      fullPath: '/docs/api'
+      preLoaderRoute: typeof DocsApiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/{$slug}.md': {
+      id: '/docs/{$slug}.md'
+      path: '/docs/{$slug}.md'
+      fullPath: '/docs/{$slug}.md'
+      preLoaderRoute: typeof DocsChar123slugChar125DotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/': {
       id: '/tools/'
       path: '/tools'
@@ -402,6 +523,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   ErrorRoute: ErrorRoute,
   LifetimeDealRoute: LifetimeDealRoute,
+  LlmsFullDottxtRoute: LlmsFullDottxtRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ReportRoute: ReportRoute,
@@ -410,10 +533,14 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   AlternativesSlugRoute: AlternativesSlugRoute,
+  DocsSlugRoute: DocsSlugRoute,
+  DocsApiRoute: DocsApiRoute,
+  DocsChar123slugChar125DotmdRoute: DocsChar123slugChar125DotmdRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   ToolsSocialSharePreviewRoute: ToolsSocialSharePreviewRoute,
   ToolsWhatsappLinkGeneratorRoute: ToolsWhatsappLinkGeneratorRoute,
   AlternativesIndexRoute: AlternativesIndexRoute,
+  DocsIndexRoute: DocsIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
 }
 export const routeTree = rootRouteImport
@@ -421,10 +548,11 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

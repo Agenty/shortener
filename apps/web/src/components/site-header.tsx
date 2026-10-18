@@ -86,10 +86,18 @@ export function SiteHeader() {
             Pricing
           </Link>
           <Link
-            to="/alternatives"
+            to="/docs/api"
             className="rounded-full px-3 py-2 text-sm text-foreground/80 hover:text-foreground"
+            activeProps={{ className: 'text-foreground' }}
           >
-            Compare
+            API
+          </Link>
+          <Link
+            to="/docs"
+            className="rounded-full px-3 py-2 text-sm text-foreground/80 hover:text-foreground"
+            activeProps={{ className: 'text-foreground' }}
+          >
+            Docs
           </Link>
           <a
             href={LOGIN_URL}
@@ -133,8 +141,11 @@ export function SiteHeader() {
                 <Link to="/pricing" className="py-1.5 text-[15px]">
                   Pricing
                 </Link>
-                <Link to="/alternatives" className="py-1.5 text-[15px]">
-                  Compare
+                <Link to="/docs/api" className="py-1.5 text-[15px]">
+                  API
+                </Link>
+                <Link to="/docs" className="py-1.5 text-[15px]">
+                  Docs
                 </Link>
                 <Link to="/contact" className="py-1.5 text-[15px]">
                   Contact

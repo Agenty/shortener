@@ -139,7 +139,7 @@ export const linkSchema = z
     password: z.string().max(32).nullable().optional().openapi({
       example: 's3cret',
       description:
-        'Restrict access with a [password protected short link](https://shortener.dev/docs/t/how-to-create-password-protected-short-links/413)',
+        'Restrict access with a [password protected short link](https://shortener.dev/docs/password-protected-links)',
     }),
     ios: optionalDestinationUrl.openapi({
       example: 'https://apps.apple.com/us/app/example/id000000000',
@@ -159,7 +159,7 @@ export const linkSchema = z
       .default([])
       .openapi({
         description:
-          'Redirect visitors by country with [geo-targeted short links](https://shortener.dev/docs/t/how-to-create-geo-targeted-short-links/414)',
+          'Redirect visitors by country with [geo-targeted short links](https://shortener.dev/docs/geo-targeting)',
       }),
     is_enabled: z
       .union([z.boolean(), z.number().int().min(0).max(1)])

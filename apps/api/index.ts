@@ -6,7 +6,7 @@ import { users } from './controllers/users.controller';
 import { accounts } from './controllers/accounts.controller';
 import { profile } from './controllers/profile.controller';
 import { apiKeys } from './controllers/apikeys.controller';
-import { removeDomainInPaths } from './helper/utility';
+import { inlineSchemas, removeDomainInPaths, removeTagsInPaths } from './helper/utility';
 import { analytics } from './controllers/analytics.controller';
 import { subscription } from './controllers/subscription.controller';
 import { jwtAuth } from './middleware/auth';
@@ -165,27 +165,18 @@ app.get("/openapi.json", async (ctx) => {
         name: "Users",
         description: "Manage team members of your account",
       },
-      {
-        name: "API Keys",
-        description: "Create and revoke API keys for server-to-server access",
-      },
-      {
-        name: "Authentication",
-        description: "Sign up, sign in and password reset",
-      },
-      {
-        name: "Tools",
-        description: "Free utilities for link previews",
-      },
     ],
     servers: [
       {
-        url: "https://api.ticketdesk.ai/v1",
+        url: "https://api.shortener.dev/v1",
         description: "API",
       },
     ],
   });
-  return ctx.json(removeDomainInPaths(apiSpecs), {
+  const publicSpecs = inlineSchemas(
+    removeTagsInPaths(removeDomainInPaths(apiSpecs), ["API Keys", "Authentication", "Tools"]),
+  );
+  return ctx.json(publicSpecs, {
     headers: {
       "Cache-Control": `max-age=3600, s-maxage=7200`,
     },

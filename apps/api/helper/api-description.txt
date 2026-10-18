@@ -1,30 +1,27 @@
-URL shortener API by Shortener.dev allows you to shorten your links using programming languages like Node.js, Python, C#, Java or more. 
-You can use our RESTful interface to integrate link shortening tool into your applications.
+Use the Shortener.dev URL shortener API to create and manage short links from your own code, in any language that can send an HTTPS request: Node.js, Python, PHP, Go, C#, Java and more.
 
-The API can be used to [create short URL](https://shortener.dev/), QR code etc:
+With the API you can:
 
-- Shorten long URLs into unique, shorter aliases(free plan)
-- Create short link with customizable alias, expiration, UTM parameters to track conversion on Google ads and [more options](https://shortener.dev/docs/t/url-shortening/403)
-- Get analytics report to track click statistics (paid plan)
+- Shorten long URLs with a custom alias (back-half) or an auto-generated one
+- Add [UTM parameters](https://shortener.dev/docs/utm-parameters), an [expiration date](https://shortener.dev/docs/link-expiration), a [password](https://shortener.dev/docs/password-protected-links), [iOS and Android app links](https://shortener.dev/docs/ios-android-app-links) and [geo targeting](https://shortener.dev/docs/geo-targeting)
+- Add and [verify the domains](https://shortener.dev/docs/verify-domain) your links point to
+- Read click analytics by date, referrer, country, browser, OS and device
 
-![URL shortener API](/static/img/url-shortener-api.png)
-
-The API documentation includes information on how to authorize your request and sample responses JSON for each endpoint.
+Step-by-step guides are in the [Shortener.dev docs](https://shortener.dev/docs).
 
 ## Base URL
-The root endpoint of Shortener.dev API is: `https://api.shortener.dev/v1` and can be accessed over `https` only.
 
+All endpoints are under `https://api.shortener.dev/v1` and are served over HTTPS only.
 
-## Authentication Types
-To authorize your requests, you must be sending the `Authorization` header with your API key.
+## Authentication
 
-- [Get your api key](https://app.shortener.dev/settings/apikeys) from here.
-
-Authorization example:
-```
-curl -X GET \
-  https://api.shortener.dev/v1/links \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer: YOUR_API_KEY_HERE' \
+Send your API key in the `Authorization` header as a bearer token. [Create an API key](https://app.shortener.dev/settings/api-keys) in the dashboard under Settings, then API Keys.
 
 ```
+curl https://api.shortener.dev/v1/links \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+## Errors
+
+Errors return a JSON body with a `message`, for example `{"message": "Domain not verified: example.com"}`. A `402` means the plan limit is reached, `403` means the destination domain is not verified, and `429` means too many requests.

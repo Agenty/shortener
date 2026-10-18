@@ -15,6 +15,8 @@ const columns = [
       { label: 'Short links', to: '/short-links-builder' },
       { label: 'Pricing', to: '/pricing' },
       { label: 'Lifetime deal', to: '/lifetime-deal' },
+      { label: 'Docs', to: '/docs' },
+      { label: 'API reference', to: '/docs/api' },
     ],
   },
   {

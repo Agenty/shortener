@@ -71,7 +71,65 @@ export const removeDomainInPaths = (openapiSpec: any) => {
   return openapiSpec;
 };
 
-const formatZodIssue = (issue: ZodIssue): string => {
+/** Remove operations with any of the given tags, and the tags themselves */
+export const removeTagsInPaths = (openapiSpec: any, tags: string[]) => {
+  if (!openapiSpec || !openapiSpec.paths) {
+    return openapiSpec;
+  }
+
+  Object.keys(openapiSpec.paths).forEach((path) => {
+    const operations = openapiSpec.paths[path];
+    Object.keys(operations).forEach((method) => {
+      if (operations[method]?.tags?.some((tag: string) => tags.includes(tag))) {
+        delete operations[method];
+      }
+    });
+    if (!Object.keys(operations).length) {
+      delete openapiSpec.paths[path];
+    }
+  });
+
+  if (openapiSpec.tags) {
+    openapiSpec.tags = openapiSpec.tags.filter((tag: any) => !tags.includes(tag.name));
+  }
+
+  return openapiSpec;
+};
+
+/** Inline all component schema references and drop components.schemas, so no "Models" section is listed */
+export const inlineSchemas = (openapiSpec: any) => {
+  const schemas = openapiSpec?.components?.schemas;
+  if (!schemas) {
+    return openapiSpec;
+  }
+
+  const prefix = '#/components/schemas/';
+  const resolve = (node: any, seen: string[]): any => {
+    if (Array.isArray(node)) {
+      return node.map((item) => resolve(item, seen));
+    }
+    if (!node || typeof node !== 'object') {
+      return node;
+    }
+    if (typeof node.$ref === 'string' && node.$ref.startsWith(prefix)) {
+      const name = node.$ref.slice(prefix.length);
+      if (seen.includes(name) || !schemas[name]) {
+        return { type: 'object' };
+      }
+      return resolve(schemas[name], [...seen, name]);
+    }
+    return Object.fromEntries(
+      Object.entries(node).map(([key, value]) => [key, resolve(value, seen)])
+    );
+  };
+
+  openapiSpec.paths = resolve(openapiSpec.paths, []);
+  delete openapiSpec.components.schemas;
+
+  return openapiSpec;
+};
+
+const formatZodIssue =(issue: ZodIssue): string => {
   const { path, message } = issue;
   const pathString = path.join('.');
   return `${pathString}: ${message}`;

@@ -150,43 +150,43 @@ export const api = {
     clicks(params: { interval?: number; key?: string } = {}) {
       const query = new URLSearchParams();
       if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("key", params.key);
+      if (params.key) query.set("url", params.key);
       return request<AnalyticsClick[]>(`/analytics?${query.toString()}`);
     },
     referer(params: { interval?: number; key?: string } = {}) {
       const query = new URLSearchParams();
       if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("key", params.key);
+      if (params.key) query.set("url", params.key);
       return request<AnalyticsReferer[]>(`/analytics/referer?${query.toString()}`);
     },
     country(params: { interval?: number; key?: string } = {}) {
       const query = new URLSearchParams();
       if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("key", params.key);
+      if (params.key) query.set("url", params.key);
       return request<AnalyticsCountry[]>(`/analytics/country?${query.toString()}`);
     },
     top(params: { interval?: number; key?: string } = {}) {
       const query = new URLSearchParams();
       if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("key", params.key);
+      if (params.key) query.set("url", params.key);
       return request<AnalyticsTop[]>(`/analytics/top?${query.toString()}`);
     },
     browser(params: { interval?: number; key?: string } = {}) {
       const query = new URLSearchParams();
       if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("key", params.key);
+      if (params.key) query.set("url", params.key);
       return request<AnalyticsBrowser[]>(`/analytics/browser?${query.toString()}`);
     },
     os(params: { interval?: number; key?: string } = {}) {
       const query = new URLSearchParams();
       if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("key", params.key);
+      if (params.key) query.set("url", params.key);
       return request<AnalyticsOS[]>(`/analytics/os?${query.toString()}`);
     },
     device(params: { interval?: number; key?: string } = {}) {
       const query = new URLSearchParams();
       if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("key", params.key);
+      if (params.key) query.set("url", params.key);
       return request<AnalyticsDevice[]>(`/analytics/device?${query.toString()}`);
     },
   },
