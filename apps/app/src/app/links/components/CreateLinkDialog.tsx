@@ -170,13 +170,13 @@ export function CreateLinkDialog() {
               {/* Options Accordion */}
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Options</p>
-                <Accordion className="space-y-1">
+                <Accordion className="rounded-lg">
                   {/* Expiration */}
-                  <AccordionItem value="expiration" className="border rounded-lg px-4">
-                    <AccordionTrigger className="text-sm font-medium py-3">
+                  <AccordionItem value="expiration">
+                    <AccordionTrigger className="py-3 hover:no-underline hover:bg-muted/50">
                       <span className="flex items-center gap-2"><Calendar className="h-4 w-4" /> Expiration</span>
                     </AccordionTrigger>
-                    <AccordionContent className="pb-4">
+                    <AccordionContent className="pt-1 pb-4">
                       <Input
                         type="datetime-local"
                         value={link.expire_at}
@@ -189,11 +189,11 @@ export function CreateLinkDialog() {
                   </AccordionItem>
 
                   {/* UTM Builder */}
-                  <AccordionItem value="utm" className="border rounded-lg px-4">
-                    <AccordionTrigger className="text-sm font-medium py-3">
+                  <AccordionItem value="utm">
+                    <AccordionTrigger className="py-3 hover:no-underline hover:bg-muted/50">
                       <span className="flex items-center gap-2"><Link2 className="h-4 w-4" /> UTM Builder</span>
                     </AccordionTrigger>
-                    <AccordionContent className="pb-4 space-y-3">
+                    <AccordionContent className="pt-1 pb-4 space-y-3">
                       {[
                         { key: "ref", label: "Referral (ref)", placeholder: "shortener.dev" },
                         { key: "utm_source", label: "UTM Source", placeholder: "twitter, instagram" },
@@ -216,11 +216,11 @@ export function CreateLinkDialog() {
                   </AccordionItem>
 
                   {/* Social Preview */}
-                  <AccordionItem value="social" className="border rounded-lg px-4">
-                    <AccordionTrigger className="text-sm font-medium py-3">
+                  <AccordionItem value="social">
+                    <AccordionTrigger className="py-3 hover:no-underline hover:bg-muted/50">
                       <span className="flex items-center gap-2"><Share2 className="h-4 w-4" /> Social Preview</span>
                     </AccordionTrigger>
-                    <AccordionContent className="pb-4 space-y-3">
+                    <AccordionContent className="pt-1 pb-4 space-y-3">
                       <div className="space-y-1">
                         <Label className="text-xs">Title</Label>
                         <Input
@@ -256,11 +256,11 @@ export function CreateLinkDialog() {
                   </AccordionItem>
 
                   {/* Password */}
-                  <AccordionItem value="password" className="border rounded-lg px-4">
-                    <AccordionTrigger className="text-sm font-medium py-3">
+                  <AccordionItem value="password">
+                    <AccordionTrigger className="py-3 hover:no-underline hover:bg-muted/50">
                       <span className="flex items-center gap-2"><Lock className="h-4 w-4" /> Password Protection</span>
                     </AccordionTrigger>
-                    <AccordionContent className="pb-4">
+                    <AccordionContent className="pt-1 pb-4">
                       <div className="flex items-center gap-1">
                         <Input
                           type={showPassword ? "text" : "password"}
@@ -287,11 +287,11 @@ export function CreateLinkDialog() {
                   </AccordionItem>
 
                   {/* iOS Targeting */}
-                  <AccordionItem value="ios" className="border rounded-lg px-4">
-                    <AccordionTrigger className="text-sm font-medium py-3">
+                  <AccordionItem value="ios">
+                    <AccordionTrigger className="py-3 hover:no-underline hover:bg-muted/50">
                       <span className="flex items-center gap-2"><Smartphone className="h-4 w-4" /> iOS Targeting</span>
                     </AccordionTrigger>
-                    <AccordionContent className="pb-4">
+                    <AccordionContent className="pt-1 pb-4">
                       <Input
                         type="url"
                         placeholder="https://apps.apple.com/..."
@@ -306,11 +306,11 @@ export function CreateLinkDialog() {
                   </AccordionItem>
 
                   {/* Android Targeting */}
-                  <AccordionItem value="android" className="border rounded-lg px-4">
-                    <AccordionTrigger className="text-sm font-medium py-3">
+                  <AccordionItem value="android">
+                    <AccordionTrigger className="py-3 hover:no-underline hover:bg-muted/50">
                       <span className="flex items-center gap-2"><Tablet className="h-4 w-4" /> Android Targeting</span>
                     </AccordionTrigger>
-                    <AccordionContent className="pb-4">
+                    <AccordionContent className="pt-1 pb-4">
                       <Input
                         type="url"
                         placeholder="https://play.google.com/..."
@@ -325,11 +325,11 @@ export function CreateLinkDialog() {
                   </AccordionItem>
 
                   {/* Geo Targeting */}
-                  <AccordionItem value="geo" className="border rounded-lg px-4">
-                    <AccordionTrigger className="text-sm font-medium py-3">
+                  <AccordionItem value="geo">
+                    <AccordionTrigger className="py-3 hover:no-underline hover:bg-muted/50">
                       <span className="flex items-center gap-2"><Globe className="h-4 w-4" /> Geo Targeting</span>
                     </AccordionTrigger>
-                    <AccordionContent className="pb-4 space-y-2">
+                    <AccordionContent className="pt-1 pb-4 space-y-2">
                       <p className="text-xs text-muted-foreground">
                         Redirect users based on their location, e.g., UK users to example.uk.
                       </p>
