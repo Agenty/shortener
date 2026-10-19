@@ -335,9 +335,9 @@ To report a security issue, email [support@shortener.dev](mailto:support@shorten
 
 ## License
 
-Shortener.dev is open-source under the [GNU Affero General Public License Version 3 (AGPLv3)](LICENSE) or any later version, the same license used by [Dub](https://github.com/dubinc/dub).
+Shortener.dev is built and maintained by Agenty Analytics Pvt. Ltd. as open core: the core product is fully open source under the AGPLv3(LICENSE), and a commercial license is available for organizations that need more than the AGPLv3 allows.
 
-In short: you can use, modify and self-host it, including commercially. If you run a modified version as a network service, you must make your modified source code available to its users under the same license.
+For a commercial license, the hosted Enterprise plan or self-hosting support, [contact us at shortener.dev/enterprise](https://shortener.dev/enterprise).
 
 ---
 

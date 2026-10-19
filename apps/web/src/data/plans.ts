@@ -78,7 +78,7 @@ export const enterprise = {
     'Contract, invoicing and DPA',
     'Dedicated support',
   ],
-  cta: { label: 'Talk to us', href: '/contact' },
+  cta: { label: 'Talk to us', href: '/enterprise' },
 };
 
 /** The lifetime deal is the Pro plan for a one-time payment, limited to the first `spots` customers. */

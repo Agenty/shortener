@@ -39,7 +39,7 @@ Add an entry to `shortenerTools` in `src/data/tools.ts`. The page, nav, footer a
 
 In dev the site calls `http://localhost:8787/v1`, in production `https://api.shortener.dev/v1` (`src/lib/site.ts`):
 
-- `POST /public/links` from the link builder (anonymous 24-hour links)
+- `POST /links` from the link builder, with the signed-in user's token (the builder opens the login dialog first)
 - `GET /public/meta` from the social share preview tool
 - `POST /public/unsubscribe` from `/unsubscribe`
 

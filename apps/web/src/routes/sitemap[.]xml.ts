@@ -9,6 +9,7 @@ const staticPaths = [
   '/pricing',
   '/short-links-builder',
   '/lifetime-deal',
+  '/enterprise',
   '/alternatives',
   '/tools',
   '/about',

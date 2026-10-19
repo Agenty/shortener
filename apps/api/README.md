@@ -65,7 +65,7 @@ npm run cf-typegen    # regenerate worker-configuration.d.ts from wrangler.json
 
 | Prefix             | Auth     | Purpose                                         |
 | ------------------ | -------- | ----------------------------------------------- |
-| `/v1/public`       | None     | Anonymous links from the website, link metadata |
+| `/v1/public`       | None     | Link metadata for the website's preview tool    |
 | `/v1/auth`         | None     | Sign up, sign in, password reset                |
 | `/v1/oauth`        | None     | Google and GitHub sign-in, Search Console       |
 | `/v1/links`        | Required | Create, list, update and delete short links     |
