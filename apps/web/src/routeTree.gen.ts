@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as EnterpriseRouteImport } from './routes/enterprise'
 import { Route as ErrorRouteImport } from './routes/error'
 import { Route as LifetimeDealRouteImport } from './routes/lifetime-deal'
 import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
@@ -47,6 +48,11 @@ const AboutRoute = AboutRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnterpriseRoute = EnterpriseRouteImport.update({
+  id: '/enterprise',
+  path: '/enterprise',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ErrorRoute = ErrorRouteImport.update({
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/enterprise': typeof EnterpriseRoute
   '/error': typeof ErrorRoute
   '/lifetime-deal': typeof LifetimeDealRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
@@ -187,6 +194,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/enterprise': typeof EnterpriseRoute
   '/error': typeof ErrorRoute
   '/lifetime-deal': typeof LifetimeDealRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
@@ -214,6 +222,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/enterprise': typeof EnterpriseRoute
   '/error': typeof ErrorRoute
   '/lifetime-deal': typeof LifetimeDealRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/enterprise'
     | '/error'
     | '/lifetime-deal'
     | '/llms-full.txt'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/enterprise'
     | '/error'
     | '/lifetime-deal'
     | '/llms-full.txt'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/enterprise'
     | '/error'
     | '/lifetime-deal'
     | '/llms-full.txt'
@@ -321,6 +333,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
+  EnterpriseRoute: typeof EnterpriseRoute
   ErrorRoute: typeof ErrorRoute
   LifetimeDealRoute: typeof LifetimeDealRoute
   LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
@@ -365,6 +378,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/enterprise': {
+      id: '/enterprise'
+      path: '/enterprise'
+      fullPath: '/enterprise'
+      preLoaderRoute: typeof EnterpriseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/error': {
@@ -521,6 +541,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
+  EnterpriseRoute: EnterpriseRoute,
   ErrorRoute: ErrorRoute,
   LifetimeDealRoute: LifetimeDealRoute,
   LlmsFullDottxtRoute: LlmsFullDottxtRoute,
