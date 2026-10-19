@@ -104,7 +104,6 @@ CREATE TABLE IF NOT EXISTS Links(
   project_id INTEGER NULL,
   url TEXT NOT NULL,
   expire_at DATETIME,
-  type TEXT,
   data TEXT,
   params TEXT,
   title TEXT,
@@ -123,7 +122,6 @@ CREATE TABLE IF NOT EXISTS Links(
 );
 
 CREATE INDEX IF NOT EXISTS idx_links_account_created ON Links(account_id, created_at);
-CREATE INDEX IF NOT EXISTS idx_links_account_type_created ON Links(account_id, type, created_at);
 CREATE INDEX IF NOT EXISTS idx_links_project ON Links(project_id);
 CREATE INDEX IF NOT EXISTS idx_links_user ON Links(user_id);
 

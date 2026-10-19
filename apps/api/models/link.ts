@@ -188,6 +188,5 @@ export type Link = z.infer<typeof linkSchema> & {
   account_id?: number;
   user_id?: number;
   name?: string;
-  type?: string;
   data?: Record<string, any>;
 };

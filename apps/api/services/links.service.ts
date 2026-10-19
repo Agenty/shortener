@@ -93,7 +93,7 @@ export const getLinkByKey = async (
     `
       SELECT key, account_id, user_id, project_id, url, expire_at, data, is_enabled, created_at, updated_at
       FROM Links
-      WHERE key = ? and account_id = ? and type = 'link'`
+      WHERE key = ? and account_id = ?`
   ).bind(key, authUser.account_id);
 
   const link = await sqlQuery.first();
@@ -125,8 +125,8 @@ export const createLink = async (
   try {
     await env.DB.prepare(
       `
-      INSERT INTO Links (key, account_id, user_id, project_id, url, expire_at, data, is_enabled, type) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'link')`
+      INSERT INTO Links (key, account_id, user_id, project_id, url, expire_at, data, is_enabled) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
       .bind(
         link.key,
@@ -226,7 +226,7 @@ export const getLinkForRedirect = async (
     `
       SELECT key, url, expire_at, data, is_enabled
       FROM Links
-      WHERE key = ? and type = 'link'`
+      WHERE key = ?`
   )
     .bind(key)
     .first();
@@ -272,11 +272,11 @@ export const getLinkCount = async (
   let sqlQuery: D1PreparedStatement;
   if (authUser.plan == PlanType.Free || countAll) {
     sqlQuery = env.DB.prepare(
-      `Select count(1) as total from Links Where account_id = ? and type = 'link'`
+      `Select count(1) as total from Links Where account_id = ?`
     ).bind(authUser.account_id);
   } else {
     sqlQuery = env.DB.prepare(
-      `Select count(1) as total from Links Where account_id = ? and type = 'link' and created_at >= date(?)`
+      `Select count(1) as total from Links Where account_id = ? and created_at >= date(?)`
     ).bind(
       authUser.account_id,
       format(subMonths(new Date(), 1), 'yyyy-MM-dd')
