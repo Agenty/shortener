@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { useRecaptcha } from "@/hooks/use-recaptcha";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -56,6 +57,7 @@ export default function Login() {
         </CardHeader>
         <form onSubmit={handleLogin} className="space-y-6">
           <CardContent className="space-y-4">
+            <GoogleSignInButton />
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />

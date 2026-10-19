@@ -24,6 +24,16 @@ import type { User, UsersResponse, UserCreatePayload, UserUpdatePayload } from "
 
 const BASE_URL = env.API_URL;
 
+/** Cookies the API sets after Google sign in, see `oauth.controller.ts` */
+const OAUTH_TOKEN_COOKIE = "auth_token";
+const OAUTH_USER_COOKIE = "auth_user";
+
+/** Same domain the API sets the Google sign in cookies on */
+const oauthCookieDomain = () => {
+  const { hostname } = window.location;
+  return hostname.endsWith("shortener.dev") ? ".shortener.dev" : hostname;
+};
+
 /** API returns 428 when the signed in user has not verified their email */
 export const EMAIL_NOT_VERIFIED = 428;
 
@@ -105,8 +115,28 @@ export const api = {
       });
     },
 
+    /** Sends the browser to Google consent, the API redirects back to `/oauth/callback` */
+    signinWithGoogle() {
+      const url = new URL(`${BASE_URL}/oauth/google`);
+      url.searchParams.set("reason", "consent");
+      url.searchParams.set("redirect_uri", `${window.location.origin}/oauth/callback`);
+      window.location.href = url.toString();
+    },
+
+    /** Adopts the `auth_token` cookie set by the API's Google sign in, false when missing */
+    completeOAuth() {
+      const token = Cookies.get(OAUTH_TOKEN_COOKIE);
+      if (!token) return false;
+      Cookies.set("token", token, { expires: 7 });
+      return true;
+    },
+
     logout() {
       Cookies.remove("token");
+      // Google sign in session, shared with the website on the parent domain
+      for (const name of [OAUTH_TOKEN_COOKIE, OAUTH_USER_COOKIE]) {
+        Cookies.remove(name, { path: "/", domain: oauthCookieDomain() });
+      }
     },
 
     isAuthenticated() {
