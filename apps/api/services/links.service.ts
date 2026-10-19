@@ -208,11 +208,60 @@ export const deleteLink = async (
   )
     .bind(key, authUser.account_id)
     .run();
-  const success = meta.changes > 0;
-  if (success) {
-    await env.LINKS.delete(key);
+  return meta.changes > 0;
+};
+
+/** Seconds a link stays cached in KV for redirects (KV minimum TTL is 60) */
+const LINK_CACHE_TTL = 60;
+
+/** Public lookup of a short link for redirect, cached in KV for a minute */
+export const getLinkForRedirect = async (
+  env: CloudflareBindings,
+  key: string
+): Promise<Link | undefined> => {
+  const cached = await env.LINKS.get<Link>(key, 'json');
+  if (cached) return cached;
+
+  const row = await env.DB.prepare(
+    `
+      SELECT key, url, expire_at, data, is_enabled
+      FROM Links
+      WHERE key = ? and type = 'link'`
+  )
+    .bind(key)
+    .first();
+  const link = convertToLink(row);
+  if (link) {
+    await env.LINKS.put(key, JSON.stringify(link), {
+      expirationTtl: LINK_CACHE_TTL,
+    });
   }
-  return success;
+  return link;
+};
+
+/** Destination for a visitor, honoring app deep links, geo-targeting and UTM params */
+export const getRedirectUrl = (
+  link: Link,
+  userAgent = '',
+  country?: string
+): string => {
+  let destination = link.url;
+  if (link.ios && /iPhone|iPad|iPod/i.test(userAgent)) {
+    destination = link.ios;
+  } else if (link.android && /Android/i.test(userAgent)) {
+    destination = link.android;
+  } else if (country) {
+    const geo = (link.geo || []).find(
+      (x) => x.country?.toUpperCase() === country.toUpperCase()
+    );
+    if (geo) destination = geo.url;
+  }
+
+  const url = new URL(destination);
+  for (const [name, value] of Object.entries(link.params || {})) {
+    url.searchParams.set(name, value);
+  }
+  return url.toString();
 };
 
 export const getLinkCount = async (
