@@ -6,8 +6,12 @@
   "keep_vars": true,
   "compatibility_date": "2026-04-28",
   "compatibility_flags": ["nodejs_compat"],
-  "observability": { "enabled": true },
-  "placement": { "mode": "smart" },
+  "observability": {
+    "enabled": true
+  },
+  "placement": {
+    "mode": "smart"
+  },
   "analytics_engine_datasets": [
     {
       "binding": "API_LOGS"
@@ -86,5 +90,74 @@
       "name": "EMAIL",
       "remote": true
     }
-  ]
+  ],
+  "previews": {
+    "analytics_engine_datasets": [
+      {
+        "binding": "API_LOGS"
+      },
+      {
+        "binding": "SHORTENER_ANALYTICS"
+      }
+    ],
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_id": "90f71b57-075c-4677-aeaf-9e05edc7ff15",
+        "database_name": "shortener",
+        "migrations_dir": "drizzle/migrations"
+      }
+    ],
+    "r2_buckets": [
+      {
+        "binding": "BUCKET",
+        "bucket_name": "shortener"
+      }
+    ],
+    "kv_namespaces": [
+      {
+        "binding": "KVCACHE",
+        "id": "cdcbd6e8e3be4a6f9f2f6e610ab43ab2"
+      },
+      {
+        "binding": "LINKS",
+        "id": "90fb27447e004ee58024a39293e27e4a"
+      }
+    ],
+    "ai": {
+      "binding": "AI"
+    },
+    "queues": {
+      "producers": [
+        {
+          "binding": "QUEUE",
+          "queue": "shortener-queue"
+        }
+      ]
+    },
+    "ratelimits": [
+      {
+        "name": "PUBLIC_RATE_LIMITER",
+        "namespace_id": "1041",
+        "simple": {
+          "limit": 5,
+          "period": 60
+        }
+      },
+      {
+        "name": "PRO_RATE_LIMITER",
+        "namespace_id": "1051",
+        "simple": {
+          "limit": 150,
+          "period": 60
+        }
+      }
+    ],
+    "send_email": [
+      {
+        "name": "EMAIL",
+        "remote": true
+      }
+    ]
+  }
 }
