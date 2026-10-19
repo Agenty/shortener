@@ -1,17 +1,21 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router";
-import { getTitleForPath } from "@/lib/titles";
+import { useMatches } from "react-router";
+import { formatTitle } from "@/lib/titles";
 
 /**
  * Mount once at the app root. Updates document.title on every route change
- * based on the map defined in src/lib/titles.ts.
+ * from the deepest matched route's `handle.title` (set in App.tsx).
  */
 export function DocumentTitle() {
-  const { pathname } = useLocation();
+  const matches = useMatches();
+  const title = matches
+    .map((m) => (m.handle as { title?: string } | undefined)?.title)
+    .filter(Boolean)
+    .pop();
 
   useEffect(() => {
-    document.title = getTitleForPath(pathname);
-  }, [pathname]);
+    document.title = formatTitle(title);
+  }, [title]);
 
   return null;
 }

@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# shortener-web
 
-## Getting Started
-
-First, run the development server:
+Marketing website for [shortener.dev](https://shortener.dev): TanStack Start (SSR) on Cloudflare Workers, Tailwind and shadcn (Base UI) with the same theme tokens as `apps/app`.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev          # http://localhost:3000, runs in workerd via @cloudflare/vite-plugin
+npm run build        # dist/client (assets) + dist/server (worker)
+npm run deploy       # build, then wrangler deploy
+npm run check-types
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Layout
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `src/routes/` file routes. Every route sets `head()` through `seo()` in `src/lib/seo.ts` (title, description, canonical, Open Graph, Twitter card, JSON-LD).
+- `src/routes/sitemap[.]xml.ts` serves `/sitemap.xml`; `public/robots.txt` points to it.
+- `src/components/link-builder.tsx` is the public short link form, shared by the home page and every `/tools/*-link-shortener` page.
+- `src/data/` holds page content: `tools.ts` (one entry per `/tools/$slug` page), `alternatives.ts` (`/alternatives/$slug`), `plans.ts` (mirrors `apps/api/models/plan.ts`).
+- `public/images/` holds light and dark dashboard screenshots, swapped with the theme by `ThemedScreenshot`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+## Adding a link shortener tool page
 
-## Learn More
+Add an entry to `shortenerTools` in `src/data/tools.ts`. The page, nav, footer and sitemap pick it up.
 
-To learn more about Next.js, take a look at the following resources:
+## API
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+In dev the site calls `http://localhost:8787/v1`, in production `https://api.shortener.dev/v1` (`src/lib/site.ts`):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `POST /public/links` from the link builder (anonymous 24-hour links)
+- `GET /public/meta` from the social share preview tool
+- `POST /public/unsubscribe` from `/unsubscribe`

@@ -16,12 +16,6 @@
   "engines": {
     "node": ">=24"
   },
-  "devEngines": {
-    "packageManager": {
-      "name": "npm",
-      "version": "11.16.0"
-    }
-  },
   "workspaces": [
     "apps/*",
     "packages/*"

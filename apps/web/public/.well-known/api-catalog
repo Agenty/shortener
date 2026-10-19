@@ -1,0 +1,33 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://api.shortener.dev/v1",
+      "service-desc": [
+        {
+          "href": "https://api.shortener.dev/openapi.json",
+          "type": "application/vnd.oai.openapi+json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://shortener.dev/docs/api",
+          "type": "text/html"
+        },
+        {
+          "href": "https://shortener.dev/docs/url-shortener-api",
+          "type": "text/html"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://shortener.dev/llms.txt",
+          "type": "text/plain"
+        },
+        {
+          "href": "https://shortener.dev/.well-known/agent-skills/index.json",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

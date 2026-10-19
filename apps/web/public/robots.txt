@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /error
+Disallow: /unsubscribe
+
+Sitemap: https://shortener.dev/sitemap.xml

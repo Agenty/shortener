@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "shortener-dev",
+      "type": "skill-md",
+      "description": "Create and manage short links with the Shortener.dev URL shortener API, including custom back-halves, UTM parameters, expiration dates, passwords, iOS and Android app targeting, geo targeting, domain verification and click analytics. Use when a user asks to shorten a URL, create a tracked or branded short link, or read click statistics for srt1.link short links.",
+      "url": "/.well-known/agent-skills/SKILL.md",
+      "digest": "sha256:d154c78881f9984c82f54d91eb635ee26bcad67f14553d07cd0044ac08e05dcb"
+    }
+  ]
+}
