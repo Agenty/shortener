@@ -1,9 +1,7 @@
 <p align="center">
   <a href="https://shortener.dev">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-dark.svg">
-      <img src=".github/assets/logo-light.svg" alt="shortener.dev" height="48">
-    </picture>
+    <img src=".github/assets/logo-light.svg#gh-light-mode-only" alt="shortener.dev" height="48">
+    <img src=".github/assets/logo-dark.svg#gh-dark-mode-only" alt="shortener.dev" height="48">
   </a>
 </p>
 
@@ -58,25 +56,16 @@ You can use the hosted version at [shortener.dev](https://shortener.dev) or run 
 
 ## Responsible link shortening
 
-Short links hide where they go. That makes them useful for sharing, and also a favorite tool for phishing, malware and scams. Most public shorteners deal with abuse after the fact, so a harmful link can reach thousands of people before anyone notices, and the short domain ends up on spam blocklists for everyone.
+Short links hide their destination, which makes them a favorite tool for phishing. So Shortener.dev only shortens links to **domains you've verified** or to trusted sites on a whitelist.
 
-Shortener.dev takes a different approach: **you can only shorten links to domains you have proven you own**, or to well-known sites on a global whitelist.
+- **Verify first.** Prove ownership with an email code or Google Search Console. Subdomains are included.
+- **Popular sites just work.** YouTube, LinkedIn, Amazon and other trusted sites need no verification.
+- **Abused destinations are blocked.** Free hosts, tunnels, other shorteners and risky TLDs like `.zip` are denied ([list](apps/api/data/blocked.ts)).
+- **Anyone can [report a link](https://shortener.dev/report).**
 
-- **Verify ownership first.** Add your domain and verify it with a 6-digit code sent to an email address on that domain, or with Google Search Console. A verified domain covers all of its subdomains. Public and disposable email providers are not accepted.
-- **Popular sites work right away.** YouTube, LinkedIn, Amazon, Google Play and other trusted destinations are whitelisted, so you can share them without verification.
-- **Abused destinations are blocked.** Free hosting and tunnel services, IPFS gateways, other link shorteners (link chains hide the real destination) and TLDs commonly used for phishing, such as `.zip` and `.mov`, are denied even when verified. See [`apps/api/data/blocked.ts`](apps/api/data/blocked.ts).
-- **Anyone can report a link.** If a short link leads somewhere harmful, [report it](https://shortener.dev/report) and it will be reviewed and disabled.
+The result: visitors can trust every link, your brand can't be misused, and the short domain stays off spam blocklists.
 
-Why this matters:
-
-- **Visitors can trust the link.** A `srt1.link` URL always points to a site whose owner verified it, not to an anonymous phishing page.
-- **Your domain can't be misused.** Nobody can attach your brand to a short link campaign you didn't create, and nobody can use the service to send people to a lookalike of your site.
-- **Links keep working.** Because the short domain isn't used for spam, it stays off email and browser blocklists, so your links get delivered and clicked.
-- **It's the responsible thing to do.** A link shortener is shared infrastructure. Keeping scammers off it protects everyone who clicks, not just the people who create links.
-
-If you self-host, please keep these checks enabled. They live in `assertVerifiedDestinations` in [`apps/api/services/domain.service.ts`](apps/api/services/domain.service.ts).
-
-Read more in the docs: [Verify a domain](https://shortener.dev/docs/verify-domain).
+Self-hosting? Please keep these checks enabled (`assertVerifiedDestinations` in [`domain.service.ts`](apps/api/services/domain.service.ts)). More: [Verify a domain](https://shortener.dev/docs/verify-domain).
 
 ## API
 
