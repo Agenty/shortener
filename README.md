@@ -335,7 +335,7 @@ To report a security issue, email [support@shortener.dev](mailto:support@shorten
 
 ## License
 
-Shortener.dev is open-source under the [GNU Affero General Public License Version 3 (AGPLv3)](LICENSE) or any later version, the same license used by [Dub](https://github.com/dubinc/dub).
+Shortener.dev is open-source under the [GNU Affero General Public License Version 3 (AGPLv3)](LICENSE) or any later version.
 
 In short: you can use, modify and self-host it, including commercially. If you run a modified version as a network service, you must make your modified source code available to its users under the same license.
 
