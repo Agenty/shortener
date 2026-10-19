@@ -197,10 +197,10 @@ showRoutes(app);
 export default {
   fetch: app.fetch,
 
-  // async queue(batch: MessageBatch, env: CloudflareBindings, ctx: ExecutionContext) {
-  //   for (const message of batch.messages) {
-  //     await startJob(env, message);
-  //     message.ack();
-  //   }
-  // }
+  async queue(batch: MessageBatch, env: CloudflareBindings, ctx: ExecutionContext) {
+    for (const message of batch.messages) {
+      // Implement message processing 
+      message.ack();
+    }
+  }
 }
