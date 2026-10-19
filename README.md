@@ -1,7 +1,6 @@
 <p align="center">
   <a href="https://shortener.dev">
-    <img src=".github/assets/logo-light.svg#gh-light-mode-only" alt="shortener.dev" height="48">
-    <img src=".github/assets/logo-dark.svg#gh-dark-mode-only" alt="shortener.dev" height="48">
+    <img src=".github/assets/logo.svg" alt="shortener.dev" width="600">
   </a>
 </p>
 
