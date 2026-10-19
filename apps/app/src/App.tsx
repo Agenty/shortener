@@ -51,6 +51,10 @@ export const router = createBrowserRouter([
         ...page(() => import('@/app/auth/reset-password/page'), 'Reset Password'),
       },
       {
+        path: 'oauth/callback',
+        ...page(() => import('@/app/auth/oauth-callback/page'), 'Signing In'),
+      },
+      {
         path: 'onboarding',
         ...page(() => import('@/app/auth/onboarding/page'), 'Verify Email'),
       },
