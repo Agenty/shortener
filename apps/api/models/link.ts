@@ -70,11 +70,17 @@ export type Geo = z.infer<typeof geoSchema>;
 
 export const linkSchema = z
   .object({
-    key: z.string().max(32).optional().openapi({
-      example: 'summer-sale',
-      description:
-        'Custom alias (back-half) of the short URL, e.g. `srt1.link/summer-sale`. Auto-generated when not provided',
-    }),
+    key: z
+      .string()
+      .regex(/^[A-Za-z0-9_-]{3,32}$/, {
+        message: 'Must be 3-32 characters of letters, numbers, - or _',
+      })
+      .optional()
+      .openapi({
+        example: 'sale-26',
+        description:
+          'Custom alias (back-half) of the short URL, e.g. `srt1.link/sale-26`. 3-32 characters of letters, numbers, `-` or `_`. Auto-generated when not provided',
+      }),
     project_id: z.number().int().positive().optional().nullable().openapi({
       example: 1,
       description: 'Project to organize the short link in',
@@ -188,5 +194,4 @@ export type Link = z.infer<typeof linkSchema> & {
   account_id?: number;
   user_id?: number;
   name?: string;
-  data?: Record<string, any>;
 };

@@ -104,7 +104,6 @@ CREATE TABLE IF NOT EXISTS Links(
   project_id INTEGER NULL,
   url TEXT NOT NULL,
   expire_at DATETIME,
-  data TEXT,
   params TEXT,
   title TEXT,
   description TEXT,

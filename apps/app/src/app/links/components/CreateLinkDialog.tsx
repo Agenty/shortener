@@ -156,6 +156,7 @@ export function CreateLinkDialog() {
                     <Input
                       id="key"
                       placeholder="my-link"
+                      maxLength={32}
                       value={link.key}
                       onChange={(e) => updateLink("key", e.target.value)}
                       className="rounded-l-none"

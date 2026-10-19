@@ -29,7 +29,7 @@ import { getLinkForRedirect, getRedirectUrl } from './services/links.service';
 import { passwordPage, redirectPage, unavailablePage } from './helper/redirect-page';
 
 /** Short link paths, e.g. /summer-sale */
-const SHORT_LINK_PATH = /^\/[a-zA-Z0-9-]{1,32}$/;
+const SHORT_LINK_PATH = /^\/[a-zA-Z0-9_-]{1,32}$/;
 
 const app = new OpenAPIHono<{ Bindings: CloudflareBindings }>();
 
