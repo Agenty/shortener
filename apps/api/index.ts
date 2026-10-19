@@ -25,6 +25,11 @@ import { waitUntil } from 'cloudflare:workers';
 import apiDescription from "./helper/api-description.txt";
 import { rateLimit } from './middleware/rate-limit';
 import { logger } from './middleware/logger';
+import { getLinkForRedirect, getRedirectUrl } from './services/links.service';
+import { passwordPage, redirectPage, unavailablePage } from './helper/redirect-page';
+
+/** Short link paths, e.g. /summer-sale */
+const SHORT_LINK_PATH = /^\/[a-zA-Z0-9_-]{1,32}$/;
 
 const app = new OpenAPIHono<{ Bindings: CloudflareBindings }>();
 
@@ -90,7 +95,10 @@ app.use(
 const rateLimitMiddleware = rateLimit({
   getRateLimitKey: (c) => c.req.header("cf-connecting-ip") ?? "unknown",
 });
-app.use("*", rateLimitMiddleware);
+// Short link redirects are public traffic, skip rate limit
+app.use("*", (ctx, next) =>
+  SHORT_LINK_PATH.test(ctx.req.path) ? next() : rateLimitMiddleware(ctx, next),
+);
 
 // Healthcheck
 app.get("/healthcheck", async (ctx) => {
@@ -184,11 +192,45 @@ app.route(`/v1/subscription`, subscription);
 app.route(`/v1/otp`, otp);
 app.route(`/v1/admin`, admin);
 
+// Short link redirect, e.g. srt1.link/summer-sale
 app.notFound(async (ctx) => {
-  return ctx.json(
-    { error: "No routes found", url: ctx.req.url, path: ctx.req.path },
-    404,
+  if (!SHORT_LINK_PATH.test(ctx.req.path)) {
+    return ctx.json(
+      { error: "No routes found", url: ctx.req.url, path: ctx.req.path },
+      404,
+    );
+  }
+
+  const key = ctx.req.path.slice(1).toLowerCase();
+  const link = await getLinkForRedirect(ctx.env, key);
+  if (!link || !link.is_enabled) {
+    return ctx.html(unavailablePage("not-found"), 404);
+  }
+
+  if (link.expire_at && new Date(link.expire_at) <= new Date()) {
+    return ctx.html(unavailablePage("expired"), 410);
+  }
+
+  // Password protected link, ask for password and verify on form post
+  if (link.password) {
+    if (ctx.req.method !== "POST") {
+      return ctx.html(passwordPage(false), 200, { "Cache-Control": "no-store" });
+    }
+    const { password } = await ctx.req.parseBody();
+    if (password !== link.password) {
+      return ctx.html(passwordPage(true), 401, { "Cache-Control": "no-store" });
+    }
+  }
+
+  const url = getRedirectUrl(
+    link,
+    ctx.req.header("user-agent"),
+    ctx.req.raw.cf?.country as string | undefined,
   );
+  
+  return ctx.html(redirectPage(url), 200, {
+    "Cache-Control": "no-store",
+  });
 });
 
 // Print all routes
