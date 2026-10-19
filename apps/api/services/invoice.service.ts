@@ -9,7 +9,7 @@ export const addInvoice = async (env: CloudflareBindings, invoice: Invoice) => {
   invoice.tax_name = account.tax_name;
   invoice.tax_number = account.tax_number;
 
-  invoice.initial = 'IDM';
+  invoice.initial = 'SRT';
   const r = await fetch(
     `https://api.agenty.com/v2/admin/invoices?apiKey=${env.AGENTY_KEY}`,
     {

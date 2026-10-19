@@ -15,6 +15,7 @@ import {
 import { Link as RouterLink } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { SHORT_DOMAIN } from '@/env';
 import {
   Table,
   TableBody,
@@ -116,7 +117,7 @@ function LinksGrid({
             <div className="flex items-center gap-2 min-w-0">
               <LinkFavicon url={link.url} />
               <span className="text-primary font-medium truncate">
-                shortener.dev/{link.key}
+                {SHORT_DOMAIN}/{link.key}
               </span>
               <Button
                 variant="ghost"
@@ -191,7 +192,7 @@ function LinksTable({
               <TableCell className="font-medium">
                 <div className="flex items-center gap-2">
                   <LinkFavicon url={link.url} />
-                  <span className="text-primary">shortener.dev/{link.key}</span>
+                  <span className="text-primary">{SHORT_DOMAIN}/{link.key}</span>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -275,7 +276,7 @@ export default function Links() {
   const totalPages = Math.ceil(total / PER_PAGE);
 
   const copyLink = (key: string) => {
-    navigator.clipboard.writeText(`https://shortener.dev/${key}`);
+    navigator.clipboard.writeText(`https://${SHORT_DOMAIN}/${key}`);
     toast.success('Link copied to clipboard!');
   };
 
@@ -395,7 +396,7 @@ export default function Links() {
             <AlertDialogDescription>
               This will permanently delete{' '}
               <span className="font-medium text-foreground">
-                shortener.dev/{deleteKey}
+                {SHORT_DOMAIN}/{deleteKey}
               </span>
               . This action cannot be undone.
             </AlertDialogDescription>

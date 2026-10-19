@@ -7,6 +7,7 @@ import { PlanType } from '../models/plan';
 import { isAfter } from 'date-fns';
 import { HTTPException } from 'hono/http-exception';
 import { createApi, errorResponses } from '../helper/openapi';
+import { SHORT_DOMAIN } from '../services/links.service';
 
 const reports = createApi();
 
@@ -16,7 +17,7 @@ const clickSchema = z
       example: '2026-01-01T10:00:00Z',
       description: 'UTC date-time of the click',
     }),
-    url: z.string().openapi({ example: 'https://shortener.dev/summer-sale' }),
+    url: z.string().openapi({ example: `https://${SHORT_DOMAIN}/summer-sale` }),
     country: z.string().openapi({ example: 'US' }),
     city: z.string().openapi({ example: 'New York' }),
     region: z.string().openapi({ example: 'NY' }),
@@ -72,7 +73,7 @@ reports.openapi(
 
     const sqlQuery = `SELECT
     timestamp,
-    format('https://shortener.dev/{}', blob2) as url,
+    format('https://${SHORT_DOMAIN}/{}', blob2) as url,
     blob3 as country,
     blob4 as city,
     blob5 as region,

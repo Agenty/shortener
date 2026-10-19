@@ -3,7 +3,7 @@ import {
   getAllUsers,
 } from '../services/admin.service';
 import { AuthUser, LevelType } from '../models/auth-user';
-import { getLinks } from '../services/links.service';
+import { getLinks, SHORT_DOMAIN } from '../services/links.service';
 import { getAnalytics } from '../services/analytics.service';
 import { toTableResult } from '../models/table';
 import { pagedSchema } from '../models/paged';
@@ -52,7 +52,7 @@ admin.get('/top-links', async (ctx) => {
   let limit = Number(ctx.req.query('limit')) || 100;
 
   const sqlQuery = `SELECT
-  format('https://shortener.dev/{}', blob2) as url,
+  format('https://${SHORT_DOMAIN}/{}', blob2) as url,
   count() as clicks
     FROM SHORTENER_ANALYTICS
     WHERE

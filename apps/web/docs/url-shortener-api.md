@@ -30,7 +30,7 @@ The response is the saved link, with the URL to share in `short_url`:
 {
   "key": "spring-launch",
   "url": "https://example.com/blog/spring-launch",
-  "short_url": "https://shortener.dev/spring-launch",
+  "short_url": "https://srt1.link/spring-launch",
   "is_enabled": true,
   "created_at": "2030-03-01T10:00:00Z"
 }

@@ -25,7 +25,7 @@ import { cn } from '@/lib/utils';
 const faqs = [
   {
     q: 'What is a URL shortener?',
-    a: 'A URL shortener turns a long web address into a short link, like shortener.dev/spring, that redirects to the original page. Short links are easier to share and let you count the clicks.',
+    a: 'A URL shortener turns a long web address into a short link, like srt1.link/spring, that redirects to the original page. Short links are easier to share and let you count the clicks.',
   },
   {
     q: 'Is Shortener.dev free?',

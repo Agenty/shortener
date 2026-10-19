@@ -38,7 +38,7 @@ const commonFaqs = (platform: string): Faq[] => [
   },
   {
     q: 'Can I choose my own short link?',
-    a: 'Yes, with a free account you can set a custom back-half such as shortener.dev/my-offer, add UTM parameters, an expiration date or a password. Links from the public form get a random back-half.',
+    a: 'Yes, with a free account you can set a custom back-half such as srt1.link/my-offer, add UTM parameters, an expiration date or a password. Links from the public form get a random back-half.',
   },
   {
     q: 'How do I see how many people clicked my link?',
@@ -63,7 +63,7 @@ export const shortenerTools: ShortenerTool[] = [
     uses: [
       {
         title: 'Share a custom GPT',
-        body: 'GPT URLs carry a random ID. A short link like shortener.dev/tax-helper is easier to say on a call and to remember.',
+        body: 'GPT URLs carry a random ID. A short link like srt1.link/tax-helper is easier to say on a call and to remember.',
       },
       {
         title: 'Track GPT visitors',

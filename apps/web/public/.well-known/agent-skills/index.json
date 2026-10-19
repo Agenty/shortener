@@ -4,9 +4,9 @@
     {
       "name": "shortener-dev",
       "type": "skill-md",
-      "description": "Create and manage short links with the Shortener.dev URL shortener API, including custom back-halves, UTM parameters, expiration dates, passwords, iOS and Android app targeting, geo targeting, domain verification and click analytics. Use when a user asks to shorten a URL, create a tracked or branded short link, or read click statistics for shortener.dev links.",
+      "description": "Create and manage short links with the Shortener.dev URL shortener API, including custom back-halves, UTM parameters, expiration dates, passwords, iOS and Android app targeting, geo targeting, domain verification and click analytics. Use when a user asks to shorten a URL, create a tracked or branded short link, or read click statistics for srt1.link short links.",
       "url": "/.well-known/agent-skills/SKILL.md",
-      "digest": "sha256:9d92be0caaf309d75f2ba65e5f965a0f21946658f2f5b865a652e46d484639ab"
+      "digest": "sha256:d154c78881f9984c82f54d91eb635ee26bcad67f14553d07cd0044ac08e05dcb"
     }
   ]
 }

@@ -41,7 +41,7 @@ function Report() {
           subject="Report a short link"
           submitLabel="Send report"
           fields={[
-            { name: 'short_url', label: 'Short link', type: 'url', placeholder: 'https://shortener.dev/…', required: true },
+            { name: 'short_url', label: 'Short link', type: 'url', placeholder: 'https://srt1.link/…', required: true },
             { name: 'reason', label: 'What’s wrong with it?', type: 'textarea', placeholder: 'Phishing page for a bank login…', required: true },
             { name: 'email', label: 'Your email (optional)', type: 'email' },
           ]}

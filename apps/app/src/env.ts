@@ -9,3 +9,6 @@ const prod = {
 };
 
 export const env = import.meta.env.DEV ? local : prod;
+
+/** Host of every short link, kept separate from the main site domain */
+export const SHORT_DOMAIN = 'srt1.link';

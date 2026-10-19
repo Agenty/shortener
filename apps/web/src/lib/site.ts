@@ -14,5 +14,5 @@ export const OG_IMAGE = `${SITE_URL}/og.png`;
 export const SIGNUP_URL = `${APP_URL}/signup`;
 export const LOGIN_URL = `${APP_URL}/login`;
 
-/** Short host shown in demos, e.g. `shortener.dev/summer-sale` */
-export const SHORT_HOST = 'shortener.dev';
+/** Host of every short link, e.g. `srt1.link/summer-sale`. The main domain never serves short links */
+export const SHORT_HOST = 'srt1.link';

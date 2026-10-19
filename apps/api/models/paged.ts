@@ -19,7 +19,7 @@ export type Paged = z.infer<typeof pagedSchema>;
 
 export const analyticsQuerySchema = z.object({
   url: z.string().optional().openapi({
-    example: 'https://shortener.dev/github',
+    example: 'https://srt1.link/github',
     description: 'Filter the report by a short link URL or key',
   }),
   interval: z.coerce.number().int().min(1).max(90).optional().default(7).openapi({

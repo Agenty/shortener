@@ -9,7 +9,8 @@ import { isEmpty } from 'lodash';
 import { format, subMonths } from 'date-fns';
 import { assertVerifiedDestinations } from './domain.service';
 
-const SHORT_DOMAIN = 'shortener.dev';
+/** Host of every short link, kept separate from the main site domain */
+export const SHORT_DOMAIN = 'srt1.link';
 
 const nanoid = customAlphabet(
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
@@ -49,9 +50,8 @@ export const getLinks = async (
   paged: Paged
 ): Promise<Array<Link>> => {
   let sqlQuery: D1PreparedStatement;
-  const domains = [`${SHORT_DOMAIN}/`, 'idm.li/'];
   if (!isEmpty(paged.search)) {
-    const search = domains.some((x) => paged.search.includes(x))
+    const search = paged.search.includes(`${SHORT_DOMAIN}/`)
       ? paged.search.split('/').pop()
       : paged.search.split('?')[0];
     sqlQuery = env.DB.prepare(

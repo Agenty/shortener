@@ -73,7 +73,7 @@ export const linkSchema = z
     key: z.string().max(32).optional().openapi({
       example: 'summer-sale',
       description:
-        'Custom alias (back-half) of the short URL, e.g. `shortener.dev/summer-sale`. Auto-generated when not provided',
+        'Custom alias (back-half) of the short URL, e.g. `srt1.link/summer-sale`. Auto-generated when not provided',
     }),
     project_id: z.number().int().positive().optional().nullable().openapi({
       example: 1,
@@ -91,7 +91,7 @@ export const linkSchema = z
           'Long destination URL to shorten. The domain must be [verified](#tag/Domains) in your account or whitelisted',
       }),
     short_url: z.string().optional().openapi({
-      example: 'https://shortener.dev/summer-sale',
+      example: 'https://srt1.link/summer-sale',
       description: 'The generated short URL to share',
       readOnly: true,
     }),

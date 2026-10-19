@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     q: 'How do I add a WhatsApp chat button to my website?',
-    a: 'Add a link to your short URL, for example <a href="https://shortener.dev/chat">Chat on WhatsApp</a>, and style it as a button. Every click is then counted in your analytics.',
+    a: 'Add a link to your short URL, for example <a href="https://srt1.link/chat">Chat on WhatsApp</a>, and style it as a button. Every click is then counted in your analytics.',
   },
 ];
 
@@ -145,7 +145,7 @@ function WhatsappGenerator() {
             </p>
           </div>
           <pre className="overflow-x-auto rounded-xl border bg-neutral-950 p-5 font-mono text-xs leading-relaxed text-neutral-200">
-            <code>{`<a href="https://shortener.dev/chat"
+            <code>{`<a href="https://srt1.link/chat"
    style="display:inline-flex;align-items:center;gap:8px;
           padding:10px 16px;border-radius:999px;
           background:#25D366;color:#fff;font-weight:600;

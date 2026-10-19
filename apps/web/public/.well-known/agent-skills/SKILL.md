@@ -1,11 +1,11 @@
 ---
 name: shortener-dev
-description: Create and manage short links with the Shortener.dev URL shortener API, including custom back-halves, UTM parameters, expiration dates, passwords, iOS and Android app targeting, geo targeting, domain verification and click analytics. Use when a user asks to shorten a URL, create a tracked or branded short link, or read click statistics for shortener.dev links.
+description: Create and manage short links with the Shortener.dev URL shortener API, including custom back-halves, UTM parameters, expiration dates, passwords, iOS and Android app targeting, geo targeting, domain verification and click analytics. Use when a user asks to shorten a URL, create a tracked or branded short link, or read click statistics for srt1.link short links.
 ---
 
 # Shortener.dev URL shortener
 
-Shortener.dev turns long URLs into short links like `https://shortener.dev/spring-sale` and records the clicks on them.
+Shortener.dev turns long URLs into short links like `https://srt1.link/spring-sale` and records the clicks on them.
 
 - API base URL: `https://api.shortener.dev/v1`
 - OpenAPI spec: `https://api.shortener.dev/openapi.json`

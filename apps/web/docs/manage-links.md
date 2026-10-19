@@ -14,7 +14,7 @@ Type into **Search links...** at the top of the page. You can search three ways:
 
 - Part of the destination URL, such as `example.com/blog`, to find every link pointing to your blog
 - The exact back-half, such as `spring-sale`
-- The full short link, such as `shortener.dev/spring-sale`, pasted from wherever you shared it
+- The full short link, such as `srt1.link/spring-sale`, pasted from wherever you shared it
 
 ![Searching the links list](/docs/images/links-search.png)
 
@@ -28,7 +28,7 @@ The two buttons next to the search box switch between list view and grid view. G
 
 ## Copy or open a link
 
-Click the copy icon next to a short link to copy the full URL, such as `https://shortener.dev/spring-sale`. You'll see "Link copied to clipboard!"
+Click the copy icon next to a short link to copy the full URL, such as `https://srt1.link/spring-sale`. You'll see "Link copied to clipboard!"
 
 The **...** menu at the end of each row has the same **Copy** action, plus **Open**, which opens the destination URL in a new tab so you can check where the link goes.
 

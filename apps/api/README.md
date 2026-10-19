@@ -12,7 +12,7 @@ An open-source [URL shortener](https://shortener.dev/) to create shorten link wi
 
 ## Deploy on Cloudflare
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/dayschedule/idm)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Agenty/shortener)
 
 Built with:
 - 💡 [Cloudflare Pages and Workers](https://www.cloudflare.com/)

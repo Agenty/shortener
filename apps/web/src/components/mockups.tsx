@@ -40,7 +40,7 @@ export function AnalyticsMockup() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-base font-semibold">Analytics</p>
-            <p className="text-xs text-muted-foreground">shortener.dev/spring-launch · last 14 days</p>
+            <p className="text-xs text-muted-foreground">srt1.link/spring-launch · last 14 days</p>
           </div>
           <span className="rounded-full border px-3 py-1 text-xs">Last 14d</span>
         </div>
@@ -176,7 +176,7 @@ export function ApiMockup() {
           {'\n\n'}
           <span className="text-neutral-500">{'{'}</span>
           {'\n  '}<span className="text-violet-300">"key"</span>: <span className="text-emerald-300">"spring"</span>,
-          {'\n  '}<span className="text-violet-300">"short_url"</span>: <span className="text-emerald-300">"https://shortener.dev/spring"</span>,
+          {'\n  '}<span className="text-violet-300">"short_url"</span>: <span className="text-emerald-300">"https://srt1.link/spring"</span>,
           {'\n  '}<span className="text-violet-300">"url"</span>: <span className="text-emerald-300">"https://acme.com/spring"</span>,
           {'\n  '}<span className="text-violet-300">"is_enabled"</span>: <span className="text-sky-300">true</span>
           {'\n'}

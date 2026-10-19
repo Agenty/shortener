@@ -22,6 +22,7 @@ import {
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { SHORT_DOMAIN } from "@/env";
 import type { LinkCreatePayload, LinkFormState, UrlMeta, GeoTarget } from "@/types/link";
 import { initialLinkForm } from "@/types/link";
 
@@ -44,8 +45,14 @@ export function CreateLinkDialog() {
 
   const mutation = useMutation({
     mutationFn: (data: LinkCreatePayload) => api.links.create(data),
-    onSuccess: () => {
-      toast.success("Short link created successfully!");
+    onSuccess: (created) => {
+      toast.success("Short link created successfully!", {
+        description: created.short_url,
+        action: {
+          label: "Copy",
+          onClick: () => navigator.clipboard.writeText(created.short_url),
+        },
+      });
       queryClient.invalidateQueries({ queryKey: ["links"] });
       setOpen(false);
       resetForm();
@@ -93,7 +100,7 @@ export function CreateLinkDialog() {
 
   const copyKey = () => {
     if (!link.key) return;
-    navigator.clipboard.writeText(`https://shortener.dev/${link.key}`);
+    navigator.clipboard.writeText(`https://${SHORT_DOMAIN}/${link.key}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -144,7 +151,7 @@ export function CreateLinkDialog() {
                   <Label htmlFor="key">Short Link</Label>
                   <div className="flex items-center gap-0">
                     <span className="inline-flex items-center h-10 px-3 rounded-l-md border border-r-0 bg-muted text-sm text-muted-foreground">
-                      shortener.dev/
+                      {SHORT_DOMAIN}/
                     </span>
                     <Input
                       id="key"

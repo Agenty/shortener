@@ -56,7 +56,7 @@ export const BLOCKED_DOMAINS = new Set([
   'w3s.link',
 
   // Link shorteners
-  'idm.in',
+  'srt1.link',
   'ko.gl',
   'bitly.ws',
   'bit.ly',

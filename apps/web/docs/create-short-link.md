@@ -17,9 +17,9 @@ The destination must start with `http://` or `https://` and be at least 10 chara
 
 ## Choose a custom back-half
 
-The **Short Link** field is the part after `shortener.dev/`. Type a name your audience will recognize, like `spring-sale` or `webinar-2030`, so the link reads as `shortener.dev/spring-sale`.
+The **Short Link** field is the part after `srt1.link/`. Type a name your audience will recognize, like `spring-sale` or `webinar-2030`, so the link reads as `srt1.link/spring-sale`.
 
-- Leave it empty and a random 7-character back-half is generated, such as `shortener.dev/k3x9q2m`.
+- Leave it empty and a random 7-character back-half is generated, such as `srt1.link/k3x9q2m`.
 - Back-halves are converted to lowercase. Spaces become hyphens, and anything other than letters, numbers and hyphens is removed. `Spring Sale!` becomes `spring-sale`.
 - The limit is 32 characters.
 - Each back-half can be used only once across Shortener.dev. If it's taken, you'll see `This key 'spring-sale' has already been used`, so pick another one or leave the field empty.

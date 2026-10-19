@@ -25,7 +25,7 @@ UTM parameters tell Google Analytics, and most other analytics tools, where a vi
 | UTM Term | `utm_term` | `running_shoes` |
 | UTM Content | `utm_content` | `header_button` |
 
-With the values above, a visitor who clicks `shortener.dev/spring-launch` lands on a URL like:
+With the values above, a visitor who clicks `srt1.link/spring-launch` lands on a URL like:
 
 ```
 https://example.com/spring?utm_source=newsletter&utm_medium=email&utm_campaign=spring_launch

@@ -4,6 +4,7 @@ import { createRoute, z } from '@hono/zod-openapi';
 import { AnalyticsQuery, analyticsQuerySchema } from '../models/paged';
 import { HTTPException } from 'hono/http-exception';
 import { createApi, errorResponses } from '../helper/openapi';
+import { SHORT_DOMAIN } from '../services/links.service';
 
 const analytics = createApi();
 
@@ -87,10 +88,10 @@ const BREAKDOWNS = [
   {
     path: '/top',
     field: 'url',
-    column: `format('https://shortener.dev/{}', blob2)`,
+    column: `format('https://${SHORT_DOMAIN}/{}', blob2)`,
     summary: 'Top short links',
     description: 'Get the 10 most clicked short links in the selected period.',
-    example: 'https://shortener.dev/summer-sale',
+    example: `https://${SHORT_DOMAIN}/summer-sale`,
   },
   {
     path: '/referer',

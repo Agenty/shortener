@@ -24,7 +24,10 @@ const readStored = (): ShortLink[] => {
   try {
     const links: ShortLink[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     const now = Date.now();
-    return links.filter((link) => !link.expire_at || new Date(link.expire_at).getTime() > now);
+    return links
+      .filter((link) => !link.expire_at || new Date(link.expire_at).getTime() > now)
+      // Links saved before the move to the short domain
+      .map((link) => ({ ...link, short_url: `https://${SHORT_HOST}/${link.key}` }));
   } catch {
     return [];
   }

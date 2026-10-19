@@ -21,7 +21,7 @@ import { SIGNUP_URL } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
 const features = [
-  { icon: Link2, title: 'Custom back-half', body: 'shortener.dev/spring-sale instead of a random code.' },
+  { icon: Link2, title: 'Custom back-half', body: 'srt1.link/spring-sale instead of a random code.' },
   { icon: Tags, title: 'UTM builder', body: 'Add utm_source, utm_medium and utm_campaign without editing the URL.' },
   { icon: Share2, title: 'Social preview', body: 'Set the title, description and image shown when the link is shared.' },
   { icon: Lock, title: 'Password protection', body: 'Visitors enter a password before they are redirected.' },
