@@ -58,7 +58,7 @@ export function MyDomains({ onVerify }: MyDomainsProps) {
     mutationFn: (domain: Domain) => api.domains.delete(domain.domain_id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['domains'] });
-      toast.success('Domain deleted');
+      toast.success('Domain removed');
       setDeleting(null);
     },
     onError: (e: Error) => toast.error(e.message),
@@ -139,7 +139,7 @@ export function MyDomains({ onVerify }: MyDomainsProps) {
                     variant="destructive"
                     onClick={() => setDeleting(d)}
                   >
-                    <Trash2 className="mr-2 h-4 w-4" /> Delete
+                    <Trash2 className="mr-2 h-4 w-4" /> Remove
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -151,11 +151,12 @@ export function MyDomains({ onVerify }: MyDomainsProps) {
       <AlertDialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Domain</AlertDialogTitle>
+            <AlertDialogTitle>Remove Domain</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{deleting?.domain}"? New short
+              Are you sure you want to remove "{deleting?.domain}"? New short
               links to this domain can't be created until it's added and
-              verified again.
+              verified again. Removed domains still count towards your plan's
+              domain limit.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -165,7 +166,7 @@ export function MyDomains({ onVerify }: MyDomainsProps) {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {deleteMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Delete
+              Remove
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

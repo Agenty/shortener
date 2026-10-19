@@ -65,7 +65,7 @@ export const getDomains = async (
     `
           SELECT ${DOMAIN_COLUMNS}
           FROM Domains
-          WHERE account_id = ?
+          WHERE account_id = ? AND archived_at IS NULL
           ORDER BY created_at DESC
           LIMIT ?, ?`
   ).bind(authUser.account_id, offset, limit);
@@ -74,14 +74,22 @@ export const getDomains = async (
   return results as unknown as Array<Domain>;
 };
 
+/**
+ * Every domain ever added counts against the plan limit, archived ones
+ * included, so accounts can't keep rotating through (phishing) domains by
+ * removing and adding them. `domain` is left out of the count, as adding an
+ * archived domain again restores its row instead of using a new slot
+ */
 export const getDomainCount = async (
   env: CloudflareBindings,
-  authUser: AuthUser
+  authUser: AuthUser,
+  domain?: string
 ) => {
   const { total } = await env.DB.prepare(
-    `Select count(1) as total from Domains Where account_id = ?`
+    `SELECT count(1) as total FROM Domains
+     WHERE account_id = ? AND domain IS NOT ?`
   )
-    .bind(authUser.account_id)
+    .bind(authUser.account_id, domain || null)
     .first();
   return Number(total);
 };
@@ -95,7 +103,7 @@ export const getDomainById = async (
     `
           SELECT ${DOMAIN_COLUMNS}
           FROM Domains
-          WHERE domain_id = ? AND account_id = ?`
+          WHERE domain_id = ? AND account_id = ? AND archived_at IS NULL`
   ).bind(domainId, authUser.account_id);
 
   return await sqlQuery.first<Domain>();
@@ -111,30 +119,32 @@ export const createDomain = async (
   domain.is_verified = false;
   domain.created_at = new Date().toISOString();
 
-  try {
-    const { meta } = await env.DB.prepare(
-      `
-          INSERT INTO Domains (account_id, user_id, domain, type, is_default, is_verified, created_at)
-          VALUES (?, ?, ?, '${DomainType.user}', ?, 0, ?)`
+  // Adding an archived domain again restores the same row, unverified, so
+  // the ownership is proved again and its history stays in one place
+  const row = await env.DB.prepare(
+    `
+        INSERT INTO Domains (account_id, user_id, domain, type, is_default, is_verified, created_at)
+        VALUES (?1, ?2, ?3, '${DomainType.user}', ?4, 0, ?5)
+        ON CONFLICT(account_id, domain) DO UPDATE
+        SET user_id = ?2, is_default = ?4, is_verified = 0, archived_at = NULL, updated_at = ?5
+        WHERE Domains.archived_at IS NOT NULL
+        RETURNING domain_id, created_at`
+  )
+    .bind(
+      domain.account_id,
+      domain.user_id,
+      domain.domain,
+      domain.is_default ? 1 : 0,
+      domain.created_at
     )
-      .bind(
-        domain.account_id,
-        domain.user_id,
-        domain.domain,
-        domain.is_default ? 1 : 0,
-        domain.created_at
-      )
-      .run();
-    domain.domain_id = meta.last_row_id;
-  } catch (err) {
-    if (err.message.includes('UNIQUE constraint failed')) {
-      throw new HTTPException(400, {
-        message: `The domain '${domain.domain}' has already been added to your account`,
-      });
-    }
-    throw err;
+    .first<Pick<Domain, 'domain_id' | 'created_at'>>();
+
+  if (!row) {
+    throw new HTTPException(400, {
+      message: `The domain '${domain.domain}' has already been added to your account`,
+    });
   }
-  return domain;
+  return { ...domain, ...row };
 };
 
 export const updateDomain = async (
@@ -147,7 +157,7 @@ export const updateDomain = async (
     `
         UPDATE Domains
         SET user_id = COALESCE(?, user_id), is_default = ?, updated_at = ?
-        WHERE domain_id = ? AND account_id = ?`
+        WHERE domain_id = ? AND account_id = ? AND archived_at IS NULL`
   )
     .bind(
       domain.user_id || null,
@@ -161,17 +171,23 @@ export const updateDomain = async (
   return meta.changes ? getDomainById(env, domainId, authUser) : null;
 };
 
-export const deleteDomain = async (
+/**
+ * Domains are archived instead of deleted to keep an audit trail. Archived
+ * domains are hidden and can't be used for new short links
+ */
+export const archiveDomain = async (
   env: CloudflareBindings,
   authUser: AuthUser,
   domainId: number
 ): Promise<boolean> => {
+  const now = new Date().toISOString();
   const { meta } = await env.DB.prepare(
     `
-        DELETE FROM Domains
-        WHERE domain_id = ? AND account_id = ?`
+        UPDATE Domains
+        SET archived_at = ?, is_default = 0, updated_at = ?
+        WHERE domain_id = ? AND account_id = ? AND archived_at IS NULL`
   )
-    .bind(domainId, authUser.account_id)
+    .bind(now, now, domainId, authUser.account_id)
     .run();
   return meta.changes > 0;
 };
@@ -185,7 +201,7 @@ export const markDomainVerified = async (
     `
         UPDATE Domains
         SET is_verified = 1, updated_at = ?
-        WHERE domain_id = ? AND account_id = ?`
+        WHERE domain_id = ? AND account_id = ? AND archived_at IS NULL`
   )
     .bind(new Date().toISOString(), domainId, authUser.account_id)
     .run();
@@ -428,7 +444,7 @@ export const assertVerifiedDestinations = async (
     ({ results: rows } = await env.DB.prepare(
       `SELECT domain, type FROM Domains
        WHERE domain IN (${candidates.map(() => '?').join()})
-       AND (account_id IS NULL OR (account_id = ? AND is_verified = 1))`
+       AND (account_id IS NULL OR (account_id = ? AND is_verified = 1 AND archived_at IS NULL))`
     )
       .bind(...candidates, authUser.account_id)
       .all<{ domain: string; type: DomainType }>());

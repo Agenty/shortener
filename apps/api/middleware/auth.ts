@@ -47,7 +47,14 @@ export const jwtAuth = (): MiddlewareHandler => {
         });
       }
 
-      ctx.req['user'] = toAuthResponse(authUser);
+      const user = toAuthResponse(authUser);
+      // Keys created on a paid plan stop working when the plan has no API access
+      if (payload.key_id && !user.api_access) {
+        throw new HTTPException(402, {
+          message: `The ${user.plan} plan doesn't have API access, please upgrade`,
+        });
+      }
+      ctx.req['user'] = user;
     }
 
     //console.log('u', ctx.req['user']);

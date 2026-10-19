@@ -297,7 +297,7 @@ export const getDisposableDomains = async () => {
         },
       }
     );
-    if (resp.status == 200) {
+    if (resp.ok) {
       const data: any = await resp.json();
       return data.list;
     }
