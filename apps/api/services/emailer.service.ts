@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
 import { AuthUser } from '../models/auth-user';
-import { md5 } from '../helper/utility';
 import { welcomeEmailHtml } from '../emails/welcome-email';
 import { otpEmailHtml } from '../emails/otp-email';
 import { domainVerificationEmailHtml } from '../emails/domain-verification-email';

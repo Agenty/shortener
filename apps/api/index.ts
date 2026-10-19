@@ -22,7 +22,6 @@ import { projects } from './controllers/projects.controller';
 import { domains } from './controllers/domains.controller';
 import { files } from './controllers/files.controller';
 import { waitUntil } from 'cloudflare:workers';
-import { CF_ERRORS } from './helper/cf-errors';
 import apiDescription from "./helper/api-description.txt";
 import { rateLimit } from './middleware/rate-limit';
 import { logger } from './middleware/logger';
@@ -164,7 +163,6 @@ app.get("/openapi.json", async (ctx) => {
 app.route(`/v1/public`, publicApi);
 app.route(`/v1/auth`, auth);
 app.route(`/v1/oauth`, oauth);
-app.route(`/v1/webhook`, webhook);
 app.route(`/webhook`, webhook);
 
 // Authentication middleware
