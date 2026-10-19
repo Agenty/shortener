@@ -10,7 +10,6 @@ import { BRAND, SUPPORT_EMAIL } from '../emails/components/layout';
 
 const NOREPLY = { email: 'noreply@shortener.dev', name: BRAND };
 const SUPPORT = { email: SUPPORT_EMAIL, name: BRAND };
-const SYS_ALERT_EMAIL = 'sys-alert@agenty.com';
 
 export const sendEmail = async (
   env: CloudflareBindings,
@@ -84,26 +83,3 @@ export const sendPasswordResetEmail = async (
       `${env.APP_URL}/reset-password?token=${token}`
     ),
   });
-
-export const sysAlertEmail = async (env: CloudflareBindings, logs: any) => {
-  const time = format(new Date(), 'MMM d, yyyy h:mm a');
-  const errorMessage = logs.error?.substring(0, 50) || logs.url;
-  const uuid = await md5(errorMessage);
-  const cacheKey = `sysalert-${uuid}`;
-  const isExists = await env.KVCACHE.get(cacheKey, { cacheTtl: 60 });
-  if (isExists) return;
-
-  const response = await sendEmail(env, {
-    from: { email: 'sys-alert@shortener.dev', name: BRAND },
-    to: SYS_ALERT_EMAIL,
-    subject: `${BRAND} error on Cloudflare - ${time}`,
-    html: await dataTableEmailHtml(
-      'System alert',
-      `An error occurred on the ${env.ENVIRONMENT} environment.`,
-      logs
-    ),
-  });
-
-  await env.KVCACHE.put(cacheKey, '1', { expirationTtl: 60 * 60 * 4 });
-  return response;
-};

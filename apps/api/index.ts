@@ -21,7 +21,6 @@ import { publicApi } from './controllers/public.controller';
 import { projects } from './controllers/projects.controller';
 import { domains } from './controllers/domains.controller';
 import { files } from './controllers/files.controller';
-import { sysAlertEmail } from './services/emailer.service';
 import { waitUntil } from 'cloudflare:workers';
 import { CF_ERRORS } from './helper/cf-errors';
 import apiDescription from "./helper/api-description.txt";
@@ -40,42 +39,20 @@ app.onError(async (err, ctx) => {
     return ctx.json({ message: "Invalid reference id in request body" }, 400);
   } else if (err instanceof URIError) {
     return ctx.json({ message: err.message }, 400);
-  } else {
-    console.error(`Server error: ${err.message}`, err.stack);
-    const { url, method } = ctx.req.raw;
-    let jsonBody = "";
-    if (method === "POST" || method === "PUT" || method === 'PATCH') {
-      jsonBody = await ctx.req.json();
-    }
-    const logs = {
-      message: err.message,
-      stack: err.stack,
-      cause: err.cause,
-      url: url,
-      method: method,
-      body: jsonBody,
-    };
-
-    if (
-      ctx.env.ENVIRONMENT != "local" &&
-      err.message &&
-      !CF_ERRORS.find((x) => err.message.includes(x))
-    ) {
-      waitUntil(sysAlertEmail(ctx.env, logs));
-    }
-
-    const data =
-      ctx.env.ENVIRONMENT == "production"
-        ? {
-          message:
-            "Server error, the issue has been reported to administrator. If you still need help, contact support@shortener.dev",
-        }
-        : {
-          message: err.message,
-          stack: err.stack,
-        };
-    return ctx.json(data, 500);
   }
+  // Report as an uncaught exception in Cloudflare logs without failing the response
+  waitUntil(Promise.reject(err));
+  const data =
+    ctx.env.ENVIRONMENT == "production"
+      ? {
+        message:
+          "Server error, the issue has been reported to administrator. If you still need help, contact support@shortener.dev",
+      }
+      : {
+        message: err.message,
+        stack: err.stack,
+      };
+  return ctx.json(data, 500);
 });
 
 // CORS Caching for preflight requests
