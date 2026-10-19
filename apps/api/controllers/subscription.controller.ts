@@ -34,7 +34,7 @@ subscription.post(
       authUser,
       subscriptions
     );
-    return ctx.json({ id: session.id }, 200);
+    return ctx.json({ id: session.id, url: session.url }, 200);
   }
 );
 

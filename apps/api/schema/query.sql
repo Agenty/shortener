@@ -88,9 +88,15 @@ CREATE TABLE IF NOT EXISTS Domains(
   is_verified INTEGER NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME,
+  -- Removed domains are archived, never deleted, to keep an audit trail of
+  -- every domain an account has verified (e.g. phishing domains rotated out)
+  archived_at DATETIME,
   FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE SET NULL
 );
+
+-- Migration for existing databases:
+-- ALTER TABLE Domains ADD COLUMN archived_at DATETIME;
 
 CREATE UNIQUE INDEX IF NOT EXISTS unique_account_domain ON Domains(account_id, domain);
 CREATE UNIQUE INDEX IF NOT EXISTS unique_global_domain ON Domains(domain) WHERE account_id IS NULL;

@@ -53,6 +53,7 @@ export const WHITELISTED_DOMAINS = new Set([
   'github.com',
   'stackoverflow.com',
   'wikipedia.org',
+  'chatgpt.com',
 
   // Meetings & events
   'zoom.us',

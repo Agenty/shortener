@@ -1,8 +1,10 @@
 export enum PlanType {
   Free = 'Free',
+  /** Legacy plan, no longer sold */
   Basic = 'Basic',
   Pro = 'Pro',
   Business = 'Business',
+  Advanced = 'Advanced',
   Enterprise = 'Enterprise',
 }
 
@@ -17,11 +19,16 @@ export interface PlanLimits {
   api_access: boolean;
 }
 
+/**
+ * Mirrors the pricing in apps/web/src/data/plans.ts and the billing page in
+ * apps/app/src/app/billings/data.ts. Keep all three in sync.
+ * `users_limit` includes the account owner.
+ */
 const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
   [PlanType.Free]: {
     links_limit: 10,
     projects_limit: 0,
-    domains_limit: 0,
+    domains_limit: 1,
     analytics_limit: 7,
     users_limit: 0,
     qr_limit: 1,
@@ -43,13 +50,13 @@ const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
     projects_limit: 5,
     domains_limit: 3,
     analytics_limit: 30,
-    users_limit: 50,
+    users_limit: 5,
     qr_limit: 500,
     pages_limit: 5,
     api_access: true,
   },
   [PlanType.Business]: {
-    links_limit: 5000,
+    links_limit: 10000,
     projects_limit: 10,
     domains_limit: 5,
     analytics_limit: 60,
@@ -58,14 +65,25 @@ const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
     pages_limit: 10,
     api_access: true,
   },
-  [PlanType.Enterprise]: {
-    links_limit: 10000,
+  [PlanType.Advanced]: {
+    links_limit: 50000,
     projects_limit: 25,
     domains_limit: 10,
     analytics_limit: 90,
-    users_limit: 100,
+    users_limit: 20,
     qr_limit: 5000,
     pages_limit: 25,
+    api_access: true,
+  },
+  // Unlimited links and users, domains and projects are raised per contract
+  [PlanType.Enterprise]: {
+    links_limit: 1000000,
+    projects_limit: 100,
+    domains_limit: 50,
+    analytics_limit: 90,
+    users_limit: 1000,
+    qr_limit: 10000,
+    pages_limit: 100,
     api_access: true,
   },
 };

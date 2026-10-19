@@ -22,14 +22,16 @@ Use **Search domains** to check a specific site. If a domain isn't on the list a
 
 Click the menu next to a domain in **My domains** and choose **Set as default**. The domain gets a **Default** badge. Choose **Unset default** from the same menu to remove it.
 
-## Delete a domain
+## Remove a domain
 
-1. Click the menu next to the domain and choose **Delete**.
-2. Confirm with **Delete**.
+1. Click the menu next to the domain and choose **Remove**.
+2. Confirm with **Remove**.
 
 ![Domain actions menu](/docs/images/domain-menu.png)
 
-After you delete a domain, you can't create new short links to it until you add and verify it again.
+After you remove a domain, you can't create new short links to it until you add and verify it again. Existing short links keep redirecting.
+
+The number of domains you can add depends on your plan, and removed domains still count towards that limit. Adding a removed domain again restores it without using another slot. Upgrade your plan to add more domains.
 
 ## Why a link was blocked
 

@@ -242,6 +242,16 @@ export const api = {
     },
   },
 
+  subscription: {
+    /** Stripe checkout for a paid plan, `price` must match a Stripe price in USD */
+    checkout(data: { plan: string; price: number }) {
+      return request<{ id: string; url: string }>("/subscription/create-checkout-session", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+    },
+  },
+
   accounts: {
     get() {
       return request<Account>("/accounts");

@@ -2,9 +2,10 @@ import { AuthUser } from '../models/auth-user';
 import { createRoute, z } from '@hono/zod-openapi';
 import { pagedSchema } from '../models/paged';
 import {
+  archiveDomain,
   createDomain,
-  deleteDomain,
   getDomainById,
+  getDomainCount,
   getDomains,
   getSearchConsoleConsentUri,
   getStateSecret,
@@ -93,7 +94,7 @@ domains.openapi(
     path: '/',
     summary: 'Add a domain',
     description:
-      'Add a domain you own to your account. Then verify the ownership with an email OTP sent to an address on that domain, or with Google Search Console, to create short links for it.',
+      'Add a domain you own to your account. Then verify the ownership with an email OTP sent to an address on that domain, or with Google Search Console, to create short links for it. The number of domains is limited by your plan.',
     request: {
       body: {
         required: true,
@@ -114,12 +115,18 @@ domains.openapi(
           },
         },
       },
-      ...errorResponses(400, 401),
+      ...errorResponses(400, 401, 402),
     } as any,
   }),
   async (ctx) => {
     const authUser: AuthUser = ctx.req['user'];
     const domain = ctx.req.valid('json') as Domain;
+    const totalDomains = await getDomainCount(ctx.env, authUser, domain.domain);
+    if (totalDomains >= authUser.domains_limit) {
+      throw new HTTPException(402, {
+        message: `The ${authUser.plan} plan is limited to ${authUser.domains_limit} domains only, including removed domains, please upgrade`,
+      });
+    }
     const result = await createDomain(ctx.env, authUser, domain);
     return ctx.json(result, 200);
   }
@@ -193,7 +200,7 @@ domains.openapi(
     path: '/{id}',
     summary: 'Update a domain',
     description:
-      'Assign the domain to another team member or set it as default. The domain name itself cannot be changed, delete and add it again instead.',
+      'Assign the domain to another team member or set it as default. The domain name itself cannot be changed, remove and add it again instead.',
     request: {
       params: idParamSchema,
       body: {
@@ -237,15 +244,15 @@ domains.openapi(
     tags: ['Domains'],
     method: 'delete',
     path: '/{id}',
-    summary: 'Delete a domain',
+    summary: 'Remove a domain',
     description:
-      'Remove a domain from your account. New short links to this domain cannot be created until it is verified again.',
+      'Remove a domain from your account. New short links to this domain cannot be created until it is added and verified again. Removed domains are archived for audit and still count towards the domain limit of your plan. Adding a removed domain again restores it.',
     request: {
       params: idParamSchema,
     },
     responses: {
       200: {
-        description: 'Domain deleted',
+        description: 'Domain removed',
         content: {
           'application/json': {
             schema: messageSchema,
@@ -258,13 +265,13 @@ domains.openapi(
   async (ctx) => {
     const { id } = ctx.req.valid('param');
     const authUser: AuthUser = ctx.req['user'];
-    const isDeleted = await deleteDomain(ctx.env, authUser, id);
-    if (!isDeleted) {
+    const isArchived = await archiveDomain(ctx.env, authUser, id);
+    if (!isArchived) {
       throw new HTTPException(404, {
         message: `No domain found with id: ${id}`,
       });
     }
-    return ctx.json({ message: 'Domain deleted successfully' }, 200);
+    return ctx.json({ message: 'Domain removed successfully' }, 200);
   }
 );
 

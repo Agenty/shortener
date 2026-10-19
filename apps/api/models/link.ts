@@ -72,14 +72,14 @@ export const linkSchema = z
   .object({
     key: z
       .string()
-      .regex(/^[A-Za-z0-9_-]{3,32}$/, {
-        message: 'Must be 3-32 characters of letters, numbers, - or _',
+      .regex(/^[A-Za-z0-9_-]{2,32}$/, {
+        message: 'Must be 2-32 characters of letters, numbers, - or _',
       })
       .optional()
       .openapi({
         example: 'sale-26',
         description:
-          'Custom alias (back-half) of the short URL, e.g. `srt1.link/sale-26`. 3-32 characters of letters, numbers, `-` or `_`. Auto-generated when not provided',
+          'Custom alias (back-half) of the short URL, e.g. `srt1.link/sale-26`. 2-32 characters of letters, numbers, `-` or `_`. Auto-generated when not provided',
       }),
     project_id: z.number().int().positive().optional().nullable().openapi({
       example: 1,

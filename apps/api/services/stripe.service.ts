@@ -86,7 +86,9 @@ export const createCheckoutSession = async (
 
   // Offer free trial for first time buyers only and not to repeat buyers or re-subscribers
   // https://github.com/Agenty/dayschedule-api/issues/374
+  // One-time (lifetime) payments have no subscription to put on trial
   if (
+    price.recurring &&
     authUser.trial_end_at &&
     !isAfter(new Date(), new Date(authUser.trial_end_at)) &&
     !subscriptions?.length
@@ -318,7 +320,7 @@ export const createLifetimeSubscription = async (
     pg_customer_id: stripeObject.customer,
     pg_subscr_id: stripeObject.id,
     status: SubscriptionStatus.active,
-    plan: PlanType.Basic,
+    plan: PlanType.Pro, // The lifetime deal is the Pro plan
     plan_id: 'lifetime',
     amount: stripeObject.amount / 100,
     currency: stripeObject.currency.toUpperCase(),
