@@ -1,9 +1,6 @@
 <p align="center">
   <a href="https://shortener.dev">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="../../.github/assets/logo-dark.svg">
-      <img src="../../.github/assets/logo-light.svg" alt="shortener.dev" height="40">
-    </picture>
+    <img src="../../.github/assets/logo.svg" alt="shortener.dev" width="480">
   </a>
 </p>
 
