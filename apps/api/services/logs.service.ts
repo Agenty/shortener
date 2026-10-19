@@ -3,7 +3,7 @@ import { env } from "cloudflare:workers";
 import { ApiLogs } from "../models/api-logs";
 import { AuthUser } from "../models/auth-user";
 
-const API_URL = env.API_URL.replace('https://', '');
+const API_URL = env.API_URL?.replace('https://', '');
 
 export function createApiLog(
     env: CloudflareBindings,
