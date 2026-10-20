@@ -73,18 +73,18 @@ reports.openapi(
 
     const sqlQuery = `SELECT
     timestamp,
-    format('https://${SHORT_DOMAIN}/{}', blob2) as url,
-    blob3 as country,
-    blob4 as city,
-    blob5 as region,
-    blob6 as referer,
-    blob7 as browser,
-    blob8 as os,
-    blob9 as device,
-    blob10 as ip
+    format('https://${SHORT_DOMAIN}/{}', blob1) as url,
+    blob2 as country,
+    blob3 as city,
+    blob4 as region,
+    blob5 as referer,
+    blob6 as browser,
+    blob7 as os,
+    blob8 as device,
+    blob9 as ip
   FROM SHORTENER_ANALYTICS
   WHERE
-    blob1 = '${Number(authUser.account_id)}'
+    double1 = ${Number(authUser.account_id)}
   and timestamp >= NOW() - INTERVAL '30' DAY
   ORDER BY timestamp DESC
   LIMIT ${Number(limit)}`;

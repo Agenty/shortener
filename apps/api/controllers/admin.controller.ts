@@ -52,8 +52,8 @@ admin.get('/top-links', async (ctx) => {
   let limit = Number(ctx.req.query('limit')) || 100;
 
   const sqlQuery = `SELECT
-  format('https://${SHORT_DOMAIN}/{}', blob2) as url,
-  count() as clicks
+  format('https://${SHORT_DOMAIN}/{}', blob1) as url,
+  SUM(_sample_interval) as clicks
     FROM SHORTENER_ANALYTICS
     WHERE
   timestamp >= NOW() - INTERVAL '1' DAY

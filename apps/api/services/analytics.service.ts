@@ -1,43 +1,79 @@
 import { Link } from '../models/link';
-import { IResult } from "ua-parser-js";
-import { isbot } from "isbot";
+import { UAParser } from 'ua-parser-js';
+import { isbot } from 'isbot';
 
+/** Hostname of the referring page, e.g. linkedin.com, or 'null' for direct traffic */
+const toRefererHost = (referer?: string) => {
+  if (!referer) return 'null';
+  try {
+    return new URL(referer).hostname.replace(/^www\./, '');
+  } catch {
+    return 'null';
+  }
+};
+
+/**
+ * Record a short link click in Analytics Engine.
+ * Blob positions are read by the analytics, reports and admin controllers,
+ * so only append new fields, never reorder:
+ *
+ * Each data point is one click, count clicks with SUM(_sample_interval)
+ * so totals stay accurate when Analytics Engine samples rows.
+ *
+ *  blob1 key               double1 account_id
+ *  blob2 country           double2 project_id (0 when none)
+ *  blob3 city              double3 latitude
+ *  blob4 region            double4 longitude
+ *  blob5 referer host
+ *  blob6 browser
+ *  blob7 os
+ *  blob8 device type
+ *  blob9 ip
+ *  blob10 destination url
+ *  blob11 referer url (full)
+ */
 export const setAnalytics = (
   env: CloudflareBindings,
   link: Link,
-  parseResult: IResult,
-  cf: any,
-  referer: string,
-  ip: string
+  req: Request,
+  destination: string
 ) => {
-
   if (!link.account_id || !env.SHORTENER_ANALYTICS) return;
 
-  if (!parseResult.ua || isbot(parseResult.ua)) return;
+  const ua = req.headers.get('user-agent') || '';
+  if (!ua || isbot(ua)) return;
 
   try {
-    const { browser, os, device } = parseResult;
+    const { browser, os, device } = UAParser(ua);
+    const cf: any = req.cf || {};
+    const referer = req.headers.get('referer') || '';
+    const ip = req.headers.get('cf-connecting-ip') || '';
 
-    const isDesktop =
-      device.type === undefined ||
-      !['wearable', 'mobile'].includes(device.type);
+    // ua-parser leaves device type empty for desktops
+    const deviceType =
+      !device.type || !['mobile', 'tablet', 'wearable'].includes(device.type)
+        ? 'desktop'
+        : device.type;
 
     env.SHORTENER_ANALYTICS.writeDataPoint({
       blobs: [
-        cf.country,
-        cf.city,
-        cf.region,
-        referer,
-        browser.name,
-        os.name,
-        isDesktop ? 'desktop' : device.type,
+        link.key,
+        cf.country ?? null,
+        cf.city ?? null,
+        cf.region ?? null,
+        toRefererHost(referer),
+        browser.name ?? null,
+        os.name ?? null,
+        deviceType,
         ip,
+        destination,
+        referer || null,
       ],
       doubles: [
         Number(link.account_id),
-        Number(cf.metroCode ?? 0),
-        Number(cf.longitude ?? 0),
+        Number(link.project_id ?? 0),
         Number(cf.latitude ?? 0),
+        Number(cf.longitude ?? 0),
       ],
       indexes: [link.key],
     });

@@ -27,12 +27,12 @@ const queryBuilder = (authUser: AuthUser, filter: AnalyticsQuery) => {
     });
   }
   const intervalClause = `timestamp >= NOW() - INTERVAL '${days}' DAY`;
-  let whereClause = `blob1 = '${Number(authUser.account_id)}' AND ${intervalClause}`;
+  let whereClause = `double1 = ${Number(authUser.account_id)} AND ${intervalClause}`;
   if (filter.url && filter.url.length) {
-    whereClause += ` AND blob2 = '${toKey(filter.url)}'`;
+    whereClause += ` AND blob1 = '${toKey(filter.url)}'`;
   }
   if (filter.project_id) {
-    whereClause += ` AND blob11 = '${Number(filter.project_id)}'`;
+    whereClause += ` AND double2 = ${Number(filter.project_id)}`;
   }
   return whereClause;
 };
@@ -71,7 +71,7 @@ analytics.openapi(
     const authUser: AuthUser = ctx.req['user'];
     const sqlQuery = `SELECT
     formatDateTime(toStartOfInterval(timestamp, INTERVAL '1' DAY), '%Y-%m-%d') AS date,
-    COUNT() as clicks
+    SUM(_sample_interval) as clicks
   FROM SHORTENER_ANALYTICS
   WHERE
   ${queryBuilder(authUser, ctx.req.valid('query'))}
@@ -88,7 +88,7 @@ const BREAKDOWNS = [
   {
     path: '/top',
     field: 'url',
-    column: `format('https://${SHORT_DOMAIN}/{}', blob2)`,
+    column: `format('https://${SHORT_DOMAIN}/{}', blob1)`,
     summary: 'Top short links',
     description: 'Get the 10 most clicked short links in the selected period.',
     example: `https://${SHORT_DOMAIN}/summer-sale`,
@@ -96,7 +96,7 @@ const BREAKDOWNS = [
   {
     path: '/referer',
     field: 'referer',
-    column: `if(blob6 = 'null', '(direct)', blob6)`,
+    column: `if(blob5 = 'null', '(direct)', blob5)`,
     summary: 'Clicks by referrer',
     description:
       'Get the top 10 websites and social networks sending clicks to your short links. Clicks without a referrer are reported as `(direct)`.',
@@ -105,7 +105,7 @@ const BREAKDOWNS = [
   {
     path: '/country',
     field: 'country',
-    column: 'blob3',
+    column: 'blob2',
     summary: 'Clicks by country',
     description:
       'Get the top 10 countries of visitors clicking your short links, as ISO 3166-1 alpha-2 codes.',
@@ -114,7 +114,7 @@ const BREAKDOWNS = [
   {
     path: '/city',
     field: 'city',
-    column: 'blob4',
+    column: 'blob3',
     summary: 'Clicks by city',
     description: 'Get the top 10 cities of visitors clicking your short links.',
     example: 'New York',
@@ -122,7 +122,7 @@ const BREAKDOWNS = [
   {
     path: '/browser',
     field: 'browser',
-    column: 'blob7',
+    column: 'blob6',
     summary: 'Clicks by browser',
     description: 'Get the top 10 web browsers used to open your short links.',
     example: 'Chrome',
@@ -130,7 +130,7 @@ const BREAKDOWNS = [
   {
     path: '/os',
     field: 'os',
-    column: 'blob8',
+    column: 'blob7',
     summary: 'Clicks by operating system',
     description:
       'Get the top 10 operating systems (iOS, Android, Windows, macOS...) of visitors clicking your short links.',
@@ -139,7 +139,7 @@ const BREAKDOWNS = [
   {
     path: '/device',
     field: 'device',
-    column: 'blob9',
+    column: 'blob8',
     summary: 'Clicks by device type',
     description:
       'Get the clicks split by device type: mobile, tablet or desktop.',
@@ -179,7 +179,7 @@ for (const report of BREAKDOWNS) {
       const authUser: AuthUser = ctx.req['user'];
       const sqlQuery = `SELECT
     ${report.column} as ${report.field},
-    COUNT() as clicks
+    SUM(_sample_interval) as clicks
   FROM SHORTENER_ANALYTICS
   WHERE
   ${queryBuilder(authUser, ctx.req.valid('query'))}
@@ -236,11 +236,11 @@ analytics.openapi(
 
     const keys = key.map((x) => `'${toKey(x.trim())}'`).join();
     const sqlQuery = `SELECT
-    blob2 as key,
-    COUNT() as clicks
+    blob1 as key,
+    SUM(_sample_interval) as clicks
   FROM SHORTENER_ANALYTICS
   WHERE
-  blob1 = '${Number(authUser.account_id)}'
+  double1 = ${Number(authUser.account_id)}
   AND timestamp >= NOW() - INTERVAL '30' DAY
   AND key in (${keys})
   GROUP BY key
