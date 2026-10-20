@@ -1,7 +1,7 @@
-import { getAnalytics } from '../services/analytics.service';
+import { filterClause, getAnalytics } from '../services/analytics.service';
 import { AuthUser } from '../models/auth-user';
 import { createRoute, z } from '@hono/zod-openapi';
-import { pagedSchema } from '../models/paged';
+import { clickFilterSchema, pagedSchema } from '../models/paged';
 import { tableSchema, toTableResult } from '../models/table';
 import { PlanType } from '../models/plan';
 import { isAfter } from 'date-fns';
@@ -10,6 +10,20 @@ import { createApi, errorResponses } from '../helper/openapi';
 import { SHORT_DOMAIN } from '../services/links.service';
 
 const reports = createApi();
+
+/** Clicks the free plan can see in full, the rest are returned masked */
+const FREE_VISIBLE_CLICKS = 3;
+const MASK = '••••••';
+
+const maskClick = (click: Record<string, any>) => ({
+  ...click,
+  url: `https://${SHORT_DOMAIN}/${MASK}`,
+  city: MASK,
+  region: MASK,
+  referer: MASK,
+  ip: '•••.•••.•••.•••',
+  locked: true,
+});
 
 const clickSchema = z
   .object({
@@ -26,6 +40,11 @@ const clickSchema = z
     os: z.string().openapi({ example: 'macOS' }),
     device: z.string().openapi({ example: 'desktop' }),
     ip: z.string().openapi({ example: '203.0.113.10' }),
+    locked: z.boolean().optional().openapi({
+      example: false,
+      description:
+        'True when the click is hidden by the plan, the url, city, referer and ip are masked',
+    }),
   })
   .openapi('Click', {
     description: 'A single click on a short link with visitor details',
@@ -38,9 +57,11 @@ reports.openapi(
     path: '/',
     summary: 'Raw click log',
     description:
-      'Export the latest clicks on your short links from the last 30 days with timestamp, country, city, referrer, browser, OS and device of each visitor. Useful to feed click data into your own BI tool or CRM.',
+      'Export the latest clicks on your short links from the last 30 days with timestamp, country, city, referrer, browser, OS and device of each visitor. Useful to feed click data into your own BI tool or CRM. Clicks without a referrer have an empty `referer`.',
     request: {
-      query: pagedSchema.pick({ offset: true, limit: true }),
+      query: pagedSchema
+        .pick({ offset: true, limit: true })
+        .merge(clickFilterSchema),
     },
     responses: {
       200: {
@@ -56,11 +77,9 @@ reports.openapi(
   }),
   async (ctx) => {
     const authUser: AuthUser = ctx.req['user'];
-    const { offset } = ctx.req.valid('query');
-    let { limit } = ctx.req.valid('query');
-    if (authUser.plan == PlanType.Free && !authUser.level) {
-      limit = 3;
-    }
+    const query = ctx.req.valid('query');
+    const { offset, limit } = query;
+    const isFree = authUser.plan == PlanType.Free && !authUser.level;
 
     if (
       authUser.plan == PlanType.Free &&
@@ -71,30 +90,40 @@ reports.openapi(
       });
     }
 
+    const whereClause = `double1 = ${Number(authUser.account_id)}
+    AND timestamp >= NOW() - INTERVAL '30' DAY${filterClause(query)}`;
+
     const sqlQuery = `SELECT
     timestamp,
     format('https://${SHORT_DOMAIN}/{}', blob1) as url,
     blob2 as country,
     blob3 as city,
     blob4 as region,
-    blob5 as referer,
+    if(blob5 = 'null', '', blob5) as referer,
     blob6 as browser,
     blob7 as os,
     blob8 as device,
     blob9 as ip
   FROM SHORTENER_ANALYTICS
-  WHERE
-    double1 = ${Number(authUser.account_id)}
-  and timestamp >= NOW() - INTERVAL '30' DAY
+  WHERE ${whereClause}
   ORDER BY timestamp DESC
-  LIMIT ${Number(limit)}`;
+  LIMIT ${Number(limit)} OFFSET ${Number(offset)}`;
 
-    const result = await getAnalytics(ctx.env, sqlQuery);
-    // Convert to ISO format
-    result.forEach((r: { timestamp: string }) => {
+    const countQuery = `SELECT count() as total
+  FROM SHORTENER_ANALYTICS
+  WHERE ${whereClause}`;
+
+    const [rows, count] = await Promise.all([
+      getAnalytics(ctx.env, sqlQuery),
+      getAnalytics(ctx.env, countQuery),
+    ]);
+    const result = rows.map((r: Record<string, any>, i: number) => {
+      // Convert to ISO format
       r.timestamp = r.timestamp.replace(' ', 'T') + 'Z';
+      return isFree && offset + i >= FREE_VISIBLE_CLICKS ? maskClick(r) : r;
     });
-    return ctx.json(toTableResult(result, offset, limit), 200);
+    const total = Number(count[0]?.total ?? 0);
+    return ctx.json(toTableResult(result, offset, limit, total), 200);
   }
 );
 

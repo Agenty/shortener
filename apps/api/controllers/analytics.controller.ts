@@ -1,4 +1,4 @@
-import { getAnalytics } from '../services/analytics.service';
+import { filterClause, getAnalytics } from '../services/analytics.service';
 import { AuthUser } from '../models/auth-user';
 import { createRoute, z } from '@hono/zod-openapi';
 import { AnalyticsQuery, analyticsQuerySchema } from '../models/paged';
@@ -34,7 +34,7 @@ const queryBuilder = (authUser: AuthUser, filter: AnalyticsQuery) => {
   if (filter.project_id) {
     whereClause += ` AND double2 = ${Number(filter.project_id)}`;
   }
-  return whereClause;
+  return whereClause + filterClause(filter);
 };
 
 const CACHE_HEADERS = { 'Cache-Control': 'public, max-age=90' };

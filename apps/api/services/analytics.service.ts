@@ -1,6 +1,8 @@
 import { Link } from '../models/link';
 import { UAParser } from 'ua-parser-js';
 import { isbot } from 'isbot';
+import { HTTPException } from 'hono/http-exception';
+import { ClickFilter } from '../models/paged';
 
 /** Hostname of the referring page, e.g. linkedin.com, or 'null' for direct traffic */
 const toRefererHost = (referer?: string) => {
@@ -80,6 +82,36 @@ export const setAnalytics = (
   } catch (e) {
     console.error('Error in worker analytics', e);
   }
+};
+
+/** Analytics Engine column of each drill-down filter, see the blob layout above */
+const FILTER_COLUMNS: Record<keyof ClickFilter, string> = {
+  country: 'blob2',
+  city: 'blob3',
+  referer: 'blob5',
+  browser: 'blob6',
+  os: 'blob7',
+  device: 'blob8',
+};
+
+// Filter values are interpolated in the Analytics Engine SQL, so reject
+// anything that could close the string literal
+const FILTER_VALUE_PATTERN = /^[^'\\\x00-\x1f]{1,256}$/;
+
+/** `AND ...` conditions for the drill-down filters set in the query */
+export const filterClause = (filter: ClickFilter) => {
+  let clause = '';
+  for (const [field, column] of Object.entries(FILTER_COLUMNS)) {
+    let value = filter[field as keyof ClickFilter];
+    if (!value) continue;
+    if (!FILTER_VALUE_PATTERN.test(value)) {
+      throw new HTTPException(400, { message: `Invalid ${field}: ${value}` });
+    }
+    // Direct traffic is stored as 'null', see toRefererHost
+    if (field === 'referer' && value === '(direct)') value = 'null';
+    clause += ` AND ${column} = '${value}'`;
+  }
+  return clause;
 };
 
 // Implement caching
