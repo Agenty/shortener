@@ -21,6 +21,12 @@ const zh: Messages = {
     apiKeys: "API 密钥",
     notFound: "页面不存在",
   },
+  githubStar: {
+    title: "支持开源",
+    body: "Shortener.dev 是开源项目。在 GitHub 上点个星标，能帮助更多人发现它。",
+    cta: "在 GitHub 上点星",
+    dismiss: "关闭",
+  },
   nav: {
     menu: "菜单",
     links: "链接",

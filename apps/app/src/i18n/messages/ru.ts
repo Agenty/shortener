@@ -22,6 +22,12 @@ const ru: Messages = {
     apiKeys: "Ключи API",
     notFound: "Не найдено",
   },
+  githubStar: {
+    title: "Поддержите open source",
+    body: "Shortener.dev — проект с открытым исходным кодом. Звезда на GitHub помогает другим его найти.",
+    cta: "Поставить звезду на GitHub",
+    dismiss: "Закрыть",
+  },
   nav: {
     menu: "Меню",
     links: "Ссылки",

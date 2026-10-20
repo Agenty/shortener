@@ -21,6 +21,12 @@ const vi: Messages = {
     included: 'Có',
     notIncluded: 'Không có',
   },
+  githubStar: {
+    title: 'Ủng hộ mã nguồn mở',
+    body: 'Shortener.dev là mã nguồn mở. Một ngôi sao trên GitHub giúp nhiều người biết đến hơn.',
+    cta: 'Gắn sao trên GitHub',
+    dismiss: 'Đóng',
+  },
   nav: {
     shortLinks: 'Liên kết rút gọn',
     shortLinksDescription: 'Đuôi tùy chỉnh, UTM, hết hạn, mật khẩu và nhắm mục tiêu',

@@ -22,6 +22,12 @@ const he: Messages = {
     apiKeys: "מפתחות API",
     notFound: "לא נמצא",
   },
+  githubStar: {
+    title: "תמכו בקוד פתוח",
+    body: "Shortener.dev הוא קוד פתוח. כוכב ב-GitHub עוזר לעוד אנשים למצוא אותו.",
+    cta: "סמנו בכוכב ב-GitHub",
+    dismiss: "סגירה",
+  },
   nav: {
     menu: "תפריט",
     links: "קישורים",

@@ -22,6 +22,12 @@ const fr: Messages = {
     apiKeys: "Clés API",
     notFound: "Page introuvable",
   },
+  githubStar: {
+    title: "Soutenez l’open source",
+    body: "Shortener.dev est open source. Une étoile sur GitHub aide plus de personnes à le découvrir.",
+    cta: "Ajouter une étoile sur GitHub",
+    dismiss: "Fermer",
+  },
   nav: {
     menu: "Menu",
     links: "Liens",

@@ -22,6 +22,12 @@ const nl: Messages = {
     apiKeys: "API-sleutels",
     notFound: "Niet gevonden",
   },
+  githubStar: {
+    title: "Steun open source",
+    body: "Shortener.dev is open source. Een ster op GitHub helpt meer mensen het te vinden.",
+    cta: "Geef een ster op GitHub",
+    dismiss: "Sluiten",
+  },
   nav: {
     menu: "Menu",
     links: "Links",

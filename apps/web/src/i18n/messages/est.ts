@@ -21,6 +21,12 @@ const est: Messages = {
     included: 'Sisaldub',
     notIncluded: 'Ei sisaldu',
   },
+  githubStar: {
+    title: 'Toeta avatud lähtekoodi',
+    body: 'Shortener.dev on avatud lähtekoodiga. Täht GitHubis aitab rohkematel inimestel selle üles leida.',
+    cta: 'Anna GitHubis täht',
+    dismiss: 'Sulge',
+  },
   nav: {
     shortLinks: 'Lühilingid',
     shortLinksDescription: 'Kohandatud lingilõpud, UTM, aegumine, paroolid ja sihtimine',

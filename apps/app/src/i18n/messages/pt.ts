@@ -22,6 +22,12 @@ const pt: Messages = {
     apiKeys: "Chaves de API",
     notFound: "Não encontrado",
   },
+  githubStar: {
+    title: "Apoie o código aberto",
+    body: "O Shortener.dev é de código aberto. Uma estrela no GitHub ajuda mais pessoas a encontrá-lo.",
+    cta: "Dar estrela no GitHub",
+    dismiss: "Fechar",
+  },
   nav: {
     menu: "Menu",
     links: "Links",

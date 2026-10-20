@@ -22,6 +22,12 @@ const el: Messages = {
     apiKeys: "Κλειδιά API",
     notFound: "Δεν βρέθηκε",
   },
+  githubStar: {
+    title: "Υποστήριξε το ανοιχτό λογισμικό",
+    body: "Το Shortener.dev είναι ανοιχτού κώδικα. Ένα αστέρι στο GitHub βοηθά περισσότερους να το βρουν.",
+    cta: "Αστέρι στο GitHub",
+    dismiss: "Κλείσιμο",
+  },
   nav: {
     menu: "Μενού",
     links: "Σύνδεσμοι",

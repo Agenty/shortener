@@ -22,6 +22,12 @@ const da: Messages = {
     apiKeys: "API-nøgler",
     notFound: "Ikke fundet",
   },
+  githubStar: {
+    title: "Støt open source",
+    body: "Shortener.dev er open source. En stjerne på GitHub hjælper flere med at finde det.",
+    cta: "Giv en stjerne på GitHub",
+    dismiss: "Luk",
+  },
   nav: {
     menu: "Menu",
     links: "Links",

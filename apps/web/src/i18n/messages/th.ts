@@ -21,6 +21,12 @@ const th: Messages = {
     included: 'รวมอยู่',
     notIncluded: 'ไม่รวม',
   },
+  githubStar: {
+    title: 'สนับสนุนโอเพนซอร์ส',
+    body: 'Shortener.dev เป็นโอเพนซอร์ส การกดดาวบน GitHub ช่วยให้คนอื่นค้นพบได้มากขึ้น',
+    cta: 'กดดาวบน GitHub',
+    dismiss: 'ปิด',
+  },
   nav: {
     shortLinks: 'ลิงก์สั้น',
     shortLinksDescription: 'ท้ายลิงก์แบบกำหนดเอง UTM วันหมดอายุ รหัสผ่าน และการกำหนดเป้าหมาย',

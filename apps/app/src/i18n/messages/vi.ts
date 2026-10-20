@@ -22,6 +22,12 @@ const vi: Messages = {
     apiKeys: "Khóa API",
     notFound: "Không tìm thấy",
   },
+  githubStar: {
+    title: "Ủng hộ mã nguồn mở",
+    body: "Shortener.dev là mã nguồn mở. Một ngôi sao trên GitHub giúp nhiều người biết đến hơn.",
+    cta: "Gắn sao trên GitHub",
+    dismiss: "Đóng",
+  },
   nav: {
     menu: "Menu",
     links: "Liên kết",

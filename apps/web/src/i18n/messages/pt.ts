@@ -21,6 +21,12 @@ const pt: Messages = {
     included: 'Incluído',
     notIncluded: 'Não incluído',
   },
+  githubStar: {
+    title: 'Apoie o código aberto',
+    body: 'O Shortener.dev é de código aberto. Uma estrela no GitHub ajuda mais pessoas a encontrá-lo.',
+    cta: 'Dar estrela no GitHub',
+    dismiss: 'Fechar',
+  },
   nav: {
     shortLinks: 'Links curtos',
     shortLinksDescription: 'Finais personalizados, UTM, expiração, senhas e segmentação',

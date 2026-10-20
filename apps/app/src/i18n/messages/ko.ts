@@ -22,6 +22,12 @@ const ko: Messages = {
     apiKeys: "API 키",
     notFound: "페이지 없음",
   },
+  githubStar: {
+    title: "오픈 소스를 응원해 주세요",
+    body: "Shortener.dev는 오픈 소스입니다. GitHub 스타는 더 많은 사람이 찾는 데 도움이 됩니다.",
+    cta: "GitHub에서 스타 주기",
+    dismiss: "닫기",
+  },
   nav: {
     menu: "메뉴",
     links: "링크",

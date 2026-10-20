@@ -22,6 +22,12 @@ const id: Messages = {
     apiKeys: "Kunci API",
     notFound: "Tidak ditemukan",
   },
+  githubStar: {
+    title: "Dukung open source",
+    body: "Shortener.dev adalah open source. Bintang di GitHub membantu lebih banyak orang menemukannya.",
+    cta: "Beri bintang di GitHub",
+    dismiss: "Tutup",
+  },
   nav: {
     menu: "Menu",
     links: "Tautan",

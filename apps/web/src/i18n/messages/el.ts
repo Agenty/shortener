@@ -21,6 +21,12 @@ const el: Messages = {
     included: 'Περιλαμβάνεται',
     notIncluded: 'Δεν περιλαμβάνεται',
   },
+  githubStar: {
+    title: 'Υποστήριξε το ανοιχτό λογισμικό',
+    body: 'Το Shortener.dev είναι ανοιχτού κώδικα. Ένα αστέρι στο GitHub βοηθά περισσότερους να το βρουν.',
+    cta: 'Αστέρι στο GitHub',
+    dismiss: 'Κλείσιμο',
+  },
   nav: {
     shortLinks: 'Σύντομοι σύνδεσμοι',
     shortLinksDescription: 'Προσαρμοσμένες καταλήξεις, UTM, λήξη, κωδικοί και στόχευση',

@@ -22,6 +22,12 @@ const est: Messages = {
     apiKeys: "API-võtmed",
     notFound: "Ei leitud",
   },
+  githubStar: {
+    title: "Toeta avatud lähtekoodi",
+    body: "Shortener.dev on avatud lähtekoodiga. Täht GitHubis aitab rohkematel inimestel selle üles leida.",
+    cta: "Anna GitHubis täht",
+    dismiss: "Sulge",
+  },
   nav: {
     menu: "Menüü",
     links: "Lingid",

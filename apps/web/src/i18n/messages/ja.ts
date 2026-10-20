@@ -21,6 +21,12 @@ const ja: Messages = {
     included: '含まれる',
     notIncluded: '含まれない',
   },
+  githubStar: {
+    title: 'オープンソースを応援',
+    body: 'Shortener.dev はオープンソースです。GitHub でスターを付けると、より多くの人に届きます。',
+    cta: 'GitHub でスターする',
+    dismiss: '閉じる',
+  },
   nav: {
     shortLinks: '短縮リンク',
     shortLinksDescription: 'カスタムパス、UTM、有効期限、パスワード、ターゲティング',

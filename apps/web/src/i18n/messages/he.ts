@@ -21,6 +21,12 @@ const he: Messages = {
     included: 'כלול',
     notIncluded: 'לא כלול',
   },
+  githubStar: {
+    title: 'תמכו בקוד פתוח',
+    body: 'Shortener.dev הוא קוד פתוח. כוכב ב-GitHub עוזר לעוד אנשים למצוא אותו.',
+    cta: 'סמנו בכוכב ב-GitHub',
+    dismiss: 'סגירה',
+  },
   nav: {
     shortLinks: 'קישורים מקוצרים',
     shortLinksDescription: 'סיומות מותאמות, UTM, תפוגה, סיסמאות וטירגוט',

@@ -21,6 +21,12 @@ const ko: Messages = {
     included: '포함',
     notIncluded: '미포함',
   },
+  githubStar: {
+    title: '오픈 소스를 응원해 주세요',
+    body: 'Shortener.dev는 오픈 소스입니다. GitHub 스타는 더 많은 사람이 찾는 데 도움이 됩니다.',
+    cta: 'GitHub에서 스타 주기',
+    dismiss: '닫기',
+  },
   nav: {
     shortLinks: '단축 링크',
     shortLinksDescription: '맞춤 경로, UTM, 만료, 비밀번호, 타기팅',

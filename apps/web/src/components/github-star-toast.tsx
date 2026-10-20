@@ -1,0 +1,75 @@
+import { useEffect, useState } from 'react';
+import { isbot } from 'isbot';
+import { Star, X } from 'lucide-react';
+import { buttonVariants } from '@/components/ui/button';
+import { useI18n } from '@/i18n';
+import { GITHUB_URL } from '@/lib/site';
+import { cn } from '@/lib/utils';
+
+const STORAGE_KEY = 'github-star-toast-dismissed';
+const SHOW_AFTER_MS = 4000;
+
+function wasDismissed() {
+  try {
+    return localStorage.getItem(STORAGE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+/** Bottom-left nudge to star the repo. Client only, so crawlers and the SSR markup never include it */
+export function GithubStarToast() {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (isbot(navigator.userAgent) || navigator.webdriver || wasDismissed()) return;
+    const timer = setTimeout(() => setOpen(true), SHOW_AFTER_MS);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!open) return null;
+
+  const dismiss = () => {
+    setOpen(false);
+    try {
+      localStorage.setItem(STORAGE_KEY, '1');
+    } catch {
+      // Storage blocked, the toast just shows again next visit
+    }
+  };
+
+  return (
+    <div
+      role="status"
+      className="fixed bottom-4 left-4 z-50 w-[calc(100vw-2rem)] max-w-sm animate-in fade-in slide-in-from-bottom-4 rounded-xl border bg-background p-4 shadow-lg duration-300"
+    >
+      <button
+        type="button"
+        onClick={dismiss}
+        aria-label={t.githubStar.dismiss}
+        className="absolute end-3 top-3 rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+      >
+        <X className="size-4" />
+      </button>
+      <div className="flex gap-3 pe-6">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-400">
+          <Star className="size-5 fill-current" aria-hidden="true" />
+        </span>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold">{t.githubStar.title}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground">{t.githubStar.body}</p>
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={dismiss}
+            className={cn(buttonVariants({ size: 'sm' }), 'mt-3')}
+          >
+            <Star data-icon="inline-start" /> {t.githubStar.cta}
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}

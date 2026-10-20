@@ -24,6 +24,12 @@ const en = {
     apiKeys: "API Keys",
     notFound: "Not Found",
   },
+  githubStar: {
+    title: "Support open source",
+    body: "Shortener.dev is open source. A star on GitHub helps more people find it.",
+    cta: "Star on GitHub",
+    dismiss: "Dismiss",
+  },
   nav: {
     menu: "Menu",
     links: "Links",

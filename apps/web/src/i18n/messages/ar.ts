@@ -21,6 +21,12 @@ const ar: Messages = {
     included: 'مشمول',
     notIncluded: 'غير مشمول',
   },
+  githubStar: {
+    title: 'ادعم المصادر المفتوحة',
+    body: 'Shortener.dev مفتوح المصدر. نجمة على GitHub تساعد المزيد من الناس على اكتشافه.',
+    cta: 'أضف نجمة على GitHub',
+    dismiss: 'إغلاق',
+  },
   nav: {
     shortLinks: 'الروابط المختصرة',
     shortLinksDescription: 'نهايات مخصصة وUTM وانتهاء الصلاحية وكلمات المرور والاستهداف',

@@ -21,6 +21,12 @@ const zh: Messages = {
     included: '包含',
     notIncluded: '不包含',
   },
+  githubStar: {
+    title: '支持开源',
+    body: 'Shortener.dev 是开源项目。在 GitHub 上点个星标，能帮助更多人发现它。',
+    cta: '在 GitHub 上点星',
+    dismiss: '关闭',
+  },
   nav: {
     shortLinks: '短链接',
     shortLinksDescription: '自定义后缀、UTM、有效期、密码和定向',

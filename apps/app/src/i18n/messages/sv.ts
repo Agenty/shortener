@@ -22,6 +22,12 @@ const sv: Messages = {
     apiKeys: "API-nycklar",
     notFound: "Hittades inte",
   },
+  githubStar: {
+    title: "Stöd öppen källkod",
+    body: "Shortener.dev är öppen källkod. En stjärna på GitHub hjälper fler att hitta det.",
+    cta: "Ge en stjärna på GitHub",
+    dismiss: "Stäng",
+  },
   nav: {
     menu: "Meny",
     links: "Länkar",

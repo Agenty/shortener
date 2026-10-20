@@ -22,6 +22,12 @@ const ja: Messages = {
     apiKeys: "API キー",
     notFound: "ページが見つかりません",
   },
+  githubStar: {
+    title: "オープンソースを応援",
+    body: "Shortener.dev はオープンソースです。GitHub でスターを付けると、より多くの人に届きます。",
+    cta: "GitHub でスターする",
+    dismiss: "閉じる",
+  },
   nav: {
     menu: "メニュー",
     links: "リンク",

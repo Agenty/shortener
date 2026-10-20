@@ -2,6 +2,7 @@
 import type { ReactNode } from 'react';
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
 import { ThemeProvider } from 'next-themes';
+import { GithubStarToast } from '@/components/github-star-toast';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { NotFound } from '@/components/not-found';
@@ -86,6 +87,7 @@ function RootDocument({ children }: { children: ReactNode }) {
           <SiteHeader />
           <main id="main">{children}</main>
           <SiteFooter />
+          <GithubStarToast />
         </ThemeProvider>
         <Scripts />
       </body>

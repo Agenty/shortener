@@ -22,6 +22,12 @@ const th: Messages = {
     apiKeys: "คีย์ API",
     notFound: "ไม่พบหน้า",
   },
+  githubStar: {
+    title: "สนับสนุนโอเพนซอร์ส",
+    body: "Shortener.dev เป็นโอเพนซอร์ส การกดดาวบน GitHub ช่วยให้คนอื่นค้นพบได้มากขึ้น",
+    cta: "กดดาวบน GitHub",
+    dismiss: "ปิด",
+  },
   nav: {
     menu: "เมนู",
     links: "ลิงก์",

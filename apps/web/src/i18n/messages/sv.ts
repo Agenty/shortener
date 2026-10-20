@@ -21,6 +21,12 @@ const sv: Messages = {
     included: 'Ingår',
     notIncluded: 'Ingår inte',
   },
+  githubStar: {
+    title: 'Stöd öppen källkod',
+    body: 'Shortener.dev är öppen källkod. En stjärna på GitHub hjälper fler att hitta det.',
+    cta: 'Ge en stjärna på GitHub',
+    dismiss: 'Stäng',
+  },
   nav: {
     shortLinks: 'Korta länkar',
     shortLinksDescription: 'Egna länkslut, UTM, utgångsdatum, lösenord och målgruppsstyrning',

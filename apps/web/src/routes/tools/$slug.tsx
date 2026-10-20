@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
-import { ArrowRight } from 'lucide-react';
 import { Faq } from '@/components/faq';
 import { LinkBuilder } from '@/components/link-builder';
+import { ToolIcon } from '@/components/tool-icon';
 import { PageHero } from '@/components/page-hero';
 import { Eyebrow, NumberedList, Section, Showcase } from '@/components/section';
 import { getTool, shortenerTools } from '@/data/tools';
@@ -106,13 +106,10 @@ function ToolPage() {
               key={item.slug}
               to="/tools/$slug"
               params={{ slug: item.slug }}
-              className="group flex items-center justify-between gap-3 rounded-xl border bg-background px-4 py-3 text-sm"
+              className="group flex items-center gap-3 rounded-xl border bg-background px-4 py-3 text-sm transition-colors hover:border-foreground/20"
             >
-              <span className="flex items-center gap-2">
-                <item.icon className="size-4 text-muted-foreground" />
-                {item.title}
-              </span>
-              <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+              <ToolIcon domain={item.domain} icon={item.icon} />
+              {item.title}
             </Link>
           ))}
         </div>

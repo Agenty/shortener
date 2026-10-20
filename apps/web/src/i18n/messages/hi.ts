@@ -21,6 +21,12 @@ const hi: Messages = {
     included: 'शामिल',
     notIncluded: 'शामिल नहीं',
   },
+  githubStar: {
+    title: 'ओपन सोर्स का समर्थन करें',
+    body: 'Shortener.dev ओपन सोर्स है। GitHub पर एक स्टार इसे और लोगों तक पहुँचाने में मदद करता है।',
+    cta: 'GitHub पर स्टार दें',
+    dismiss: 'बंद करें',
+  },
   nav: {
     shortLinks: 'शॉर्ट लिंक',
     shortLinksDescription: 'कस्टम बैक-हाफ़, UTM, एक्सपायरी, पासवर्ड और टार्गेटिंग',

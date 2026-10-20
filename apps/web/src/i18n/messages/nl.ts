@@ -21,6 +21,12 @@ const nl: Messages = {
     included: 'Inbegrepen',
     notIncluded: 'Niet inbegrepen',
   },
+  githubStar: {
+    title: 'Steun open source',
+    body: 'Shortener.dev is open source. Een ster op GitHub helpt meer mensen het te vinden.',
+    cta: 'Geef een ster op GitHub',
+    dismiss: 'Sluiten',
+  },
   nav: {
     shortLinks: 'Korte links',
     shortLinksDescription: 'Eigen linkuitgangen, UTM, vervaldatum, wachtwoorden en targeting',

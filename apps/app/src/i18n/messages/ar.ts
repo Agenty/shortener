@@ -22,6 +22,12 @@ const ar: Messages = {
     apiKeys: "مفاتيح API",
     notFound: "غير موجود",
   },
+  githubStar: {
+    title: "ادعم المصادر المفتوحة",
+    body: "Shortener.dev مفتوح المصدر. نجمة على GitHub تساعد المزيد من الناس على اكتشافه.",
+    cta: "أضف نجمة على GitHub",
+    dismiss: "إغلاق",
+  },
   nav: {
     menu: "القائمة",
     links: "الروابط",

@@ -21,6 +21,12 @@ const de: Messages = {
     included: 'Enthalten',
     notIncluded: 'Nicht enthalten',
   },
+  githubStar: {
+    title: 'Unterstütze Open Source',
+    body: 'Shortener.dev ist Open Source. Ein Stern auf GitHub hilft, dass mehr Leute es finden.',
+    cta: 'Auf GitHub mit Stern versehen',
+    dismiss: 'Schließen',
+  },
   nav: {
     shortLinks: 'Kurzlinks',
     shortLinksDescription: 'Eigene Link-Endungen, UTM, Ablaufdatum, Passwörter und Targeting',

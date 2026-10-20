@@ -24,6 +24,12 @@ const en = {
     included: 'Included',
     notIncluded: 'Not included',
   },
+  githubStar: {
+    title: 'Support open source',
+    body: 'Shortener.dev is open source. A star on GitHub helps more people find it.',
+    cta: 'Star on GitHub',
+    dismiss: 'Dismiss',
+  },
   nav: {
     shortLinks: 'Short links',
     shortLinksDescription: 'Custom back-halves, UTM, expiration, passwords and targeting',

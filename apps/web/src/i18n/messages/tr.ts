@@ -21,6 +21,12 @@ const tr: Messages = {
     included: 'Dahil',
     notIncluded: 'Dahil değil',
   },
+  githubStar: {
+    title: 'Açık kaynağı destekleyin',
+    body: 'Shortener.dev açık kaynaklıdır. GitHub’da bir yıldız daha fazla kişinin onu bulmasına yardımcı olur.',
+    cta: 'GitHub’da yıldız verin',
+    dismiss: 'Kapat',
+  },
   nav: {
     shortLinks: 'Kısa bağlantılar',
     shortLinksDescription: 'Özel uzantılar, UTM, süre sonu, şifreler ve hedefleme',

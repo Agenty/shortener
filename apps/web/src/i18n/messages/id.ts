@@ -21,6 +21,12 @@ const id: Messages = {
     included: 'Termasuk',
     notIncluded: 'Tidak termasuk',
   },
+  githubStar: {
+    title: 'Dukung open source',
+    body: 'Shortener.dev adalah open source. Bintang di GitHub membantu lebih banyak orang menemukannya.',
+    cta: 'Beri bintang di GitHub',
+    dismiss: 'Tutup',
+  },
   nav: {
     shortLinks: 'Tautan pendek',
     shortLinksDescription: 'Akhiran kustom, UTM, kedaluwarsa, kata sandi, dan penargetan',

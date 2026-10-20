@@ -21,6 +21,12 @@ const da: Messages = {
     included: 'Inkluderet',
     notIncluded: 'Ikke inkluderet',
   },
+  githubStar: {
+    title: 'Støt open source',
+    body: 'Shortener.dev er open source. En stjerne på GitHub hjælper flere med at finde det.',
+    cta: 'Giv en stjerne på GitHub',
+    dismiss: 'Luk',
+  },
   nav: {
     shortLinks: 'Korte links',
     shortLinksDescription: 'Egne linkendelser, UTM, udløb, adgangskoder og målretning',

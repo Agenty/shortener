@@ -22,6 +22,12 @@ const tr: Messages = {
     apiKeys: "API anahtarları",
     notFound: "Bulunamadı",
   },
+  githubStar: {
+    title: "Açık kaynağı destekleyin",
+    body: "Shortener.dev açık kaynaklıdır. GitHub’da bir yıldız daha fazla kişinin onu bulmasına yardımcı olur.",
+    cta: "GitHub’da yıldız verin",
+    dismiss: "Kapat",
+  },
   nav: {
     menu: "Menü",
     links: "Bağlantılar",

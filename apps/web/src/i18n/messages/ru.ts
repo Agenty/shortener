@@ -21,6 +21,12 @@ const ru: Messages = {
     included: 'Включено',
     notIncluded: 'Не включено',
   },
+  githubStar: {
+    title: 'Поддержите open source',
+    body: 'Shortener.dev — проект с открытым исходным кодом. Звезда на GitHub помогает другим его найти.',
+    cta: 'Поставить звезду на GitHub',
+    dismiss: 'Закрыть',
+  },
   nav: {
     shortLinks: 'Короткие ссылки',
     shortLinksDescription: 'Свои окончания ссылок, UTM, срок действия, пароли и таргетинг',

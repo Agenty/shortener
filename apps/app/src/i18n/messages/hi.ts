@@ -22,6 +22,12 @@ const hi: Messages = {
     apiKeys: "API कीज़",
     notFound: "नहीं मिला",
   },
+  githubStar: {
+    title: "ओपन सोर्स का समर्थन करें",
+    body: "Shortener.dev ओपन सोर्स है। GitHub पर एक स्टार इसे और लोगों तक पहुँचाने में मदद करता है।",
+    cta: "GitHub पर स्टार दें",
+    dismiss: "बंद करें",
+  },
   nav: {
     menu: "मेन्यू",
     links: "लिंक",
