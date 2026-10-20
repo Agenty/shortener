@@ -10,6 +10,8 @@ import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { useRecaptcha } from "@/hooks/use-recaptcha";
 import { GoogleSignInButton } from "@/components/GoogleSignInButton";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useI18n } from "@/i18n";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,18 +19,19 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { executeRecaptcha } = useRecaptcha();
+  const { t } = useI18n();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      toast.error("Please fill in all fields");
+      toast.error(t.common.fillAllFields);
       return;
     }
     setLoading(true);
     try {
       const recaptcha = await executeRecaptcha("login");
       if (!recaptcha) {
-        toast.error("reCAPTCHA is still loading, please try again");
+        toast.error(t.common.recaptchaLoading);
         return;
       }
       const user = await api.auth.signin({ email, password, recaptcha });
@@ -36,37 +39,38 @@ export default function Login() {
         navigate("/onboarding", { replace: true, state: { email } });
         return;
       }
-      toast.success("Logged in successfully!");
+      toast.success(t.common.loggedIn);
       navigate("/links");
     } catch (err: any) {
-      toast.error(err.message || "Login failed");
+      toast.error(err.message || t.login.failed);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-muted/30">
+    <div className="relative min-h-screen flex items-center justify-center p-4 bg-muted/30">
+          <LanguageSwitcher className="absolute top-4 end-4 h-9 w-9" />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
             <Link2 className="h-8 w-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to your shortener.dev account</CardDescription>
+          <CardTitle className="text-2xl">{t.login.title}</CardTitle>
+          <CardDescription>{t.login.description}</CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin} className="space-y-6">
           <CardContent className="space-y-4">
             <GoogleSignInButton />
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Label htmlFor="email">{t.common.email}</Label>
+              <Input id="email" type="email" autoComplete="email" placeholder={t.common.emailPlaceholder} value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t.login.password}</Label>
                 <Link to="/reset-password" className="text-sm text-primary hover:underline">
-                  Forgot password?
+                  {t.login.forgot}
                 </Link>
               </div>
               <PasswordInput id="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -74,11 +78,11 @@ export default function Login() {
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? t.login.submitting : t.login.submit}
             </Button>
             <p className="text-sm text-muted-foreground text-center">
-              Don't have an account?{" "}
-              <Link to="/signup" className="text-primary hover:underline">Sign up</Link>
+              {t.login.noAccount}{" "}
+              <Link to="/signup" className="text-primary hover:underline">{t.login.signup}</Link>
             </p>
           </CardFooter>
         </form>

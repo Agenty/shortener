@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { fmt, rich, useI18n } from "@/i18n";
 
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 60;
@@ -19,6 +21,7 @@ export default function Onboarding() {
   const sent = useRef(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useI18n();
   // Passed by signup/login, the API token doesn't carry the email
   const email: string | undefined = useLocation().state?.email;
 
@@ -26,10 +29,10 @@ export default function Onboarding() {
     setCooldown(RESEND_SECONDS);
     try {
       await api.auth.sendOtp();
-      toast.success("Verification code sent to your email");
+      toast.success(t.onboarding.sent);
     } catch (err: any) {
       setCooldown(0);
-      toast.error(err.message || "Failed to send the code");
+      toast.error(err.message || t.onboarding.sendFailed);
     }
   };
 
@@ -49,18 +52,18 @@ export default function Onboarding() {
   const handleVerify = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (code.length !== OTP_LENGTH) {
-      toast.error(`Please enter the ${OTP_LENGTH} digit code`);
+      toast.error(fmt(t.onboarding.enterCode, { length: OTP_LENGTH }));
       return;
     }
     setLoading(true);
     try {
       await api.auth.verifyOtp(Number(code));
       await queryClient.invalidateQueries({ queryKey: ["auth-user"] });
-      toast.success("Email verified, welcome aboard!");
+      toast.success(t.onboarding.verified);
       navigate("/links", { replace: true });
     } catch (err: any) {
       setCode("");
-      toast.error(err.message || "Verification failed");
+      toast.error(err.message || t.onboarding.failed);
     } finally {
       setLoading(false);
     }
@@ -77,16 +80,19 @@ export default function Onboarding() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-muted/30">
+    <div className="relative min-h-screen flex items-center justify-center p-4 bg-muted/30">
+          <LanguageSwitcher className="absolute top-4 end-4 h-9 w-9" />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
             <MailCheck className="h-8 w-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl">Verify your email</CardTitle>
+          <CardTitle className="text-2xl">{t.onboarding.title}</CardTitle>
           <CardDescription>
-            Enter the {OTP_LENGTH} digit code we sent to{" "}
-            {email ? <span className="font-medium text-foreground">{email}</span> : "your email"}
+            {rich(t.onboarding.description, {
+              length: OTP_LENGTH,
+              email: email ? <span className="font-medium text-foreground">{email}</span> : t.onboarding.yourEmail,
+            })}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleVerify} className="space-y-6">
@@ -108,21 +114,21 @@ export default function Onboarding() {
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={loading || code.length !== OTP_LENGTH}>
-              {loading ? "Verifying..." : "Verify Email"}
+              {loading ? t.onboarding.submitting : t.onboarding.submit}
             </Button>
             <p className="text-sm text-muted-foreground text-center">
-              Didn't get the code?{" "}
+              {t.onboarding.noCode}{" "}
               <button
                 type="button"
                 className="text-primary hover:underline disabled:text-muted-foreground disabled:no-underline"
                 disabled={cooldown > 0}
                 onClick={sendOtp}
               >
-                {cooldown > 0 ? `Resend in ${cooldown}s` : "Resend code"}
+                {cooldown > 0 ? fmt(t.onboarding.resendIn, { seconds: cooldown }) : t.onboarding.resend}
               </button>
             </p>
             <button type="button" className="text-sm text-muted-foreground hover:underline" onClick={handleLogout}>
-              Use a different account
+              {t.onboarding.otherAccount}
             </button>
           </CardFooter>
         </form>

@@ -1,27 +1,28 @@
-import { lifetime } from './plans';
+import { fmt, type Messages } from '@/i18n';
 import { shortenerTools } from './tools';
 
-export const productNav = [
+export const productNav = (t: Messages) => [
   {
-    label: 'Short links',
+    label: t.nav.shortLinks,
     to: '/short-links-builder',
-    description: 'Custom back-halves, UTM, expiration, passwords and targeting',
+    description: t.nav.shortLinksDescription,
   },
   {
-    label: 'Lifetime deal',
+    label: t.nav.lifetimeDeal,
     to: '/lifetime-deal',
-    description: `Pay once for ${lifetime.links}`,
+    description: fmt(t.nav.lifetimeDealDescription, { links: t.lifetime.links }),
   },
   {
-    label: 'Comparisons',
+    label: t.nav.comparisons,
     to: '/alternatives',
-    description: 'How we compare with Bitly, Rebrandly, Dub and others',
+    description: t.nav.comparisonsDescription,
   },
 ];
 
-export const toolNav = [
+// Tool pages are English only, so their names stay in English
+export const toolNav = (t: Messages) => [
   ...shortenerTools.slice(0, 4).map((tool) => ({ label: tool.title, to: `/tools/${tool.slug}` })),
-  { label: 'WhatsApp link generator', to: '/tools/whatsapp-link-generator' },
-  { label: 'Social share preview', to: '/tools/social-share-preview' },
-  { label: 'All free tools', to: '/tools' },
+  { label: t.nav.whatsapp, to: '/tools/whatsapp-link-generator' },
+  { label: t.nav.socialPreview, to: '/tools/social-share-preview' },
+  { label: t.nav.allTools, to: '/tools' },
 ];

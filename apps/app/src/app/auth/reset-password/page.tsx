@@ -6,52 +6,54 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useI18n } from "@/i18n";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const { t } = useI18n();
 
   const handleReset = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
-      toast.error("Please enter your email");
+      toast.error(t.reset.enterEmail);
       return;
     }
     setSent(true);
-    toast.success("Reset link sent to your email!");
+    toast.success(t.reset.sent);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-muted/30">
+    <div className="relative min-h-screen flex items-center justify-center p-4 bg-muted/30">
+          <LanguageSwitcher className="absolute top-4 end-4 h-9 w-9" />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
             <Link2 className="h-8 w-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl">Reset Password</CardTitle>
-          <CardDescription>
-            {sent ? "Check your email for the reset link" : "Enter your email to receive a reset link"}
-          </CardDescription>
+          <CardTitle className="text-2xl">{t.reset.title}</CardTitle>
+          <CardDescription>{sent ? t.reset.sentDescription : t.reset.description}</CardDescription>
         </CardHeader>
         {!sent ? (
           <form onSubmit={handleReset} className="space-y-6">
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Label htmlFor="email">{t.common.email}</Label>
+                <Input id="email" type="email" autoComplete="email" placeholder={t.common.emailPlaceholder} value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
-              <Button type="submit" className="w-full">Send Reset Link</Button>
-              <Link to="/login" className="text-sm text-primary hover:underline">Back to login</Link>
+              <Button type="submit" className="w-full">{t.reset.submit}</Button>
+              <Link to="/login" className="text-sm text-primary hover:underline">{t.reset.back}</Link>
             </CardFooter>
           </form>
         ) : (
           <CardFooter className="flex flex-col gap-4">
             <Button variant="outline" className="w-full" onClick={() => setSent(false)}>
-              Resend Link
+              {t.reset.resend}
             </Button>
-            <Link to="/login" className="text-sm text-primary hover:underline">Back to login</Link>
+            <Link to="/login" className="text-sm text-primary hover:underline">{t.reset.back}</Link>
           </CardFooter>
         )}
       </Card>

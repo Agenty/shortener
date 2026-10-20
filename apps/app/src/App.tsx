@@ -16,12 +16,12 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import DashboardLayout from '@/app/layout';
 import { ApiError, EMAIL_NOT_VERIFIED } from '@/lib/api';
-import { DocumentTitle } from '@/components/DocumentTitle';
+import { DocumentTitle, type TitleKey } from '@/components/DocumentTitle';
 
 type PageModule = { default: React.ComponentType };
 
-/** Lazy route for a `page.tsx` in the app directory */
-const page = (load: () => Promise<PageModule>, title: string) => ({
+/** Lazy route for a `page.tsx` in the app directory, `title` is a key of the `titles` messages */
+const page = (load: () => Promise<PageModule>, title: TitleKey) => ({
   lazy: async () => {
     const { default: Component } = await load();
     return { Component, handle: { title } };
@@ -40,23 +40,23 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Navigate to="/login" replace />,
-        handle: { title: 'Login' },
+        handle: { title: 'login' },
       },
 
       // auth
-      { path: 'login', ...page(() => import('@/app/auth/login/page'), 'Login') },
-      { path: 'signup', ...page(() => import('@/app/auth/signup/page'), 'Sign Up') },
+      { path: 'login', ...page(() => import('@/app/auth/login/page'), 'login') },
+      { path: 'signup', ...page(() => import('@/app/auth/signup/page'), 'signup') },
       {
         path: 'reset-password',
-        ...page(() => import('@/app/auth/reset-password/page'), 'Reset Password'),
+        ...page(() => import('@/app/auth/reset-password/page'), 'resetPassword'),
       },
       {
         path: 'oauth/callback',
-        ...page(() => import('@/app/auth/oauth-callback/page'), 'Signing In'),
+        ...page(() => import('@/app/auth/oauth-callback/page'), 'signingIn'),
       },
       {
         path: 'onboarding',
-        ...page(() => import('@/app/auth/onboarding/page'), 'Verify Email'),
+        ...page(() => import('@/app/auth/onboarding/page'), 'verifyEmail'),
       },
 
       // dashboard, shares the sidebar layout
@@ -64,27 +64,27 @@ export const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
           { index: true, element: <Navigate to="/links" replace /> },
-          { path: 'links', ...page(() => import('@/app/links/page'), 'Links') },
+          { path: 'links', ...page(() => import('@/app/links/page'), 'links') },
           {
             path: 'analytics',
-            ...page(() => import('@/app/analytics/page'), 'Analytics'),
+            ...page(() => import('@/app/analytics/page'), 'analytics'),
           },
-          { path: 'reports', ...page(() => import('@/app/reports/page'), 'Reports') },
-          { path: 'domains', ...page(() => import('@/app/domains/page'), 'Domains') },
-          { path: 'users', ...page(() => import('@/app/users/page'), 'Users') },
-          { path: 'billings', ...page(() => import('@/app/billings/page'), 'Billing') },
+          { path: 'reports', ...page(() => import('@/app/reports/page'), 'reports') },
+          { path: 'domains', ...page(() => import('@/app/domains/page'), 'domains') },
+          { path: 'users', ...page(() => import('@/app/users/page'), 'users') },
+          { path: 'billings', ...page(() => import('@/app/billings/page'), 'billing') },
           {
             path: 'settings',
-            ...page(() => import('@/app/settings/page'), 'Settings'),
+            ...page(() => import('@/app/settings/page'), 'settings'),
           },
           {
             path: 'settings/api-keys',
-            ...page(() => import('@/app/settings/api-keys/page'), 'API Keys'),
+            ...page(() => import('@/app/settings/api-keys/page'), 'apiKeys'),
           },
         ],
       },
 
-      { path: '*', ...page(() => import('@/app/not-found'), 'Not Found') },
+      { path: '*', ...page(() => import('@/app/not-found'), 'notFound') },
     ],
   },
 ]);

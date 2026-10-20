@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { rich, useI18n } from '@/i18n';
 import { SUPPORT_EMAIL } from '@/lib/site';
 
 type Field = {
@@ -21,12 +22,13 @@ type Field = {
 export function MailForm({
   subject,
   fields,
-  submitLabel = 'Send email',
+  submitLabel,
 }: {
   subject: string;
   fields: Field[];
   submitLabel?: string;
 }) {
+  const { t } = useI18n();
   const id = useId();
   const [values, setValues] = useState<Record<string, string>>({});
 
@@ -60,14 +62,16 @@ export function MailForm({
       })}
       <Button type="submit" size="lg" className="mt-1 h-11 rounded-xl">
         <Mail data-icon="inline-start" />
-        {submitLabel}
+        {submitLabel ?? t.mailForm.send}
       </Button>
       <p className="text-xs text-muted-foreground">
-        Opens your email app with this message to{' '}
-        <a href={`mailto:${SUPPORT_EMAIL}`} className="underline underline-offset-2">
-          {SUPPORT_EMAIL}
-        </a>
-        .
+        {rich(t.mailForm.note, {
+          email: (
+            <a href={`mailto:${SUPPORT_EMAIL}`} className="underline underline-offset-2">
+              {SUPPORT_EMAIL}
+            </a>
+          ),
+        })}
       </p>
     </form>
   );

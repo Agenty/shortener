@@ -3,17 +3,18 @@ import { Check, Mail } from 'lucide-react';
 import { MailForm } from '@/components/mail-form';
 import { PageHero } from '@/components/page-hero';
 import { NumberedList, Section } from '@/components/section';
-import { enterprise } from '@/data/plans';
+import { rich, useI18n } from '@/i18n';
 import { seo } from '@/lib/seo';
 import { GITHUB_URL, SUPPORT_EMAIL } from '@/lib/site';
 
 export const Route = createFileRoute('/enterprise')({
-  head: () =>
-    seo({
-      title: 'Enterprise',
-      description:
-        'Shortener.dev for enterprises: unlimited links, a contract with invoicing and a DPA, dedicated support, and a commercial license for self-hosting without AGPLv3 obligations.',
+  head: ({ match }) => {
+    const { locale, messages: t } = match.context;
+    return seo({
+      title: t.enterprise.metaTitle,
+      description: t.enterprise.metaDescription,
       path: '/enterprise',
+      locale,
       jsonLd: [
         {
           '@type': 'ContactPage',
@@ -21,24 +22,27 @@ export const Route = createFileRoute('/enterprise')({
           url: 'https://shortener.dev/enterprise',
         },
       ],
-    }),
+    });
+  },
   component: Enterprise,
 });
 
 function Enterprise() {
+  const { t } = useI18n();
+  const copy = t.enterprise;
   return (
     <>
       <div className="container grid gap-12 pb-24 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
         <PageHero
           contained={false}
-          eyebrow="Enterprise"
+          eyebrow={copy.eyebrow}
           tone="violet"
-          title="Short links at scale."
-          accent="On your terms."
-          description="For organizations with security, compliance and procurement requirements, on our hosted service or on your own Cloudflare account."
+          title={copy.title}
+          accent={copy.accent}
+          description={copy.description}
         >
           <ul className="mt-10 grid gap-3 text-[15px]">
-            {enterprise.features.map((feature) => (
+            {t.plans.enterprise.features.map((feature) => (
               <li key={feature} className="flex items-center gap-3">
                 <Check className="size-4 text-brand-3" />
                 {feature}
@@ -57,20 +61,16 @@ function Enterprise() {
           <MailForm
             subject="Shortener.dev Enterprise inquiry"
             fields={[
-              { name: 'name', label: 'Name', required: true },
-              { name: 'email', label: 'Work email', type: 'email', required: true },
-              { name: 'company', label: 'Company', required: true },
-              {
-                name: 'volume',
-                label: 'Links per month (approx.)',
-                placeholder: 'e.g. 100,000',
-              },
+              { name: 'name', label: t.mailForm.name, required: true },
+              { name: 'email', label: t.mailForm.workEmail, type: 'email', required: true },
+              { name: 'company', label: t.mailForm.company, required: true },
+              { name: 'volume', label: copy.volume, placeholder: copy.volumePlaceholder },
               {
                 name: 'message',
-                label: 'What do you need?',
+                label: copy.need,
                 type: 'textarea',
                 required: true,
-                placeholder: 'Hosted plan, commercial license, self-hosting support, SSO, a DPA…',
+                placeholder: copy.needPlaceholder,
               },
             ]}
           />
@@ -80,38 +80,31 @@ function Enterprise() {
         <div className="grid gap-12 md:grid-cols-2 md:gap-20">
           <div className="space-y-5 text-lg leading-relaxed text-muted-foreground">
             <h2 className="text-3xl font-semibold tracking-[-0.03em] text-foreground">
-              Open source, with a commercial license
+              {copy.licenseTitle}
             </h2>
             <p>
-              The full source of Shortener.dev is on{' '}
-              <a
-                href={GITHUB_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-foreground underline underline-offset-2"
-              >
-                GitHub
-              </a>{' '}
-              under the AGPLv3. You can self-host it, including commercially, as long as you publish
-              the source of any modified version you run as a network service.
+              {rich(copy.licenseBody1, {
+                github: (
+                  <a
+                    href={GITHUB_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-foreground underline underline-offset-2"
+                  >
+                    GitHub
+                  </a>
+                ),
+              })}
             </p>
             <p>
-              If your organization can’t meet those terms, or needs features, support or guarantees
-              that the open-source edition doesn’t include, a commercial license from{' '}
-              <span className="text-foreground">Agenty Analytics Pvt. Ltd.</span> covers it.
+              {rich(copy.licenseBody2, {
+                company: <span className="text-foreground">Agenty Analytics Pvt. Ltd.</span>,
+              })}
             </p>
           </div>
           <div>
-            <h3 className="text-sm font-semibold">A commercial license lets you</h3>
-            <NumberedList
-              className="mt-3"
-              items={[
-                'Run a modified version without publishing your changes',
-                'Embed Shortener.dev in a proprietary product',
-                'Get enterprise features built by the core team',
-                'Have a support agreement and SLA for your deployment',
-              ]}
-            />
+            <h3 className="text-sm font-semibold">{copy.licenseListTitle}</h3>
+            <NumberedList className="mt-3" items={copy.licenseList} />
           </div>
         </div>
       </Section>

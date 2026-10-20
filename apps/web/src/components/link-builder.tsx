@@ -3,6 +3,7 @@ import { ArrowRight, Check, Copy, Link2, Loader2, X } from 'lucide-react';
 import { DomainFavicon } from '@/components/domain-favicon';
 import { LoginDialog } from '@/components/login-dialog';
 import { Button } from '@/components/ui/button';
+import { fmt, useI18n } from '@/i18n';
 import { clearAuth, useAuth } from '@/lib/auth';
 import { API_URL, APP_URL, SHORT_HOST } from '@/lib/site';
 import { cn } from '@/lib/utils';
@@ -95,14 +96,16 @@ export type LinkBuilderProps = {
  * Links are created in the visitor's account, so shortening asks to sign in first.
  */
 export function LinkBuilder({
-  placeholder = 'Paste a long URL, e.g. https://example.com/blog/my-post',
+  placeholder,
   examples = [],
   defaultUrl = '',
   expectHost,
-  submitLabel = 'Shorten',
+  submitLabel,
   className,
   onCreated,
 }: LinkBuilderProps) {
+  const { t } = useI18n();
+  const text = t.linkBuilder;
   const inputId = useId();
   const [url, setUrl] = useState(defaultUrl);
   const [loading, setLoading] = useState(false);
@@ -142,13 +145,13 @@ export function LinkBuilder({
       if (res.status === 401) {
         clearAuth();
         setLoginOpen(true);
-        throw new Error('Your session has expired. Sign in again to save this link to your account.');
+        throw new Error(text.sessionExpired);
       }
       if (!res.ok) {
         throw new Error(
           res.status === 429
-            ? 'Too many links in a minute. Wait a moment and try again.'
-            : json.message || 'Could not shorten this link.'
+            ? text.rateLimited
+            : json.message || text.failed
         );
       }
       const link: ShortLink = {
@@ -163,7 +166,7 @@ export function LinkBuilder({
       setUrl('');
       onCreated?.(link);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not shorten this link.');
+      setError(err instanceof Error ? err.message : text.failed);
     } finally {
       setLoading(false);
     }
@@ -185,7 +188,7 @@ export function LinkBuilder({
     try {
       new URL(destination);
     } catch {
-      setError('Enter a valid URL, starting with https://');
+      setError(text.invalidUrl);
       return;
     }
 
@@ -215,7 +218,7 @@ export function LinkBuilder({
     <div className={cn('rounded-2xl border bg-card p-3 text-left shadow-sm sm:p-4', className)}>
       <form onSubmit={submit} className="flex flex-col gap-2 sm:flex-row" noValidate>
         <label htmlFor={inputId} className="sr-only">
-          URL to shorten
+          {text.label}
         </label>
         <div className="relative flex-1">
           <Link2 className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -227,7 +230,7 @@ export function LinkBuilder({
             spellCheck={false}
             value={url}
             onChange={(event) => setUrl(event.target.value)}
-            placeholder={placeholder}
+            placeholder={placeholder ?? text.placeholder}
             aria-invalid={Boolean(error)}
             aria-describedby={error ? `${inputId}-error` : undefined}
             className="h-12 w-full rounded-xl border bg-background pr-3 pl-10 text-[15px] outline-none placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive"
@@ -235,14 +238,14 @@ export function LinkBuilder({
         </div>
         <Button type="submit" disabled={loading || !url.trim()} className="h-12 rounded-xl px-5 text-[15px]">
           {loading ? <Loader2 className="animate-spin" /> : null}
-          {submitLabel}
-          {!loading && <ArrowRight data-icon="inline-end" />}
+          {submitLabel ?? text.submit}
+          {!loading && <ArrowRight data-icon="inline-end" className="rtl:rotate-180" />}
         </Button>
       </form>
 
       {offHost && !error && (
         <p className="mt-2 px-1 text-xs text-muted-foreground">
-          This isn’t a {expectHost} link, but you can shorten it anyway.
+          {fmt(text.offHost, { host: expectHost ?? '' })}
         </p>
       )}
 
@@ -269,7 +272,7 @@ export function LinkBuilder({
                   </a>
                   {link.example && (
                     <span className="rounded-full bg-muted px-1.5 py-px text-[10px] text-muted-foreground">
-                      Example
+                      {text.example}
                     </span>
                   )}
                 </div>
@@ -280,7 +283,7 @@ export function LinkBuilder({
                 variant="ghost"
                 size="icon-sm"
                 onClick={() => copy(link.short_url)}
-                aria-label={`Copy ${link.short_url}`}
+                aria-label={fmt(text.copy, { url: link.short_url })}
               >
                 {copied === link.short_url ? <Check className="text-brand-3" /> : <Copy />}
               </Button>
@@ -290,7 +293,7 @@ export function LinkBuilder({
                   variant="ghost"
                   size="icon-sm"
                   onClick={() => remove(link.key)}
-                  aria-label="Remove from this list"
+                  aria-label={text.remove}
                 >
                   <X />
                 </Button>
@@ -303,21 +306,21 @@ export function LinkBuilder({
       <p className="mt-3 px-1 text-xs text-muted-foreground">
         {auth ? (
           <>
-            Signed in{auth.email ? ` as ${auth.email}` : ''}. Links are saved to your account.{' '}
+            {auth.email ? fmt(text.signedInAs, { email: auth.email }) : text.signedIn}{' '}
             <a href={APP_URL} className={textButton}>
-              Open dashboard
+              {text.openDashboard}
             </a>{' '}
             ·{' '}
             <button type="button" onClick={clearAuth} className="underline underline-offset-2 hover:text-foreground">
-              Sign out
+              {text.signOut}
             </button>
           </>
         ) : (
           <>
             <button type="button" onClick={() => setLoginOpen(true)} className={textButton}>
-              Sign in free
+              {text.signInFree}
             </button>{' '}
-            to shorten links, pick the back-half and see click analytics.
+            {text.signInPitch}
           </>
         )}
       </p>
@@ -325,8 +328,8 @@ export function LinkBuilder({
       <LoginDialog
         open={loginOpen}
         onOpenChange={setLoginOpen}
-        title={destination ? 'Sign in to save your link' : undefined}
-        description={destination ? 'Sign in to shorten it. The link and its clicks are saved to your account.' : undefined}
+        title={destination ? text.loginTitle : undefined}
+        description={destination ? text.loginDescription : undefined}
         onSuccess={(user) => destination && shorten(destination, user.token)}
         onBeforeRedirect={() => destination && session.set(PENDING_KEY, destination)}
       />
