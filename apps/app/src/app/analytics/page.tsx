@@ -48,6 +48,18 @@ const INTERVALS = [
   { label: '90d', value: '90' },
 ];
 
+function getHostname(value: string) {
+  try {
+    return new URL(value).hostname;
+  } catch {
+    try {
+      return new URL(`https://${value}`).hostname;
+    } catch {
+      return '';
+    }
+  }
+}
+
 function CountryFlag({ code }: { code: string }) {
   const upper = code.toUpperCase();
   if (hasFlag(upper)) {
@@ -224,7 +236,7 @@ export default function Analytics() {
         clicks: Number(d.clicks),
         icon: d.referer ? (
           <img
-            src={`https://www.google.com/s2/favicons?domain=${new URL(d.referer).hostname}&sz=16`}
+            src={`https://www.google.com/s2/favicons?domain=${getHostname(d.referer)}&sz=16`}
             alt=""
             className="h-4 w-4 rounded-sm"
           />
@@ -247,13 +259,7 @@ export default function Analytics() {
           clicks: Number(d.clicks),
           icon: (
             <img
-              src={`https://www.google.com/s2/favicons?domain=${(() => {
-                try {
-                  return new URL(d.url).hostname;
-                } catch {
-                  return '';
-                }
-              })()}&sz=16`}
+              src={`https://www.google.com/s2/favicons?domain=${getHostname(d.url)}&sz=16`}
               alt=""
               className="h-4 w-4 rounded-sm"
             />
