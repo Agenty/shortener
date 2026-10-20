@@ -49,4 +49,4 @@ Click the copy icon next to the short link to copy it, or click **View** in the 
 
 ## Plan limits
 
-The Free plan includes 10 short links. Paid plans count the links you create in the last 30 days. When you reach the limit, the builder shows an error asking you to upgrade, and links you've already created keep redirecting. See [pricing](/pricing) for the limits on each plan.
+The Free plan includes 50 short links. Paid plans count the links you create in the last 30 days. When you reach the limit, the builder shows an error asking you to upgrade, and links you've already created keep redirecting. See [pricing](/pricing) for the limits on each plan.

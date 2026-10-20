@@ -43,7 +43,7 @@ function AlternativesIndex() {
               <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
                 Shortener.dev gives every link a custom back-half, UTM parameters, social preview,
                 expiration, password, device and geo targeting, with click analytics, on every plan.
-                Compare it with the tool you are using or considering. Paid plans start at $29 a month.
+                Compare it with the tool you are using or considering. Paid plans start at $9 a month.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <a href={SIGNUP_URL} className={cn(buttonVariants({ size: 'lg' }), 'rounded-xl')}>

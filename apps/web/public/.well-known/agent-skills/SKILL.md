@@ -75,7 +75,7 @@ All analytics endpoints accept `interval` (days, default 7) and `url` (a short l
 - `GET /v1/analytics/referer`, `/country`, `/city`, `/browser`, `/os`, `/device` breakdowns
 - `GET /v1/reports?offset=0&limit=100` raw click log
 
-The history is limited by plan: 7 days on Free, 30 on Pro, 60 on Business, 90 on Advanced. A longer `interval` returns `402`.
+The history is limited by plan: 7 days on Free, 30 on Starter, 60 on Pro, 90 on Business. A longer `interval` returns `402`.
 
 ## Errors
 

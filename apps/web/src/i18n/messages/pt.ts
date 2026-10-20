@@ -17,7 +17,7 @@ const pt: Messages = {
     language: 'Idioma',
     faq: 'FAQ',
     faqTitle: 'Perguntas frequentes',
-    freeNote: 'Grátis para 10 links com análise de cliques, sem cartão de crédito.',
+    freeNote: 'Grátis para 50 links com análise de cliques, sem cartão de crédito.',
     included: 'Incluído',
     notIncluded: 'Não incluído',
   },
@@ -124,7 +124,7 @@ const pt: Messages = {
     customPricing: 'Preço sob medida',
     free: {
       tagline: 'Para testar com alguns links',
-      links: '10 links',
+      links: '50 links',
       analytics: '7 dias de análise de cliques',
       features: [
         'Expiração e senhas nos links',
@@ -134,32 +134,42 @@ const pt: Messages = {
       ],
       cta: 'Comece grátis',
     },
-    pro: {
-      tagline: 'Para equipes de marketing',
-      links: '1.000 links por mês',
+    starter: {
+      tagline: 'Para profissionais de marketing e criadores',
+      links: '500 links por mês',
       analytics: '30 dias de análise de cliques',
       features: [
-        '3 domínios próprios',
-        '5 projetos',
-        '5 membros da equipe',
+        '2 domínios na lista branca',
+        '3 projetos',
+        '2 membros da equipe',
         'Relatórios de cliques',
         'Acesso à API',
+      ],
+      cta: 'Escolher Starter',
+    },
+    pro: {
+      tagline: 'Para equipes de marketing',
+      links: '2.000 links por mês',
+      analytics: '60 dias de análise de cliques',
+      features: [
+        '10 domínios na lista branca',
+        '5 projetos',
+        '5 membros da equipe',
+        'Tudo do Starter',
       ],
       cta: 'Escolher Pro',
     },
     business: {
       tagline: 'Para agências e marcas',
-      links: '10.000 links por mês',
-      analytics: '60 dias de análise de cliques',
-      features: ['5 domínios próprios', '10 projetos', '10 membros da equipe', 'Tudo do Pro'],
-      cta: 'Escolher Business',
-    },
-    advanced: {
-      tagline: 'Para equipes de alto volume',
-      links: '50.000 links por mês',
+      links: '15.000 links por mês',
       analytics: '90 dias de análise de cliques',
-      features: ['10 domínios próprios', '25 projetos', '20 membros da equipe', 'Tudo do Business'],
-      cta: 'Escolher Advanced',
+      features: [
+        '25 domínios na lista branca',
+        '10 projetos',
+        '10 membros da equipe',
+        'Tudo do Pro',
+      ],
+      cta: 'Escolher Business',
     },
     enterprise: {
       tagline: 'Para organizações com requisitos de segurança, conformidade e compras.',
@@ -167,8 +177,8 @@ const pt: Messages = {
         'Links ilimitados',
         'Membros da equipe ilimitados',
         'Apoio em auditorias de conformidade',
-        '90 dias de análise de cliques',
-        'Domínios e projetos sob medida para suas marcas',
+        'Até 3 anos de análise de cliques',
+        'Domínios na lista branca e projetos sob medida para suas marcas',
         'Contrato, faturamento e DPA',
         'Suporte dedicado',
       ],
@@ -177,7 +187,7 @@ const pt: Messages = {
     faqs: [
       {
         q: 'Existe um plano grátis?',
-        a: 'Sim. O plano grátis inclui 10 links curtos com 7 dias de análise de cliques, sem cartão de crédito. Faça upgrade quando precisar de mais links, um domínio próprio ou acesso à API.',
+        a: 'Sim. O plano grátis inclui 50 links curtos com 7 dias de análise de cliques, sem cartão de crédito. Faça upgrade quando precisar de mais links, mais domínios na lista branca ou acesso à API.',
       },
       {
         q: 'Como os links são contados nos planos pagos?',
@@ -193,20 +203,20 @@ const pt: Messages = {
       },
       {
         q: 'Vocês têm uma oferta vitalícia?',
-        a: 'Sim, para os primeiros 200 clientes. Um pagamento único de US$ 149 dá a você os recursos do plano Pro com 1.000 links por mês, sem assinatura mensal.',
+        a: 'Sim, para os primeiros 200 clientes. Um pagamento único de US$ 99 dá a você os recursos do plano Pro com 2.000 links por mês, sem assinatura mensal.',
       },
       {
         q: 'O que o plano Enterprise inclui?',
-        a: 'Links e membros da equipe ilimitados, 90 dias de análise de cliques, ajuda com auditorias de conformidade e segurança, contrato com faturamento e DPA, e suporte dedicado. Fale com a gente para um orçamento.',
+        a: 'Links e membros da equipe ilimitados, até 3 anos de análise de cliques, ajuda com auditorias de conformidade e segurança, contrato com faturamento e DPA, e suporte dedicado. Fale com a gente para um orçamento.',
       },
       {
-        q: 'Posso usar meu próprio domínio?',
-        a: 'Sim. Os planos pagos incluem domínios próprios, para que seus links curtos fiquem como go.suamarca.com/oferta em vez de um domínio curto genérico.',
+        q: 'Posso encurtar links para o meu próprio site?',
+        a: 'Sim. Verifique seu domínio para adicioná-lo à sua lista branca e encurte links para qualquer página dele ou dos subdomínios. Cada plano inclui um número de domínios na lista branca, e sites populares como YouTube, LinkedIn e Amazon são permitidos em todos os planos.',
       },
     ],
   },
   lifetime: {
-    links: '1.000 links por mês',
+    links: '2.000 links por mês',
     claimed: '{claimed} de {spots} garantidas',
     left: 'Restam só {left}',
     progress: 'Vagas da oferta vitalícia já garantidas',
@@ -276,8 +286,8 @@ const pt: Messages = {
     extrasTitle: 'Feito para equipes que compartilham muitos links',
     extras: {
       domains: {
-        title: 'Domínios próprios',
-        body: 'Links curtos em go.suamarca.com em vez de um domínio genérico.',
+        title: 'Lista branca de domínios',
+        body: 'Verifique seus domínios uma vez e encurte links para qualquer página deles.',
       },
       projects: { title: 'Projetos', body: 'Agrupe links por campanha, cliente ou marca.' },
       team: {
@@ -306,15 +316,15 @@ const pt: Messages = {
       },
       {
         q: 'O Shortener.dev é grátis?',
-        a: 'Sim. O plano grátis inclui 10 links curtos com análise de cliques, e você pode entrar e encurtar um link direto pelo formulário desta página. Os planos pagos começam em US$ 29 por mês.',
+        a: 'Sim. O plano grátis inclui 50 links curtos com análise de cliques, e você pode entrar e encurtar um link direto pelo formulário desta página. Os planos pagos começam em US$ 9 por mês.',
       },
       {
         q: 'Posso mudar o destino de um link curto depois de compartilhá-lo?',
         a: 'Sim. Edite o destino quando quiser pelo painel ou pela API, e o mesmo link curto leva os visitantes para a nova página.',
       },
       {
-        q: 'Posso usar meu próprio domínio?',
-        a: 'Sim. Os planos pagos incluem domínios próprios, para que seus links fiquem como go.suamarca.com/oferta.',
+        q: 'Posso encurtar links para o meu próprio site?',
+        a: 'Sim. Verifique seu domínio uma vez e ele entra na sua lista branca, para você encurtar links para qualquer página dele.',
       },
       {
         q: 'O que a análise de cliques inclui?',
@@ -329,19 +339,19 @@ const pt: Messages = {
   pricing: {
     metaTitle: 'Preços',
     metaDescription:
-      'Encurte links grátis ou escolha um plano a partir de US$ 29 por mês para ter domínios próprios, membros da equipe, relatórios de cliques e acesso à API. O Enterprise adiciona links ilimitados e apoio em conformidade.',
+      'Encurte links grátis ou escolha um plano a partir de US$ 9 por mês para ter mais domínios na lista branca, membros da equipe, relatórios de cliques e acesso à API. O Enterprise adiciona links ilimitados e apoio em conformidade.',
     eyebrow: 'Preços',
     title: 'Pague por links,',
     accent: 'não por cliques.',
     description:
-      'Comece grátis com 10 links. Os planos pagos adicionam domínios próprios, membros da equipe, relatórios de cliques e a API. Todos os planos têm cliques ilimitados.',
+      'Comece grátis com 50 links. Os planos pagos adicionam domínios na lista branca, membros da equipe, relatórios de cliques e a API. Todos os planos têm cliques ilimitados.',
     compare: 'Comparar planos',
     feature: 'Recurso',
     rows: {
       shortLinks: 'Links curtos',
       clicks: 'Cliques',
       history: 'Histórico de análises',
-      domains: 'Domínios próprios',
+      domains: 'Lista branca de domínios',
       projects: 'Projetos',
       team: 'Membros da equipe',
       reports: 'Relatórios de cliques',
@@ -357,6 +367,7 @@ const pt: Messages = {
     custom: 'Sob medida',
     perMonth: '{n}/mês',
     days: '{n} dias',
+    years: 'Até {n} anos',
     note: 'Preços em USD, sem impostos locais. Os planos pagos contam os links criados nos últimos 30 dias.',
   },
   shortLinks: {
@@ -413,7 +424,7 @@ const pt: Messages = {
       },
       {
         q: 'Essas opções estão no plano grátis?',
-        a: 'Sim. Todas as opções de link estão disponíveis em todos os planos. Os planos pagos adicionam mais links, domínios próprios, membros da equipe, relatórios de cliques e a API.',
+        a: 'Sim. Todas as opções de link estão disponíveis em todos os planos. Os planos pagos adicionam mais links, domínios na lista branca, membros da equipe, relatórios de cliques e a API.',
       },
       {
         q: 'Posso editar um link depois de criá-lo?',
@@ -424,20 +435,20 @@ const pt: Messages = {
   lifetimeDeal: {
     metaTitle: 'Oferta vitalícia: encurtador de URL',
     metaDescription:
-      'Pague US$ {price} uma vez por um encurtador de URL com {links}, domínio próprio, análise de cliques, gerador de UTM, prévia social, senhas e segmentação por dispositivo e localização.',
+      'Pague US$ {price} uma vez por um encurtador de URL com {links}, 10 domínios na lista branca, análise de cliques, gerador de UTM, prévia social, senhas e segmentação por dispositivo e localização.',
     eyebrow: 'Oferta vitalícia',
     title: 'Pague uma vez.',
     accent: 'Encurte todo mês.',
     description:
-      'Tenha o plano Pro por um pagamento único de US$ {price}: {links} com análise de cliques, domínios próprios e a API. Sem assinatura. Só para os primeiros {spots} clientes.',
+      'Tenha o plano Pro por um pagamento único de US$ {price}: {links} com análise de cliques, 10 domínios na lista branca e a API. Sem assinatura. Só para os primeiros {spots} clientes.',
     oneTimePrice: 'Pagamento único',
     buy: 'Comprar a oferta vitalícia',
     rows: {
       links: 'Links',
       analytics: 'Análise de cliques',
-      analyticsValue: '30 dias de histórico',
-      domains: 'Domínios próprios',
-      domainsValue: '3 domínios',
+      analyticsValue: '60 dias de histórico',
+      domains: 'Lista branca de domínios',
+      domainsValue: '10 domínios',
       team: 'Membros da equipe',
       projects: 'Projetos',
       reports: 'Relatórios de cliques',
@@ -461,7 +472,7 @@ const pt: Messages = {
       },
       {
         q: 'Posso fazer upgrade depois?',
-        a: 'Sim. Se o plano vitalício ficar pequeno, você pode mudar para um plano mensal Business ou Advanced a qualquer momento.',
+        a: 'Sim. Se o plano vitalício ficar pequeno, você pode mudar para o plano mensal Business ou falar com a gente sobre o Enterprise a qualquer momento.',
       },
       {
         q: 'Esta oferta está no AppSumo ou em outros marketplaces?',

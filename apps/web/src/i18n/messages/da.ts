@@ -17,7 +17,7 @@ const da: Messages = {
     language: 'Sprog',
     faq: 'FAQ',
     faqTitle: 'Ofte stillede spørgsmål',
-    freeNote: 'Gratis til 10 links med klikstatistik, uden betalingskort.',
+    freeNote: 'Gratis til 50 links med klikstatistik, uden betalingskort.',
     included: 'Inkluderet',
     notIncluded: 'Ikke inkluderet',
   },
@@ -124,7 +124,7 @@ const da: Messages = {
     customPricing: 'Individuel pris',
     free: {
       tagline: 'Prøv det på nogle få links',
-      links: '10 links',
+      links: '50 links',
       analytics: '7 dages klikstatistik',
       features: [
         'Udløb og adgangskoder',
@@ -134,26 +134,32 @@ const da: Messages = {
       ],
       cta: 'Start gratis',
     },
+    starter: {
+      tagline: 'Til selvstændige marketingfolk og skabere',
+      links: '500 links om måneden',
+      analytics: '30 dages klikstatistik',
+      features: [
+        '2 hvidlistede domæner',
+        '3 projekter',
+        '2 teammedlemmer',
+        'Klikrapporter',
+        'API-adgang',
+      ],
+      cta: 'Vælg Starter',
+    },
     pro: {
       tagline: 'Til marketingteams',
-      links: '1.000 links om måneden',
-      analytics: '30 dages klikstatistik',
-      features: ['3 egne domæner', '5 projekter', '5 teammedlemmer', 'Klikrapporter', 'API-adgang'],
+      links: '2.000 links om måneden',
+      analytics: '60 dages klikstatistik',
+      features: ['10 hvidlistede domæner', '5 projekter', '5 teammedlemmer', 'Alt i Starter'],
       cta: 'Vælg Pro',
     },
     business: {
       tagline: 'Til bureauer og brands',
-      links: '10.000 links om måneden',
-      analytics: '60 dages klikstatistik',
-      features: ['5 egne domæner', '10 projekter', '10 teammedlemmer', 'Alt i Pro'],
-      cta: 'Vælg Business',
-    },
-    advanced: {
-      tagline: 'Til teams med store mængder',
-      links: '50.000 links om måneden',
+      links: '15.000 links om måneden',
       analytics: '90 dages klikstatistik',
-      features: ['10 egne domæner', '25 projekter', '20 teammedlemmer', 'Alt i Business'],
-      cta: 'Vælg Advanced',
+      features: ['25 hvidlistede domæner', '10 projekter', '10 teammedlemmer', 'Alt i Pro'],
+      cta: 'Vælg Business',
     },
     enterprise: {
       tagline: 'Til organisationer med krav til sikkerhed, compliance og indkøb.',
@@ -161,8 +167,8 @@ const da: Messages = {
         'Ubegrænsede links',
         'Ubegrænsede teammedlemmer',
         'Hjælp til compliance-audits',
-        '90 dages klikstatistik',
-        'Egne domæner og projekter, der passer til dine brands',
+        'Op til 3 års klikstatistik',
+        'Hvidlistede domæner og projekter, der passer til dine brands',
         'Kontrakt, fakturering og databehandleraftale',
         'Dedikeret support',
       ],
@@ -171,7 +177,7 @@ const da: Messages = {
     faqs: [
       {
         q: 'Findes der en gratis plan?',
-        a: 'Ja. Den gratis plan indeholder 10 korte links med 7 dages klikstatistik, uden betalingskort. Opgrader, når du har brug for flere links, et eget domæne eller API-adgang.',
+        a: 'Ja. Den gratis plan indeholder 50 korte links med 7 dages klikstatistik, uden betalingskort. Opgrader, når du har brug for flere links, flere hvidlistede domæner eller API-adgang.',
       },
       {
         q: 'Hvordan tælles links på betalte planer?',
@@ -187,20 +193,20 @@ const da: Messages = {
       },
       {
         q: 'Har I en livstidsaftale?',
-        a: 'Ja, for de første 200 kunder. En engangsbetaling på 149 $ giver dig funktionerne i Pro-planen med 1.000 links om måneden, uden månedligt abonnement.',
+        a: 'Ja, for de første 200 kunder. En engangsbetaling på 99 $ giver dig funktionerne i Pro-planen med 2.000 links om måneden, uden månedligt abonnement.',
       },
       {
         q: 'Hvad indeholder Enterprise-planen?',
-        a: 'Ubegrænsede links og teammedlemmer, 90 dages klikstatistik, hjælp til compliance- og sikkerhedsaudits, en kontrakt med fakturering og databehandleraftale samt dedikeret support. Kontakt os for et tilbud.',
+        a: 'Ubegrænsede links og teammedlemmer, op til 3 års klikstatistik, hjælp til compliance- og sikkerhedsaudits, en kontrakt med fakturering og databehandleraftale samt dedikeret support. Kontakt os for et tilbud.',
       },
       {
-        q: 'Kan jeg bruge mit eget domæne?',
-        a: 'Ja. Betalte planer omfatter egne domæner, så dine korte links kan se ud som go.ditbrand.dk/tilbud i stedet for et generisk kort domæne.',
+        q: 'Kan jeg forkorte links til mit eget website?',
+        a: 'Ja. Bekræft dit domæne for at føje det til din hvidliste, og forkort derefter links til enhver side på det eller dets underdomæner. Hver plan indeholder et antal hvidlistede domæner, og populære sites som YouTube, LinkedIn og Amazon er tilladt på alle planer.',
       },
     ],
   },
   lifetime: {
-    links: '1.000 links om måneden',
+    links: '2.000 links om måneden',
     claimed: '{claimed} af {spots} taget',
     left: 'Kun {left} tilbage',
     progress: 'Pladser i livstidsaftalen, der er taget',
@@ -270,8 +276,8 @@ const da: Messages = {
     extrasTitle: 'Bygget til teams, der deler mange links',
     extras: {
       domains: {
-        title: 'Egne domæner',
-        body: 'Korte links på go.ditbrand.dk i stedet for et generisk domæne.',
+        title: 'Domæne-hvidliste',
+        body: 'Bekræft dine egne domæner én gang, og forkort derefter links til enhver side på dem.',
       },
       projects: { title: 'Projekter', body: 'Gruppér links efter kampagne, kunde eller brand.' },
       team: {
@@ -300,15 +306,15 @@ const da: Messages = {
       },
       {
         q: 'Er Shortener.dev gratis?',
-        a: 'Ja. Den gratis plan indeholder 10 korte links med klikstatistik, og du kan logge ind og forkorte et link direkte fra formularen på denne side. Betalte planer starter ved 29 $ om måneden.',
+        a: 'Ja. Den gratis plan indeholder 50 korte links med klikstatistik, og du kan logge ind og forkorte et link direkte fra formularen på denne side. Betalte planer starter ved 9 $ om måneden.',
       },
       {
         q: 'Kan jeg ændre, hvor et kort link peger hen, efter jeg har delt det?',
         a: 'Ja. Rediger destinationen når som helst fra dashboardet eller API’et, så sender det samme korte link besøgende til den nye side.',
       },
       {
-        q: 'Kan jeg bruge mit eget domæne?',
-        a: 'Ja. Betalte planer omfatter egne domæner, så dine links kan se ud som go.ditbrand.dk/tilbud.',
+        q: 'Kan jeg forkorte links til mit eget website?',
+        a: 'Ja. Bekræft dit domæne én gang, så kommer det på din hvidliste, og du kan forkorte links til enhver side på det.',
       },
       {
         q: 'Hvad indeholder klikstatistikken?',
@@ -323,19 +329,19 @@ const da: Messages = {
   pricing: {
     metaTitle: 'Priser',
     metaDescription:
-      'Forkort links gratis, eller vælg en plan fra 29 $ om måneden med egne domæner, teammedlemmer, klikrapporter og API-adgang. Enterprise tilføjer ubegrænsede links og hjælp til compliance.',
+      'Forkort links gratis, eller vælg en plan fra 9 $ om måneden med flere hvidlistede domæner, teammedlemmer, klikrapporter og API-adgang. Enterprise tilføjer ubegrænsede links og hjælp til compliance.',
     eyebrow: 'Priser',
     title: 'Betal for links,',
     accent: 'ikke for klik.',
     description:
-      'Start gratis med 10 links. Betalte planer tilføjer egne domæner, teammedlemmer, klikrapporter og API’et. Alle planer har ubegrænsede klik.',
+      'Start gratis med 50 links. Betalte planer tilføjer hvidlistede domæner, teammedlemmer, klikrapporter og API’et. Alle planer har ubegrænsede klik.',
     compare: 'Sammenlign planer',
     feature: 'Funktion',
     rows: {
       shortLinks: 'Korte links',
       clicks: 'Klik',
       history: 'Statistikhistorik',
-      domains: 'Egne domæner',
+      domains: 'Domæne-hvidliste',
       projects: 'Projekter',
       team: 'Teammedlemmer',
       reports: 'Klikrapporter',
@@ -351,6 +357,7 @@ const da: Messages = {
     custom: 'Individuelt',
     perMonth: '{n}/md.',
     days: '{n} dage',
+    years: 'Op til {n} år',
     note: 'Priser i USD ekskl. lokale afgifter. Betalte planer tæller links oprettet de seneste 30 dage.',
   },
   shortLinks: {
@@ -407,7 +414,7 @@ const da: Messages = {
       },
       {
         q: 'Findes disse muligheder på den gratis plan?',
-        a: 'Ja. Alle linkmuligheder findes på alle planer. Betalte planer tilføjer flere links, egne domæner, teammedlemmer, klikrapporter og API’et.',
+        a: 'Ja. Alle linkmuligheder findes på alle planer. Betalte planer tilføjer flere links, hvidlistede domæner, teammedlemmer, klikrapporter og API’et.',
       },
       {
         q: 'Kan jeg redigere et link, efter det er oprettet?',
@@ -418,20 +425,20 @@ const da: Messages = {
   lifetimeDeal: {
     metaTitle: 'Livstidsaftale: URL-forkorter',
     metaDescription:
-      'Betal {price} $ én gang for en URL-forkorter med {links}, eget domæne, klikstatistik, UTM-builder, forhåndsvisning, adgangskoder og målretning efter enhed og geografi.',
+      'Betal {price} $ én gang for en URL-forkorter med {links}, 10 hvidlistede domæner, klikstatistik, UTM-builder, forhåndsvisning, adgangskoder og målretning efter enhed og geografi.',
     eyebrow: 'Livstidsaftale',
     title: 'Betal én gang.',
     accent: 'Forkort hver måned.',
     description:
-      'Få Pro-planen for en engangsbetaling på {price} $: {links} med klikstatistik, egne domæner og API’et. Intet abonnement. Kun for de første {spots} kunder.',
+      'Få Pro-planen for en engangsbetaling på {price} $: {links} med klikstatistik, 10 hvidlistede domæner og API’et. Intet abonnement. Kun for de første {spots} kunder.',
     oneTimePrice: 'Engangspris',
     buy: 'Køb livstidsaftalen',
     rows: {
       links: 'Links',
       analytics: 'Klikstatistik',
-      analyticsValue: '30 dages historik',
-      domains: 'Egne domæner',
-      domainsValue: '3 domæner',
+      analyticsValue: '60 dages historik',
+      domains: 'Domæne-hvidliste',
+      domainsValue: '10 domæner',
       team: 'Teammedlemmer',
       projects: 'Projekter',
       reports: 'Klikrapporter',
@@ -455,7 +462,7 @@ const da: Messages = {
       },
       {
         q: 'Kan jeg opgradere senere?',
-        a: 'Ja. Hvis du vokser ud af livstidsplanen, kan du når som helst skifte til en månedlig Business- eller Advanced-plan.',
+        a: 'Ja. Hvis du vokser ud af livstidsplanen, kan du når som helst skifte til den månedlige Business-plan eller tale med os om Enterprise.',
       },
       {
         q: 'Findes aftalen på AppSumo eller andre markedspladser?',

@@ -17,7 +17,7 @@ const nl: Messages = {
     language: 'Taal',
     faq: 'FAQ',
     faqTitle: 'Veelgestelde vragen',
-    freeNote: 'Gratis voor 10 links met klikstatistieken, geen creditcard nodig.',
+    freeNote: 'Gratis voor 50 links met klikstatistieken, geen creditcard nodig.',
     included: 'Inbegrepen',
     notIncluded: 'Niet inbegrepen',
   },
@@ -124,7 +124,7 @@ const nl: Messages = {
     customPricing: 'Prijs op maat',
     free: {
       tagline: 'Probeer het met een paar links',
-      links: '10 links',
+      links: '50 links',
       analytics: '7 dagen klikstatistieken',
       features: [
         'Vervaldatum en wachtwoorden',
@@ -134,26 +134,32 @@ const nl: Messages = {
       ],
       cta: 'Gratis beginnen',
     },
+    starter: {
+      tagline: 'Voor zelfstandige marketeers en makers',
+      links: '500 links per maand',
+      analytics: '30 dagen klikstatistieken',
+      features: [
+        '2 domeinen op de whitelist',
+        '3 projecten',
+        '2 teamleden',
+        'Klikrapporten',
+        'API-toegang',
+      ],
+      cta: 'Kies Starter',
+    },
     pro: {
       tagline: 'Voor marketingteams',
-      links: '1.000 links per maand',
-      analytics: '30 dagen klikstatistieken',
-      features: ['3 eigen domeinen', '5 projecten', '5 teamleden', 'Klikrapporten', 'API-toegang'],
+      links: '2.000 links per maand',
+      analytics: '60 dagen klikstatistieken',
+      features: ['10 domeinen op de whitelist', '5 projecten', '5 teamleden', 'Alles uit Starter'],
       cta: 'Kies Pro',
     },
     business: {
       tagline: 'Voor bureaus en merken',
-      links: '10.000 links per maand',
-      analytics: '60 dagen klikstatistieken',
-      features: ['5 eigen domeinen', '10 projecten', '10 teamleden', 'Alles uit Pro'],
-      cta: 'Kies Business',
-    },
-    advanced: {
-      tagline: 'Voor teams met grote volumes',
-      links: '50.000 links per maand',
+      links: '15.000 links per maand',
       analytics: '90 dagen klikstatistieken',
-      features: ['10 eigen domeinen', '25 projecten', '20 teamleden', 'Alles uit Business'],
-      cta: 'Kies Advanced',
+      features: ['25 domeinen op de whitelist', '10 projecten', '10 teamleden', 'Alles uit Pro'],
+      cta: 'Kies Business',
     },
     enterprise: {
       tagline: 'Voor organisaties met eisen op het gebied van beveiliging, compliance en inkoop.',
@@ -161,8 +167,8 @@ const nl: Messages = {
         'Onbeperkt links',
         'Onbeperkt teamleden',
         'Ondersteuning bij compliance-audits',
-        '90 dagen klikstatistieken',
-        'Eigen domeinen en projecten passend bij je merken',
+        'Tot 3 jaar klikstatistieken',
+        'Domeinen op de whitelist en projecten passend bij je merken',
         'Contract, facturatie en verwerkersovereenkomst',
         'Persoonlijke support',
       ],
@@ -171,7 +177,7 @@ const nl: Messages = {
     faqs: [
       {
         q: 'Is er een gratis abonnement?',
-        a: 'Ja. Het gratis abonnement bevat 10 korte links met 7 dagen klikstatistieken, zonder creditcard. Upgrade wanneer je meer links, een eigen domein of API-toegang nodig hebt.',
+        a: 'Ja. Het gratis abonnement bevat 50 korte links met 7 dagen klikstatistieken, zonder creditcard. Upgrade wanneer je meer links, meer domeinen op de whitelist of API-toegang nodig hebt.',
       },
       {
         q: 'Hoe worden links geteld bij betaalde abonnementen?',
@@ -187,20 +193,20 @@ const nl: Messages = {
       },
       {
         q: 'Hebben jullie een lifetime deal?',
-        a: 'Ja, voor de eerste 200 klanten. Met een eenmalige betaling van $ 149 krijg je de functies van het Pro-abonnement met 1.000 links per maand, zonder maandelijks abonnement.',
+        a: 'Ja, voor de eerste 200 klanten. Met een eenmalige betaling van $ 99 krijg je de functies van het Pro-abonnement met 2.000 links per maand, zonder maandelijks abonnement.',
       },
       {
         q: 'Wat zit er in het Enterprise-abonnement?',
-        a: 'Onbeperkt links en teamleden, 90 dagen klikstatistieken, hulp bij compliance- en beveiligingsaudits, een contract met facturatie en een verwerkersovereenkomst, en persoonlijke support. Neem contact op voor een offerte.',
+        a: 'Onbeperkt links en teamleden, tot 3 jaar klikstatistieken, hulp bij compliance- en beveiligingsaudits, een contract met facturatie en een verwerkersovereenkomst, en persoonlijke support. Neem contact op voor een offerte.',
       },
       {
-        q: 'Kan ik mijn eigen domein gebruiken?',
-        a: 'Ja. Betaalde abonnementen bevatten eigen domeinen, zodat je korte links eruitzien als go.jouwmerk.nl/aanbieding in plaats van een generiek kort domein.',
+        q: 'Kan ik links naar mijn eigen website verkorten?',
+        a: 'Ja. Verifieer je domein om het aan je whitelist toe te voegen en verkort daarna links naar elke pagina erop of op de subdomeinen. Elk abonnement bevat een aantal domeinen op de whitelist, en populaire sites als YouTube, LinkedIn en Amazon zijn in elk abonnement toegestaan.',
       },
     ],
   },
   lifetime: {
-    links: '1.000 links per maand',
+    links: '2.000 links per maand',
     claimed: '{claimed} van {spots} geclaimd',
     left: 'Nog maar {left} over',
     progress: 'Geclaimde plekken van de lifetime deal',
@@ -269,8 +275,8 @@ const nl: Messages = {
     extrasTitle: 'Gebouwd voor teams die veel links delen',
     extras: {
       domains: {
-        title: 'Eigen domeinen',
-        body: 'Korte links op go.jouwmerk.nl in plaats van een generiek domein.',
+        title: 'Domein-whitelist',
+        body: 'Verifieer je eigen domeinen één keer en verkort daarna links naar elke pagina erop.',
       },
       projects: { title: 'Projecten', body: 'Groepeer links per campagne, klant of merk.' },
       team: {
@@ -299,15 +305,15 @@ const nl: Messages = {
       },
       {
         q: 'Is Shortener.dev gratis?',
-        a: 'Ja. Het gratis abonnement bevat 10 korte links met klikstatistieken, en je kunt direct via het formulier op deze pagina inloggen en een link verkorten. Betaalde abonnementen beginnen bij $ 29 per maand.',
+        a: 'Ja. Het gratis abonnement bevat 50 korte links met klikstatistieken, en je kunt direct via het formulier op deze pagina inloggen en een link verkorten. Betaalde abonnementen beginnen bij $ 9 per maand.',
       },
       {
         q: 'Kan ik de bestemming van een korte link wijzigen nadat ik hem heb gedeeld?',
         a: 'Ja. Wijzig de bestemming wanneer je wilt via het dashboard of de API, en dezelfde korte link stuurt bezoekers naar de nieuwe pagina.',
       },
       {
-        q: 'Kan ik mijn eigen domein gebruiken?',
-        a: 'Ja. Betaalde abonnementen bevatten eigen domeinen, zodat je links eruitzien als go.jouwmerk.nl/aanbieding.',
+        q: 'Kan ik links naar mijn eigen website verkorten?',
+        a: 'Ja. Verifieer je domein één keer en het komt op je whitelist, zodat je links naar elke pagina erop kunt verkorten.',
       },
       {
         q: 'Wat zit er in de klikstatistieken?',
@@ -322,19 +328,19 @@ const nl: Messages = {
   pricing: {
     metaTitle: 'Prijzen',
     metaDescription:
-      'Verkort links gratis of kies een abonnement vanaf $ 29 per maand voor eigen domeinen, teamleden, klikrapporten en API-toegang. Enterprise voegt onbeperkt links en compliance-ondersteuning toe.',
+      'Verkort links gratis of kies een abonnement vanaf $ 9 per maand voor meer domeinen op de whitelist, teamleden, klikrapporten en API-toegang. Enterprise voegt onbeperkt links en compliance-ondersteuning toe.',
     eyebrow: 'Prijzen',
     title: 'Betaal voor links,',
     accent: 'niet voor klikken.',
     description:
-      'Begin gratis met 10 links. Betaalde abonnementen voegen eigen domeinen, teamleden, klikrapporten en de API toe. Elk abonnement heeft onbeperkt klikken.',
+      'Begin gratis met 50 links. Betaalde abonnementen voegen domeinen op de whitelist, teamleden, klikrapporten en de API toe. Elk abonnement heeft onbeperkt klikken.',
     compare: 'Abonnementen vergelijken',
     feature: 'Functie',
     rows: {
       shortLinks: 'Korte links',
       clicks: 'Klikken',
       history: 'Statistiekhistorie',
-      domains: 'Eigen domeinen',
+      domains: 'Domein-whitelist',
       projects: 'Projecten',
       team: 'Teamleden',
       reports: 'Klikrapporten',
@@ -350,6 +356,7 @@ const nl: Messages = {
     custom: 'Op maat',
     perMonth: '{n}/mnd',
     days: '{n} dagen',
+    years: 'Tot {n} jaar',
     note: 'Prijzen in USD, exclusief lokale belastingen. Betaalde abonnementen tellen links die in de afgelopen 30 dagen zijn gemaakt.',
   },
   shortLinks: {
@@ -406,7 +413,7 @@ const nl: Messages = {
       },
       {
         q: 'Zitten deze opties in het gratis abonnement?',
-        a: 'Ja. Elke linkoptie is beschikbaar in elk abonnement. Betaalde abonnementen voegen meer links, eigen domeinen, teamleden, klikrapporten en de API toe.',
+        a: 'Ja. Elke linkoptie is beschikbaar in elk abonnement. Betaalde abonnementen voegen meer links, domeinen op de whitelist, teamleden, klikrapporten en de API toe.',
       },
       {
         q: 'Kan ik een link bewerken nadat ik hem heb gemaakt?',
@@ -417,20 +424,20 @@ const nl: Messages = {
   lifetimeDeal: {
     metaTitle: 'Lifetime deal: URL-verkorter',
     metaDescription:
-      'Betaal eenmalig $ {price} voor een URL-verkorter met {links}, eigen domein, klikstatistieken, UTM-builder, social-voorbeeld, wachtwoorden en targeting op apparaat en locatie.',
+      'Betaal eenmalig $ {price} voor een URL-verkorter met {links}, 10 domeinen op de whitelist, klikstatistieken, UTM-builder, social-voorbeeld, wachtwoorden en targeting op apparaat en locatie.',
     eyebrow: 'Lifetime deal',
     title: 'Eenmalig betalen.',
     accent: 'Elke maand verkorten.',
     description:
-      'Krijg het Pro-abonnement voor eenmalig $ {price}: {links} met klikstatistieken, eigen domeinen en de API. Geen abonnement. Alleen voor de eerste {spots} klanten.',
+      'Krijg het Pro-abonnement voor eenmalig $ {price}: {links} met klikstatistieken, 10 domeinen op de whitelist en de API. Geen abonnement. Alleen voor de eerste {spots} klanten.',
     oneTimePrice: 'Eenmalige prijs',
     buy: 'Lifetime deal kopen',
     rows: {
       links: 'Links',
       analytics: 'Klikstatistieken',
-      analyticsValue: '30 dagen historie',
-      domains: 'Eigen domeinen',
-      domainsValue: '3 domeinen',
+      analyticsValue: '60 dagen historie',
+      domains: 'Domein-whitelist',
+      domainsValue: '10 domeinen',
       team: 'Teamleden',
       projects: 'Projecten',
       reports: 'Klikrapporten',
@@ -454,7 +461,7 @@ const nl: Messages = {
       },
       {
         q: 'Kan ik later upgraden?',
-        a: 'Ja. Als je het lifetime-abonnement ontgroeit, kun je op elk moment overstappen naar een maandelijks Business- of Advanced-abonnement.',
+        a: 'Ja. Als je het lifetime-abonnement ontgroeit, kun je op elk moment overstappen naar het maandelijkse Business-abonnement of met ons praten over Enterprise.',
       },
       {
         q: 'Staat deze deal op AppSumo of andere marktplaatsen?',

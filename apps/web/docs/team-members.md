@@ -19,7 +19,7 @@ Team members share your account's links, domains and analytics. Open **Settings*
 
 You'll see "Invitation sent to" followed by their email address, and they're added to the list.
 
-The number of team members depends on your plan: 5 on Pro, 10 on Business and 20 on Advanced. See [pricing](/pricing).
+The number of team members depends on your plan: 2 on Starter, 5 on Pro and 10 on Business, and unlimited on Enterprise. See [pricing](/pricing).
 
 ## Change a member's name or role
 

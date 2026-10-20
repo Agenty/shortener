@@ -17,7 +17,7 @@ const vi: Messages = {
     language: 'Ngôn ngữ',
     faq: 'FAQ',
     faqTitle: 'Câu hỏi thường gặp',
-    freeNote: 'Miễn phí 10 liên kết kèm thống kê lượt nhấp, không cần thẻ.',
+    freeNote: 'Miễn phí 50 liên kết kèm thống kê lượt nhấp, không cần thẻ.',
     included: 'Có',
     notIncluded: 'Không có',
   },
@@ -124,7 +124,7 @@ const vi: Messages = {
     customPricing: 'Giá tùy chỉnh',
     free: {
       tagline: 'Dùng thử với vài liên kết',
-      links: '10 liên kết',
+      links: '50 liên kết',
       analytics: 'Thống kê lượt nhấp 7 ngày',
       features: [
         'Hết hạn liên kết và mật khẩu',
@@ -134,32 +134,42 @@ const vi: Messages = {
       ],
       cta: 'Bắt đầu miễn phí',
     },
-    pro: {
-      tagline: 'Cho đội ngũ marketing',
-      links: '1.000 liên kết mỗi tháng',
+    starter: {
+      tagline: 'Cho người làm marketing độc lập và nhà sáng tạo',
+      links: '500 liên kết mỗi tháng',
       analytics: 'Thống kê lượt nhấp 30 ngày',
       features: [
-        '3 tên miền tùy chỉnh',
-        '5 dự án',
-        '5 thành viên',
+        '2 tên miền trong danh sách trắng',
+        '3 dự án',
+        '2 thành viên',
         'Báo cáo lượt nhấp',
         'Truy cập API',
+      ],
+      cta: 'Chọn Starter',
+    },
+    pro: {
+      tagline: 'Cho đội ngũ marketing',
+      links: '2.000 liên kết mỗi tháng',
+      analytics: 'Thống kê lượt nhấp 60 ngày',
+      features: [
+        '10 tên miền trong danh sách trắng',
+        '5 dự án',
+        '5 thành viên',
+        'Mọi tính năng của Starter',
       ],
       cta: 'Chọn Pro',
     },
     business: {
       tagline: 'Cho agency và thương hiệu',
-      links: '10.000 liên kết mỗi tháng',
-      analytics: 'Thống kê lượt nhấp 60 ngày',
-      features: ['5 tên miền tùy chỉnh', '10 dự án', '10 thành viên', 'Mọi tính năng của Pro'],
-      cta: 'Chọn Business',
-    },
-    advanced: {
-      tagline: 'Cho đội ngũ có khối lượng lớn',
-      links: '50.000 liên kết mỗi tháng',
+      links: '15.000 liên kết mỗi tháng',
       analytics: 'Thống kê lượt nhấp 90 ngày',
-      features: ['10 tên miền tùy chỉnh', '25 dự án', '20 thành viên', 'Mọi tính năng của Business'],
-      cta: 'Chọn Advanced',
+      features: [
+        '25 tên miền trong danh sách trắng',
+        '10 dự án',
+        '10 thành viên',
+        'Mọi tính năng của Pro',
+      ],
+      cta: 'Chọn Business',
     },
     enterprise: {
       tagline: 'Cho tổ chức có yêu cầu về bảo mật, tuân thủ và mua sắm.',
@@ -167,8 +177,8 @@ const vi: Messages = {
         'Liên kết không giới hạn',
         'Thành viên không giới hạn',
         'Hỗ trợ kiểm toán tuân thủ',
-        'Thống kê lượt nhấp 90 ngày',
-        'Tên miền và dự án phù hợp với thương hiệu của bạn',
+        'Thống kê lượt nhấp đến 3 năm',
+        'Tên miền trong danh sách trắng và dự án phù hợp với thương hiệu của bạn',
         'Hợp đồng, hóa đơn và DPA',
         'Hỗ trợ riêng',
       ],
@@ -177,7 +187,7 @@ const vi: Messages = {
     faqs: [
       {
         q: 'Có gói miễn phí không?',
-        a: 'Có. Gói miễn phí gồm 10 liên kết rút gọn với thống kê lượt nhấp 7 ngày, không cần thẻ. Nâng cấp khi bạn cần thêm liên kết, tên miền riêng hoặc quyền truy cập API.',
+        a: 'Có. Gói miễn phí gồm 50 liên kết rút gọn với thống kê lượt nhấp 7 ngày, không cần thẻ. Nâng cấp khi bạn cần thêm liên kết, thêm tên miền trong danh sách trắng hoặc quyền truy cập API.',
       },
       {
         q: 'Liên kết được tính thế nào trên các gói trả phí?',
@@ -193,20 +203,20 @@ const vi: Messages = {
       },
       {
         q: 'Có ưu đãi trọn đời không?',
-        a: 'Có, cho 200 khách hàng đầu tiên. Thanh toán một lần $149 để nhận tính năng gói Pro với 1.000 liên kết mỗi tháng, không cần đăng ký hằng tháng.',
+        a: 'Có, cho 200 khách hàng đầu tiên. Thanh toán một lần $99 để nhận tính năng gói Pro với 2.000 liên kết mỗi tháng, không cần đăng ký hằng tháng.',
       },
       {
         q: 'Gói Doanh nghiệp gồm những gì?',
-        a: 'Liên kết và thành viên không giới hạn, thống kê lượt nhấp 90 ngày, hỗ trợ kiểm toán tuân thủ và bảo mật, hợp đồng kèm hóa đơn và DPA, cùng hỗ trợ riêng. Liên hệ để nhận báo giá.',
+        a: 'Liên kết và thành viên không giới hạn, thống kê lượt nhấp đến 3 năm, hỗ trợ kiểm toán tuân thủ và bảo mật, hợp đồng kèm hóa đơn và DPA, cùng hỗ trợ riêng. Liên hệ để nhận báo giá.',
       },
       {
-        q: 'Tôi có thể dùng tên miền riêng không?',
-        a: 'Có. Các gói trả phí có tên miền tùy chỉnh, để liên kết rút gọn của bạn trông như go.thuonghieu.com/uudai thay vì một tên miền rút gọn chung chung.',
+        q: 'Tôi có thể rút gọn liên kết đến trang web của mình không?',
+        a: 'Có. Xác minh tên miền để thêm vào danh sách trắng, rồi rút gọn liên kết đến bất kỳ trang nào trên tên miền đó hoặc tên miền phụ. Mỗi gói có một số tên miền trong danh sách trắng, và các trang phổ biến như YouTube, LinkedIn và Amazon được cho phép trên mọi gói.',
       },
     ],
   },
   lifetime: {
-    links: '1.000 liên kết mỗi tháng',
+    links: '2.000 liên kết mỗi tháng',
     claimed: 'Đã nhận {claimed}/{spots}',
     left: 'Chỉ còn {left}',
     progress: 'Số suất ưu đãi trọn đời đã được nhận',
@@ -276,8 +286,8 @@ const vi: Messages = {
     extrasTitle: 'Dành cho đội ngũ chia sẻ nhiều liên kết',
     extras: {
       domains: {
-        title: 'Tên miền tùy chỉnh',
-        body: 'Liên kết rút gọn trên go.thuonghieu.com thay vì tên miền chung.',
+        title: 'Danh sách trắng tên miền',
+        body: 'Xác minh tên miền của bạn một lần, rồi rút gọn liên kết đến bất kỳ trang nào trên đó.',
       },
       projects: { title: 'Dự án', body: 'Nhóm liên kết theo chiến dịch, khách hàng hoặc thương hiệu.' },
       team: {
@@ -306,15 +316,15 @@ const vi: Messages = {
       },
       {
         q: 'Shortener.dev có miễn phí không?',
-        a: 'Có. Gói miễn phí gồm 10 liên kết rút gọn kèm thống kê lượt nhấp, và bạn có thể đăng nhập rồi rút gọn liên kết ngay từ biểu mẫu trên trang này. Gói trả phí từ $29 mỗi tháng.',
+        a: 'Có. Gói miễn phí gồm 50 liên kết rút gọn kèm thống kê lượt nhấp, và bạn có thể đăng nhập rồi rút gọn liên kết ngay từ biểu mẫu trên trang này. Gói trả phí từ $9 mỗi tháng.',
       },
       {
         q: 'Tôi có thể đổi đích đến của liên kết rút gọn sau khi chia sẻ không?',
         a: 'Có. Sửa đích đến bất cứ lúc nào từ bảng điều khiển hoặc API, và cùng liên kết rút gọn đó sẽ đưa khách đến trang mới.',
       },
       {
-        q: 'Tôi có thể dùng tên miền riêng không?',
-        a: 'Có. Các gói trả phí có tên miền tùy chỉnh, để liên kết của bạn trông như go.thuonghieu.com/uudai.',
+        q: 'Tôi có thể rút gọn liên kết đến trang web của mình không?',
+        a: 'Có. Xác minh tên miền một lần và nó sẽ vào danh sách trắng của bạn, để bạn rút gọn liên kết đến bất kỳ trang nào trên đó.',
       },
       {
         q: 'Thống kê lượt nhấp gồm những gì?',
@@ -329,19 +339,19 @@ const vi: Messages = {
   pricing: {
     metaTitle: 'Bảng giá',
     metaDescription:
-      'Rút gọn liên kết miễn phí, hoặc chọn gói từ $29 mỗi tháng để có tên miền tùy chỉnh, thành viên, báo cáo lượt nhấp và truy cập API. Gói Doanh nghiệp thêm liên kết không giới hạn và hỗ trợ tuân thủ.',
+      'Rút gọn liên kết miễn phí, hoặc chọn gói từ $9 mỗi tháng để có thêm tên miền trong danh sách trắng, thành viên, báo cáo lượt nhấp và truy cập API. Gói Doanh nghiệp thêm liên kết không giới hạn và hỗ trợ tuân thủ.',
     eyebrow: 'Bảng giá',
     title: 'Trả tiền cho liên kết,',
     accent: 'không phải cho lượt nhấp.',
     description:
-      'Bắt đầu miễn phí với 10 liên kết. Các gói trả phí thêm tên miền tùy chỉnh, thành viên, báo cáo lượt nhấp và API. Mọi gói đều có lượt nhấp không giới hạn.',
+      'Bắt đầu miễn phí với 50 liên kết. Các gói trả phí thêm tên miền trong danh sách trắng, thành viên, báo cáo lượt nhấp và API. Mọi gói đều có lượt nhấp không giới hạn.',
     compare: 'So sánh các gói',
     feature: 'Tính năng',
     rows: {
       shortLinks: 'Liên kết rút gọn',
       clicks: 'Lượt nhấp',
       history: 'Lịch sử thống kê',
-      domains: 'Tên miền tùy chỉnh',
+      domains: 'Danh sách trắng tên miền',
       projects: 'Dự án',
       team: 'Thành viên',
       reports: 'Báo cáo lượt nhấp',
@@ -357,6 +367,7 @@ const vi: Messages = {
     custom: 'Tùy chỉnh',
     perMonth: '{n}/tháng',
     days: '{n} ngày',
+    years: 'Đến {n} năm',
     note: 'Giá tính bằng USD, chưa gồm thuế địa phương. Các gói trả phí tính liên kết được tạo trong 30 ngày gần nhất.',
   },
   shortLinks: {
@@ -413,7 +424,7 @@ const vi: Messages = {
       },
       {
         q: 'Các tùy chọn này có trên gói miễn phí không?',
-        a: 'Có. Mọi tùy chọn liên kết đều có trên mọi gói. Các gói trả phí thêm nhiều liên kết hơn, tên miền tùy chỉnh, thành viên, báo cáo lượt nhấp và API.',
+        a: 'Có. Mọi tùy chọn liên kết đều có trên mọi gói. Các gói trả phí thêm nhiều liên kết hơn, tên miền trong danh sách trắng, thành viên, báo cáo lượt nhấp và API.',
       },
       {
         q: 'Tôi có thể sửa liên kết sau khi tạo không?',
@@ -424,20 +435,20 @@ const vi: Messages = {
   lifetimeDeal: {
     metaTitle: 'Ưu đãi trọn đời: công cụ rút gọn URL',
     metaDescription:
-      'Trả ${price} một lần cho công cụ rút gọn URL với {links}, tên miền tùy chỉnh, thống kê lượt nhấp, trình tạo UTM, xem trước mạng xã hội, mật khẩu và nhắm mục tiêu theo thiết bị, vị trí.',
+      'Trả ${price} một lần cho công cụ rút gọn URL với {links}, 10 tên miền trong danh sách trắng, thống kê lượt nhấp, trình tạo UTM, xem trước mạng xã hội, mật khẩu và nhắm mục tiêu theo thiết bị, vị trí.',
     eyebrow: 'Ưu đãi trọn đời',
     title: 'Trả một lần.',
     accent: 'Rút gọn mỗi tháng.',
     description:
-      'Nhận gói Pro với khoản thanh toán một lần ${price}: {links} kèm thống kê lượt nhấp, tên miền tùy chỉnh và API. Không đăng ký. Chỉ cho {spots} khách hàng đầu tiên.',
+      'Nhận gói Pro với khoản thanh toán một lần ${price}: {links} kèm thống kê lượt nhấp, 10 tên miền trong danh sách trắng và API. Không đăng ký. Chỉ cho {spots} khách hàng đầu tiên.',
     oneTimePrice: 'Giá trả một lần',
     buy: 'Mua ưu đãi trọn đời',
     rows: {
       links: 'Liên kết',
       analytics: 'Thống kê lượt nhấp',
-      analyticsValue: 'Lịch sử 30 ngày',
-      domains: 'Tên miền tùy chỉnh',
-      domainsValue: '3 tên miền',
+      analyticsValue: 'Lịch sử 60 ngày',
+      domains: 'Danh sách trắng tên miền',
+      domainsValue: '10 tên miền',
       team: 'Thành viên',
       projects: 'Dự án',
       reports: 'Báo cáo lượt nhấp',
@@ -461,7 +472,7 @@ const vi: Messages = {
       },
       {
         q: 'Tôi có thể nâng cấp sau không?',
-        a: 'Có. Nếu gói trọn đời không còn đủ, bạn có thể chuyển sang gói Business hoặc Advanced hằng tháng bất cứ lúc nào.',
+        a: 'Có. Nếu gói trọn đời không còn đủ, bạn có thể chuyển sang gói Business hằng tháng hoặc trao đổi với chúng tôi về gói Enterprise bất cứ lúc nào.',
       },
       {
         q: 'Ưu đãi này có trên AppSumo hay sàn khác không?',

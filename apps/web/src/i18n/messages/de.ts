@@ -17,7 +17,7 @@ const de: Messages = {
     language: 'Sprache',
     faq: 'FAQ',
     faqTitle: 'Häufige Fragen',
-    freeNote: 'Kostenlos für 10 Links mit Klickstatistiken, ohne Kreditkarte.',
+    freeNote: 'Kostenlos für 50 Links mit Klickstatistiken, ohne Kreditkarte.',
     included: 'Enthalten',
     notIncluded: 'Nicht enthalten',
   },
@@ -124,7 +124,7 @@ const de: Messages = {
     customPricing: 'Individueller Preis',
     free: {
       tagline: 'Zum Ausprobieren mit ein paar Links',
-      links: '10 Links',
+      links: '50 Links',
       analytics: '7 Tage Klickstatistiken',
       features: [
         'Ablaufdatum und Passwörter',
@@ -134,26 +134,32 @@ const de: Messages = {
       ],
       cta: 'Kostenlos starten',
     },
+    starter: {
+      tagline: 'Für Solo-Marketer und Creator',
+      links: '500 Links pro Monat',
+      analytics: '30 Tage Klickstatistiken',
+      features: [
+        '2 Whitelist-Domains',
+        '3 Projekte',
+        '2 Teammitglieder',
+        'Klickberichte',
+        'API-Zugang',
+      ],
+      cta: 'Starter wählen',
+    },
     pro: {
       tagline: 'Für Marketingteams',
-      links: '1.000 Links pro Monat',
-      analytics: '30 Tage Klickstatistiken',
-      features: ['3 eigene Domains', '5 Projekte', '5 Teammitglieder', 'Klickberichte', 'API-Zugang'],
+      links: '2.000 Links pro Monat',
+      analytics: '60 Tage Klickstatistiken',
+      features: ['10 Whitelist-Domains', '5 Projekte', '5 Teammitglieder', 'Alles aus Starter'],
       cta: 'Pro wählen',
     },
     business: {
       tagline: 'Für Agenturen und Marken',
-      links: '10.000 Links pro Monat',
-      analytics: '60 Tage Klickstatistiken',
-      features: ['5 eigene Domains', '10 Projekte', '10 Teammitglieder', 'Alles aus Pro'],
-      cta: 'Business wählen',
-    },
-    advanced: {
-      tagline: 'Für Teams mit hohem Volumen',
-      links: '50.000 Links pro Monat',
+      links: '15.000 Links pro Monat',
       analytics: '90 Tage Klickstatistiken',
-      features: ['10 eigene Domains', '25 Projekte', '20 Teammitglieder', 'Alles aus Business'],
-      cta: 'Advanced wählen',
+      features: ['25 Whitelist-Domains', '10 Projekte', '10 Teammitglieder', 'Alles aus Pro'],
+      cta: 'Business wählen',
     },
     enterprise: {
       tagline: 'Für Organisationen mit Anforderungen an Sicherheit, Compliance und Einkauf.',
@@ -161,8 +167,8 @@ const de: Messages = {
         'Unbegrenzte Links',
         'Unbegrenzte Teammitglieder',
         'Unterstützung bei Compliance-Audits',
-        '90 Tage Klickstatistiken',
-        'Eigene Domains und Projekte passend zu deinen Marken',
+        'Bis zu 3 Jahre Klickstatistiken',
+        'Whitelist-Domains und Projekte passend zu deinen Marken',
         'Vertrag, Rechnung und AVV',
         'Persönlicher Support',
       ],
@@ -171,7 +177,7 @@ const de: Messages = {
     faqs: [
       {
         q: 'Gibt es einen kostenlosen Tarif?',
-        a: 'Ja. Der kostenlose Tarif umfasst 10 Kurzlinks mit 7 Tagen Klickstatistiken, ohne Kreditkarte. Wechsle in einen bezahlten Tarif, wenn du mehr Links, eine eigene Domain oder API-Zugang brauchst.',
+        a: 'Ja. Der kostenlose Tarif umfasst 50 Kurzlinks mit 7 Tagen Klickstatistiken, ohne Kreditkarte. Wechsle in einen bezahlten Tarif, wenn du mehr Links, mehr Whitelist-Domains oder API-Zugang brauchst.',
       },
       {
         q: 'Wie werden Links in bezahlten Tarifen gezählt?',
@@ -187,20 +193,20 @@ const de: Messages = {
       },
       {
         q: 'Gibt es einen Lifetime-Deal?',
-        a: 'Ja, für die ersten 200 Kunden. Eine Einmalzahlung von 149 $ gibt dir die Funktionen des Pro-Tarifs mit 1.000 Links pro Monat, ohne monatliches Abo.',
+        a: 'Ja, für die ersten 200 Kunden. Eine Einmalzahlung von 99 $ gibt dir die Funktionen des Pro-Tarifs mit 2.000 Links pro Monat, ohne monatliches Abo.',
       },
       {
         q: 'Was umfasst der Enterprise-Tarif?',
-        a: 'Unbegrenzte Links und Teammitglieder, 90 Tage Klickstatistiken, Hilfe bei Compliance- und Sicherheitsaudits, einen Vertrag mit Rechnung und AVV sowie persönlichen Support. Kontaktiere uns für ein Angebot.',
+        a: 'Unbegrenzte Links und Teammitglieder, bis zu 3 Jahre Klickstatistiken, Hilfe bei Compliance- und Sicherheitsaudits, einen Vertrag mit Rechnung und AVV sowie persönlichen Support. Kontaktiere uns für ein Angebot.',
       },
       {
-        q: 'Kann ich meine eigene Domain verwenden?',
-        a: 'Ja. Bezahlte Tarife enthalten eigene Domains, sodass deine Kurzlinks wie go.deinemarke.de/angebot aussehen statt wie eine generische Kurzdomain.',
+        q: 'Kann ich Links zu meiner eigenen Website kürzen?',
+        a: 'Ja. Verifiziere deine Domain, um sie auf deine Whitelist zu setzen, und kürze dann Links zu jeder Seite darauf oder auf ihren Subdomains. Jeder Tarif enthält eine bestimmte Anzahl an Whitelist-Domains, und beliebte Websites wie YouTube, LinkedIn und Amazon sind in jedem Tarif erlaubt.',
       },
     ],
   },
   lifetime: {
-    links: '1.000 Links pro Monat',
+    links: '2.000 Links pro Monat',
     claimed: '{claimed} von {spots} vergeben',
     left: 'Nur noch {left} frei',
     progress: 'Vergebene Lifetime-Deal-Plätze',
@@ -269,8 +275,8 @@ const de: Messages = {
     extrasTitle: 'Gebaut für Teams, die viele Links teilen',
     extras: {
       domains: {
-        title: 'Eigene Domains',
-        body: 'Kurzlinks auf go.deinemarke.de statt auf einer generischen Domain.',
+        title: 'Domain-Whitelist',
+        body: 'Verifiziere deine eigenen Domains einmal und kürze dann Links zu jeder Seite darauf.',
       },
       projects: { title: 'Projekte', body: 'Gruppiere Links nach Kampagne, Kunde oder Marke.' },
       team: {
@@ -299,15 +305,15 @@ const de: Messages = {
       },
       {
         q: 'Ist Shortener.dev kostenlos?',
-        a: 'Ja. Der kostenlose Tarif umfasst 10 Kurzlinks mit Klickstatistiken, und du kannst dich direkt über das Formular auf dieser Seite anmelden und einen Link kürzen. Bezahlte Tarife beginnen bei 29 $ pro Monat.',
+        a: 'Ja. Der kostenlose Tarif umfasst 50 Kurzlinks mit Klickstatistiken, und du kannst dich direkt über das Formular auf dieser Seite anmelden und einen Link kürzen. Bezahlte Tarife beginnen bei 9 $ pro Monat.',
       },
       {
         q: 'Kann ich das Ziel eines Kurzlinks nach dem Teilen ändern?',
         a: 'Ja. Ändere das Ziel jederzeit im Dashboard oder über die API, und derselbe Kurzlink führt Besucher auf die neue Seite.',
       },
       {
-        q: 'Kann ich meine eigene Domain verwenden?',
-        a: 'Ja. Bezahlte Tarife enthalten eigene Domains, sodass deine Links wie go.deinemarke.de/angebot aussehen.',
+        q: 'Kann ich Links zu meiner eigenen Website kürzen?',
+        a: 'Ja. Verifiziere deine Domain einmal und sie kommt auf deine Whitelist, sodass du Links zu jeder Seite darauf kürzen kannst.',
       },
       {
         q: 'Was umfassen die Klickstatistiken?',
@@ -322,19 +328,19 @@ const de: Messages = {
   pricing: {
     metaTitle: 'Preise',
     metaDescription:
-      'Kürze Links kostenlos oder wähle einen Tarif ab 29 $ pro Monat für eigene Domains, Teammitglieder, Klickberichte und API-Zugang. Enterprise bietet unbegrenzte Links und Compliance-Unterstützung.',
+      'Kürze Links kostenlos oder wähle einen Tarif ab 9 $ pro Monat für mehr Whitelist-Domains, Teammitglieder, Klickberichte und API-Zugang. Enterprise bietet unbegrenzte Links und Compliance-Unterstützung.',
     eyebrow: 'Preise',
     title: 'Zahle für Links,',
     accent: 'nicht für Klicks.',
     description:
-      'Starte kostenlos mit 10 Links. Bezahlte Tarife bieten eigene Domains, Teammitglieder, Klickberichte und die API. Jeder Tarif hat unbegrenzte Klicks.',
+      'Starte kostenlos mit 50 Links. Bezahlte Tarife bieten Whitelist-Domains, Teammitglieder, Klickberichte und die API. Jeder Tarif hat unbegrenzte Klicks.',
     compare: 'Tarife vergleichen',
     feature: 'Funktion',
     rows: {
       shortLinks: 'Kurzlinks',
       clicks: 'Klicks',
       history: 'Statistik-Verlauf',
-      domains: 'Eigene Domains',
+      domains: 'Domain-Whitelist',
       projects: 'Projekte',
       team: 'Teammitglieder',
       reports: 'Klickberichte',
@@ -350,6 +356,7 @@ const de: Messages = {
     custom: 'Individuell',
     perMonth: '{n}/Monat',
     days: '{n} Tage',
+    years: 'Bis zu {n} Jahre',
     note: 'Preise in USD, zzgl. lokaler Steuern. Bezahlte Tarife zählen Links, die in den letzten 30 Tagen erstellt wurden.',
   },
   shortLinks: {
@@ -406,7 +413,7 @@ const de: Messages = {
       },
       {
         q: 'Gibt es diese Optionen im kostenlosen Tarif?',
-        a: 'Ja. Jede Link-Option ist in jedem Tarif verfügbar. Bezahlte Tarife bieten mehr Links, eigene Domains, Teammitglieder, Klickberichte und die API.',
+        a: 'Ja. Jede Link-Option ist in jedem Tarif verfügbar. Bezahlte Tarife bieten mehr Links, Whitelist-Domains, Teammitglieder, Klickberichte und die API.',
       },
       {
         q: 'Kann ich einen Link nach dem Erstellen bearbeiten?',
@@ -417,20 +424,20 @@ const de: Messages = {
   lifetimeDeal: {
     metaTitle: 'Lifetime-Deal: URL-Shortener',
     metaDescription:
-      'Zahle einmal {price} $ für einen URL-Shortener mit {links}, eigener Domain, Klickstatistiken, UTM-Builder, Social-Vorschau, Passwörtern sowie Geräte- und Geo-Targeting.',
+      'Zahle einmal {price} $ für einen URL-Shortener mit {links}, 10 Whitelist-Domains, Klickstatistiken, UTM-Builder, Social-Vorschau, Passwörtern sowie Geräte- und Geo-Targeting.',
     eyebrow: 'Lifetime-Deal',
     title: 'Einmal zahlen.',
     accent: 'Jeden Monat kürzen.',
     description:
-      'Hol dir den Pro-Tarif für einmalig {price} $: {links} mit Klickstatistiken, eigenen Domains und der API. Kein Abo. Nur für die ersten {spots} Kunden.',
+      'Hol dir den Pro-Tarif für einmalig {price} $: {links} mit Klickstatistiken, 10 Whitelist-Domains und der API. Kein Abo. Nur für die ersten {spots} Kunden.',
     oneTimePrice: 'Einmalpreis',
     buy: 'Lifetime-Deal kaufen',
     rows: {
       links: 'Links',
       analytics: 'Klickstatistiken',
-      analyticsValue: '30 Tage Verlauf',
-      domains: 'Eigene Domains',
-      domainsValue: '3 Domains',
+      analyticsValue: '60 Tage Verlauf',
+      domains: 'Domain-Whitelist',
+      domainsValue: '10 Domains',
       team: 'Teammitglieder',
       projects: 'Projekte',
       reports: 'Klickberichte',
@@ -454,7 +461,7 @@ const de: Messages = {
       },
       {
         q: 'Kann ich später upgraden?',
-        a: 'Ja. Wenn dir der Lifetime-Tarif nicht mehr reicht, kannst du jederzeit zu einem monatlichen Business- oder Advanced-Tarif wechseln.',
+        a: 'Ja. Wenn dir der Lifetime-Tarif nicht mehr reicht, kannst du jederzeit zum monatlichen Business-Tarif wechseln oder mit uns über Enterprise sprechen.',
       },
       {
         q: 'Gibt es diesen Deal auf AppSumo oder anderen Marktplätzen?',

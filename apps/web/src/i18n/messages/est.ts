@@ -17,7 +17,7 @@ const est: Messages = {
     language: 'Keel',
     faq: 'KKK',
     faqTitle: 'Korduma kippuvad küsimused',
-    freeNote: 'Tasuta 10 lingile koos klikistatistikaga, kaarti pole vaja.',
+    freeNote: 'Tasuta 50 lingile koos klikistatistikaga, kaarti pole vaja.',
     included: 'Sisaldub',
     notIncluded: 'Ei sisaldu',
   },
@@ -124,7 +124,7 @@ const est: Messages = {
     customPricing: 'Kohandatud hind',
     free: {
       tagline: 'Proovi mõne lingiga',
-      links: '10 linki',
+      links: '50 linki',
       analytics: '7 päeva klikistatistikat',
       features: [
         'Lingi aegumine ja paroolid',
@@ -134,32 +134,32 @@ const est: Messages = {
       ],
       cta: 'Alusta tasuta',
     },
-    pro: {
-      tagline: 'Turundusmeeskondadele',
-      links: '1000 linki kuus',
+    starter: {
+      tagline: 'Iseseisvatele turundajatele ja loojatele',
+      links: '500 linki kuus',
       analytics: '30 päeva klikistatistikat',
       features: [
-        '3 kohandatud domeeni',
-        '5 projekti',
-        '5 meeskonnaliiget',
+        '2 lubatud domeeni',
+        '3 projekti',
+        '2 meeskonnaliiget',
         'Klikiaruanded',
         'API-ligipääs',
       ],
+      cta: 'Vali Starter',
+    },
+    pro: {
+      tagline: 'Turundusmeeskondadele',
+      links: '2000 linki kuus',
+      analytics: '60 päeva klikistatistikat',
+      features: ['10 lubatud domeeni', '5 projekti', '5 meeskonnaliiget', 'Kõik Starter paketist'],
       cta: 'Vali Pro',
     },
     business: {
       tagline: 'Agentuuridele ja brändidele',
-      links: '10 000 linki kuus',
-      analytics: '60 päeva klikistatistikat',
-      features: ['5 kohandatud domeeni', '10 projekti', '10 meeskonnaliiget', 'Kõik Pro paketist'],
-      cta: 'Vali Business',
-    },
-    advanced: {
-      tagline: 'Suure mahuga meeskondadele',
-      links: '50 000 linki kuus',
+      links: '15 000 linki kuus',
       analytics: '90 päeva klikistatistikat',
-      features: ['10 kohandatud domeeni', '25 projekti', '20 meeskonnaliiget', 'Kõik Business paketist'],
-      cta: 'Vali Advanced',
+      features: ['25 lubatud domeeni', '10 projekti', '10 meeskonnaliiget', 'Kõik Pro paketist'],
+      cta: 'Vali Business',
     },
     enterprise: {
       tagline: 'Organisatsioonidele, millel on turva-, vastavus- ja hankenõuded.',
@@ -167,8 +167,8 @@ const est: Messages = {
         'Piiramatult linke',
         'Piiramatult meeskonnaliikmeid',
         'Tugi vastavusauditites',
-        '90 päeva klikistatistikat',
-        'Sinu brändidele sobivad domeenid ja projektid',
+        'Kuni 3 aastat klikistatistikat',
+        'Sinu brändidele sobivad lubatud domeenid ja projektid',
         'Leping, arveldus ja andmetöötlusleping',
         'Isiklik tugi',
       ],
@@ -177,7 +177,7 @@ const est: Messages = {
     faqs: [
       {
         q: 'Kas on olemas tasuta pakett?',
-        a: 'Jah. Tasuta pakett sisaldab 10 lühilinki 7 päeva klikistatistikaga, kaarti pole vaja. Vaheta tasulisele paketile, kui vajad rohkem linke, oma domeeni või API-ligipääsu.',
+        a: 'Jah. Tasuta pakett sisaldab 50 lühilinki 7 päeva klikistatistikaga, kaarti pole vaja. Vaheta tasulisele paketile, kui vajad rohkem linke, rohkem lubatud domeene või API-ligipääsu.',
       },
       {
         q: 'Kuidas tasulistes pakettides linke loetakse?',
@@ -193,20 +193,20 @@ const est: Messages = {
       },
       {
         q: 'Kas teil on eluaegne pakkumine?',
-        a: 'Jah, esimesele 200 kliendile. Ühekordne makse 149 $ annab Pro paketi funktsioonid 1000 lingiga kuus, ilma igakuise tellimuseta.',
+        a: 'Jah, esimesele 200 kliendile. Ühekordne makse 99 $ annab Pro paketi funktsioonid 2000 lingiga kuus, ilma igakuise tellimuseta.',
       },
       {
         q: 'Mida sisaldab Enterprise pakett?',
-        a: 'Piiramatult linke ja meeskonnaliikmeid, 90 päeva klikistatistikat, abi vastavus- ja turvaauditites, lepingut koos arvelduse ja andmetöötluslepinguga ning isiklikku tuge. Hinnapakkumise saamiseks võta meiega ühendust.',
+        a: 'Piiramatult linke ja meeskonnaliikmeid, kuni 3 aastat klikistatistikat, abi vastavus- ja turvaauditites, lepingut koos arvelduse ja andmetöötluslepinguga ning isiklikku tuge. Hinnapakkumise saamiseks võta meiega ühendust.',
       },
       {
-        q: 'Kas saan kasutada oma domeeni?',
-        a: 'Jah. Tasulised paketid sisaldavad kohandatud domeene, nii et sinu lühilingid võivad välja näha nagu go.sinubränd.ee/pakkumine, mitte üldine lühidomeen.',
+        q: 'Kas saan lühendada linke oma veebisaidile?',
+        a: 'Jah. Kinnita oma domeen, et lisada see lubatud domeenide nimekirja, ja lühenda siis linke selle või selle alamdomeenide mis tahes lehele. Iga pakett sisaldab teatud arvu lubatud domeene ning populaarsed saidid nagu YouTube, LinkedIn ja Amazon on lubatud igas paketis.',
       },
     ],
   },
   lifetime: {
-    links: '1000 linki kuus',
+    links: '2000 linki kuus',
     claimed: '{claimed}/{spots} võetud',
     left: 'Alles ainult {left}',
     progress: 'Eluaegse pakkumise võetud kohad',
@@ -275,8 +275,8 @@ const est: Messages = {
     extrasTitle: 'Loodud meeskondadele, kes jagavad palju linke',
     extras: {
       domains: {
-        title: 'Kohandatud domeenid',
-        body: 'Lühilingid aadressil go.sinubränd.ee üldise domeeni asemel.',
+        title: 'Lubatud domeenide nimekiri',
+        body: 'Kinnita oma domeenid ühe korra ja lühenda siis linke nende mis tahes lehele.',
       },
       projects: { title: 'Projektid', body: 'Rühmita lingid kampaania, kliendi või brändi järgi.' },
       team: {
@@ -305,15 +305,15 @@ const est: Messages = {
       },
       {
         q: 'Kas Shortener.dev on tasuta?',
-        a: 'Jah. Tasuta pakett sisaldab 10 lühilinki koos klikistatistikaga ning saad sisse logida ja lingi lühendada otse selle lehe vormist. Tasulised paketid algavad 29 $ kuus.',
+        a: 'Jah. Tasuta pakett sisaldab 50 lühilinki koos klikistatistikaga ning saad sisse logida ja lingi lühendada otse selle lehe vormist. Tasulised paketid algavad 9 $ kuus.',
       },
       {
         q: 'Kas saan lühilingi sihtkohta pärast jagamist muuta?',
         a: 'Jah. Muuda sihtkohta igal ajal töölaual või API kaudu ning sama lühilink suunab külastajad uuele lehele.',
       },
       {
-        q: 'Kas saan kasutada oma domeeni?',
-        a: 'Jah. Tasulised paketid sisaldavad kohandatud domeene, nii et sinu lingid võivad välja näha nagu go.sinubränd.ee/pakkumine.',
+        q: 'Kas saan lühendada linke oma veebisaidile?',
+        a: 'Jah. Kinnita oma domeen ühe korra ja see lisatakse sinu lubatud domeenide nimekirja, nii et saad lühendada linke selle mis tahes lehele.',
       },
       {
         q: 'Mida klikistatistika sisaldab?',
@@ -328,19 +328,19 @@ const est: Messages = {
   pricing: {
     metaTitle: 'Hinnad',
     metaDescription:
-      'Lühenda linke tasuta või vali pakett alates 29 $ kuus kohandatud domeenide, meeskonnaliikmete, klikiaruannete ja API-ligipääsu jaoks. Enterprise lisab piiramatud lingid ja vastavustoe.',
+      'Lühenda linke tasuta või vali pakett alates 9 $ kuus rohkemate lubatud domeenide, meeskonnaliikmete, klikiaruannete ja API-ligipääsu jaoks. Enterprise lisab piiramatud lingid ja vastavustoe.',
     eyebrow: 'Hinnad',
     title: 'Maksa linkide,',
     accent: 'mitte klikkide eest.',
     description:
-      'Alusta tasuta 10 lingiga. Tasulised paketid lisavad kohandatud domeenid, meeskonnaliikmed, klikiaruanded ja API. Igas paketis on piiramatult klikke.',
+      'Alusta tasuta 50 lingiga. Tasulised paketid lisavad lubatud domeenid, meeskonnaliikmed, klikiaruanded ja API. Igas paketis on piiramatult klikke.',
     compare: 'Võrdle pakette',
     feature: 'Funktsioon',
     rows: {
       shortLinks: 'Lühilingid',
       clicks: 'Klikid',
       history: 'Statistika ajalugu',
-      domains: 'Kohandatud domeenid',
+      domains: 'Lubatud domeenide nimekiri',
       projects: 'Projektid',
       team: 'Meeskonnaliikmed',
       reports: 'Klikiaruanded',
@@ -356,6 +356,7 @@ const est: Messages = {
     custom: 'Kohandatud',
     perMonth: '{n}/kuu',
     days: '{n} päeva',
+    years: 'Kuni {n} aastat',
     note: 'Hinnad USD-s, ilma kohalike maksudeta. Tasulised paketid loevad viimase 30 päeva jooksul loodud linke.',
   },
   shortLinks: {
@@ -412,7 +413,7 @@ const est: Messages = {
       },
       {
         q: 'Kas need valikud on tasuta paketis?',
-        a: 'Jah. Kõik lingivalikud on igas paketis saadaval. Tasulised paketid lisavad rohkem linke, kohandatud domeenid, meeskonnaliikmed, klikiaruanded ja API.',
+        a: 'Jah. Kõik lingivalikud on igas paketis saadaval. Tasulised paketid lisavad rohkem linke, lubatud domeenid, meeskonnaliikmed, klikiaruanded ja API.',
       },
       {
         q: 'Kas saan linki pärast loomist muuta?',
@@ -423,20 +424,20 @@ const est: Messages = {
   lifetimeDeal: {
     metaTitle: 'Eluaegne pakkumine: URL-i lühendaja',
     metaDescription:
-      'Maksa üks kord {price} $ URL-i lühendaja eest: {links}, kohandatud domeen, klikistatistika, UTM-i koostaja, eelvaade, paroolid ning seadme- ja asukohapõhine sihtimine.',
+      'Maksa üks kord {price} $ URL-i lühendaja eest: {links}, 10 lubatud domeeni, klikistatistika, UTM-i koostaja, eelvaade, paroolid ning seadme- ja asukohapõhine sihtimine.',
     eyebrow: 'Eluaegne pakkumine',
     title: 'Maksa üks kord.',
     accent: 'Lühenda iga kuu.',
     description:
-      'Saa Pro pakett ühekordse {price} $ maksega: {links} koos klikistatistika, kohandatud domeenide ja API-ga. Tellimust pole. Ainult esimesele {spots} kliendile.',
+      'Saa Pro pakett ühekordse {price} $ maksega: {links} koos klikistatistika, 10 lubatud domeeni ja API-ga. Tellimust pole. Ainult esimesele {spots} kliendile.',
     oneTimePrice: 'Ühekordne hind',
     buy: 'Osta eluaegne pakkumine',
     rows: {
       links: 'Lingid',
       analytics: 'Klikistatistika',
-      analyticsValue: '30 päeva ajalugu',
-      domains: 'Kohandatud domeenid',
-      domainsValue: '3 domeeni',
+      analyticsValue: '60 päeva ajalugu',
+      domains: 'Lubatud domeenide nimekiri',
+      domainsValue: '10 domeeni',
       team: 'Meeskonnaliikmed',
       projects: 'Projektid',
       reports: 'Klikiaruanded',
@@ -460,7 +461,7 @@ const est: Messages = {
       },
       {
         q: 'Kas saan hiljem paketti uuendada?',
-        a: 'Jah. Kui eluaegsest paketist jääb väheks, saad igal ajal üle minna igakuisele Business või Advanced paketile.',
+        a: 'Jah. Kui eluaegsest paketist jääb väheks, saad igal ajal üle minna igakuisele Business paketile või rääkida meiega Enterprise paketist.',
       },
       {
         q: 'Kas see pakkumine on AppSumos või teistel turuplatsidel?',

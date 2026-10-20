@@ -17,7 +17,7 @@ const id: Messages = {
     language: 'Bahasa',
     faq: 'FAQ',
     faqTitle: 'Pertanyaan umum',
-    freeNote: 'Gratis untuk 10 tautan dengan analitik klik, tanpa kartu kredit.',
+    freeNote: 'Gratis untuk 50 tautan dengan analitik klik, tanpa kartu kredit.',
     included: 'Termasuk',
     notIncluded: 'Tidak termasuk',
   },
@@ -124,7 +124,7 @@ const id: Messages = {
     customPricing: 'Harga khusus',
     free: {
       tagline: 'Coba pada beberapa tautan',
-      links: '10 tautan',
+      links: '50 tautan',
       analytics: 'Analitik klik 7 hari',
       features: [
         'Kedaluwarsa tautan dan kata sandi',
@@ -134,26 +134,26 @@ const id: Messages = {
       ],
       cta: 'Mulai gratis',
     },
+    starter: {
+      tagline: 'Untuk pemasar mandiri dan kreator',
+      links: '500 tautan per bulan',
+      analytics: 'Analitik klik 30 hari',
+      features: ['2 domain whitelist', '3 proyek', '2 anggota tim', 'Laporan klik', 'Akses API'],
+      cta: 'Pilih Starter',
+    },
     pro: {
       tagline: 'Untuk tim pemasaran',
-      links: '1.000 tautan per bulan',
-      analytics: 'Analitik klik 30 hari',
-      features: ['3 domain kustom', '5 proyek', '5 anggota tim', 'Laporan klik', 'Akses API'],
+      links: '2.000 tautan per bulan',
+      analytics: 'Analitik klik 60 hari',
+      features: ['10 domain whitelist', '5 proyek', '5 anggota tim', 'Semua fitur Starter'],
       cta: 'Pilih Pro',
     },
     business: {
       tagline: 'Untuk agensi dan merek',
-      links: '10.000 tautan per bulan',
-      analytics: 'Analitik klik 60 hari',
-      features: ['5 domain kustom', '10 proyek', '10 anggota tim', 'Semua fitur Pro'],
-      cta: 'Pilih Business',
-    },
-    advanced: {
-      tagline: 'Untuk tim bervolume tinggi',
-      links: '50.000 tautan per bulan',
+      links: '15.000 tautan per bulan',
       analytics: 'Analitik klik 90 hari',
-      features: ['10 domain kustom', '25 proyek', '20 anggota tim', 'Semua fitur Business'],
-      cta: 'Pilih Advanced',
+      features: ['25 domain whitelist', '10 proyek', '10 anggota tim', 'Semua fitur Pro'],
+      cta: 'Pilih Business',
     },
     enterprise: {
       tagline: 'Untuk organisasi dengan kebutuhan keamanan, kepatuhan, dan pengadaan.',
@@ -161,8 +161,8 @@ const id: Messages = {
         'Tautan tanpa batas',
         'Anggota tim tanpa batas',
         'Dukungan audit kepatuhan',
-        'Analitik klik 90 hari',
-        'Domain dan proyek kustom sesuai merek Anda',
+        'Analitik klik hingga 3 tahun',
+        'Domain whitelist dan proyek sesuai merek Anda',
         'Kontrak, faktur, dan DPA',
         'Dukungan khusus',
       ],
@@ -171,7 +171,7 @@ const id: Messages = {
     faqs: [
       {
         q: 'Apakah ada paket gratis?',
-        a: 'Ya. Paket gratis mencakup 10 tautan pendek dengan analitik klik 7 hari, tanpa kartu kredit. Tingkatkan saat Anda membutuhkan lebih banyak tautan, domain kustom, atau akses API.',
+        a: 'Ya. Paket gratis mencakup 50 tautan pendek dengan analitik klik 7 hari, tanpa kartu kredit. Tingkatkan saat Anda membutuhkan lebih banyak tautan, lebih banyak domain whitelist, atau akses API.',
       },
       {
         q: 'Bagaimana tautan dihitung pada paket berbayar?',
@@ -187,20 +187,20 @@ const id: Messages = {
       },
       {
         q: 'Apakah ada penawaran seumur hidup?',
-        a: 'Ya, untuk 200 pelanggan pertama. Pembayaran sekali sebesar $149 memberi Anda fitur paket Pro dengan 1.000 tautan per bulan, tanpa langganan bulanan.',
+        a: 'Ya, untuk 200 pelanggan pertama. Pembayaran sekali sebesar $99 memberi Anda fitur paket Pro dengan 2.000 tautan per bulan, tanpa langganan bulanan.',
       },
       {
         q: 'Apa saja yang termasuk dalam paket Enterprise?',
-        a: 'Tautan dan anggota tim tanpa batas, analitik klik 90 hari, bantuan untuk audit kepatuhan dan keamanan, kontrak dengan faktur dan DPA, serta dukungan khusus. Hubungi kami untuk penawaran harga.',
+        a: 'Tautan dan anggota tim tanpa batas, analitik klik hingga 3 tahun, bantuan untuk audit kepatuhan dan keamanan, kontrak dengan faktur dan DPA, serta dukungan khusus. Hubungi kami untuk penawaran harga.',
       },
       {
-        q: 'Bisakah saya menggunakan domain sendiri?',
-        a: 'Ya. Paket berbayar mencakup domain kustom, sehingga tautan pendek Anda bisa terlihat seperti go.merekanda.com/promo, bukan domain pendek umum.',
+        q: 'Bisakah saya memendekkan tautan ke situs saya sendiri?',
+        a: 'Ya. Verifikasi domain Anda untuk menambahkannya ke whitelist, lalu pendekkan tautan ke halaman mana pun di domain itu atau subdomainnya. Setiap paket mencakup sejumlah domain whitelist, dan situs populer seperti YouTube, LinkedIn, dan Amazon diizinkan di semua paket.',
       },
     ],
   },
   lifetime: {
-    links: '1.000 tautan per bulan',
+    links: '2.000 tautan per bulan',
     claimed: '{claimed} dari {spots} sudah diambil',
     left: 'Tinggal {left} lagi',
     progress: 'Slot penawaran seumur hidup yang sudah diambil',
@@ -270,8 +270,8 @@ const id: Messages = {
     extrasTitle: 'Dibuat untuk tim yang membagikan banyak tautan',
     extras: {
       domains: {
-        title: 'Domain kustom',
-        body: 'Tautan pendek di go.merekanda.com, bukan domain umum.',
+        title: 'Whitelist domain',
+        body: 'Verifikasi domain Anda sekali, lalu pendekkan tautan ke halaman mana pun di dalamnya.',
       },
       projects: { title: 'Proyek', body: 'Kelompokkan tautan berdasarkan kampanye, klien, atau merek.' },
       team: {
@@ -300,15 +300,15 @@ const id: Messages = {
       },
       {
         q: 'Apakah Shortener.dev gratis?',
-        a: 'Ya. Paket gratis mencakup 10 tautan pendek dengan analitik klik, dan Anda bisa masuk serta memendekkan tautan langsung dari formulir di halaman ini. Paket berbayar mulai dari $29 per bulan.',
+        a: 'Ya. Paket gratis mencakup 50 tautan pendek dengan analitik klik, dan Anda bisa masuk serta memendekkan tautan langsung dari formulir di halaman ini. Paket berbayar mulai dari $9 per bulan.',
       },
       {
         q: 'Bisakah saya mengubah tujuan tautan pendek setelah dibagikan?',
         a: 'Ya. Ubah tujuan kapan saja dari dasbor atau API, dan tautan pendek yang sama akan mengarahkan pengunjung ke halaman baru.',
       },
       {
-        q: 'Bisakah saya menggunakan domain sendiri?',
-        a: 'Ya. Paket berbayar mencakup domain kustom, sehingga tautan Anda bisa terlihat seperti go.merekanda.com/promo.',
+        q: 'Bisakah saya memendekkan tautan ke situs saya sendiri?',
+        a: 'Ya. Verifikasi domain Anda sekali dan domain itu masuk ke whitelist Anda, sehingga Anda bisa memendekkan tautan ke halaman mana pun di dalamnya.',
       },
       {
         q: 'Apa saja yang termasuk dalam analitik klik?',
@@ -323,19 +323,19 @@ const id: Messages = {
   pricing: {
     metaTitle: 'Harga',
     metaDescription:
-      'Pendekkan tautan secara gratis, atau pilih paket mulai $29 per bulan untuk domain kustom, anggota tim, laporan klik, dan akses API. Enterprise menambahkan tautan tanpa batas dan dukungan kepatuhan.',
+      'Pendekkan tautan secara gratis, atau pilih paket mulai $9 per bulan untuk lebih banyak domain whitelist, anggota tim, laporan klik, dan akses API. Enterprise menambahkan tautan tanpa batas dan dukungan kepatuhan.',
     eyebrow: 'Harga',
     title: 'Bayar untuk tautan,',
     accent: 'bukan untuk klik.',
     description:
-      'Mulai gratis dengan 10 tautan. Paket berbayar menambahkan domain kustom, anggota tim, laporan klik, dan API. Semua paket memiliki klik tanpa batas.',
+      'Mulai gratis dengan 50 tautan. Paket berbayar menambahkan domain whitelist, anggota tim, laporan klik, dan API. Semua paket memiliki klik tanpa batas.',
     compare: 'Bandingkan paket',
     feature: 'Fitur',
     rows: {
       shortLinks: 'Tautan pendek',
       clicks: 'Klik',
       history: 'Riwayat analitik',
-      domains: 'Domain kustom',
+      domains: 'Whitelist domain',
       projects: 'Proyek',
       team: 'Anggota tim',
       reports: 'Laporan klik',
@@ -351,6 +351,7 @@ const id: Messages = {
     custom: 'Kustom',
     perMonth: '{n}/bln',
     days: '{n} hari',
+    years: 'Hingga {n} tahun',
     note: 'Harga dalam USD, belum termasuk pajak lokal. Paket berbayar menghitung tautan yang dibuat dalam 30 hari terakhir.',
   },
   shortLinks: {
@@ -407,7 +408,7 @@ const id: Messages = {
       },
       {
         q: 'Apakah opsi ini ada di paket gratis?',
-        a: 'Ya. Setiap opsi tautan tersedia di semua paket. Paket berbayar menambahkan lebih banyak tautan, domain kustom, anggota tim, laporan klik, dan API.',
+        a: 'Ya. Setiap opsi tautan tersedia di semua paket. Paket berbayar menambahkan lebih banyak tautan, domain whitelist, anggota tim, laporan klik, dan API.',
       },
       {
         q: 'Bisakah saya mengedit tautan setelah dibuat?',
@@ -418,20 +419,20 @@ const id: Messages = {
   lifetimeDeal: {
     metaTitle: 'Penawaran seumur hidup: pemendek URL',
     metaDescription:
-      'Bayar ${price} sekali untuk pemendek URL dengan {links}, domain kustom, analitik klik, pembuat UTM, pratinjau sosial, kata sandi, serta penargetan perangkat dan lokasi.',
+      'Bayar ${price} sekali untuk pemendek URL dengan {links}, 10 domain whitelist, analitik klik, pembuat UTM, pratinjau sosial, kata sandi, serta penargetan perangkat dan lokasi.',
     eyebrow: 'Penawaran seumur hidup',
     title: 'Bayar sekali.',
     accent: 'Pendekkan setiap bulan.',
     description:
-      'Dapatkan paket Pro dengan pembayaran sekali ${price}: {links} dengan analitik klik, domain kustom, dan API. Tanpa langganan. Hanya untuk {spots} pelanggan pertama.',
+      'Dapatkan paket Pro dengan pembayaran sekali ${price}: {links} dengan analitik klik, 10 domain whitelist, dan API. Tanpa langganan. Hanya untuk {spots} pelanggan pertama.',
     oneTimePrice: 'Harga sekali bayar',
     buy: 'Beli penawaran seumur hidup',
     rows: {
       links: 'Tautan',
       analytics: 'Analitik klik',
-      analyticsValue: 'Riwayat 30 hari',
-      domains: 'Domain kustom',
-      domainsValue: '3 domain',
+      analyticsValue: 'Riwayat 60 hari',
+      domains: 'Whitelist domain',
+      domainsValue: '10 domain',
       team: 'Anggota tim',
       projects: 'Proyek',
       reports: 'Laporan klik',
@@ -455,7 +456,7 @@ const id: Messages = {
       },
       {
         q: 'Bisakah saya meningkatkan paket nanti?',
-        a: 'Ya. Jika paket seumur hidup tidak lagi cukup, Anda bisa pindah ke paket Business atau Advanced bulanan kapan saja.',
+        a: 'Ya. Jika paket seumur hidup tidak lagi cukup, Anda bisa pindah ke paket Business bulanan atau berbicara dengan kami tentang Enterprise kapan saja.',
       },
       {
         q: 'Apakah penawaran ini ada di AppSumo atau marketplace lain?',

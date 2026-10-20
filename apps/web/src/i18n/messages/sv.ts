@@ -17,7 +17,7 @@ const sv: Messages = {
     language: 'Språk',
     faq: 'FAQ',
     faqTitle: 'Vanliga frågor',
-    freeNote: 'Gratis för 10 länkar med klickstatistik, inget kort krävs.',
+    freeNote: 'Gratis för 50 länkar med klickstatistik, inget kort krävs.',
     included: 'Ingår',
     notIncluded: 'Ingår inte',
   },
@@ -124,7 +124,7 @@ const sv: Messages = {
     customPricing: 'Anpassat pris',
     free: {
       tagline: 'Testa på några länkar',
-      links: '10 länkar',
+      links: '50 länkar',
       analytics: '7 dagars klickstatistik',
       features: [
         'Utgångsdatum och lösenord',
@@ -134,26 +134,32 @@ const sv: Messages = {
       ],
       cta: 'Börja gratis',
     },
+    starter: {
+      tagline: 'För egna marknadsförare och kreatörer',
+      links: '500 länkar i månaden',
+      analytics: '30 dagars klickstatistik',
+      features: [
+        '2 vitlistade domäner',
+        '3 projekt',
+        '2 teammedlemmar',
+        'Klickrapporter',
+        'API-åtkomst',
+      ],
+      cta: 'Välj Starter',
+    },
     pro: {
       tagline: 'För marknadsföringsteam',
-      links: '1 000 länkar i månaden',
-      analytics: '30 dagars klickstatistik',
-      features: ['3 egna domäner', '5 projekt', '5 teammedlemmar', 'Klickrapporter', 'API-åtkomst'],
+      links: '2 000 länkar i månaden',
+      analytics: '60 dagars klickstatistik',
+      features: ['10 vitlistade domäner', '5 projekt', '5 teammedlemmar', 'Allt i Starter'],
       cta: 'Välj Pro',
     },
     business: {
       tagline: 'För byråer och varumärken',
-      links: '10 000 länkar i månaden',
-      analytics: '60 dagars klickstatistik',
-      features: ['5 egna domäner', '10 projekt', '10 teammedlemmar', 'Allt i Pro'],
-      cta: 'Välj Business',
-    },
-    advanced: {
-      tagline: 'För team med stora volymer',
-      links: '50 000 länkar i månaden',
+      links: '15 000 länkar i månaden',
       analytics: '90 dagars klickstatistik',
-      features: ['10 egna domäner', '25 projekt', '20 teammedlemmar', 'Allt i Business'],
-      cta: 'Välj Advanced',
+      features: ['25 vitlistade domäner', '10 projekt', '10 teammedlemmar', 'Allt i Pro'],
+      cta: 'Välj Business',
     },
     enterprise: {
       tagline: 'För organisationer med krav på säkerhet, regelefterlevnad och upphandling.',
@@ -161,8 +167,8 @@ const sv: Messages = {
         'Obegränsat antal länkar',
         'Obegränsat antal teammedlemmar',
         'Stöd vid regelefterlevnadsrevisioner',
-        '90 dagars klickstatistik',
-        'Egna domäner och projekt anpassade efter dina varumärken',
+        'Upp till 3 års klickstatistik',
+        'Vitlistade domäner och projekt anpassade efter dina varumärken',
         'Avtal, fakturering och personuppgiftsbiträdesavtal',
         'Dedikerad support',
       ],
@@ -171,7 +177,7 @@ const sv: Messages = {
     faqs: [
       {
         q: 'Finns det en gratisplan?',
-        a: 'Ja. Gratisplanen innehåller 10 korta länkar med 7 dagars klickstatistik, inget kort krävs. Uppgradera när du behöver fler länkar, en egen domän eller API-åtkomst.',
+        a: 'Ja. Gratisplanen innehåller 50 korta länkar med 7 dagars klickstatistik, inget kort krävs. Uppgradera när du behöver fler länkar, fler vitlistade domäner eller API-åtkomst.',
       },
       {
         q: 'Hur räknas länkar på betalplaner?',
@@ -187,20 +193,20 @@ const sv: Messages = {
       },
       {
         q: 'Har ni ett livstidserbjudande?',
-        a: 'Ja, för de första 200 kunderna. En engångsbetalning på 149 $ ger dig Pro-planens funktioner med 1 000 länkar i månaden, utan månadsabonnemang.',
+        a: 'Ja, för de första 200 kunderna. En engångsbetalning på 99 $ ger dig Pro-planens funktioner med 2 000 länkar i månaden, utan månadsabonnemang.',
       },
       {
         q: 'Vad ingår i Enterprise-planen?',
-        a: 'Obegränsat antal länkar och teammedlemmar, 90 dagars klickstatistik, hjälp med regelefterlevnads- och säkerhetsrevisioner, ett avtal med fakturering och personuppgiftsbiträdesavtal samt dedikerad support. Kontakta oss för en offert.',
+        a: 'Obegränsat antal länkar och teammedlemmar, upp till 3 års klickstatistik, hjälp med regelefterlevnads- och säkerhetsrevisioner, ett avtal med fakturering och personuppgiftsbiträdesavtal samt dedikerad support. Kontakta oss för en offert.',
       },
       {
-        q: 'Kan jag använda min egen domän?',
-        a: 'Ja. Betalplaner innehåller egna domäner, så dina korta länkar kan se ut som go.dittvarumarke.se/erbjudande i stället för en generisk kortdomän.',
+        q: 'Kan jag korta länkar till min egen webbplats?',
+        a: 'Ja. Verifiera din domän för att lägga till den i din vitlista och korta sedan länkar till valfri sida på den eller dess underdomäner. Varje plan innehåller ett antal vitlistade domäner, och populära webbplatser som YouTube, LinkedIn och Amazon är tillåtna på alla planer.',
       },
     ],
   },
   lifetime: {
-    links: '1 000 länkar i månaden',
+    links: '2 000 länkar i månaden',
     claimed: '{claimed} av {spots} tagna',
     left: 'Bara {left} kvar',
     progress: 'Tagna platser i livstidserbjudandet',
@@ -270,8 +276,8 @@ const sv: Messages = {
     extrasTitle: 'Byggt för team som delar många länkar',
     extras: {
       domains: {
-        title: 'Egna domäner',
-        body: 'Korta länkar på go.dittvarumarke.se i stället för en generisk domän.',
+        title: 'Vitlista för domäner',
+        body: 'Verifiera dina egna domäner en gång och korta sedan länkar till valfri sida på dem.',
       },
       projects: { title: 'Projekt', body: 'Gruppera länkar efter kampanj, kund eller varumärke.' },
       team: {
@@ -300,15 +306,15 @@ const sv: Messages = {
       },
       {
         q: 'Är Shortener.dev gratis?',
-        a: 'Ja. Gratisplanen innehåller 10 korta länkar med klickstatistik, och du kan logga in och korta en länk direkt från formuläret på den här sidan. Betalplaner börjar på 29 $ i månaden.',
+        a: 'Ja. Gratisplanen innehåller 50 korta länkar med klickstatistik, och du kan logga in och korta en länk direkt från formuläret på den här sidan. Betalplaner börjar på 9 $ i månaden.',
       },
       {
         q: 'Kan jag ändra vart en kort länk leder efter att jag delat den?',
         a: 'Ja. Ändra destinationen när som helst från instrumentpanelen eller API:et, så skickar samma korta länk besökarna till den nya sidan.',
       },
       {
-        q: 'Kan jag använda min egen domän?',
-        a: 'Ja. Betalplaner innehåller egna domäner, så dina länkar kan se ut som go.dittvarumarke.se/erbjudande.',
+        q: 'Kan jag korta länkar till min egen webbplats?',
+        a: 'Ja. Verifiera din domän en gång så hamnar den i din vitlista, och du kan korta länkar till valfri sida på den.',
       },
       {
         q: 'Vad ingår i klickstatistiken?',
@@ -323,19 +329,19 @@ const sv: Messages = {
   pricing: {
     metaTitle: 'Priser',
     metaDescription:
-      'Korta länkar gratis eller välj en plan från 29 $ i månaden för egna domäner, teammedlemmar, klickrapporter och API-åtkomst. Enterprise lägger till obegränsat antal länkar och stöd för regelefterlevnad.',
+      'Korta länkar gratis eller välj en plan från 9 $ i månaden för fler vitlistade domäner, teammedlemmar, klickrapporter och API-åtkomst. Enterprise lägger till obegränsat antal länkar och stöd för regelefterlevnad.',
     eyebrow: 'Priser',
     title: 'Betala för länkar,',
     accent: 'inte för klick.',
     description:
-      'Börja gratis med 10 länkar. Betalplaner lägger till egna domäner, teammedlemmar, klickrapporter och API:et. Alla planer har obegränsade klick.',
+      'Börja gratis med 50 länkar. Betalplaner lägger till vitlistade domäner, teammedlemmar, klickrapporter och API:et. Alla planer har obegränsade klick.',
     compare: 'Jämför planer',
     feature: 'Funktion',
     rows: {
       shortLinks: 'Korta länkar',
       clicks: 'Klick',
       history: 'Statistikhistorik',
-      domains: 'Egna domäner',
+      domains: 'Vitlista för domäner',
       projects: 'Projekt',
       team: 'Teammedlemmar',
       reports: 'Klickrapporter',
@@ -351,6 +357,7 @@ const sv: Messages = {
     custom: 'Anpassat',
     perMonth: '{n}/mån',
     days: '{n} dagar',
+    years: 'Upp till {n} år',
     note: 'Priser i USD exklusive lokala skatter. Betalplaner räknar länkar skapade de senaste 30 dagarna.',
   },
   shortLinks: {
@@ -407,7 +414,7 @@ const sv: Messages = {
       },
       {
         q: 'Finns de här valen på gratisplanen?',
-        a: 'Ja. Alla länkval finns på alla planer. Betalplaner lägger till fler länkar, egna domäner, teammedlemmar, klickrapporter och API:et.',
+        a: 'Ja. Alla länkval finns på alla planer. Betalplaner lägger till fler länkar, vitlistade domäner, teammedlemmar, klickrapporter och API:et.',
       },
       {
         q: 'Kan jag redigera en länk när den har skapats?',
@@ -418,20 +425,20 @@ const sv: Messages = {
   lifetimeDeal: {
     metaTitle: 'Livstidserbjudande: URL-förkortare',
     metaDescription:
-      'Betala {price} $ en gång för en URL-förkortare med {links}, egen domän, klickstatistik, UTM-byggare, förhandsvisning, lösenord och styrning efter enhet och plats.',
+      'Betala {price} $ en gång för en URL-förkortare med {links}, 10 vitlistade domäner, klickstatistik, UTM-byggare, förhandsvisning, lösenord och styrning efter enhet och plats.',
     eyebrow: 'Livstidserbjudande',
     title: 'Betala en gång.',
     accent: 'Korta varje månad.',
     description:
-      'Få Pro-planen för en engångsbetalning på {price} $: {links} med klickstatistik, egna domäner och API:et. Inget abonnemang. Bara för de första {spots} kunderna.',
+      'Få Pro-planen för en engångsbetalning på {price} $: {links} med klickstatistik, 10 vitlistade domäner och API:et. Inget abonnemang. Bara för de första {spots} kunderna.',
     oneTimePrice: 'Engångspris',
     buy: 'Köp livstidserbjudandet',
     rows: {
       links: 'Länkar',
       analytics: 'Klickstatistik',
-      analyticsValue: '30 dagars historik',
-      domains: 'Egna domäner',
-      domainsValue: '3 domäner',
+      analyticsValue: '60 dagars historik',
+      domains: 'Vitlista för domäner',
+      domainsValue: '10 domäner',
       team: 'Teammedlemmar',
       projects: 'Projekt',
       reports: 'Klickrapporter',
@@ -455,7 +462,7 @@ const sv: Messages = {
       },
       {
         q: 'Kan jag uppgradera senare?',
-        a: 'Ja. Om livstidsplanen inte räcker kan du när som helst byta till en månatlig Business- eller Advanced-plan.',
+        a: 'Ja. Om livstidsplanen inte räcker kan du när som helst byta till den månatliga Business-planen eller prata med oss om Enterprise.',
       },
       {
         q: 'Finns erbjudandet på AppSumo eller andra marknadsplatser?',

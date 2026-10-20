@@ -19,7 +19,7 @@ export const plans: Plan[] = [
     name: "Free",
     price: 0,
     tagline: "Try it on a few links",
-    links: "10 links",
+    links: "50 links",
     analytics: "7 days of click analytics",
     features: [
       "Link expiration and passwords",
@@ -29,40 +29,40 @@ export const plans: Plan[] = [
     ],
   },
   {
+    name: "Starter",
+    price: 9,
+    period: "/month",
+    tagline: "For solo marketers and creators",
+    links: "500 links a month",
+    analytics: "30 days of click analytics",
+    features: ["2 whitelisted domains", "3 projects", "2 team members", "Click reports", "API access"],
+  },
+  {
     name: "Pro",
-    price: 29,
+    price: 19,
     period: "/month",
     tagline: "For marketing teams",
-    links: "1,000 links a month",
-    analytics: "30 days of click analytics",
-    features: ["3 custom domains", "5 projects", "5 team members", "Click reports", "API access"],
+    links: "2,000 links a month",
+    analytics: "60 days of click analytics",
+    features: ["10 whitelisted domains", "5 projects", "5 team members", "Everything in Starter"],
     popular: true,
   },
   {
     name: "Business",
-    price: 89,
+    price: 49,
     period: "/month",
     tagline: "For agencies and brands",
-    links: "10,000 links a month",
-    analytics: "60 days of click analytics",
-    features: ["5 custom domains", "10 projects", "10 team members", "Everything in Pro"],
-  },
-  {
-    name: "Advanced",
-    price: 249,
-    period: "/month",
-    tagline: "For high-volume teams",
-    links: "50,000 links a month",
+    links: "15,000 links a month",
     analytics: "90 days of click analytics",
-    features: ["10 custom domains", "25 projects", "20 team members", "Everything in Business"],
+    features: ["25 whitelisted domains", "10 projects", "10 team members", "Everything in Pro"],
   },
 ];
 
 /** The lifetime deal is the Pro plan for a one-time payment */
 export const lifetime = {
   name: "Lifetime",
-  price: 149,
-  links: "1,000 links a month",
+  price: 99,
+  links: "2,000 links a month",
 };
 
 export const enterprise = {
@@ -72,8 +72,8 @@ export const enterprise = {
     "Unlimited links",
     "Unlimited team members",
     "Compliance audit support",
-    "90 days of click analytics",
-    "Custom domains and projects to fit your brands",
+    "Up to 3 years of click analytics",
+    "Whitelisted domains and projects to fit your brands",
     "Contract, invoicing and DPA",
     "Dedicated support",
   ],
