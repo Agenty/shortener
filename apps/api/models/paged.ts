@@ -17,7 +17,25 @@ export const pagedSchema = z.object({
 
 export type Paged = z.infer<typeof pagedSchema>;
 
-export const analyticsQuerySchema = z.object({
+const dimension = (example: string, description: string) =>
+  z.string().min(1).max(256).optional().openapi({ example, description });
+
+/** Drill-down filters on the click dimensions, shared by analytics and reports */
+export const clickFilterSchema = z.object({
+  country: dimension('US', 'Filter by ISO 3166-1 alpha-2 country code'),
+  city: dimension('New York', 'Filter by city'),
+  referer: dimension(
+    'linkedin.com',
+    'Filter by referrer host, use `(direct)` for clicks without a referrer'
+  ),
+  browser: dimension('Chrome', 'Filter by browser'),
+  os: dimension('iOS', 'Filter by operating system'),
+  device: dimension('mobile', 'Filter by device type: mobile, tablet or desktop'),
+});
+
+export type ClickFilter = z.infer<typeof clickFilterSchema>;
+
+export const analyticsQuerySchema = clickFilterSchema.extend({
   url: z.string().optional().openapi({
     example: 'https://srt1.link/github',
     description: 'Filter the report by a short link URL or key',

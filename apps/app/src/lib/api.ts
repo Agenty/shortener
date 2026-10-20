@@ -9,7 +9,7 @@ import type {
   GlobalDomainsResponse,
 } from "@/types/domain";
 import type { LinksResponse, Link, LinkCreatePayload, UrlMeta } from "@/types/link";
-import type { ReportsResponse } from "@/types/report";
+import type { ReportsResponse, ReportsParams } from "@/types/report";
 import type {
   AnalyticsClick,
   AnalyticsReferer,
@@ -18,6 +18,7 @@ import type {
   AnalyticsBrowser,
   AnalyticsOS,
   AnalyticsDevice,
+  AnalyticsParams,
 } from "@/types/analytics";
 import type { Profile, Account, ApiKey, ApiKeysResponse } from "@/types/account";
 import type { User, UsersResponse, UserCreatePayload, UserUpdatePayload } from "@/types/user";
@@ -70,6 +71,17 @@ async function request<T>(
   }
 
   return res.json();
+}
+
+/** Query string for the analytics and reports endpoints, `key` is sent as `url` */
+function toClickQuery(params: AnalyticsParams & ReportsParams) {
+  const query = new URLSearchParams();
+  const { key, ...rest } = params;
+  if (key) query.set("url", key);
+  for (const [name, value] of Object.entries(rest)) {
+    if (value !== undefined && value !== "") query.set(name, String(value));
+  }
+  return query.toString();
 }
 
 // ─── Auth ────────────────────────────────────────────
@@ -168,56 +180,32 @@ export const api = {
   },
 
   reports: {
-    list(params: { offset?: number; limit?: number } = {}) {
-      const query = new URLSearchParams();
-      if (params.offset !== undefined) query.set("offset", String(params.offset));
-      if (params.limit !== undefined) query.set("limit", String(params.limit));
-      return request<ReportsResponse>(`/reports?${query.toString()}`);
+    list(params: ReportsParams = {}) {
+      return request<ReportsResponse>(`/reports?${toClickQuery(params)}`);
     },
   },
 
   analytics: {
-    clicks(params: { interval?: number; key?: string } = {}) {
-      const query = new URLSearchParams();
-      if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("url", params.key);
-      return request<AnalyticsClick[]>(`/analytics?${query.toString()}`);
+    clicks(params: AnalyticsParams = {}) {
+      return request<AnalyticsClick[]>(`/analytics?${toClickQuery(params)}`);
     },
-    referer(params: { interval?: number; key?: string } = {}) {
-      const query = new URLSearchParams();
-      if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("url", params.key);
-      return request<AnalyticsReferer[]>(`/analytics/referer?${query.toString()}`);
+    referer(params: AnalyticsParams = {}) {
+      return request<AnalyticsReferer[]>(`/analytics/referer?${toClickQuery(params)}`);
     },
-    country(params: { interval?: number; key?: string } = {}) {
-      const query = new URLSearchParams();
-      if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("url", params.key);
-      return request<AnalyticsCountry[]>(`/analytics/country?${query.toString()}`);
+    country(params: AnalyticsParams = {}) {
+      return request<AnalyticsCountry[]>(`/analytics/country?${toClickQuery(params)}`);
     },
-    top(params: { interval?: number; key?: string } = {}) {
-      const query = new URLSearchParams();
-      if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("url", params.key);
-      return request<AnalyticsTop[]>(`/analytics/top?${query.toString()}`);
+    top(params: AnalyticsParams = {}) {
+      return request<AnalyticsTop[]>(`/analytics/top?${toClickQuery(params)}`);
     },
-    browser(params: { interval?: number; key?: string } = {}) {
-      const query = new URLSearchParams();
-      if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("url", params.key);
-      return request<AnalyticsBrowser[]>(`/analytics/browser?${query.toString()}`);
+    browser(params: AnalyticsParams = {}) {
+      return request<AnalyticsBrowser[]>(`/analytics/browser?${toClickQuery(params)}`);
     },
-    os(params: { interval?: number; key?: string } = {}) {
-      const query = new URLSearchParams();
-      if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("url", params.key);
-      return request<AnalyticsOS[]>(`/analytics/os?${query.toString()}`);
+    os(params: AnalyticsParams = {}) {
+      return request<AnalyticsOS[]>(`/analytics/os?${toClickQuery(params)}`);
     },
-    device(params: { interval?: number; key?: string } = {}) {
-      const query = new URLSearchParams();
-      if (params.interval !== undefined) query.set("interval", String(params.interval));
-      if (params.key) query.set("url", params.key);
-      return request<AnalyticsDevice[]>(`/analytics/device?${query.toString()}`);
+    device(params: AnalyticsParams = {}) {
+      return request<AnalyticsDevice[]>(`/analytics/device?${toClickQuery(params)}`);
     },
   },
 

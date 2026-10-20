@@ -32,3 +32,18 @@ export interface AnalyticsDevice {
   device: string;
   clicks: string;
 }
+
+/** Drill-down filters on the click dimensions */
+export interface ClickFilter {
+  country?: string;
+  city?: string;
+  referer?: string;
+  browser?: string;
+  os?: string;
+  device?: string;
+}
+
+export interface AnalyticsParams extends ClickFilter {
+  interval?: number;
+  key?: string;
+}

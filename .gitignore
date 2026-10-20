@@ -40,3 +40,4 @@ yarn-error.log*
 
 # Wrangler local secrets
 .dev.vars*
+apps/extension*
