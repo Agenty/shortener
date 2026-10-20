@@ -27,6 +27,7 @@ import { rateLimit } from './middleware/rate-limit';
 import { logger } from './middleware/logger';
 import { getLinkForRedirect, getRedirectUrl } from './services/links.service';
 import { passwordPage, redirectPage, unavailablePage } from './helper/redirect-page';
+import { setAnalytics } from './services/analytics.service';
 
 /** Short link paths, e.g. /summer-sale */
 const SHORT_LINK_PATH = /^\/[a-zA-Z0-9_-]{1,32}$/;
@@ -227,7 +228,8 @@ app.notFound(async (ctx) => {
     ctx.req.header("user-agent"),
     ctx.req.raw.cf?.country as string | undefined,
   );
-  
+  setAnalytics(ctx.env, link, ctx.req.raw, url);
+
   return ctx.html(redirectPage(url), 200, {
     "Cache-Control": "no-store",
   });

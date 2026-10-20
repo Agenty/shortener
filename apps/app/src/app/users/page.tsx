@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { MoreHorizontal, Pencil, Trash2, Loader2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2, Loader2, Users } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/EmptyState";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -76,9 +77,13 @@ export default function UsersPage() {
             </Card>
           ))
         ) : users.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-8">
-            No team members yet. Invite one to get started.
-          </p>
+          <EmptyState
+            icon={Users}
+            title="No team members yet"
+            description="Invite teammates to create, manage and track short links together."
+            action={<InviteUserDialog />}
+            docs="team-members"
+          />
         ) : (
           users.map((user) => (
             <Card key={user.user_id}>

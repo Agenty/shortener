@@ -50,7 +50,10 @@ export default function Domains() {
           {isAdmin && <TabsTrigger value="blocked">Blocked</TabsTrigger>}
         </TabsList>
         <TabsContent value="mine" className="pt-2">
-          <MyDomains onVerify={setVerifying} />
+          <MyDomains
+            onVerify={setVerifying}
+            emptyAction={<AddDomainDialog isAdmin={isAdmin} onCreated={setVerifying} />}
+          />
         </TabsContent>
         <TabsContent value="whitelisted" className="pt-2">
           <GlobalDomains type="whitelisted" isAdmin={isAdmin} />

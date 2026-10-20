@@ -12,3 +12,6 @@ export const env = import.meta.env.DEV ? local : prod;
 
 /** Host of every short link, kept separate from the main site domain */
 export const SHORT_DOMAIN = 'srt1.link';
+
+/** Public documentation, empty states and help menus link to pages under it */
+export const DOCS_URL = 'https://shortener.dev/docs';

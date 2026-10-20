@@ -13,6 +13,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { DOCS_URL } from "@/env";
 import { useLocation } from "react-router";
 import {
   Sidebar,
@@ -155,7 +156,7 @@ export function AppSidebar() {
               tooltip="Docs"
               render={
                 <a
-                  href="https://shortener.dev/docs"
+                  href={DOCS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:bg-accent/50"

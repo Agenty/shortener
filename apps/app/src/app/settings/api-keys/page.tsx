@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trash2, Loader2 } from 'lucide-react';
+import { Trash2, Loader2, KeyRound } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,6 +16,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState } from '@/components/EmptyState';
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
 import { CreateApiKeyDialog } from './components/CreateApiKeyDialog';
@@ -42,14 +43,13 @@ export default function ApiKeys() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">API Keys</h1>
-        <p className="text-muted-foreground">
-          Manage your API keys for programmatic access
-        </p>
-      </div>
-
-      <div className="flex items-center justify-end">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">API Keys</h1>
+          <p className="text-muted-foreground">
+            Manage your API keys for programmatic access
+          </p>
+        </div>
         <CreateApiKeyDialog />
       </div>
 
@@ -67,9 +67,13 @@ export default function ApiKeys() {
             </Card>
           ))
         ) : keys.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-8">
-            No API keys yet. Create one to get started.
-          </p>
+          <EmptyState
+            icon={KeyRound}
+            title="No API keys yet"
+            description="Create a key to shorten links and read analytics from your own apps and scripts."
+            action={<CreateApiKeyDialog />}
+            docs="api-keys"
+          />
         ) : (
           keys.map((apiKey) => (
             <Card key={apiKey.key_id}>
