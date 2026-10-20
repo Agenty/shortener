@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import {
   AlertCircle,
   CheckCircle2,
+  Globe,
   Loader2,
   MoreVertical,
   Star,
@@ -33,12 +34,15 @@ import { toast } from 'sonner';
 import { api } from '@/lib/api';
 import type { Domain } from '@/types/domain';
 import { DomainFavicon } from '@/components/DomainFavicon';
+import { EmptyState } from '@/components/EmptyState';
 
 interface MyDomainsProps {
   onVerify: (domain: Domain) => void;
+  /** Call to action shown when there are no domains yet */
+  emptyAction?: ReactNode;
 }
 
-export function MyDomains({ onVerify }: MyDomainsProps) {
+export function MyDomains({ onVerify, emptyAction }: MyDomainsProps) {
   const queryClient = useQueryClient();
   const [deleting, setDeleting] = useState<Domain | null>(null);
 
@@ -86,9 +90,13 @@ export function MyDomains({ onVerify }: MyDomainsProps) {
 
   if (domains.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground text-center py-8">
-        No domains yet. Add a domain you own to shorten links pointing to it.
-      </p>
+      <EmptyState
+        icon={Globe}
+        title="No domains yet"
+        description="Add and verify a domain you own to shorten links pointing to it."
+        action={emptyAction}
+        docs="verify-domain"
+      />
     );
   }
 

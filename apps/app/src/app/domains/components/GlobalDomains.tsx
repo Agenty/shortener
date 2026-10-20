@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Ban, CheckCircle2, Search, Trash2 } from 'lucide-react';
+import { Ban, CheckCircle2, Search, SearchX, ShieldCheck, Trash2 } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { api } from '@/lib/api';
 import type { GlobalDomain, GlobalDomainType } from '@/types/domain';
 import { DomainFavicon } from '@/components/DomainFavicon';
+import { EmptyState } from '@/components/EmptyState';
 
 interface GlobalDomainsProps {
   type: GlobalDomainType;
@@ -94,9 +95,25 @@ export function GlobalDomains({ type, isAdmin }: GlobalDomainsProps) {
           ))}
         </div>
       ) : domains.length === 0 ? (
-        <p className="text-sm text-muted-foreground text-center py-8">
-          {search ? 'No matching domains.' : `No ${type} domains yet.`}
-        </p>
+        search ? (
+          <EmptyState
+            icon={SearchX}
+            title="No matching domains"
+            description={`Nothing matches "${search}". Try a different keyword or clear the search.`}
+            action={
+              <Button variant="outline" onClick={() => setSearch('')}>
+                Clear search
+              </Button>
+            }
+          />
+        ) : (
+          <EmptyState
+            icon={type === 'whitelisted' ? ShieldCheck : Ban}
+            title={`No ${type} domains yet`}
+            description={DESCRIPTIONS[type]}
+            docs="manage-domains"
+          />
+        )
       ) : (
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {domains.map((d) => (

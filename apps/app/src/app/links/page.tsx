@@ -11,6 +11,8 @@ import {
   BarChart3,
   LayoutGrid,
   LayoutList,
+  Link2,
+  SearchX,
 } from 'lucide-react';
 import { Link as RouterLink } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -44,6 +46,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { DomainFavicon } from '@/components/DomainFavicon';
+import { EmptyState } from '@/components/EmptyState';
 import { toast } from 'sonner';
 import { CreateLinkDialog } from './components/CreateLinkDialog';
 import { ApiExamplesSheet } from './components/ApiExamplesSheet';
@@ -345,9 +348,32 @@ export default function Links() {
 
       {/* Content */}
       {!isLoading && !error && links.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground">
-          No links found
-        </div>
+        search ? (
+          <EmptyState
+            icon={SearchX}
+            title="No matching links"
+            description={`Nothing matches "${search}". Try a different keyword or clear the search.`}
+            action={
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSearch(null);
+                  setPage('1');
+                }}
+              >
+                Clear search
+              </Button>
+            }
+          />
+        ) : (
+          <EmptyState
+            icon={Link2}
+            title="No links yet"
+            description="Create your first short link to share it anywhere and track every click."
+            action={<CreateLinkDialog />}
+            docs="create-short-link"
+          />
+        )
       )}
       {!isLoading &&
         !error &&
