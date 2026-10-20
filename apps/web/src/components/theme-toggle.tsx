@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { useI18n } from '@/i18n';
 import { cn } from '@/lib/utils';
 
 const options = [
-  { value: 'light', label: 'Light', icon: Sun },
-  { value: 'system', label: 'System', icon: Monitor },
-  { value: 'dark', label: 'Dark', icon: Moon },
+  { value: 'light', icon: Sun },
+  { value: 'system', icon: Monitor },
+  { value: 'dark', icon: Moon },
 ] as const;
 
 /** Three-way segmented switch, highlighted after mount to avoid a hydration mismatch */
 export function ThemeToggle({ className }: { className?: string }) {
+  const { t } = useI18n();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -18,11 +20,12 @@ export function ThemeToggle({ className }: { className?: string }) {
   return (
     <div
       role="radiogroup"
-      aria-label="Color theme"
+      aria-label={t.theme.label}
       className={cn('inline-flex items-center gap-0.5 rounded-full border p-0.5', className)}
     >
-      {options.map(({ value, label, icon: Icon }) => {
+      {options.map(({ value, icon: Icon }) => {
         const active = mounted && theme === value;
+        const label = t.theme[value];
         return (
           <button
             key={value}

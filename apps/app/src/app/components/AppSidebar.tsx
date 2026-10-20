@@ -35,21 +35,24 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useI18n } from "@/i18n";
 
 const mainItems = [
-  { title: "Links", url: "/links", icon: Link2 },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Reports", url: "/reports", icon: FileText },
-  { title: "Domains", url: "/domains", icon: Globe },
-];
+  { key: "links", url: "/links", icon: Link2 },
+  { key: "analytics", url: "/analytics", icon: BarChart3 },
+  { key: "reports", url: "/reports", icon: FileText },
+  { key: "domains", url: "/domains", icon: Globe },
+] as const;
 
 const settingsSubItems = [
-  { title: "Profile", url: "/settings", icon: User },
-  { title: "API Keys", url: "/settings/api-keys", icon: Key },
-  { title: "Users", url: "/users", icon: Users },
-];
+  { key: "profile", url: "/settings", icon: User },
+  { key: "apiKeys", url: "/settings/api-keys", icon: Key },
+  { key: "users", url: "/users", icon: Users },
+] as const;
 
 export function AppSidebar() {
+  const { t } = useI18n();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
@@ -66,13 +69,13 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupLabel>{t.nav.menu}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.key}>
                   <SidebarMenuButton
-                    tooltip={item.title}
+                    tooltip={t.nav[item.key]}
                     render={
                       <NavLink
                         to={item.url}
@@ -83,7 +86,7 @@ export function AppSidebar() {
                     }
                   >
                     <item.icon />
-                    <span>{item.title}</span>
+                    <span>{t.nav[item.key]}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -94,20 +97,20 @@ export function AppSidebar() {
                   <CollapsibleTrigger
                     render={
                       <SidebarMenuButton
-                        tooltip="Settings"
+                        tooltip={t.nav.settings}
                         className={`hover:bg-accent/50 ${isSettingsActive ? "bg-accent text-accent-foreground font-medium" : ""}`}
                       />
                     }
                   >
                     <Settings />
-                    <span>Settings</span>
-                    <ChevronRight className="ml-auto transition-transform group-data-open/collapsible:rotate-90" />
+                    <span>{t.nav.settings}</span>
+                    <ChevronRight className="ms-auto transition-transform rtl:rotate-180 group-data-open/collapsible:rotate-90" />
                   </CollapsibleTrigger>
                   {!collapsed && (
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {settingsSubItems.map((sub) => (
-                          <SidebarMenuSubItem key={sub.title}>
+                          <SidebarMenuSubItem key={sub.key}>
                             <SidebarMenuSubButton
                               render={
                                 <NavLink
@@ -119,7 +122,7 @@ export function AppSidebar() {
                               }
                             >
                               <sub.icon />
-                              <span>{sub.title}</span>
+                              <span>{t.nav[sub.key]}</span>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
@@ -137,7 +140,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              tooltip="Billings"
+              tooltip={t.nav.billing}
               render={
                 <NavLink
                   to="/billings"
@@ -148,12 +151,12 @@ export function AppSidebar() {
               }
             >
               <CreditCard />
-              <span>Billings</span>
+              <span>{t.nav.billing}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
-              tooltip="Docs"
+              tooltip={t.nav.docs}
               render={
                 <a
                   href={DOCS_URL}
@@ -164,7 +167,7 @@ export function AppSidebar() {
               }
             >
               <BookOpen />
-              <span>Docs</span>
+              <span>{t.nav.docs}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -178,8 +181,9 @@ export function AppSidebar() {
             render={<NavLink to="/login" />}
           >
             <LogOut />
-            {!collapsed && <span>Logout</span>}
+            {!collapsed && <span>{t.nav.logout}</span>}
           </Button>
+          {!collapsed && <LanguageSwitcher />}
           {!collapsed && <ThemeToggle />}
         </div>
       </SidebarFooter>

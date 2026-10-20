@@ -2,13 +2,22 @@
 import type { ReactNode } from 'react';
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
 import { ThemeProvider } from 'next-themes';
+import { GithubStarToast } from '@/components/github-star-toast';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { NotFound } from '@/components/not-found';
+import { I18nProvider, loadMessages, useI18n } from '@/i18n';
+import { langTag, localeDir } from '@/i18n/languages';
+import { splitLocale } from '@/i18n/routing';
 import { SITE_NAME, SITE_URL } from '@/lib/site';
 import appCss from '@/styles.css?url';
 
 export const Route = createRootRoute({
+  // The router strips the language from the URL, read it back from the public href
+  beforeLoad: async ({ location }) => {
+    const { locale } = splitLocale(new URL(location.publicHref, SITE_URL).pathname);
+    return { locale, messages: await loadMessages(locale) };
+  },
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -50,16 +59,20 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  const { locale, messages } = Route.useRouteContext();
   return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
+    <I18nProvider locale={locale} messages={messages}>
+      <RootDocument>
+        <Outlet />
+      </RootDocument>
+    </I18nProvider>
   );
 }
 
 function RootDocument({ children }: { children: ReactNode }) {
+  const { locale, t } = useI18n();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={langTag(locale)} dir={localeDir(locale)} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -69,11 +82,12 @@ function RootDocument({ children }: { children: ReactNode }) {
             href="#main"
             className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-background focus:px-3 focus:py-2"
           >
-            Skip to content
+            {t.common.skipToContent}
           </a>
           <SiteHeader />
           <main id="main">{children}</main>
           <SiteFooter />
+          <GithubStarToast />
         </ThemeProvider>
         <Scripts />
       </body>

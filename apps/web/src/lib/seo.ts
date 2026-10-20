@@ -1,3 +1,5 @@
+import { DEFAULT_LOCALE, LOCALES, type Locale, langTag, ogLocale } from '@/i18n/languages';
+import { localizePath } from '@/i18n/routing';
 import { OG_IMAGE, SITE_NAME, SITE_URL } from './site';
 
 type SeoInput = {
@@ -10,7 +12,15 @@ type SeoInput = {
   noindex?: boolean;
   /** JSON-LD objects to embed in the page */
   jsonLd?: Array<Record<string, unknown>>;
+  /**
+   * Language of a translated page. Adds the localized canonical, hreflang
+   * alternates for every language and `og:locale`. Leave it out on English-only
+   * pages so their `/{locale}` copies canonicalize to English.
+   */
+  locale?: Locale;
 };
+
+const absoluteUrl = (path: string) => `${SITE_URL}${path === '/' ? '' : path}`;
 
 /**
  * Title, description, canonical, Open Graph, Twitter card and JSON-LD for a
@@ -24,9 +34,20 @@ export function seo({
   type = 'website',
   noindex,
   jsonLd = [],
+  locale,
 }: SeoInput) {
-  const url = `${SITE_URL}${path === '/' ? '' : path}`;
+  const url = absoluteUrl(locale ? localizePath(path, locale) : path);
   const fullTitle = path === '/' ? title : `${title} | ${SITE_NAME}`;
+  const alternates = locale
+    ? [
+        ...LOCALES.map((alt) => ({
+          rel: 'alternate',
+          hrefLang: langTag(alt),
+          href: absoluteUrl(localizePath(path, alt)),
+        })),
+        { rel: 'alternate', hrefLang: 'x-default', href: absoluteUrl(path) },
+      ]
+    : [];
 
   return {
     meta: [
@@ -45,8 +66,15 @@ export function seo({
       { name: 'twitter:title', content: fullTitle },
       { name: 'twitter:description', content: description },
       { name: 'twitter:image', content: image },
+      { property: 'og:locale', content: ogLocale(locale ?? DEFAULT_LOCALE) },
+      ...(locale
+        ? LOCALES.filter((alt) => alt !== locale).map((alt) => ({
+            property: 'og:locale:alternate',
+            content: ogLocale(alt),
+          }))
+        : []),
     ],
-    links: [{ rel: 'canonical', href: url }],
+    links: [{ rel: 'canonical', href: url }, ...alternates],
     scripts: jsonLd.map((data) => ({
       type: 'application/ld+json',
       children: JSON.stringify({ '@context': 'https://schema.org', ...data }),

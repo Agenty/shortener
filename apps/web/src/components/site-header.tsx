@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
 import { ChevronDown, Menu } from 'lucide-react';
+import { LanguageList, LanguageMenu } from '@/components/language-menu';
 import { Logo } from '@/components/logo';
 import { buttonVariants } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { productNav, toolNav } from '@/data/nav';
+import { useI18n, withLang } from '@/i18n';
+import { localeDir } from '@/i18n/languages';
 import { LOGIN_URL, SIGNUP_URL } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
@@ -24,7 +27,7 @@ function NavMenu({ label, items }: { label: string; items: NavItem[] }) {
         {label}
         <ChevronDown className="size-3.5 transition-transform group-focus-within/menu:rotate-180 group-hover/menu:rotate-180" />
       </button>
-      <div className="invisible absolute top-full left-1/2 z-50 -translate-x-1/2 pt-2 opacity-0 transition-all group-focus-within/menu:visible group-focus-within/menu:opacity-100 group-hover/menu:visible group-hover/menu:opacity-100">
+      <div className="invisible absolute top-full left-1/2 z-50 -translate-x-1/2 rtl:translate-x-1/2 pt-2 opacity-0 transition-all group-focus-within/menu:visible group-focus-within/menu:opacity-100 group-hover/menu:visible group-hover/menu:opacity-100">
         <div className="w-80 rounded-2xl border bg-popover p-2 shadow-xl">
           {items.map((item) => (
             <Link
@@ -47,6 +50,11 @@ function NavMenu({ label, items }: { label: string; items: NavItem[] }) {
 }
 
 export function SiteHeader() {
+  const { locale, t } = useI18n();
+  const products = productNav(t);
+  const tools = toolNav(t);
+  const signupUrl = withLang(SIGNUP_URL, locale);
+  const loginUrl = withLang(LOGIN_URL, locale);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
@@ -76,53 +84,54 @@ export function SiteHeader() {
         <Logo />
 
         <nav aria-label="Main" className="hidden items-center md:flex">
-          <NavMenu label="Product" items={productNav} />
-          <NavMenu label="Free tools" items={toolNav} />
+          <NavMenu label={t.common.product} items={products} />
+          <NavMenu label={t.common.freeTools} items={tools} />
           <Link
             to="/pricing"
             className="rounded-full px-3 py-2 text-sm text-foreground/80 hover:text-foreground"
             activeProps={{ className: 'text-foreground' }}
           >
-            Pricing
+            {t.common.pricing}
           </Link>
           <Link
             to="/docs/api"
             className="rounded-full px-3 py-2 text-sm text-foreground/80 hover:text-foreground"
             activeProps={{ className: 'text-foreground' }}
           >
-            API
+            {t.common.api}
           </Link>
           <Link
             to="/docs"
             className="rounded-full px-3 py-2 text-sm text-foreground/80 hover:text-foreground"
             activeProps={{ className: 'text-foreground' }}
           >
-            Docs
+            {t.common.docs}
           </Link>
+          <LanguageMenu />
           <a
-            href={LOGIN_URL}
+            href={loginUrl}
             className="rounded-full px-3 py-2 text-sm text-foreground/80 hover:text-foreground"
           >
-            Sign in
+            {t.common.signIn}
           </a>
-          <a href={SIGNUP_URL} className={cn(buttonVariants({ size: 'lg' }), 'ml-2 rounded-xl')}>
-            Start free
+          <a href={signupUrl} className={cn(buttonVariants({ size: 'lg' }), 'ms-2 rounded-xl')}>
+            {t.common.startFree}
           </a>
         </nav>
 
         <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
           <SheetTrigger
             className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'md:hidden')}
-            aria-label="Open menu"
+            aria-label={t.common.openMenu}
           >
             <Menu className="size-5" />
           </SheetTrigger>
-          <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-sm">
-            <SheetTitle className="px-5 pt-5">Menu</SheetTitle>
+          <SheetContent side={localeDir(locale) === 'rtl' ? 'left' : 'right'} className="w-full overflow-y-auto sm:max-w-sm">
+            <SheetTitle className="px-5 pt-5">{t.common.menu}</SheetTitle>
             <nav aria-label="Mobile" className="flex flex-col gap-6 p-5">
               {[
-                { title: 'Product', items: productNav },
-                { title: 'Free tools', items: toolNav },
+                { title: t.common.product, items: products },
+                { title: t.common.freeTools, items: tools },
               ].map((group) => (
                 <div key={group.title}>
                   <p className="font-mono text-[11px] tracking-[0.18em] text-muted-foreground uppercase">
@@ -139,24 +148,25 @@ export function SiteHeader() {
               ))}
               <div className="flex flex-col">
                 <Link to="/pricing" className="py-1.5 text-[15px]">
-                  Pricing
+                  {t.common.pricing}
                 </Link>
                 <Link to="/docs/api" className="py-1.5 text-[15px]">
-                  API
+                  {t.common.api}
                 </Link>
                 <Link to="/docs" className="py-1.5 text-[15px]">
-                  Docs
+                  {t.common.docs}
                 </Link>
                 <Link to="/contact" className="py-1.5 text-[15px]">
-                  Contact
+                  {t.common.contact}
                 </Link>
               </div>
+              <LanguageList />
               <div className="grid gap-2">
-                <a href={SIGNUP_URL} className={buttonVariants({ size: 'lg' })}>
-                  Start free
+                <a href={signupUrl} className={buttonVariants({ size: 'lg' })}>
+                  {t.common.startFree}
                 </a>
-                <a href={LOGIN_URL} className={buttonVariants({ size: 'lg', variant: 'outline' })}>
-                  Sign in
+                <a href={loginUrl} className={buttonVariants({ size: 'lg', variant: 'outline' })}>
+                  {t.common.signIn}
                 </a>
               </div>
             </nav>

@@ -5,96 +5,95 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { buttonVariants } from '@/components/ui/button';
 import { alternatives, featuredAlternatives } from '@/data/alternatives';
 import { shortenerTools } from '@/data/tools';
+import { fmt, useI18n, withLang, type Messages } from '@/i18n';
 import { GITHUB_URL, LOGIN_URL, SIGNUP_URL } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
-const columns = [
+const footerColumns = (t: Messages) => [
   {
-    title: 'Product',
+    title: t.common.product,
     links: [
-      { label: 'Short links', to: '/short-links-builder' },
-      { label: 'Pricing', to: '/pricing' },
-      { label: 'Lifetime deal', to: '/lifetime-deal' },
-      { label: 'Enterprise', to: '/enterprise' },
-      { label: 'Docs', to: '/docs' },
-      { label: 'API reference', to: '/docs/api' },
+      { label: t.nav.shortLinks, to: '/short-links-builder' },
+      { label: t.common.pricing, to: '/pricing' },
+      { label: t.nav.lifetimeDeal, to: '/lifetime-deal' },
+      { label: t.footer.enterprise, to: '/enterprise' },
+      { label: t.common.docs, to: '/docs' },
+      { label: t.footer.apiReference, to: '/docs/api' },
     ],
   },
   {
-    title: 'Compare',
+    title: t.footer.compare,
     links: [
       ...featuredAlternatives.map((slug) => ({
-        label: `${alternatives.find((item) => item.slug === slug)?.name} alternative`,
+        label: fmt(t.footer.alternative, {
+          name: alternatives.find((item) => item.slug === slug)?.name ?? slug,
+        }),
         to: `/alternatives/${slug}`,
       })),
-      { label: 'All comparisons', to: '/alternatives' },
+      { label: t.footer.allComparisons, to: '/alternatives' },
     ],
   },
   {
-    title: 'Free tools',
+    title: t.common.freeTools,
     links: [
       ...shortenerTools.slice(0, 5).map((tool) => ({ label: tool.title, to: `/tools/${tool.slug}` })),
-      { label: 'WhatsApp link generator', to: '/tools/whatsapp-link-generator' },
-      { label: 'Social share preview', to: '/tools/social-share-preview' },
+      { label: t.nav.whatsapp, to: '/tools/whatsapp-link-generator' },
+      { label: t.nav.socialPreview, to: '/tools/social-share-preview' },
     ],
   },
   {
-    title: 'Company',
+    title: t.footer.company,
     links: [
-      { label: 'About', to: '/about' },
-      { label: 'Contact', to: '/contact' },
-      { label: 'Report a link', to: '/report' },
-      { label: 'Terms of use', to: '/terms' },
-      { label: 'Privacy policy', to: '/privacy' },
+      { label: t.footer.about, to: '/about' },
+      { label: t.common.contact, to: '/contact' },
+      { label: t.footer.report, to: '/report' },
+      { label: t.footer.terms, to: '/terms' },
+      { label: t.footer.privacy, to: '/privacy' },
     ],
   },
 ];
 
 /** Closing call to action shared by every page */
-export function CtaBand({
-  title = 'Your next link, shorter and tracked.',
-  description = 'Free for 10 links with click analytics, no card required.',
-}: {
-  title?: string;
-  description?: string;
-}) {
+export function CtaBand({ title, description }: { title?: string; description?: string }) {
+  const { locale, t } = useI18n();
   return (
     <div className="container py-24 text-center md:py-32">
       <h2 className="mx-auto max-w-2xl text-4xl font-semibold tracking-[-0.03em] text-balance md:text-6xl">
-        {title}
+        {title ?? t.footer.ctaTitle}
       </h2>
       <div className="mt-8 flex items-center justify-center gap-3">
         <a
-          href={SIGNUP_URL}
+          href={withLang(SIGNUP_URL, locale)}
           className={cn(
             buttonVariants({ size: 'lg' }),
             'h-11 rounded-xl bg-white px-5 text-base text-neutral-900 hover:bg-white/90'
           )}
         >
-          Start free
+          {t.common.startFree}
         </a>
-        <a href={LOGIN_URL} className="px-3 py-2 text-sm text-white/80 hover:text-white">
-          Sign in
+        <a href={withLang(LOGIN_URL, locale)} className="px-3 py-2 text-sm text-white/80 hover:text-white">
+          {t.common.signIn}
         </a>
       </div>
-      <p className="mt-5 text-sm text-white/60">{description}</p>
+      <p className="mt-5 text-sm text-white/60">{description ?? t.common.freeNote}</p>
     </div>
   );
 }
 
 export function SiteFooter({ hideCta }: { hideCta?: boolean }) {
+  const { t } = useI18n();
   return (
     <footer className="relative overflow-hidden bg-neutral-950 text-white dark:border-t">
       {!hideCta && <CtaBand />}
       <div className="container">
         <div className="grid grid-cols-2 gap-10 border-t border-white/10 py-14 md:grid-cols-[1.2fr_repeat(4,1fr)]">
           <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="flex items-center gap-2" aria-label="Shortener.dev home">
+            <Link to="/" className="flex items-center gap-2" aria-label={t.common.home}>
               <LogoMark className="size-8 [&_path]:stroke-neutral-950 [&_rect]:fill-white" />
               <Wordmark />
             </Link>
             <p className="mt-4 max-w-56 text-sm leading-relaxed text-white/60">
-              Short links with click analytics, for marketing teams and developers.
+              {t.footer.tagline}
             </p>
             <div className="mt-6 flex items-center gap-3">
               <ThemeToggle className="border-white/15 [&_button]:text-white/60 [&_button:hover]:text-white [&_button[aria-checked=true]]:bg-white/10 [&_button[aria-checked=true]]:text-white" />
@@ -108,7 +107,7 @@ export function SiteFooter({ hideCta }: { hideCta?: boolean }) {
               </a>
             </div>
           </div>
-          {columns.map((column) => (
+          {footerColumns(t).map((column) => (
             <div key={column.title}>
               <p className="font-mono text-[11px] tracking-[0.18em] text-white/50 uppercase">
                 {column.title}
@@ -126,8 +125,8 @@ export function SiteFooter({ hideCta }: { hideCta?: boolean }) {
           ))}
         </div>
         <div className="flex flex-col justify-between gap-2 border-t border-white/10 py-6 text-xs text-white/50 sm:flex-row">
-          <p>© {new Date().getFullYear()} Agenty Analytics Pvt. Ltd. All rights reserved.</p>
-          <p>Made for marketers and developers.</p>
+          <p>{fmt(t.footer.rights, { year: new Date().getFullYear() })}</p>
+          <p>{t.footer.madeFor}</p>
         </div>
       </div>
       <p

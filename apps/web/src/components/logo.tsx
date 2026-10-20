@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router';
+import { useI18n } from '@/i18n';
 import { cn } from '@/lib/utils';
 
 /** Monoline letterforms for "shortener" and "dev"; the period is drawn separately. */
@@ -44,10 +45,11 @@ export function Wordmark({ className }: { className?: string }) {
 }
 
 export function Logo({ className }: { className?: string }) {
+  const { t } = useI18n();
   return (
     <Link
       to="/"
-      aria-label="Shortener.dev home"
+      aria-label={t.common.home}
       className={cn('flex items-center gap-2', className)}
     >
       <LogoMark className="size-8" />

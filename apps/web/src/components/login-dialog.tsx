@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { fmt, useI18n } from '@/i18n';
 import { type AuthUser, setAuth } from '@/lib/auth';
 import { API_URL } from '@/lib/site';
 
@@ -20,7 +21,7 @@ export interface LoginDialogProps {
   returnTo?: string;
 }
 
-const postJson = async (path: string, body: unknown, token?: string) => {
+const postJson = async (path: string, body: unknown, token: string | undefined, tooMany: string) => {
   const res = await fetch(`${API_URL}${path}`, {
     method: 'POST',
     headers: {
@@ -31,7 +32,7 @@ const postJson = async (path: string, body: unknown, token?: string) => {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(res.status === 429 ? 'Too many attempts. Wait a minute and try again.' : data.message);
+    throw new Error(res.status === 429 ? tooMany : data.message);
   }
   return data;
 };
@@ -61,10 +62,12 @@ export function LoginDialog({
   onOpenChange,
   onSuccess,
   onBeforeRedirect,
-  title = 'Sign in or create an account',
-  description = 'Continue with Google, or get a one-time code by email.',
+  title,
+  description,
   returnTo,
 }: LoginDialogProps) {
+  const { t } = useI18n();
+  const copy = t.login;
   const [step, setStep] = useState<'email' | 'otp'>('email');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -94,16 +97,16 @@ export function LoginDialog({
   const handleSendOtp = async () => {
     setError(null);
     if (!email || !email.includes('@')) {
-      setError('Enter a valid email address');
+      setError(copy.invalidEmail);
       return;
     }
     try {
       setIsSendingOtp(true);
-      const data = await postJson('/auth/identify', { email });
+      const data = await postJson('/auth/identify', { email }, undefined, copy.tooMany);
       setTempToken(data.token);
       setStep('otp');
     } catch (err) {
-      setError((err as Error).message || 'Could not send the code');
+      setError((err as Error).message || copy.sendFailed);
     } finally {
       setIsSendingOtp(false);
     }
@@ -112,18 +115,18 @@ export function LoginDialog({
   const handleVerifyOtp = async () => {
     setError(null);
     if (otp.length !== 6) {
-      setError('Enter the 6-digit code');
+      setError(copy.invalidCode);
       return;
     }
     try {
       setIsVerifyingOtp(true);
-      const data = await postJson('/auth/verify', { code: otp }, tempToken);
+      const data = await postJson('/auth/verify', { code: otp }, tempToken, copy.tooMany);
       const auth: AuthUser = { token: data.token, name: data.name, email: data.email, avatar: data.avatar };
       setAuth(auth);
       onOpenChange(false);
       onSuccess?.(auth);
     } catch (err) {
-      setError((err as Error).message || 'Invalid code');
+      setError((err as Error).message || copy.verifyFailed);
     } finally {
       setIsVerifyingOtp(false);
     }
@@ -141,24 +144,24 @@ export function LoginDialog({
         {step === 'email' ? (
           <>
             <DialogHeader>
-              <DialogTitle>{title}</DialogTitle>
-              <DialogDescription>{description}</DialogDescription>
+              <DialogTitle>{title ?? copy.title}</DialogTitle>
+              <DialogDescription>{description ?? copy.description}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-2">
               <Button variant="outline" className="w-full" onClick={handleGoogle} type="button">
                 <GoogleIcon />
-                Continue with Google
+                {copy.google}
               </Button>
 
               <div className="relative text-center">
                 <span className="absolute inset-x-0 top-1/2 border-t" />
                 <span className="relative bg-popover px-2 text-xs tracking-wide text-muted-foreground uppercase">
-                  or
+                  {copy.or}
                 </span>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="login-email">Email</Label>
+                <Label htmlFor="login-email">{copy.email}</Label>
                 <Input
                   id="login-email"
                   type="email"
@@ -174,10 +177,10 @@ export function LoginDialog({
                 {isSendingOtp ? (
                   <>
                     <Loader2 className="size-4 animate-spin" />
-                    Sending...
+                    {copy.sending}
                   </>
                 ) : (
-                  'Continue with email'
+                  copy.continueEmail
                 )}
               </Button>
             </div>
@@ -185,12 +188,12 @@ export function LoginDialog({
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle>Enter verification code</DialogTitle>
-              <DialogDescription>We sent a 6-digit code to {email}</DialogDescription>
+              <DialogTitle>{copy.otpTitle}</DialogTitle>
+              <DialogDescription>{fmt(copy.otpDescription, { email })}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-2">
               <div className="space-y-2">
-                <Label htmlFor="login-otp">Verification code</Label>
+                <Label htmlFor="login-otp">{copy.otpLabel}</Label>
                 <Input
                   id="login-otp"
                   inputMode="numeric"
@@ -206,10 +209,10 @@ export function LoginDialog({
                 {isVerifyingOtp ? (
                   <>
                     <Loader2 className="size-4 animate-spin" />
-                    Verifying...
+                    {copy.verifying}
                   </>
                 ) : (
-                  'Verify & continue'
+                  copy.verify
                 )}
               </Button>
               <Button
@@ -221,7 +224,7 @@ export function LoginDialog({
                   setStep('email');
                 }}
               >
-                Use a different email
+                {copy.back}
               </Button>
             </div>
           </>
