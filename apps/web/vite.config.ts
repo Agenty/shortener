@@ -10,7 +10,9 @@ export default defineConfig({
     cloudflare({ viteEnvironment: { name: 'ssr' } }),
     tailwindcss(),
     tanstackStart({
-      prerender: { enabled: true },
+      // Emit about.html instead of about/index.html: Cloudflare would otherwise
+      // 307 /about -> /about/, which disagrees with our canonical URLs.
+      prerender: { enabled: true, autoSubfolderIndex: false },
     }),
     viteReact(),
   ],
