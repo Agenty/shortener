@@ -23,9 +23,10 @@ Use the menu in the top right corner to switch between **Last 24h**, **Last 7d**
 | Plan | Analytics history |
 | --- | --- |
 | Free | 7 days |
-| Pro | 30 days |
-| Business | 60 days |
-| Advanced | 90 days |
+| Starter | 30 days |
+| Pro | 60 days |
+| Business | 90 days |
+| Enterprise | Up to 3 years |
 
 Ranges longer than your plan's history don't return data. Upgrade on the **Billings** page to see further back.
 

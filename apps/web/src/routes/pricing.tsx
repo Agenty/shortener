@@ -32,13 +32,14 @@ const matrix = (t: Messages): Array<[string, ...Value[]]> => {
   const { rows, unlimited, custom } = t.pricing;
   const perMonth = (n: string) => fmt(t.pricing.perMonth, { n });
   const days = (n: number) => fmt(t.pricing.days, { n });
+  const years = (n: number) => fmt(t.pricing.years, { n });
   return [
-    [rows.shortLinks, '10', perMonth('1,000'), perMonth('10,000'), perMonth('50,000'), unlimited],
+    [rows.shortLinks, '50', perMonth('500'), perMonth('2,000'), perMonth('15,000'), unlimited],
     [rows.clicks, unlimited, unlimited, unlimited, unlimited, unlimited],
-    [rows.history, days(7), days(30), days(60), days(90), days(90)],
-    [rows.domains, false, '3', '5', '10', custom],
-    [rows.projects, false, '5', '10', '25', custom],
-    [rows.team, false, '5', '10', '20', unlimited],
+    [rows.history, days(7), days(30), days(60), days(90), years(3)],
+    [rows.domains, '1', '2', '10', '25', custom],
+    [rows.projects, false, '3', '5', '10', custom],
+    [rows.team, false, '2', '5', '10', unlimited],
     [rows.reports, false, true, true, true, true],
     [rows.api, false, true, true, true, true],
     [rows.utm, true, true, true, true, true],

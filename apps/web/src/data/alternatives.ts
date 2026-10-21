@@ -38,13 +38,13 @@ export type FeatureKey =
   | 'hosting';
 
 export const comparisonFeatures: Array<{ key: FeatureKey; label: string; ours: string }> = [
-  { key: 'pricing', label: 'Pricing', ours: 'From $29 a month, or $149 one-time' },
-  { key: 'free', label: 'Free plan', ours: '10 links with 7 days of analytics' },
-  { key: 'domains', label: 'Custom domains', ours: '1 to 10 branded domains, by plan' },
+  { key: 'pricing', label: 'Pricing', ours: 'From $9 a month, or $99 one-time' },
+  { key: 'free', label: 'Free plan', ours: '50 links with 7 days of analytics' },
+  { key: 'domains', label: 'Domains', ours: '1 to 25 whitelisted domains, by plan' },
   {
     key: 'analytics',
     label: 'Click analytics',
-    ours: 'Country, city, referrer, browser, OS and device, 7 to 90 days by plan',
+    ours: 'Country, city, referrer, browser, OS and device, 7 days to 3 years by plan',
   },
   {
     key: 'targeting',
@@ -66,7 +66,7 @@ export const comparisonFeatures: Array<{ key: FeatureKey; label: string; ours: s
 ];
 
 const managedAngle = (name: string) =>
-  `Shortener.dev covers the link features most teams use from ${name} (branded domains, click analytics, UTM parameters, expiration, passwords, device and geo targeting) and keeps every link option available on every plan. Paid plans start at $29 a month, and there is a one-time lifetime option.`;
+  `Shortener.dev covers the link features most teams use from ${name} (click analytics, UTM parameters, expiration, passwords, device and geo targeting) and keeps every link option available on every plan. Paid plans start at $9 a month, and there is a one-time lifetime option.`;
 
 export const alternatives: Alternative[] = [
   {
@@ -108,7 +108,7 @@ export const alternatives: Alternative[] = [
     category: 'Link management platforms',
     positioning: 'Branded links first, with domain management and team workspaces.',
     summary:
-      'Rebrandly is built around branded short links, with tools to buy and manage domains, team workspaces and an API. Shortener.dev offers branded domains and the same core link options at a lower entry price.',
+      'Rebrandly is built around branded short links, with tools to buy and manage domains, team workspaces and an API. Shortener.dev offers the same core link options at a lower entry price.',
     angle: managedAngle('Rebrandly'),
     bestFor:
       'You manage many branded domains and want to register them through the same vendor.',

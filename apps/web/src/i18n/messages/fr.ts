@@ -17,7 +17,7 @@ const fr: Messages = {
     language: 'Langue',
     faq: 'FAQ',
     faqTitle: 'Questions fréquentes',
-    freeNote: 'Gratuit pour 10 liens avec statistiques de clics, sans carte bancaire.',
+    freeNote: 'Gratuit pour 50 liens avec statistiques de clics, sans carte bancaire.',
     included: 'Inclus',
     notIncluded: 'Non inclus',
   },
@@ -124,7 +124,7 @@ const fr: Messages = {
     customPricing: 'Tarif sur mesure',
     free: {
       tagline: 'Pour essayer sur quelques liens',
-      links: '10 liens',
+      links: '50 liens',
       analytics: '7 jours de statistiques de clics',
       features: [
         'Expiration et mots de passe',
@@ -134,37 +134,42 @@ const fr: Messages = {
       ],
       cta: 'Commencer gratuitement',
     },
-    pro: {
-      tagline: 'Pour les équipes marketing',
-      links: '1 000 liens par mois',
+    starter: {
+      tagline: 'Pour les marketeurs indépendants et les créateurs',
+      links: '500 liens par mois',
       analytics: '30 jours de statistiques de clics',
       features: [
-        '3 domaines personnalisés',
-        '5 projets',
-        '5 membres d’équipe',
+        '2 domaines en liste blanche',
+        '3 projets',
+        '2 membres d’équipe',
         'Rapports de clics',
         'Accès à l’API',
+      ],
+      cta: 'Choisir Starter',
+    },
+    pro: {
+      tagline: 'Pour les équipes marketing',
+      links: '2 000 liens par mois',
+      analytics: '60 jours de statistiques de clics',
+      features: [
+        '10 domaines en liste blanche',
+        '5 projets',
+        '5 membres d’équipe',
+        'Tout le plan Starter',
       ],
       cta: 'Choisir Pro',
     },
     business: {
       tagline: 'Pour les agences et les marques',
-      links: '10 000 liens par mois',
-      analytics: '60 jours de statistiques de clics',
-      features: ['5 domaines personnalisés', '10 projets', '10 membres d’équipe', 'Tout le plan Pro'],
-      cta: 'Choisir Business',
-    },
-    advanced: {
-      tagline: 'Pour les équipes à fort volume',
-      links: '50 000 liens par mois',
+      links: '15 000 liens par mois',
       analytics: '90 jours de statistiques de clics',
       features: [
-        '10 domaines personnalisés',
-        '25 projets',
-        '20 membres d’équipe',
-        'Tout le plan Business',
+        '25 domaines en liste blanche',
+        '10 projets',
+        '10 membres d’équipe',
+        'Tout le plan Pro',
       ],
-      cta: 'Choisir Advanced',
+      cta: 'Choisir Business',
     },
     enterprise: {
       tagline: 'Pour les organisations avec des exigences de sécurité, de conformité et d’achats.',
@@ -172,8 +177,8 @@ const fr: Messages = {
         'Liens illimités',
         'Membres d’équipe illimités',
         'Accompagnement pour les audits de conformité',
-        '90 jours de statistiques de clics',
-        'Domaines et projets adaptés à vos marques',
+        'Jusqu’à 3 ans de statistiques de clics',
+        'Domaines en liste blanche et projets adaptés à vos marques',
         'Contrat, facturation et DPA',
         'Support dédié',
       ],
@@ -182,7 +187,7 @@ const fr: Messages = {
     faqs: [
       {
         q: 'Existe-t-il une offre gratuite ?',
-        a: 'Oui. L’offre gratuite comprend 10 liens courts avec 7 jours de statistiques de clics, sans carte bancaire. Passez à une offre payante quand il vous faut plus de liens, un domaine personnalisé ou l’accès à l’API.',
+        a: 'Oui. L’offre gratuite comprend 50 liens courts avec 7 jours de statistiques de clics, sans carte bancaire. Passez à une offre payante quand il vous faut plus de liens, plus de domaines en liste blanche ou l’accès à l’API.',
       },
       {
         q: 'Comment les liens sont-ils comptés sur les offres payantes ?',
@@ -198,20 +203,20 @@ const fr: Messages = {
       },
       {
         q: 'Proposez-vous une offre à vie ?',
-        a: 'Oui, pour les 200 premiers clients. Un paiement unique de 149 $ vous donne les fonctionnalités du plan Pro avec 1 000 liens par mois, sans abonnement mensuel.',
+        a: 'Oui, pour les 200 premiers clients. Un paiement unique de 99 $ vous donne les fonctionnalités du plan Pro avec 2 000 liens par mois, sans abonnement mensuel.',
       },
       {
         q: 'Que comprend l’offre Enterprise ?',
-        a: 'Liens et membres d’équipe illimités, 90 jours de statistiques de clics, de l’aide pour vos audits de conformité et de sécurité, un contrat avec facturation et un DPA, et un support dédié. Contactez-nous pour un devis.',
+        a: 'Liens et membres d’équipe illimités, jusqu’à 3 ans de statistiques de clics, de l’aide pour vos audits de conformité et de sécurité, un contrat avec facturation et un DPA, et un support dédié. Contactez-nous pour un devis.',
       },
       {
-        q: 'Puis-je utiliser mon propre domaine ?',
-        a: 'Oui. Les offres payantes incluent des domaines personnalisés : vos liens courts peuvent ressembler à go.votremarque.com/offre plutôt qu’à un domaine court générique.',
+        q: 'Puis-je raccourcir des liens vers mon propre site ?',
+        a: 'Oui. Vérifiez votre domaine pour l’ajouter à votre liste blanche, puis raccourcissez des liens vers n’importe quelle page de ce domaine ou de ses sous-domaines. Chaque offre inclut un nombre de domaines en liste blanche, et les sites populaires comme YouTube, LinkedIn et Amazon sont autorisés sur toutes les offres.',
       },
     ],
   },
   lifetime: {
-    links: '1 000 liens par mois',
+    links: '2 000 liens par mois',
     claimed: '{claimed} sur {spots} réservées',
     left: 'Plus que {left}',
     progress: 'Places de l’offre à vie réservées',
@@ -281,8 +286,8 @@ const fr: Messages = {
     extrasTitle: 'Conçu pour les équipes qui partagent beaucoup de liens',
     extras: {
       domains: {
-        title: 'Domaines personnalisés',
-        body: 'Des liens courts sur go.votremarque.com plutôt que sur un domaine générique.',
+        title: 'Liste blanche de domaines',
+        body: 'Vérifiez vos domaines une seule fois, puis raccourcissez des liens vers toutes leurs pages.',
       },
       projects: { title: 'Projets', body: 'Regroupez les liens par campagne, client ou marque.' },
       team: {
@@ -311,15 +316,15 @@ const fr: Messages = {
       },
       {
         q: 'Shortener.dev est-il gratuit ?',
-        a: 'Oui. L’offre gratuite comprend 10 liens courts avec statistiques de clics, et vous pouvez vous connecter et raccourcir un lien directement depuis le formulaire de cette page. Les offres payantes commencent à 29 $ par mois.',
+        a: 'Oui. L’offre gratuite comprend 50 liens courts avec statistiques de clics, et vous pouvez vous connecter et raccourcir un lien directement depuis le formulaire de cette page. Les offres payantes commencent à 9 $ par mois.',
       },
       {
         q: 'Puis-je changer la destination d’un lien court après l’avoir partagé ?',
         a: 'Oui. Modifiez la destination à tout moment depuis le tableau de bord ou l’API, et le même lien court envoie les visiteurs vers la nouvelle page.',
       },
       {
-        q: 'Puis-je utiliser mon propre domaine ?',
-        a: 'Oui. Les offres payantes incluent des domaines personnalisés : vos liens peuvent ressembler à go.votremarque.com/offre.',
+        q: 'Puis-je raccourcir des liens vers mon propre site ?',
+        a: 'Oui. Vérifiez votre domaine une seule fois et il rejoint votre liste blanche : vous pouvez alors raccourcir des liens vers toutes ses pages.',
       },
       {
         q: 'Que comprennent les statistiques de clics ?',
@@ -334,19 +339,19 @@ const fr: Messages = {
   pricing: {
     metaTitle: 'Tarifs',
     metaDescription:
-      'Raccourcissez des liens gratuitement ou choisissez une offre à partir de 29 $ par mois pour les domaines personnalisés, les membres d’équipe, les rapports de clics et l’accès à l’API. Enterprise ajoute les liens illimités et l’accompagnement conformité.',
+      'Raccourcissez des liens gratuitement ou choisissez une offre à partir de 9 $ par mois pour plus de domaines en liste blanche, les membres d’équipe, les rapports de clics et l’accès à l’API. Enterprise ajoute les liens illimités et l’accompagnement conformité.',
     eyebrow: 'Tarifs',
     title: 'Payez les liens,',
     accent: 'pas les clics.',
     description:
-      'Commencez gratuitement avec 10 liens. Les offres payantes ajoutent les domaines personnalisés, les membres d’équipe, les rapports de clics et l’API. Toutes les offres ont des clics illimités.',
+      'Commencez gratuitement avec 50 liens. Les offres payantes ajoutent les domaines en liste blanche, les membres d’équipe, les rapports de clics et l’API. Toutes les offres ont des clics illimités.',
     compare: 'Comparer les offres',
     feature: 'Fonctionnalité',
     rows: {
       shortLinks: 'Liens courts',
       clicks: 'Clics',
       history: 'Historique des statistiques',
-      domains: 'Domaines personnalisés',
+      domains: 'Liste blanche de domaines',
       projects: 'Projets',
       team: 'Membres d’équipe',
       reports: 'Rapports de clics',
@@ -362,6 +367,7 @@ const fr: Messages = {
     custom: 'Sur mesure',
     perMonth: '{n}/mois',
     days: '{n} jours',
+    years: 'Jusqu’à {n} ans',
     note: 'Prix en USD, hors taxes locales. Les offres payantes comptent les liens créés au cours des 30 derniers jours.',
   },
   shortLinks: {
@@ -418,7 +424,7 @@ const fr: Messages = {
       },
       {
         q: 'Ces options sont-elles disponibles avec l’offre gratuite ?',
-        a: 'Oui. Toutes les options de lien sont disponibles sur toutes les offres. Les offres payantes ajoutent plus de liens, des domaines personnalisés, des membres d’équipe, des rapports de clics et l’API.',
+        a: 'Oui. Toutes les options de lien sont disponibles sur toutes les offres. Les offres payantes ajoutent plus de liens, des domaines en liste blanche, des membres d’équipe, des rapports de clics et l’API.',
       },
       {
         q: 'Puis-je modifier un lien après sa création ?',
@@ -429,20 +435,20 @@ const fr: Messages = {
   lifetimeDeal: {
     metaTitle: 'Offre à vie : raccourcisseur d’URL',
     metaDescription:
-      'Payez {price} $ une seule fois pour un raccourcisseur d’URL avec {links}, domaine personnalisé, statistiques de clics, générateur UTM, aperçu social, mots de passe et ciblage par appareil et par pays.',
+      'Payez {price} $ une seule fois pour un raccourcisseur d’URL avec {links}, 10 domaines en liste blanche, statistiques de clics, générateur UTM, aperçu social, mots de passe et ciblage par appareil et par pays.',
     eyebrow: 'Offre à vie',
     title: 'Payez une fois.',
     accent: 'Raccourcissez tous les mois.',
     description:
-      'Obtenez le plan Pro pour un paiement unique de {price} $ : {links} avec statistiques de clics, domaines personnalisés et l’API. Sans abonnement. Réservé aux {spots} premiers clients.',
+      'Obtenez le plan Pro pour un paiement unique de {price} $ : {links} avec statistiques de clics, 10 domaines en liste blanche et l’API. Sans abonnement. Réservé aux {spots} premiers clients.',
     oneTimePrice: 'Prix unique',
     buy: 'Acheter l’offre à vie',
     rows: {
       links: 'Liens',
       analytics: 'Statistiques de clics',
-      analyticsValue: '30 jours d’historique',
-      domains: 'Domaines personnalisés',
-      domainsValue: '3 domaines',
+      analyticsValue: '60 jours d’historique',
+      domains: 'Liste blanche de domaines',
+      domainsValue: '10 domaines',
       team: 'Membres d’équipe',
       projects: 'Projets',
       reports: 'Rapports de clics',
@@ -466,7 +472,7 @@ const fr: Messages = {
       },
       {
         q: 'Puis-je changer d’offre plus tard ?',
-        a: 'Oui. Si l’offre à vie ne suffit plus, vous pouvez passer à tout moment à une offre mensuelle Business ou Advanced.',
+        a: 'Oui. Si l’offre à vie ne suffit plus, vous pouvez passer à tout moment à l’offre mensuelle Business ou nous parler d’Enterprise.',
       },
       {
         q: 'Cette offre est-elle sur AppSumo ou d’autres places de marché ?',

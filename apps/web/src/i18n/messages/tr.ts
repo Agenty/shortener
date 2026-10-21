@@ -17,7 +17,7 @@ const tr: Messages = {
     language: 'Dil',
     faq: 'SSS',
     faqTitle: 'Sıkça sorulan sorular',
-    freeNote: 'Tıklama analitiğiyle 10 bağlantıya kadar ücretsiz, kart gerekmez.',
+    freeNote: 'Tıklama analitiğiyle 50 bağlantıya kadar ücretsiz, kart gerekmez.',
     included: 'Dahil',
     notIncluded: 'Dahil değil',
   },
@@ -124,7 +124,7 @@ const tr: Messages = {
     customPricing: 'Özel fiyat',
     free: {
       tagline: 'Birkaç bağlantıyla deneyin',
-      links: '10 bağlantı',
+      links: '50 bağlantı',
       analytics: '7 günlük tıklama analitiği',
       features: [
         'Bağlantı süre sonu ve şifreler',
@@ -134,26 +134,32 @@ const tr: Messages = {
       ],
       cta: 'Ücretsiz başla',
     },
+    starter: {
+      tagline: 'Bağımsız pazarlamacılar ve içerik üreticileri için',
+      links: 'Ayda 500 bağlantı',
+      analytics: '30 günlük tıklama analitiği',
+      features: [
+        '2 beyaz listedeki alan adı',
+        '3 proje',
+        '2 ekip üyesi',
+        'Tıklama raporları',
+        'API erişimi',
+      ],
+      cta: 'Starter’ı seç',
+    },
     pro: {
       tagline: 'Pazarlama ekipleri için',
-      links: 'Ayda 1.000 bağlantı',
-      analytics: '30 günlük tıklama analitiği',
-      features: ['3 özel alan adı', '5 proje', '5 ekip üyesi', 'Tıklama raporları', 'API erişimi'],
+      links: 'Ayda 2.000 bağlantı',
+      analytics: '60 günlük tıklama analitiği',
+      features: ['10 beyaz listedeki alan adı', '5 proje', '5 ekip üyesi', 'Starter’daki her şey'],
       cta: 'Pro’yu seç',
     },
     business: {
       tagline: 'Ajanslar ve markalar için',
-      links: 'Ayda 10.000 bağlantı',
-      analytics: '60 günlük tıklama analitiği',
-      features: ['5 özel alan adı', '10 proje', '10 ekip üyesi', 'Pro’daki her şey'],
-      cta: 'Business’ı seç',
-    },
-    advanced: {
-      tagline: 'Yüksek hacimli ekipler için',
-      links: 'Ayda 50.000 bağlantı',
+      links: 'Ayda 15.000 bağlantı',
       analytics: '90 günlük tıklama analitiği',
-      features: ['10 özel alan adı', '25 proje', '20 ekip üyesi', 'Business’taki her şey'],
-      cta: 'Advanced’ı seç',
+      features: ['25 beyaz listedeki alan adı', '10 proje', '10 ekip üyesi', 'Pro’daki her şey'],
+      cta: 'Business’ı seç',
     },
     enterprise: {
       tagline: 'Güvenlik, uyumluluk ve satın alma gereksinimleri olan kuruluşlar için.',
@@ -161,8 +167,8 @@ const tr: Messages = {
         'Sınırsız bağlantı',
         'Sınırsız ekip üyesi',
         'Uyumluluk denetimi desteği',
-        '90 günlük tıklama analitiği',
-        'Markalarınıza uygun alan adları ve projeler',
+        '3 yıla kadar tıklama analitiği',
+        'Markalarınıza uygun beyaz listedeki alan adları ve projeler',
         'Sözleşme, faturalama ve DPA',
         'Özel destek',
       ],
@@ -171,7 +177,7 @@ const tr: Messages = {
     faqs: [
       {
         q: 'Ücretsiz plan var mı?',
-        a: 'Evet. Ücretsiz plan, 7 günlük tıklama analitiğiyle 10 kısa bağlantı içerir, kart gerekmez. Daha fazla bağlantıya, özel alan adına veya API erişimine ihtiyacınız olduğunda yükseltin.',
+        a: 'Evet. Ücretsiz plan, 7 günlük tıklama analitiğiyle 50 kısa bağlantı içerir, kart gerekmez. Daha fazla bağlantıya, beyaz listede daha fazla alan adına veya API erişimine ihtiyacınız olduğunda yükseltin.',
       },
       {
         q: 'Ücretli planlarda bağlantılar nasıl sayılır?',
@@ -187,20 +193,20 @@ const tr: Messages = {
       },
       {
         q: 'Ömür boyu fırsatınız var mı?',
-        a: 'Evet, ilk 200 müşteri için. 149 $ tek seferlik ödemeyle, aylık abonelik olmadan ayda 1.000 bağlantıyla Pro plan özelliklerini alırsınız.',
+        a: 'Evet, ilk 200 müşteri için. 99 $ tek seferlik ödemeyle, aylık abonelik olmadan ayda 2.000 bağlantıyla Pro plan özelliklerini alırsınız.',
       },
       {
         q: 'Enterprise planı neleri içerir?',
-        a: 'Sınırsız bağlantı ve ekip üyesi, 90 günlük tıklama analitiği, uyumluluk ve güvenlik denetimlerinize destek, faturalı sözleşme ve DPA ile özel destek. Teklif için bize ulaşın.',
+        a: 'Sınırsız bağlantı ve ekip üyesi, 3 yıla kadar tıklama analitiği, uyumluluk ve güvenlik denetimlerinize destek, faturalı sözleşme ve DPA ile özel destek. Teklif için bize ulaşın.',
       },
       {
-        q: 'Kendi alan adımı kullanabilir miyim?',
-        a: 'Evet. Ücretli planlar özel alan adı içerir; böylece kısa bağlantılarınız genel bir kısa alan adı yerine go.markaniz.com/teklif gibi görünebilir.',
+        q: 'Kendi web siteme giden bağlantıları kısaltabilir miyim?',
+        a: 'Evet. Alan adınızı doğrulayarak beyaz listenize ekleyin, ardından o alan adındaki veya alt alan adlarındaki herhangi bir sayfaya giden bağlantıları kısaltın. Her plan belirli sayıda beyaz liste alan adı içerir; YouTube, LinkedIn ve Amazon gibi popüler sitelere her planda izin verilir.',
       },
     ],
   },
   lifetime: {
-    links: 'Ayda 1.000 bağlantı',
+    links: 'Ayda 2.000 bağlantı',
     claimed: '{spots} yerden {claimed} tanesi alındı',
     left: 'Sadece {left} kaldı',
     progress: 'Alınan ömür boyu fırsat yerleri',
@@ -270,8 +276,8 @@ const tr: Messages = {
     extrasTitle: 'Çok bağlantı paylaşan ekipler için tasarlandı',
     extras: {
       domains: {
-        title: 'Özel alan adları',
-        body: 'Genel bir alan adı yerine go.markaniz.com üzerinde kısa bağlantılar.',
+        title: 'Alan adı beyaz listesi',
+        body: 'Kendi alan adlarınızı bir kez doğrulayın, ardından herhangi bir sayfalarına giden bağlantıları kısaltın.',
       },
       projects: { title: 'Projeler', body: 'Bağlantıları kampanya, müşteri veya markaya göre gruplayın.' },
       team: {
@@ -300,15 +306,15 @@ const tr: Messages = {
       },
       {
         q: 'Shortener.dev ücretsiz mi?',
-        a: 'Evet. Ücretsiz plan tıklama analitiğiyle 10 kısa bağlantı içerir ve bu sayfadaki formdan doğrudan giriş yapıp bağlantı kısaltabilirsiniz. Ücretli planlar ayda 29 $’dan başlar.',
+        a: 'Evet. Ücretsiz plan tıklama analitiğiyle 50 kısa bağlantı içerir ve bu sayfadaki formdan doğrudan giriş yapıp bağlantı kısaltabilirsiniz. Ücretli planlar ayda 9 $’dan başlar.',
       },
       {
         q: 'Kısa bağlantıyı paylaştıktan sonra hedefini değiştirebilir miyim?',
         a: 'Evet. Hedefi panelden veya API’den istediğiniz zaman düzenleyin; aynı kısa bağlantı ziyaretçileri yeni sayfaya gönderir.',
       },
       {
-        q: 'Kendi alan adımı kullanabilir miyim?',
-        a: 'Evet. Ücretli planlar özel alan adı içerir; böylece bağlantılarınız go.markaniz.com/teklif gibi görünebilir.',
+        q: 'Kendi web siteme giden bağlantıları kısaltabilir miyim?',
+        a: 'Evet. Alan adınızı bir kez doğrulayın, beyaz listenize eklensin; böylece herhangi bir sayfasına giden bağlantıları kısaltabilirsiniz.',
       },
       {
         q: 'Tıklama analitiği neleri içerir?',
@@ -323,19 +329,19 @@ const tr: Messages = {
   pricing: {
     metaTitle: 'Fiyatlar',
     metaDescription:
-      'Bağlantıları ücretsiz kısaltın veya özel alan adları, ekip üyeleri, tıklama raporları ve API erişimi için ayda 29 $’dan başlayan bir plan seçin. Enterprise sınırsız bağlantı ve uyumluluk desteği ekler.',
+      'Bağlantıları ücretsiz kısaltın veya beyaz listede daha fazla alan adı, ekip üyeleri, tıklama raporları ve API erişimi için ayda 9 $’dan başlayan bir plan seçin. Enterprise sınırsız bağlantı ve uyumluluk desteği ekler.',
     eyebrow: 'Fiyatlar',
     title: 'Bağlantılar için ödeyin,',
     accent: 'tıklamalar için değil.',
     description:
-      '10 bağlantıyla ücretsiz başlayın. Ücretli planlar özel alan adları, ekip üyeleri, tıklama raporları ve API ekler. Her planda tıklamalar sınırsızdır.',
+      '50 bağlantıyla ücretsiz başlayın. Ücretli planlar beyaz listedeki alan adları, ekip üyeleri, tıklama raporları ve API ekler. Her planda tıklamalar sınırsızdır.',
     compare: 'Planları karşılaştır',
     feature: 'Özellik',
     rows: {
       shortLinks: 'Kısa bağlantılar',
       clicks: 'Tıklamalar',
       history: 'Analitik geçmişi',
-      domains: 'Özel alan adları',
+      domains: 'Alan adı beyaz listesi',
       projects: 'Projeler',
       team: 'Ekip üyeleri',
       reports: 'Tıklama raporları',
@@ -351,6 +357,7 @@ const tr: Messages = {
     custom: 'Özel',
     perMonth: '{n}/ay',
     days: '{n} gün',
+    years: '{n} yıla kadar',
     note: 'Fiyatlar USD cinsindendir, yerel vergiler hariçtir. Ücretli planlar son 30 günde oluşturulan bağlantıları sayar.',
   },
   shortLinks: {
@@ -407,7 +414,7 @@ const tr: Messages = {
       },
       {
         q: 'Bu seçenekler ücretsiz planda var mı?',
-        a: 'Evet. Her bağlantı seçeneği her planda mevcuttur. Ücretli planlar daha fazla bağlantı, özel alan adları, ekip üyeleri, tıklama raporları ve API ekler.',
+        a: 'Evet. Her bağlantı seçeneği her planda mevcuttur. Ücretli planlar daha fazla bağlantı, beyaz listedeki alan adları, ekip üyeleri, tıklama raporları ve API ekler.',
       },
       {
         q: 'Bir bağlantıyı oluşturduktan sonra düzenleyebilir miyim?',
@@ -418,20 +425,20 @@ const tr: Messages = {
   lifetimeDeal: {
     metaTitle: 'Ömür boyu fırsat: URL kısaltıcı',
     metaDescription:
-      'Bir kez {price} $ ödeyin: {links}, özel alan adı, tıklama analitiği, UTM oluşturucu, sosyal önizleme, şifreler ve cihaz ve konum hedeflemeli URL kısaltıcı.',
+      'Bir kez {price} $ ödeyin: {links}, 10 beyaz listedeki alan adı, tıklama analitiği, UTM oluşturucu, sosyal önizleme, şifreler ve cihaz ve konum hedeflemeli URL kısaltıcı.',
     eyebrow: 'Ömür boyu fırsat',
     title: 'Bir kez ödeyin.',
     accent: 'Her ay kısaltın.',
     description:
-      'Pro planı tek seferlik {price} $ ödemeyle alın: tıklama analitiği, özel alan adları ve API ile {links}. Abonelik yok. Yalnızca ilk {spots} müşteri.',
+      'Pro planı tek seferlik {price} $ ödemeyle alın: tıklama analitiği, 10 beyaz listedeki alan adı ve API ile {links}. Abonelik yok. Yalnızca ilk {spots} müşteri.',
     oneTimePrice: 'Tek seferlik fiyat',
     buy: 'Ömür boyu fırsatı satın al',
     rows: {
       links: 'Bağlantılar',
       analytics: 'Tıklama analitiği',
-      analyticsValue: '30 günlük geçmiş',
-      domains: 'Özel alan adları',
-      domainsValue: '3 alan adı',
+      analyticsValue: '60 günlük geçmiş',
+      domains: 'Alan adı beyaz listesi',
+      domainsValue: '10 alan adı',
       team: 'Ekip üyeleri',
       projects: 'Projeler',
       reports: 'Tıklama raporları',
@@ -455,7 +462,7 @@ const tr: Messages = {
       },
       {
         q: 'Daha sonra yükseltebilir miyim?',
-        a: 'Evet. Ömür boyu plan yetmezse istediğiniz zaman aylık Business veya Advanced plana geçebilirsiniz.',
+        a: 'Evet. Ömür boyu plan yetmezse istediğiniz zaman aylık Business plana geçebilir veya Enterprise için bizimle konuşabilirsiniz.',
       },
       {
         q: 'Bu fırsat AppSumo veya başka pazar yerlerinde var mı?',

@@ -17,7 +17,7 @@ const it: Messages = {
     language: 'Lingua',
     faq: 'FAQ',
     faqTitle: 'Domande frequenti',
-    freeNote: 'Gratis per 10 link con statistiche dei clic, senza carta di credito.',
+    freeNote: 'Gratis per 50 link con statistiche dei clic, senza carta di credito.',
     included: 'Incluso',
     notIncluded: 'Non incluso',
   },
@@ -124,7 +124,7 @@ const it: Messages = {
     customPricing: 'Prezzo su misura',
     free: {
       tagline: 'Per provarlo su qualche link',
-      links: '10 link',
+      links: '50 link',
       analytics: '7 giorni di statistiche dei clic',
       features: [
         'Scadenza e password per i link',
@@ -134,32 +134,32 @@ const it: Messages = {
       ],
       cta: 'Inizia gratis',
     },
-    pro: {
-      tagline: 'Per i team marketing',
-      links: '1.000 link al mese',
+    starter: {
+      tagline: 'Per freelance del marketing e creator',
+      links: '500 link al mese',
       analytics: '30 giorni di statistiche dei clic',
       features: [
-        '3 domini personalizzati',
-        '5 progetti',
-        '5 membri del team',
+        '2 domini in whitelist',
+        '3 progetti',
+        '2 membri del team',
         'Report dei clic',
         'Accesso API',
       ],
+      cta: 'Scegli Starter',
+    },
+    pro: {
+      tagline: 'Per i team marketing',
+      links: '2.000 link al mese',
+      analytics: '60 giorni di statistiche dei clic',
+      features: ['10 domini in whitelist', '5 progetti', '5 membri del team', 'Tutto di Starter'],
       cta: 'Scegli Pro',
     },
     business: {
       tagline: 'Per agenzie e brand',
-      links: '10.000 link al mese',
-      analytics: '60 giorni di statistiche dei clic',
-      features: ['5 domini personalizzati', '10 progetti', '10 membri del team', 'Tutto di Pro'],
-      cta: 'Scegli Business',
-    },
-    advanced: {
-      tagline: 'Per team con grandi volumi',
-      links: '50.000 link al mese',
+      links: '15.000 link al mese',
       analytics: '90 giorni di statistiche dei clic',
-      features: ['10 domini personalizzati', '25 progetti', '20 membri del team', 'Tutto di Business'],
-      cta: 'Scegli Advanced',
+      features: ['25 domini in whitelist', '10 progetti', '10 membri del team', 'Tutto di Pro'],
+      cta: 'Scegli Business',
     },
     enterprise: {
       tagline: 'Per organizzazioni con requisiti di sicurezza, conformità e procurement.',
@@ -167,8 +167,8 @@ const it: Messages = {
         'Link illimitati',
         'Membri del team illimitati',
         'Supporto per audit di conformità',
-        '90 giorni di statistiche dei clic',
-        'Domini e progetti su misura per i tuoi brand',
+        'Fino a 3 anni di statistiche dei clic',
+        'Domini in whitelist e progetti su misura per i tuoi brand',
         'Contratto, fatturazione e DPA',
         'Supporto dedicato',
       ],
@@ -177,7 +177,7 @@ const it: Messages = {
     faqs: [
       {
         q: 'Esiste un piano gratuito?',
-        a: 'Sì. Il piano gratuito include 10 link brevi con 7 giorni di statistiche dei clic, senza carta di credito. Passa a un piano a pagamento quando ti servono più link, un dominio personalizzato o l’accesso API.',
+        a: 'Sì. Il piano gratuito include 50 link brevi con 7 giorni di statistiche dei clic, senza carta di credito. Passa a un piano a pagamento quando ti servono più link, più domini in whitelist o l’accesso API.',
       },
       {
         q: 'Come vengono contati i link nei piani a pagamento?',
@@ -193,20 +193,20 @@ const it: Messages = {
       },
       {
         q: 'Offrite un’offerta a vita?',
-        a: 'Sì, per i primi 200 clienti. Un pagamento unico di 149 $ ti dà le funzionalità del piano Pro con 1.000 link al mese, senza abbonamento mensile.',
+        a: 'Sì, per i primi 200 clienti. Un pagamento unico di 99 $ ti dà le funzionalità del piano Pro con 2.000 link al mese, senza abbonamento mensile.',
       },
       {
         q: 'Cosa include il piano Enterprise?',
-        a: 'Link e membri del team illimitati, 90 giorni di statistiche dei clic, aiuto per audit di conformità e sicurezza, un contratto con fatturazione e DPA e supporto dedicato. Contattaci per un preventivo.',
+        a: 'Link e membri del team illimitati, fino a 3 anni di statistiche dei clic, aiuto per audit di conformità e sicurezza, un contratto con fatturazione e DPA e supporto dedicato. Contattaci per un preventivo.',
       },
       {
-        q: 'Posso usare il mio dominio?',
-        a: 'Sì. I piani a pagamento includono domini personalizzati, così i tuoi link brevi possono apparire come go.tuobrand.it/offerta invece di un dominio breve generico.',
+        q: 'Posso accorciare link verso il mio sito?',
+        a: 'Sì. Verifica il tuo dominio per aggiungerlo alla tua whitelist, poi accorcia link verso qualsiasi sua pagina o sottodominio. Ogni piano include un certo numero di domini in whitelist, e i siti più popolari come YouTube, LinkedIn e Amazon sono consentiti in ogni piano.',
       },
     ],
   },
   lifetime: {
-    links: '1.000 link al mese',
+    links: '2.000 link al mese',
     claimed: '{claimed} su {spots} già prese',
     left: 'Ne restano solo {left}',
     progress: 'Posti dell’offerta a vita già presi',
@@ -276,8 +276,8 @@ const it: Messages = {
     extrasTitle: 'Pensato per i team che condividono tanti link',
     extras: {
       domains: {
-        title: 'Domini personalizzati',
-        body: 'Link brevi su go.tuobrand.it invece che su un dominio generico.',
+        title: 'Whitelist dei domini',
+        body: 'Verifica i tuoi domini una volta, poi accorcia link verso qualsiasi loro pagina.',
       },
       projects: { title: 'Progetti', body: 'Raggruppa i link per campagna, cliente o brand.' },
       team: {
@@ -306,15 +306,15 @@ const it: Messages = {
       },
       {
         q: 'Shortener.dev è gratuito?',
-        a: 'Sì. Il piano gratuito include 10 link brevi con statistiche dei clic, e puoi accedere e accorciare un link direttamente dal modulo in questa pagina. I piani a pagamento partono da 29 $ al mese.',
+        a: 'Sì. Il piano gratuito include 50 link brevi con statistiche dei clic, e puoi accedere e accorciare un link direttamente dal modulo in questa pagina. I piani a pagamento partono da 9 $ al mese.',
       },
       {
         q: 'Posso cambiare la destinazione di un link breve dopo averlo condiviso?',
         a: 'Sì. Modifica la destinazione quando vuoi dalla dashboard o dall’API, e lo stesso link breve porterà i visitatori alla nuova pagina.',
       },
       {
-        q: 'Posso usare il mio dominio?',
-        a: 'Sì. I piani a pagamento includono domini personalizzati, così i tuoi link possono apparire come go.tuobrand.it/offerta.',
+        q: 'Posso accorciare link verso il mio sito?',
+        a: 'Sì. Verifica il tuo dominio una volta e finisce nella tua whitelist, così puoi accorciare link verso qualsiasi sua pagina.',
       },
       {
         q: 'Cosa includono le statistiche dei clic?',
@@ -329,19 +329,19 @@ const it: Messages = {
   pricing: {
     metaTitle: 'Prezzi',
     metaDescription:
-      'Accorcia i link gratis o scegli un piano da 29 $ al mese per domini personalizzati, membri del team, report dei clic e accesso API. Enterprise aggiunge link illimitati e supporto per la conformità.',
+      'Accorcia i link gratis o scegli un piano da 9 $ al mese per più domini in whitelist, membri del team, report dei clic e accesso API. Enterprise aggiunge link illimitati e supporto per la conformità.',
     eyebrow: 'Prezzi',
     title: 'Paghi i link,',
     accent: 'non i clic.',
     description:
-      'Inizia gratis con 10 link. I piani a pagamento aggiungono domini personalizzati, membri del team, report dei clic e l’API. Ogni piano ha clic illimitati.',
+      'Inizia gratis con 50 link. I piani a pagamento aggiungono domini in whitelist, membri del team, report dei clic e l’API. Ogni piano ha clic illimitati.',
     compare: 'Confronta i piani',
     feature: 'Funzionalità',
     rows: {
       shortLinks: 'Link brevi',
       clicks: 'Clic',
       history: 'Storico delle statistiche',
-      domains: 'Domini personalizzati',
+      domains: 'Whitelist dei domini',
       projects: 'Progetti',
       team: 'Membri del team',
       reports: 'Report dei clic',
@@ -357,6 +357,7 @@ const it: Messages = {
     custom: 'Su misura',
     perMonth: '{n}/mese',
     days: '{n} giorni',
+    years: 'Fino a {n} anni',
     note: 'Prezzi in USD, tasse locali escluse. I piani a pagamento contano i link creati negli ultimi 30 giorni.',
   },
   shortLinks: {
@@ -413,7 +414,7 @@ const it: Messages = {
       },
       {
         q: 'Queste opzioni sono nel piano gratuito?',
-        a: 'Sì. Ogni opzione dei link è disponibile in ogni piano. I piani a pagamento aggiungono più link, domini personalizzati, membri del team, report dei clic e l’API.',
+        a: 'Sì. Ogni opzione dei link è disponibile in ogni piano. I piani a pagamento aggiungono più link, domini in whitelist, membri del team, report dei clic e l’API.',
       },
       {
         q: 'Posso modificare un link dopo averlo creato?',
@@ -424,20 +425,20 @@ const it: Messages = {
   lifetimeDeal: {
     metaTitle: 'Offerta a vita: accorciatore di URL',
     metaDescription:
-      'Paghi {price} $ una volta per un accorciatore di URL con {links}, dominio personalizzato, statistiche dei clic, generatore UTM, anteprima social, password e targeting per dispositivo e area geografica.',
+      'Paghi {price} $ una volta per un accorciatore di URL con {links}, 10 domini in whitelist, statistiche dei clic, generatore UTM, anteprima social, password e targeting per dispositivo e area geografica.',
     eyebrow: 'Offerta a vita',
     title: 'Paghi una volta.',
     accent: 'Accorci ogni mese.',
     description:
-      'Ottieni il piano Pro con un pagamento unico di {price} $: {links} con statistiche dei clic, domini personalizzati e l’API. Nessun abbonamento. Solo per i primi {spots} clienti.',
+      'Ottieni il piano Pro con un pagamento unico di {price} $: {links} con statistiche dei clic, 10 domini in whitelist e l’API. Nessun abbonamento. Solo per i primi {spots} clienti.',
     oneTimePrice: 'Prezzo unico',
     buy: 'Acquista l’offerta a vita',
     rows: {
       links: 'Link',
       analytics: 'Statistiche dei clic',
-      analyticsValue: '30 giorni di storico',
-      domains: 'Domini personalizzati',
-      domainsValue: '3 domini',
+      analyticsValue: '60 giorni di storico',
+      domains: 'Whitelist dei domini',
+      domainsValue: '10 domini',
       team: 'Membri del team',
       projects: 'Progetti',
       reports: 'Report dei clic',
@@ -461,7 +462,7 @@ const it: Messages = {
       },
       {
         q: 'Posso passare a un piano superiore più avanti?',
-        a: 'Sì. Se il piano a vita non ti basta più, puoi passare in qualsiasi momento a un piano mensile Business o Advanced.',
+        a: 'Sì. Se il piano a vita non ti basta più, puoi passare in qualsiasi momento al piano mensile Business o parlarci di Enterprise.',
       },
       {
         q: 'Questa offerta è su AppSumo o altri marketplace?',

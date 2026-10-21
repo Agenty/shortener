@@ -20,7 +20,7 @@ const en = {
     language: 'Language',
     faq: 'FAQ',
     faqTitle: 'Frequently asked questions',
-    freeNote: 'Free for 10 links with click analytics, no card required.',
+    freeNote: 'Free for 50 links with click analytics, no card required.',
     included: 'Included',
     notIncluded: 'Not included',
   },
@@ -127,7 +127,7 @@ const en = {
     customPricing: 'Custom pricing',
     free: {
       tagline: 'Try it on a few links',
-      links: '10 links',
+      links: '50 links',
       analytics: '7 days of click analytics',
       features: [
         'Link expiration and passwords',
@@ -137,26 +137,32 @@ const en = {
       ],
       cta: 'Start free',
     },
+    starter: {
+      tagline: 'For solo marketers and creators',
+      links: '500 links a month',
+      analytics: '30 days of click analytics',
+      features: [
+        '2 whitelisted domains',
+        '3 projects',
+        '2 team members',
+        'Click reports',
+        'API access',
+      ],
+      cta: 'Choose Starter',
+    },
     pro: {
       tagline: 'For marketing teams',
-      links: '1,000 links a month',
-      analytics: '30 days of click analytics',
-      features: ['3 custom domains', '5 projects', '5 team members', 'Click reports', 'API access'],
+      links: '2,000 links a month',
+      analytics: '60 days of click analytics',
+      features: ['10 whitelisted domains', '5 projects', '5 team members', 'Everything in Starter'],
       cta: 'Choose Pro',
     },
     business: {
       tagline: 'For agencies and brands',
-      links: '10,000 links a month',
-      analytics: '60 days of click analytics',
-      features: ['5 custom domains', '10 projects', '10 team members', 'Everything in Pro'],
-      cta: 'Choose Business',
-    },
-    advanced: {
-      tagline: 'For high-volume teams',
-      links: '50,000 links a month',
+      links: '15,000 links a month',
       analytics: '90 days of click analytics',
-      features: ['10 custom domains', '25 projects', '20 team members', 'Everything in Business'],
-      cta: 'Choose Advanced',
+      features: ['25 whitelisted domains', '10 projects', '10 team members', 'Everything in Pro'],
+      cta: 'Choose Business',
     },
     enterprise: {
       tagline: 'For organizations with security, compliance and procurement requirements.',
@@ -164,8 +170,8 @@ const en = {
         'Unlimited links',
         'Unlimited team members',
         'Compliance audit support',
-        '90 days of click analytics',
-        'Custom domains and projects to fit your brands',
+        'Up to 3 years of click analytics',
+        'Whitelisted domains and projects to fit your brands',
         'Contract, invoicing and DPA',
         'Dedicated support',
       ],
@@ -174,7 +180,7 @@ const en = {
     faqs: [
       {
         q: 'Is there a free plan?',
-        a: 'Yes. The free plan includes 10 short links with 7 days of click analytics, no card required. Upgrade when you need more links, a custom domain or API access.',
+        a: 'Yes. The free plan includes 50 short links with 7 days of click analytics, no card required. Upgrade when you need more links, more whitelisted domains or API access.',
       },
       {
         q: 'How are links counted on paid plans?',
@@ -190,20 +196,20 @@ const en = {
       },
       {
         q: 'Do you offer a lifetime deal?',
-        a: 'Yes, for the first 200 customers. A one-time payment of $149 gives you the Pro plan features with 1,000 links a month, without a monthly subscription.',
+        a: 'Yes, for the first 200 customers. A one-time payment of $99 gives you the Pro plan features with 2,000 links a month, without a monthly subscription.',
       },
       {
         q: 'What does the Enterprise plan include?',
-        a: 'Unlimited links and team members, 90 days of click analytics, help with your compliance and security audits, a contract with invoicing and a DPA, and dedicated support. Contact us for a quote.',
+        a: 'Unlimited links and team members, up to 3 years of click analytics, help with your compliance and security audits, a contract with invoicing and a DPA, and dedicated support. Contact us for a quote.',
       },
       {
-        q: 'Can I use my own domain?',
-        a: 'Yes. Paid plans include custom domains, so your short links can look like go.yourbrand.com/offer instead of a generic short domain.',
+        q: 'Can I shorten links to my own website?',
+        a: 'Yes. Verify your domain to add it to your whitelist, then shorten links to any page on it or its subdomains. Each plan includes a number of whitelisted domains, and popular sites like YouTube, LinkedIn and Amazon are allowed on every plan.',
       },
     ],
   },
   lifetime: {
-    links: '1,000 links a month',
+    links: '2,000 links a month',
     claimed: '{claimed} of {spots} claimed',
     left: 'Only {left} left',
     progress: 'Lifetime deal spots claimed',
@@ -273,8 +279,8 @@ const en = {
     extrasTitle: 'Built for teams that share a lot of links',
     extras: {
       domains: {
-        title: 'Custom domains',
-        body: 'Short links on go.yourbrand.com instead of a generic domain.',
+        title: 'Domains whitelist',
+        body: 'Verify your own domains once, then shorten links to any page on them.',
       },
       projects: { title: 'Projects', body: 'Group links by campaign, client or brand.' },
       team: { title: 'Team members', body: 'Invite colleagues to create and manage links together.' },
@@ -294,15 +300,15 @@ const en = {
       },
       {
         q: 'Is Shortener.dev free?',
-        a: 'Yes. The free plan includes 10 short links with click analytics, and you can sign in and shorten a link right from the form on this page. Paid plans start at $29 a month.',
+        a: 'Yes. The free plan includes 50 short links with click analytics, and you can sign in and shorten a link right from the form on this page. Paid plans start at $9 a month.',
       },
       {
         q: 'Can I change where a short link points after I share it?',
         a: 'Yes. Edit the destination at any time from the dashboard or the API, and the same short link sends visitors to the new page.',
       },
       {
-        q: 'Can I use my own domain?',
-        a: 'Yes. Paid plans include custom domains, so your links can look like go.yourbrand.com/offer.',
+        q: 'Can I shorten links to my own website?',
+        a: 'Yes. Verify your domain once and it joins your whitelist, so you can shorten links to any page on it.',
       },
       {
         q: 'What does the click analytics include?',
@@ -317,19 +323,19 @@ const en = {
   pricing: {
     metaTitle: 'Pricing',
     metaDescription:
-      'Shorten links for free, or choose a plan from $29 a month for custom domains, team members, click reports and API access. Enterprise adds unlimited links and compliance support.',
+      'Shorten links for free, or choose a plan from $9 a month for more whitelisted domains, team members, click reports and API access. Enterprise adds unlimited links and compliance support.',
     eyebrow: 'Pricing',
     title: 'Pay for links,',
     accent: 'not for clicks.',
     description:
-      'Start free with 10 links. Paid plans add custom domains, team members, click reports and the API. Every plan has unlimited clicks.',
+      'Start free with 50 links. Paid plans add whitelisted domains, team members, click reports and the API. Every plan has unlimited clicks.',
     compare: 'Compare plans',
     feature: 'Feature',
     rows: {
       shortLinks: 'Short links',
       clicks: 'Clicks',
       history: 'Analytics history',
-      domains: 'Custom domains',
+      domains: 'Domains whitelist',
       projects: 'Projects',
       team: 'Team members',
       reports: 'Click reports',
@@ -345,6 +351,7 @@ const en = {
     custom: 'Custom',
     perMonth: '{n}/mo',
     days: '{n} days',
+    years: 'Up to {n} years',
     note: 'Prices in USD, excluding local taxes. Paid plans count links created in the last 30 days.',
   },
   shortLinks: {
@@ -395,7 +402,7 @@ const en = {
       },
       {
         q: 'Are these options on the free plan?',
-        a: 'Yes. Every link option is available on every plan. Paid plans add more links, custom domains, team members, click reports and the API.',
+        a: 'Yes. Every link option is available on every plan. Paid plans add more links, whitelisted domains, team members, click reports and the API.',
       },
       {
         q: 'Can I edit a link after creating it?',
@@ -406,20 +413,20 @@ const en = {
   lifetimeDeal: {
     metaTitle: 'Lifetime deal: URL shortener',
     metaDescription:
-      'Pay ${price} once for a URL shortener with {links}, custom domain, click analytics, UTM builder, social preview, passwords and device and geo targeting.',
+      'Pay ${price} once for a URL shortener with {links}, 10 whitelisted domains, click analytics, UTM builder, social preview, passwords and device and geo targeting.',
     eyebrow: 'Lifetime deal',
     title: 'Pay once.',
     accent: 'Shorten every month.',
     description:
-      'Get the Pro plan for a one-time ${price}: {links} with click analytics, custom domains and the API. No subscription. First {spots} customers only.',
+      'Get the Pro plan for a one-time ${price}: {links} with click analytics, 10 whitelisted domains and the API. No subscription. First {spots} customers only.',
     oneTimePrice: 'One-time price',
     buy: 'Buy lifetime deal',
     rows: {
       links: 'Links',
       analytics: 'Click analytics',
-      analyticsValue: '30 days of history',
-      domains: 'Custom domains',
-      domainsValue: '3 domains',
+      analyticsValue: '60 days of history',
+      domains: 'Domains whitelist',
+      domainsValue: '10 domains',
       team: 'Team members',
       projects: 'Projects',
       reports: 'Click reports',
@@ -443,7 +450,7 @@ const en = {
       },
       {
         q: 'Can I upgrade later?',
-        a: 'Yes. If you outgrow the lifetime plan, you can move to a monthly Business or Advanced plan at any time.',
+        a: 'Yes. If you outgrow the lifetime plan, you can move to the monthly Business plan or talk to us about Enterprise at any time.',
       },
       {
         q: 'Is this deal on AppSumo or other marketplaces?',
