@@ -19,13 +19,18 @@ import type { Domain } from '@/types/domain';
 interface VerifyDomainDialogProps {
   domain: Domain | null;
   onOpenChange: (open: boolean) => void;
+  /** Called after the domain is verified by email code */
+  onVerified?: (domain: Domain) => void;
 }
 
-export function VerifyDomainDialog({ domain, onOpenChange }: VerifyDomainDialogProps) {
+export function VerifyDomainDialog({ domain, onOpenChange, onVerified }: VerifyDomainDialogProps) {
   const queryClient = useQueryClient();
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [codeSent, setCodeSent] = useState(false);
+
+  // Just the alias is enough, e.g. "admin" becomes admin@example.com
+  const fullEmail = email.includes('@') ? email.trim() : `${email.trim()}@${domain?.domain}`;
 
   const close = () => {
     onOpenChange(false);
@@ -35,7 +40,7 @@ export function VerifyDomainDialog({ domain, onOpenChange }: VerifyDomainDialogP
   };
 
   const sendOtp = useMutation({
-    mutationFn: () => api.domains.sendOtp(domain!.domain_id, email),
+    mutationFn: () => api.domains.sendOtp(domain!.domain_id, fullEmail),
     onSuccess: (res) => {
       setCodeSent(true);
       toast.success(res.message);
@@ -49,6 +54,7 @@ export function VerifyDomainDialog({ domain, onOpenChange }: VerifyDomainDialogP
       queryClient.invalidateQueries({ queryKey: ['domains'] });
       toast.success(`${res.domain} verified`);
       close();
+      onVerified?.(res);
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -63,7 +69,7 @@ export function VerifyDomainDialog({ domain, onOpenChange }: VerifyDomainDialogP
   const handleSendOtp = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) {
-      toast.error('Please enter an email address');
+      toast.error('Please enter an email alias, like admin');
       return;
     }
     sendOtp.mutate();
@@ -94,13 +100,22 @@ export function VerifyDomainDialog({ domain, onOpenChange }: VerifyDomainDialogP
             <form onSubmit={handleSendOtp} className="space-y-2">
               <Label htmlFor="verify-email">Email on this domain</Label>
               <div className="flex gap-2">
-                <Input
-                  id="verify-email"
-                  type="email"
-                  placeholder={`admin@${domain?.domain ?? 'example.com'}`}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                <div className="flex flex-1 min-w-0">
+                  <Input
+                    id="verify-email"
+                    placeholder="admin"
+                    autoComplete="off"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value.replace(/\s/g, ''))}
+                    className={email.includes('@') ? undefined : 'rounded-r-none'}
+                    autoFocus
+                  />
+                  {!email.includes('@') && (
+                    <span className="inline-flex items-center h-9 pl-1 pr-3 rounded-r-3xl bg-input/50 text-sm text-muted-foreground truncate max-w-[60%]">
+                      @{domain?.domain}
+                    </span>
+                  )}
+                </div>
                 <Button type="submit" disabled={sendOtp.isPending}>
                   {sendOtp.isPending ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -111,12 +126,13 @@ export function VerifyDomainDialog({ domain, onOpenChange }: VerifyDomainDialogP
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Public and disposable email providers are not accepted.
+                Enter just the alias, like admin or info. Public and disposable
+                email providers are not accepted.
               </p>
             </form>
           ) : (
             <form onSubmit={handleVerify} className="space-y-2">
-              <Label htmlFor="verify-code">Code sent to {email}</Label>
+              <Label htmlFor="verify-code">Code sent to {fullEmail}</Label>
               <div className="flex gap-2">
                 <Input
                   id="verify-code"

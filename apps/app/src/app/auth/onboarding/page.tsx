@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { MailCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { toast } from "sonner";
@@ -114,6 +115,7 @@ export default function Onboarding() {
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={loading || code.length !== OTP_LENGTH}>
+              {loading && <Spinner className="mr-2" />}
               {loading ? t.onboarding.submitting : t.onboarding.submit}
             </Button>
             <p className="text-sm text-muted-foreground text-center">
