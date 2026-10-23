@@ -12,6 +12,7 @@ import {
   BookOpen,
   ChevronRight,
 } from "lucide-react";
+import { LogoMark, Wordmark } from "@/components/Logo";
 import { NavLink } from "@/components/NavLink";
 import { DOCS_URL } from "@/env";
 import { useLocation } from "react-router";
@@ -61,9 +62,9 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="p-4">
-        <NavLink to="/links" className="flex items-center gap-2 font-bold text-lg">
-          <Link2 className="h-6 w-6 text-primary" />
-          {!collapsed && <span>shortener.dev</span>}
+        <NavLink to="/links" aria-label="shortener.dev" className="flex items-center gap-2">
+          <LogoMark className="size-7" />
+          {!collapsed && <Wordmark />}
         </NavLink>
       </SidebarHeader>
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Link2 } from "lucide-react";
+import { LogoMark } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Input } from "@/components/ui/input";
@@ -55,7 +55,7 @@ export default function Login() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
-            <Link2 className="h-8 w-8 text-primary" />
+            <LogoMark className="size-10" />
           </div>
           <CardTitle className="text-2xl">{t.login.title}</CardTitle>
           <CardDescription>{t.login.description}</CardDescription>
