@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { Link2 } from "lucide-react";
+import { LogoMark } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,7 +30,7 @@ export default function ResetPassword() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
-            <Link2 className="h-8 w-8 text-primary" />
+            <LogoMark className="size-10" />
           </div>
           <CardTitle className="text-2xl">{t.reset.title}</CardTitle>
           <CardDescription>{sent ? t.reset.sentDescription : t.reset.description}</CardDescription>
