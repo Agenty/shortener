@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Plus, Loader2, Copy, Check, Eye, EyeOff, Trash2, Globe, Smartphone, Tablet, Calendar, Link2, Lock, Share2, ChevronDown } from "lucide-react";
+import { Plus, Loader2, Copy, Check, Eye, EyeOff, Trash2, Globe, Smartphone, Tablet, Calendar, Link2, Lock, Share2, ChevronDown, Shuffle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,10 +21,24 @@ import {
 } from "@/components/ui/accordion";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api";
+import { api, ApiError } from "@/lib/api";
 import { SHORT_DOMAIN } from "@/env";
 import type { LinkCreatePayload, LinkFormState, UrlMeta, GeoTarget } from "@/types/link";
+import type { Domain } from "@/types/domain";
 import { initialLinkForm } from "@/types/link";
+import { VerifyDomainDialog } from "@/app/domains/components/VerifyDomainDialog";
+
+const KEY_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz";
+
+const randomKey = (length = 7) =>
+  Array.from(crypto.getRandomValues(new Uint8Array(length)), (b) => KEY_CHARS[b % KEY_CHARS.length]).join("");
+
+/** First hostname from the API's "Domain not verified: a.com, b.com. Add and verify…" error */
+const unverifiedHost = (error: Error) => {
+  if (!(error instanceof ApiError) || error.status !== 403) return null;
+  const hosts = error.message.match(/^Domain not verified: (.+?)\. Add/)?.[1];
+  return hosts?.split(", ")[0].replace(/^www\./, "") || null;
+};
 
 export function CreateLinkDialog() {
   const [open, setOpen] = useState(false);
@@ -32,6 +46,7 @@ export function CreateLinkDialog() {
   const [meta, setMeta] = useState<{ data: UrlMeta | null; loading: boolean }>({ data: null, loading: false });
   const [showPassword, setShowPassword] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [verifying, setVerifying] = useState<Domain | null>(null);
   const queryClient = useQueryClient();
 
   const updateLink = <K extends keyof LinkFormState>(field: K, value: LinkFormState[K]) => {
@@ -57,8 +72,28 @@ export function CreateLinkDialog() {
       setOpen(false);
       resetForm();
     },
-    onError: (error: Error) => {
-      toast.error(error.message || "Failed to create link");
+    onError: async (error: Error) => {
+      const host = unverifiedHost(error);
+      if (!host) {
+        toast.error(error.message || "Failed to create link");
+        return;
+      }
+      // Verify the domain right here, adding it first when it's not in the account yet
+      try {
+        const { result } = await queryClient.fetchQuery({
+          queryKey: ["domains"],
+          queryFn: () => api.domains.list({ limit: 100 }),
+        });
+        const existing = result.find((d) => host === d.domain || host.endsWith(`.${d.domain}`));
+        if (existing) {
+          setVerifying(existing);
+        } else {
+          setVerifying(await api.domains.create({ domain: host }));
+          queryClient.invalidateQueries({ queryKey: ["domains"] });
+        }
+      } catch (e) {
+        toast.error((e as Error).message);
+      }
     },
   });
 
@@ -74,7 +109,9 @@ export function CreateLinkDialog() {
   }, []);
 
   const handleUrlBlur = () => {
-    if (link.url) fetchMeta(link.url);
+    if (!link.url) return;
+    fetchMeta(link.url);
+    if (!link.key) updateLink("key", randomKey());
   };
 
   const handleCreate = () => {
@@ -148,17 +185,19 @@ export function CreateLinkDialog() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="key">Short Link</Label>
+                  <Label htmlFor="key">
+                    Short Link <span className="font-normal text-muted-foreground">(optional)</span>
+                  </Label>
                   <div className="flex items-center gap-0">
                     <span className="inline-flex items-center h-10 px-3 rounded-l-md border border-r-0 bg-muted text-sm text-muted-foreground">
                       {SHORT_DOMAIN}/
                     </span>
                     <Input
                       id="key"
-                      placeholder="my-link"
+                      placeholder="random if left blank"
                       maxLength={32}
                       value={link.key}
-                      onChange={(e) => updateLink("key", e.target.value)}
+                      onChange={(e) => updateLink("key", e.target.value.replace(/[^A-Za-z0-9_-]/g, ""))}
                       className="rounded-l-none"
                     />
                     <Button
@@ -166,6 +205,17 @@ export function CreateLinkDialog() {
                       variant="outline"
                       size="icon"
                       className="ml-1 shrink-0"
+                      title="Generate a random key"
+                      onClick={() => updateLink("key", randomKey())}
+                    >
+                      <Shuffle className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="ml-1 shrink-0"
+                      title="Copy short link"
                       disabled={!link.key}
                       onClick={copyKey}
                     >
@@ -173,6 +223,9 @@ export function CreateLinkDialog() {
                     </Button>
                   </div>
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  Customize the back-half, or leave it blank to auto-generate.
+                </p>
               </div>
 
               {/* Options Accordion */}
@@ -475,6 +528,12 @@ export function CreateLinkDialog() {
             </div>
           </div>
         </div>
+
+        <VerifyDomainDialog
+          domain={verifying}
+          onOpenChange={(v) => !v && setVerifying(null)}
+          onVerified={handleCreate}
+        />
       </DialogContent>
     </Dialog>
   );
