@@ -99,36 +99,37 @@ export function VerifyDomainDialog({ domain, onOpenChange, onVerified }: VerifyD
           {!codeSent ? (
             <form onSubmit={handleSendOtp} className="space-y-2">
               <Label htmlFor="verify-email">Email on this domain</Label>
-              <div className="flex gap-2">
-                <div className="flex flex-1 min-w-0">
-                  <Input
-                    id="verify-email"
-                    placeholder="admin"
-                    autoComplete="off"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value.replace(/\s/g, ''))}
-                    className={email.includes('@') ? undefined : 'rounded-r-none'}
-                    autoFocus
-                  />
-                  {!email.includes('@') && (
-                    <span className="inline-flex items-center h-9 pl-1 pr-3 rounded-r-3xl bg-input/50 text-sm text-muted-foreground truncate max-w-[60%]">
-                      @{domain?.domain}
-                    </span>
-                  )}
-                </div>
-                <Button type="submit" disabled={sendOtp.isPending}>
-                  {sendOtp.isPending ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Mail className="mr-2 h-4 w-4" />
-                  )}
-                  Send code
-                </Button>
+              <div className="flex">
+                <Input
+                  id="verify-email"
+                  placeholder="admin"
+                  autoComplete="off"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value.replace(/\s/g, ''))}
+                  className={email.includes('@') ? 'min-w-0' : 'min-w-0 rounded-r-none'}
+                  autoFocus
+                />
+                {!email.includes('@') && (
+                  <span
+                    className="inline-flex items-center h-9 pl-1 pr-3 rounded-r-3xl bg-input/50 text-sm text-muted-foreground truncate max-w-[75%]"
+                    title={`@${domain?.domain}`}
+                  >
+                    @{domain?.domain}
+                  </span>
+                )}
               </div>
               <p className="text-xs text-muted-foreground">
                 Enter just the alias, like admin or info. Public and disposable
                 email providers are not accepted.
               </p>
+              <Button type="submit" className="w-full" disabled={sendOtp.isPending}>
+                {sendOtp.isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Mail className="mr-2 h-4 w-4" />
+                )}
+                Send code
+              </Button>
             </form>
           ) : (
             <form onSubmit={handleVerify} className="space-y-2">
