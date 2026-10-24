@@ -30,7 +30,7 @@ The two buttons next to the search box switch between list view and grid view. G
 
 Click the copy icon next to a short link to copy the full URL, such as `https://srt1.link/spring-sale`. You'll see "Link copied to clipboard!"
 
-The **...** menu at the end of each row has the same **Copy** action, plus **Open**, which opens the destination URL in a new tab so you can check where the link goes.
+The **...** menu at the end of each row has the same **Copy** action, plus **Open**, which opens the destination URL in a new tab so you can check where the link goes, and **QR Code**, which opens the link's QR code. The QR icon next to the copy icon does the same. See [Create a QR code for a short link](/docs/qr-codes).
 
 ![Actions menu for a short link](/docs/images/link-actions-menu.png)
 

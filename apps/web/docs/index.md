@@ -37,6 +37,7 @@ Every option sits in the **Options** list of the link builder and is available o
 ## Where to go next
 
 - [Create a short link](/docs/create-short-link) explains custom back-halves and the social media preview panel.
+- [QR codes](/docs/qr-codes) turns a short link into a QR code you can download and print.
 - [Click analytics](/docs/click-analytics) shows how to measure one link or a whole campaign.
 - [Shorten URLs with the API](/docs/url-shortener-api) creates links from your own code with an API key.
 - `https://shortener.dev/llms.txt` lists these pages for AI assistants and agents. Add `.md` to any docs URL to get the page as plain markdown.

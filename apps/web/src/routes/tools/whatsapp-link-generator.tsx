@@ -28,6 +28,10 @@ const faqs = [
     q: 'How do I add a WhatsApp chat button to my website?',
     a: 'Add a link to your short URL, for example <a href="https://srt1.link/chat">Chat on WhatsApp</a>, and style it as a button. Every click is then counted in your analytics.',
   },
+  {
+    q: 'Can I turn my WhatsApp link into a QR code?',
+    a: 'Yes. Paste the link into the free WhatsApp QR code generator at shortener.dev/tools/whatsapp-qr-code-generator, pick your colors and download it as PNG or SVG for flyers, packaging and shop windows.',
+  },
 ];
 
 export const Route = createFileRoute('/tools/whatsapp-link-generator')({

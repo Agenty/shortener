@@ -17,6 +17,7 @@ import { AnalyticsMockup, ApiMockup, TargetingMockup } from '@/components/mockup
 import { PricingCards } from '@/components/pricing-cards';
 import { Eyebrow, Section, SectionHeader, Showcase } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
+import { qrTools } from '@/data/qr-tools';
 import { otherTools, shortenerTools } from '@/data/tools';
 import { lifetime } from '@/data/plans';
 import { fmt, useI18n, withLang } from '@/i18n';
@@ -255,6 +256,17 @@ function Home() {
               className="group flex items-center gap-3 rounded-xl border bg-background px-4 py-3 text-sm transition-colors hover:border-foreground/20"
             >
               <ToolIcon domain={tool.domain} icon={tool.icon} />
+              {tool.title}
+            </Link>
+          ))}
+          {qrTools.slice(0, 2).map((tool) => (
+            <Link
+              key={tool.slug}
+              to="/tools/$slug"
+              params={{ slug: tool.slug }}
+              className="group flex items-center gap-3 rounded-xl border bg-background px-4 py-3 text-sm transition-colors hover:border-foreground/20"
+            >
+              <ToolIcon icon={tool.icon} />
               {tool.title}
             </Link>
           ))}

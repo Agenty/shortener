@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { alternatives } from '@/data/alternatives';
+import { qrTools } from '@/data/qr-tools';
 import { otherTools, shortenerTools } from '@/data/tools';
 import { LOCALES, langTag } from '@/i18n/languages';
 import { TRANSLATED_PATHS, localizePath } from '@/i18n/routing';
@@ -32,7 +33,7 @@ export const Route = createFileRoute('/sitemap.xml')({
         const paths = [
           ...englishPaths,
           ...alternatives.map((item) => `/alternatives/${item.slug}`),
-          ...[...shortenerTools, ...otherTools].map((tool) => `/tools/${tool.slug}`),
+          ...[...shortenerTools, ...qrTools, ...otherTools].map((tool) => `/tools/${tool.slug}`),
           ...docs.map((doc) => docPath(doc.slug)),
           '/docs/api',
         ];
