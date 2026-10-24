@@ -22,6 +22,7 @@ export const productNav = (t: Messages) => [
 // Tool pages are English only, so their names stay in English
 export const toolNav = (t: Messages) => [
   ...shortenerTools.slice(0, 4).map((tool) => ({ label: tool.title, to: `/tools/${tool.slug}` })),
+  { label: 'QR code generator', to: '/tools/qr-code-generator' },
   { label: t.nav.whatsapp, to: '/tools/whatsapp-link-generator' },
   { label: t.nav.socialPreview, to: '/tools/social-share-preview' },
   { label: t.nav.allTools, to: '/tools' },

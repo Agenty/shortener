@@ -37,6 +37,7 @@ const footerColumns = (t: Messages) => [
     title: t.common.freeTools,
     links: [
       ...shortenerTools.slice(0, 5).map((tool) => ({ label: tool.title, to: `/tools/${tool.slug}` })),
+      { label: 'QR code generator', to: '/tools/qr-code-generator' },
       { label: t.nav.whatsapp, to: '/tools/whatsapp-link-generator' },
       { label: t.nav.socialPreview, to: '/tools/social-share-preview' },
     ],

@@ -13,6 +13,7 @@ import {
   LayoutList,
   Link2,
   SearchX,
+  QrCode,
 } from 'lucide-react';
 import { Link as RouterLink } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -50,6 +51,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { toast } from 'sonner';
 import { CreateLinkDialog } from './components/CreateLinkDialog';
 import { ApiExamplesSheet } from './components/ApiExamplesSheet';
+import { QrCodeDialog } from './components/QrCodeDialog';
 import { api } from '@/lib/api';
 import { useViewPreference } from '@/hooks/use-view-preference';
 import type { Link } from '@/types/link';
@@ -71,10 +73,12 @@ function LinkFavicon({ url }: { url: string }) {
 function LinkActions({
   link,
   onCopy,
+  onQr,
   onDelete,
 }: {
   link: Link;
   onCopy: (key: string) => void;
+  onQr: (key: string) => void;
   onDelete: (key: string) => void;
 }) {
   return (
@@ -85,6 +89,9 @@ function LinkActions({
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => onCopy(link.key)}>
           <Copy className="mr-2 h-4 w-4" /> Copy
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onQr(link.key)}>
+          <QrCode className="mr-2 h-4 w-4" /> QR Code
         </DropdownMenuItem>
         <DropdownMenuItem render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}>
           <ExternalLink className="mr-2 h-4 w-4" /> Open
@@ -103,10 +110,12 @@ function LinkActions({
 function LinksGrid({
   links,
   onCopy,
+  onQr,
   onDelete,
 }: {
   links: Link[];
   onCopy: (key: string) => void;
+  onQr: (key: string) => void;
   onDelete: (key: string) => void;
 }) {
   return (
@@ -130,8 +139,17 @@ function LinksGrid({
               >
                 <Copy className="h-3 w-3" />
               </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6 shrink-0"
+                aria-label="QR code"
+                onClick={() => onQr(link.key)}
+              >
+                <QrCode className="h-3 w-3" />
+              </Button>
             </div>
-            <LinkActions link={link} onCopy={onCopy} onDelete={onDelete} />
+            <LinkActions link={link} onCopy={onCopy} onQr={onQr} onDelete={onDelete} />
           </div>
           <a
             href={link.url}
@@ -170,10 +188,12 @@ function LinksGrid({
 function LinksTable({
   links,
   onCopy,
+  onQr,
   onDelete,
 }: {
   links: Link[];
   onCopy: (key: string) => void;
+  onQr: (key: string) => void;
   onDelete: (key: string) => void;
 }) {
   return (
@@ -203,6 +223,15 @@ function LinksTable({
                     onClick={() => onCopy(link.key)}
                   >
                     <Copy className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 -ml-2"
+                    aria-label="QR code"
+                    onClick={() => onQr(link.key)}
+                  >
+                    <QrCode className="h-3 w-3" />
                   </Button>
                 </div>
               </TableCell>
@@ -236,7 +265,7 @@ function LinksTable({
                 {new Date(link.created_at).toLocaleDateString()}
               </TableCell>
               <TableCell>
-                <LinkActions link={link} onCopy={onCopy} onDelete={onDelete} />
+                <LinkActions link={link} onCopy={onCopy} onQr={onQr} onDelete={onDelete} />
               </TableCell>
             </TableRow>
           ))}
@@ -250,6 +279,7 @@ export default function Links() {
   const [search, setSearch] = useQueryState('q', { defaultValue: '' });
   const [page, setPage] = useQueryState('page', { defaultValue: '1' });
   const [deleteKey, setDeleteKey] = useState<string | null>(null);
+  const [qrKey, setQrKey] = useState<string | null>(null);
   const [view, setView] = useViewPreference('links-view');
   const queryClient = useQueryClient();
 
@@ -379,9 +409,9 @@ export default function Links() {
         !error &&
         links.length > 0 &&
         (view === 'grid' ? (
-          <LinksGrid links={links} onCopy={copyLink} onDelete={setDeleteKey} />
+          <LinksGrid links={links} onCopy={copyLink} onQr={setQrKey} onDelete={setDeleteKey} />
         ) : (
-          <LinksTable links={links} onCopy={copyLink} onDelete={setDeleteKey} />
+          <LinksTable links={links} onCopy={copyLink} onQr={setQrKey} onDelete={setDeleteKey} />
         ))}
 
       {/* Pagination */}
@@ -410,6 +440,8 @@ export default function Links() {
           </div>
         </div>
       )}
+
+      <QrCodeDialog linkKey={qrKey} onOpenChange={(open) => !open && setQrKey(null)} />
 
       {/* Delete confirmation */}
       <AlertDialog
