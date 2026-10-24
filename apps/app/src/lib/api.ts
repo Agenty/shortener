@@ -231,8 +231,11 @@ export const api = {
   },
 
   subscription: {
-    /** Stripe checkout for a paid plan, `price` must match a Stripe price in USD */
-    checkout(data: { plan: string; price: number }) {
+    /**
+     * Checkout for a paid plan. With Stripe `price` must match a Stripe price in USD,
+     * PayPal charges the API's own price for the plan
+     */
+    checkout(data: { plan: string; price: number; gateway?: "Stripe" | "Paypal" }) {
       return request<{ id: string; url: string }>("/subscription/create-checkout-session", {
         method: "POST",
         body: JSON.stringify(data),

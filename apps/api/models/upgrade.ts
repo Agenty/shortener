@@ -6,6 +6,7 @@ export const upgradeSchema = z.object({
   currency: z.enum(['USD', 'INR']).default('USD'),
   price: z.number().min(7, 'Invalid plan'),
   frequency: z.enum(['month', 'year']).default('month'),
+  gateway: z.enum(['Stripe', 'Paypal']).default('Stripe'),
 });
 
 export type Upgrade = z.infer<typeof upgradeSchema>;

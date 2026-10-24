@@ -117,6 +117,10 @@ Put these in `.dev.vars` for local development (git-ignored), and add them with 
 | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`   | Optional | GitHub sign-in                                                  |
 | `RECAPTCHA_KEY`                              | Optional | reCAPTCHA secret, checked on sign-up in production              |
 | `STRIPE_SECRET_KEY`                          | Optional | Stripe billing                                                  |
+| `STRIPE_WEBHOOK_SECRET`                      | With Stripe | Signing secret (`whsec_...`) of the Stripe webhook endpoint  |
+| `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`   | Optional | PayPal billing, from a PayPal REST app                          |
+| `PAYPAL_WEBHOOK_ID`                          | With PayPal | ID of the app's webhook, used to verify webhook signatures   |
+| `PAYPAL_API_URL`                             | Optional | `https://api-m.sandbox.paypal.com` for sandbox, live by default |
 | `AGENTY_KEY`                                 | Optional | Invoice generation through the Agenty API                      |
 
 ## Run locally

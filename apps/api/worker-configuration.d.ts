@@ -28,8 +28,13 @@ interface __BaseEnv_CloudflareBindings {
 	GITHUB_CLIENT_SECRET: string;
 	VIRUSTOTAL_APIKEY: string;
 	STRIPE_SECRET_KEY: string;
+	STRIPE_WEBHOOK_SECRET: string;
 	RECAPTCHA_KEY: string;
     AGENTY_KEY: string;
+	PAYPAL_CLIENT_ID: string;
+	PAYPAL_CLIENT_SECRET: string;
+	PAYPAL_WEBHOOK_ID: string;
+	PAYPAL_API_URL?: string;
 }
 declare namespace Cloudflare {
 	interface GlobalProps {
