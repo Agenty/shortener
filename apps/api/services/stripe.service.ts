@@ -25,6 +25,31 @@ const stripeClient = (env: CloudflareBindings) => {
   return new Stripe(env.STRIPE_SECRET_KEY);
 };
 
+/**
+ * Verifies the `stripe-signature` header with the endpoint's signing secret
+ * and returns the event, or null when it was not signed by Stripe. Workers
+ * have no Node crypto, so the async SubtleCrypto variant is used.
+ * https://docs.stripe.com/webhooks#verify-events
+ */
+export const verifyStripeWebhook = async (
+  env: CloudflareBindings,
+  rawBody: string,
+  signature?: string
+) => {
+  if (!env.STRIPE_WEBHOOK_SECRET || !signature) return null;
+  try {
+    return await stripeClient(env).webhooks.constructEventAsync(
+      rawBody,
+      signature,
+      env.STRIPE_WEBHOOK_SECRET,
+      undefined,
+      Stripe.createSubtleCryptoProvider()
+    );
+  } catch {
+    return null;
+  }
+};
+
 export const createCheckoutSession = async (
   env: CloudflareBindings,
   upgrade: Upgrade,

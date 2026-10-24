@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import { ArrowRight, Check, Gift, Loader2 } from "lucide-react";
+import { ArrowRight, Check, CreditCard, Gift, Loader2, Wallet } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -9,13 +10,19 @@ import { api } from "@/lib/api";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { enterprise, lifetime, plans } from "./data";
 
+type Gateway = "Stripe" | "Paypal";
+
+/** Stripe checkout is paused for now, set to true to offer card payments again */
+const STRIPE_ENABLED = false;
+
 export default function Billings() {
   const { user } = useAuthUser();
   const [searchParams, setSearchParams] = useSearchParams();
   const [pending, setPending] = useState<string | null>(null);
+  const [gateway, setGateway] = useState<Gateway>(STRIPE_ENABLED ? "Stripe" : "Paypal");
   const currentPlan = user?.plan || "Free";
 
-  // Stripe redirects back with `?return=success|error`
+  // Stripe and PayPal redirect back with `?return=success|error`
   useEffect(() => {
     const result = searchParams.get("return");
     if (!result) return;
@@ -30,7 +37,7 @@ export default function Billings() {
   const checkout = async (plan: string, price: number) => {
     setPending(plan);
     try {
-      const { url } = await api.subscription.checkout({ plan, price });
+      const { url } = await api.subscription.checkout({ plan, price, gateway });
       window.location.href = url;
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Unable to start checkout");
@@ -40,11 +47,35 @@ export default function Billings() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Billing & Plans</h1>
-        <p className="text-muted-foreground">
-          You're on the <span className="font-medium text-foreground">{currentPlan}</span> plan
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Billing & Plans</h1>
+          <p className="text-muted-foreground">
+            You're on the <span className="font-medium text-foreground">{currentPlan}</span> plan
+          </p>
+        </div>
+        {STRIPE_ENABLED && (
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Pay with</span>
+            <ToggleGroup
+              value={[gateway]}
+              onValueChange={(v) => v[0] && setGateway(v[0] as Gateway)}
+              variant="outline"
+              size="sm"
+              spacing={0}
+              disabled={!!pending}
+            >
+              <ToggleGroupItem value="Stripe" aria-label="Pay with card">
+                <CreditCard className="h-4 w-4" />
+                Card
+              </ToggleGroupItem>
+              <ToggleGroupItem value="Paypal" aria-label="Pay with PayPal">
+                <Wallet className="h-4 w-4" />
+                PayPal
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+        )}
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">

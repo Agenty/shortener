@@ -12,10 +12,15 @@ import {
   getSubscritions,
 } from '../services/subscription.service';
 import {
+  SubscriptionFrequency,
   SubscriptionGateway,
   SubscriptionStatus,
 } from '../models/subscription';
 import { supportEmail } from '../services/emailer.service';
+import {
+  cancelPaypalSubscription,
+  createPaypalCheckout,
+} from '../services/paypal.service';
 
 const subscription = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -26,6 +31,11 @@ subscription.post(
     const { cf } = ctx.req.raw;
     const authUser: AuthUser = ctx.req['user'];
     const upgrade = ctx.req.valid('json');
+    if (upgrade.gateway == SubscriptionGateway.Paypal) {
+      const session = await createPaypalCheckout(ctx.env, upgrade, authUser);
+      return ctx.json(session, 200);
+    }
+
     upgrade.currency = cf.country == 'IN' ? 'INR' : 'USD';
     const subscriptions = await getSubscritions(ctx.env, authUser);
     const session = await createCheckoutSession(
@@ -66,6 +76,13 @@ subscription.delete('/:id', async (ctx) => {
 
   if (subscription.payment_gateway == SubscriptionGateway.Stripe) {
     await cancelStripeSubscription(ctx.env, subscription);
+  } else if (
+    subscription.payment_gateway == SubscriptionGateway.Paypal &&
+    subscription.frequency != SubscriptionFrequency.lifetime &&
+    // Legacy IPN subscriptions (S-) can't be cancelled with the REST API
+    subscription.pg_subscr_id?.startsWith('I-')
+  ) {
+    await cancelPaypalSubscription(ctx.env, subscription, cancel_reason);
   } else {
     await supportEmail(
       ctx.env,

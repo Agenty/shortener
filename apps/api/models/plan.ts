@@ -101,5 +101,17 @@ const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
   },
 };
 
-export const getPlanLimits = (plan?: PlanType | string): PlanLimits =>
+/**
+ * USD price of each paid plan, monthly except Lifetime which is a one-time
+ * payment for the Pro plan. Mirrors apps/app/src/app/billings/data.ts, PayPal
+ * checkout charges these amounts and the webhook checks payments against them.
+ */
+export const PLAN_PRICES: Record<string, number> = {
+  [PlanType.Starter]: 9,
+  [PlanType.Pro]: 19,
+  [PlanType.Business]: 49,
+  Lifetime: 99,
+};
+
+export const getPlanLimits =(plan?: PlanType | string): PlanLimits =>
   PLAN_LIMITS[plan as PlanType] ?? PLAN_LIMITS[PlanType.Free];

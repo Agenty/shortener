@@ -83,8 +83,10 @@ export const updateSubscription = async (env: CloudflareBindings, subscription: 
     subscription.pg_customer_id,
   );
 
-  const { success } = await sqlQuery.run();
-  return success;
+  // `success` is true even when no row matched, callers create the
+  // subscription when nothing was updated
+  const result = await sqlQuery.run();
+  return result.meta.changes > 0;
 };
 
 export const cancelSubscription = async (env: CloudflareBindings, subscription: Subscription) => { 
@@ -109,6 +111,20 @@ export const cancelRequest = async (env: CloudflareBindings, data: Subscription)
 
   const { success } = await sqlQuery.run();
   return success;
+};
+
+export const getSubscriptionByGatewayId = async (
+  env: CloudflareBindings,
+  pg_subscr_id: string
+) => {
+  const sqlQuery = env.DB.prepare(
+    `SELECT subscription_id, account_id, user_id, plan, plan_id, amount, currency,
+     frequency, payment_gateway, pg_subscr_id, pg_customer_id, status,
+     start_date, last_pay_date, next_pay_date, cancel_date
+     FROM Subscriptions where pg_subscr_id = ?
+     Order by subscription_id DESC LIMIT 1`
+  ).bind(pg_subscr_id);
+  return (await sqlQuery.first()) as Subscription | null;
 };
 
 export const getSubscriptionByCustomerId = async (

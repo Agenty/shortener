@@ -1,7 +1,8 @@
 /**
  * Mirrors the pricing in apps/web/src/data/plans.ts. Prices must match a
- * Stripe price (the API looks it up by amount) and limits must match
- * PLAN_LIMITS in apps/api/models/plan.ts. Keep all three in sync.
+ * Stripe price (the API looks it up by amount) and PLAN_PRICES in
+ * apps/api/models/plan.ts (PayPal), and limits must match PLAN_LIMITS there.
+ * Keep all three in sync.
  */
 export type Plan = {
   name: string;
