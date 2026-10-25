@@ -56,7 +56,7 @@ const hi: Messages = {
     report: 'लिंक की शिकायत करें',
     terms: 'उपयोग की शर्तें',
     privacy: 'प्राइवेसी पॉलिसी',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. सर्वाधिकार सुरक्षित।',
+    rights: '© {year} {company} सर्वाधिकार सुरक्षित।',
     madeFor: 'मार्केटर्स और डेवलपर्स के लिए बनाया गया।',
     ctaTitle: 'आपका अगला लिंक, छोटा और ट्रैक किया हुआ।',
   },

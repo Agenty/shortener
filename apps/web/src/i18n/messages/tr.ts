@@ -56,7 +56,7 @@ const tr: Messages = {
     report: 'Bağlantı bildir',
     terms: 'Kullanım koşulları',
     privacy: 'Gizlilik politikası',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Tüm hakları saklıdır.',
+    rights: '© {year} {company} Tüm hakları saklıdır.',
     madeFor: 'Pazarlamacılar ve geliştiriciler için yapıldı.',
     ctaTitle: 'Bir sonraki bağlantınız, daha kısa ve ölçülebilir.',
   },

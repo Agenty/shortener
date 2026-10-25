@@ -5,8 +5,8 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { buttonVariants } from '@/components/ui/button';
 import { alternatives, featuredAlternatives } from '@/data/alternatives';
 import { shortenerTools } from '@/data/tools';
-import { fmt, useI18n, withLang, type Messages } from '@/i18n';
-import { GITHUB_URL, LOGIN_URL, SIGNUP_URL } from '@/lib/site';
+import { fmt, rich, useI18n, withLang, type Messages } from '@/i18n';
+import { AGENTY_URL, GITHUB_URL, LOGIN_URL, SIGNUP_URL } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
 const footerColumns = (t: Messages) => [
@@ -126,7 +126,15 @@ export function SiteFooter({ hideCta }: { hideCta?: boolean }) {
           ))}
         </div>
         <div className="flex flex-col justify-between gap-2 border-t border-white/10 py-6 text-xs text-white/50 sm:flex-row">
-          <p>{fmt(t.footer.rights, { year: new Date().getFullYear() })}</p>
+          <p>
+            {rich(fmt(t.footer.rights, { year: new Date().getFullYear() }), {
+              company: (
+                <a href={AGENTY_URL} target="_blank" rel="noopener" className="hover:text-white">
+                  Agenty Analytics Pvt. Ltd.
+                </a>
+              ),
+            })}
+          </p>
           <p>{t.footer.madeFor}</p>
         </div>
       </div>

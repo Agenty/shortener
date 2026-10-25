@@ -59,7 +59,7 @@ const en = {
     report: 'Report a link',
     terms: 'Terms of use',
     privacy: 'Privacy policy',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. All rights reserved.',
+    rights: '© {year} {company} All rights reserved.',
     madeFor: 'Made for marketers and developers.',
     ctaTitle: 'Your next link, shorter and tracked.',
   },

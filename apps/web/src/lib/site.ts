@@ -9,6 +9,7 @@ export const OPENAPI_URL = `${API_URL.replace(/\/v1$/, '')}/openapi.json`;
 export const DOCS_URL = `${SITE_URL}/docs`;
 export const SUPPORT_EMAIL = 'support@shortener.dev';
 export const GITHUB_URL = 'https://github.com/Agenty/shortener';
+export const AGENTY_URL = 'https://agenty.com';
 export const OG_IMAGE = `${SITE_URL}/og.png`;
 
 export const SIGNUP_URL = `${APP_URL}/signup`;

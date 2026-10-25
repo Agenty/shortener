@@ -56,7 +56,7 @@ const sv: Messages = {
     report: 'Anmäl en länk',
     terms: 'Användarvillkor',
     privacy: 'Integritetspolicy',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Alla rättigheter förbehållna.',
+    rights: '© {year} {company} Alla rättigheter förbehållna.',
     madeFor: 'Gjord för marknadsförare och utvecklare.',
     ctaTitle: 'Din nästa länk, kortare och mätbar.',
   },

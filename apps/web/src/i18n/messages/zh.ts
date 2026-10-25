@@ -56,7 +56,7 @@ const zh: Messages = {
     report: '举报链接',
     terms: '使用条款',
     privacy: '隐私政策',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. 保留所有权利。',
+    rights: '© {year} {company} 保留所有权利。',
     madeFor: '为营销人员和开发者打造。',
     ctaTitle: '你的下一个链接，更短，也更可衡量。',
   },

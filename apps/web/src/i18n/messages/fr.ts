@@ -56,7 +56,7 @@ const fr: Messages = {
     report: 'Signaler un lien',
     terms: 'Conditions d’utilisation',
     privacy: 'Politique de confidentialité',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Tous droits réservés.',
+    rights: '© {year} {company} Tous droits réservés.',
     madeFor: 'Conçu pour les marketeurs et les développeurs.',
     ctaTitle: 'Votre prochain lien, plus court et suivi.',
   },

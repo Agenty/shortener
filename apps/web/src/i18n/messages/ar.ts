@@ -56,7 +56,7 @@ const ar: Messages = {
     report: 'الإبلاغ عن رابط',
     terms: 'شروط الاستخدام',
     privacy: 'سياسة الخصوصية',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. جميع الحقوق محفوظة.',
+    rights: '© {year} {company} جميع الحقوق محفوظة.',
     madeFor: 'صُمّم للمسوّقين والمطورين.',
     ctaTitle: 'رابطك التالي، أقصر وقابل للتتبع.',
   },

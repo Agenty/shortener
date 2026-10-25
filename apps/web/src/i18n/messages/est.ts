@@ -56,7 +56,7 @@ const est: Messages = {
     report: 'Teata lingist',
     terms: 'Kasutustingimused',
     privacy: 'Privaatsuspoliitika',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Kõik õigused kaitstud.',
+    rights: '© {year} {company} Kõik õigused kaitstud.',
     madeFor: 'Loodud turundajatele ja arendajatele.',
     ctaTitle: 'Sinu järgmine link: lühem ja mõõdetav.',
   },
