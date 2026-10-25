@@ -56,7 +56,7 @@ const ko: Messages = {
     report: '링크 신고',
     terms: '이용약관',
     privacy: '개인정보처리방침',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. All rights reserved.',
+    rights: '© {year} {company} All rights reserved.',
     madeFor: '마케터와 개발자를 위해 만들었습니다.',
     ctaTitle: '다음 링크는 더 짧게, 그리고 측정 가능하게.',
   },

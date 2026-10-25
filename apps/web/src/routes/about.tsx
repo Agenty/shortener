@@ -4,7 +4,7 @@ import { PageHero } from '@/components/page-hero';
 import { NumberedList, Section } from '@/components/section';
 import { rich, useI18n } from '@/i18n';
 import { seo } from '@/lib/seo';
-import { GITHUB_URL } from '@/lib/site';
+import { AGENTY_URL, GITHUB_URL } from '@/lib/site';
 
 export const Route = createFileRoute('/about')({
   head: ({ match }) => {
@@ -45,7 +45,16 @@ function About() {
             <p>{copy.body2}</p>
             <p>
               {rich(copy.body3, {
-                company: <span className="text-foreground">Agenty Analytics Pvt. Ltd.</span>,
+                company: (
+                  <a
+                    href={AGENTY_URL}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-foreground underline underline-offset-4"
+                  >
+                    Agenty Analytics Pvt. Ltd.
+                  </a>
+                ),
               })}
             </p>
           </div>

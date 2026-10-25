@@ -323,12 +323,13 @@ To report a security issue, email [support@shortener.dev](mailto:support@shorten
 
 ## License
 
-Shortener.dev is built and maintained by Agenty Analytics Pvt. Ltd. as open core: the core product is fully open source under the AGPLv3(LICENSE), and a commercial license is available for organizations that need more than the AGPLv3 allows.
+Shortener.dev is built and maintained by [Agenty Analytics Pvt. Ltd.](https://agenty.com) as open core: the core product is fully open source under the AGPLv3(LICENSE), and a commercial license is available for organizations that need more than the AGPLv3 allows.
 
 For a commercial license, the hosted Enterprise plan or self-hosting support, [contact us at shortener.dev/enterprise](https://shortener.dev/enterprise).
 
 ---
 
 <p align="center">
-  Built and hosted at <a href="https://shortener.dev"><strong>shortener.dev</strong></a>, the free URL shortener with click analytics.
+  Built and hosted at <a href="https://shortener.dev"><strong>shortener.dev</strong></a>, the free URL shortener with click analytics.<br />
+  Made by <a href="https://agenty.com">Agenty</a>.
 </p>

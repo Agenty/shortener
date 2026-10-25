@@ -56,7 +56,7 @@ const th: Messages = {
     report: 'รายงานลิงก์',
     terms: 'ข้อกำหนดการใช้งาน',
     privacy: 'นโยบายความเป็นส่วนตัว',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. สงวนลิขสิทธิ์',
+    rights: '© {year} {company} สงวนลิขสิทธิ์',
     madeFor: 'สร้างมาเพื่อนักการตลาดและนักพัฒนา',
     ctaTitle: 'ลิงก์ถัดไปของคุณ สั้นลงและติดตามได้',
   },

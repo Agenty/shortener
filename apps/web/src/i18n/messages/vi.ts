@@ -56,7 +56,7 @@ const vi: Messages = {
     report: 'Báo cáo liên kết',
     terms: 'Điều khoản sử dụng',
     privacy: 'Chính sách quyền riêng tư',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Bảo lưu mọi quyền.',
+    rights: '© {year} {company} Bảo lưu mọi quyền.',
     madeFor: 'Dành cho marketer và lập trình viên.',
     ctaTitle: 'Liên kết tiếp theo của bạn, ngắn hơn và đo lường được.',
   },

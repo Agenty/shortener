@@ -56,7 +56,7 @@ const ja: Messages = {
     report: 'リンクを報告',
     terms: '利用規約',
     privacy: 'プライバシーポリシー',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. All rights reserved.',
+    rights: '© {year} {company} All rights reserved.',
     madeFor: 'マーケターと開発者のために。',
     ctaTitle: '次のリンクを、もっと短く、計測可能に。',
   },

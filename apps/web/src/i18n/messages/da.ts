@@ -56,7 +56,7 @@ const da: Messages = {
     report: 'Anmeld et link',
     terms: 'Brugsvilkår',
     privacy: 'Privatlivspolitik',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Alle rettigheder forbeholdes.',
+    rights: '© {year} {company} Alle rettigheder forbeholdes.',
     madeFor: 'Lavet til marketingfolk og udviklere.',
     ctaTitle: 'Dit næste link, kortere og målt.',
   },

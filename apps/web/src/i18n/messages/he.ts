@@ -56,7 +56,7 @@ const he: Messages = {
     report: 'דיווח על קישור',
     terms: 'תנאי שימוש',
     privacy: 'מדיניות פרטיות',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. כל הזכויות שמורות.',
+    rights: '© {year} {company} כל הזכויות שמורות.',
     madeFor: 'נבנה למשווקים ולמפתחים.',
     ctaTitle: 'הקישור הבא שלכם, קצר יותר ומדיד.',
   },

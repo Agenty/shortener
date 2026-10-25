@@ -56,7 +56,7 @@ const es: Messages = {
     report: 'Denunciar un enlace',
     terms: 'Términos de uso',
     privacy: 'Política de privacidad',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Todos los derechos reservados.',
+    rights: '© {year} {company} Todos los derechos reservados.',
     madeFor: 'Hecho para profesionales de marketing y desarrolladores.',
     ctaTitle: 'Tu próximo enlace, más corto y medido.',
   },

@@ -56,7 +56,7 @@ const nl: Messages = {
     report: 'Link melden',
     terms: 'Gebruiksvoorwaarden',
     privacy: 'Privacybeleid',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Alle rechten voorbehouden.',
+    rights: '© {year} {company} Alle rechten voorbehouden.',
     madeFor: 'Gemaakt voor marketeers en developers.',
     ctaTitle: 'Je volgende link, korter en meetbaar.',
   },

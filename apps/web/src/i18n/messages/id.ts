@@ -56,7 +56,7 @@ const id: Messages = {
     report: 'Laporkan tautan',
     terms: 'Ketentuan penggunaan',
     privacy: 'Kebijakan privasi',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Hak cipta dilindungi.',
+    rights: '© {year} {company} Hak cipta dilindungi.',
     madeFor: 'Dibuat untuk pemasar dan developer.',
     ctaTitle: 'Tautan Anda berikutnya, lebih pendek dan terlacak.',
   },

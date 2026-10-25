@@ -56,7 +56,7 @@ const it: Messages = {
     report: 'Segnala un link',
     terms: 'Termini d’uso',
     privacy: 'Informativa sulla privacy',
-    rights: '© {year} Agenty Analytics Pvt. Ltd. Tutti i diritti riservati.',
+    rights: '© {year} {company} Tutti i diritti riservati.',
     madeFor: 'Pensato per marketer e sviluppatori.',
     ctaTitle: 'Il tuo prossimo link, più corto e tracciato.',
   },
