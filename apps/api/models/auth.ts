@@ -118,3 +118,15 @@ export const verifyCodeSchema = z
   .openapi('VerifyCode');
 
 export type VerifyCode = z.infer<typeof verifyCodeSchema>;
+
+/**
+ * Detects spam names used to abuse signup emails.
+ */
+export const isSpamName = (name: string): boolean => {
+  const trimmed = name.trim();
+  if (trimmed.split(/\s+/).length > 4) return true;
+  if (/[$€£₹+#%]/.test(trimmed)) return true;
+  // Links and HTML
+  if (/[./<>]/.test(trimmed)) return true;
+  return false;
+};

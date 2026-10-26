@@ -179,13 +179,14 @@ export const verifyUser = async (
   env: CloudflareBindings,
   user_id: number
 ): Promise<boolean> => {
-  const { success } = await env.DB.prepare(
-    `UPDATE Users set is_verified = ? Where user_id = ?`
+  // Only flips unverified users, so `true` means this call did the verification
+  const { meta } = await env.DB.prepare(
+    `UPDATE Users set is_verified = ? Where user_id = ? and (is_verified IS NULL or is_verified = 0)`
   )
     .bind(1, user_id)
     .run();
 
-  return success;
+  return meta.changes > 0;
 };
 
 /** `state` carries the page to return to after sign in, see `safeReturnUrl` */

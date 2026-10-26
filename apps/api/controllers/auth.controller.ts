@@ -2,6 +2,7 @@ import { createRoute, z } from '@hono/zod-openapi';
 import {
   forgotPasswordSchema,
   identifySchema,
+  isSpamName,
   loginSchema,
   resetPasswordSchema,
   signupSchema,
@@ -97,7 +98,15 @@ auth.openapi(
     // Captcha validation
     await captchaGuard(ctx.env, data.recaptcha);
 
-    const [existingUser, totalByIP, disposableEmail] = await Promise.all([
+    // Block spam names silently, don't share the reason
+    if (isSpamName(data.name)) {
+      throw new HTTPException(400, {
+        message:
+          "Signup with email is restricted, please continue with Google or contact support",
+      });
+    }
+
+    const [existingUser, ipSignupCount, disposableEmail] = await Promise.all([
       getUserByEmail(ctx.env, data.email),
       getUserCountByIP(ctx.env, ip),
       isDisposableEmail(ctx.env, data.email),
@@ -109,12 +118,14 @@ auth.openapi(
           'User with this email already exist, please sign in or use the forgot password option',
       });
     }
-    if (totalByIP > 0) {
+
+    if (ipSignupCount > 2) {
       throw new HTTPException(400, {
         message:
-          'Multiple account creation attempts have been detected, please upgrade your existing account to add more links, users etc.',
+          "Signup with email is restricted, please continue with Google or contact support",
       });
     }
+
     if (disposableEmail) {
       throw new HTTPException(400, {
         message: 'Invalid email, disposable email not supported',
