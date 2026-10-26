@@ -49,12 +49,12 @@ otp.post('/verify', jsonValidator(otpSchema), async (ctx) => {
   }
 
   if (cacheValue.purpose == OTPPurpose.signup) {
+    await ctx.env.KVCACHE.delete(cacheKey);
+    const newlyVerified = await verifyUser(ctx.env, authUser.user_id);
     authUser.is_verified = true;
-
-    await Promise.all([
-      verifyUser(ctx.env, authUser.user_id),
-      welcomeEmail(ctx.env, authUser),
-    ]);
+    if (newlyVerified) {
+      await welcomeEmail(ctx.env, authUser);
+    }
 
     const jwtToken = await sign(
       {
