@@ -25,14 +25,28 @@ import type { User, UsersResponse, UserCreatePayload, UserUpdatePayload } from "
 
 const BASE_URL = env.API_URL;
 
-/** Cookies the API sets after Google sign in, see `oauth.controller.ts` */
-const OAUTH_TOKEN_COOKIE = "auth_token";
-const OAUTH_USER_COOKIE = "auth_user";
+/**
+ * Session cookies, shared with the website and the rest of `shortener.dev`.
+ * The API's Google sign in sets the same ones, see `oauth.controller.ts`.
+ */
+const TOKEN_COOKIE = "auth_token";
+const USER_COOKIE = "auth_user";
 
-/** Same domain the API sets the Google sign in cookies on */
-const oauthCookieDomain = () => {
-  const { hostname } = window.location;
-  return hostname.endsWith("shortener.dev") ? ".shortener.dev" : hostname;
+/** Parent domain on `shortener.dev`, host only elsewhere since browsers reject `domain=localhost` */
+const cookieDomain = () =>
+  window.location.hostname.endsWith("shortener.dev") ? ".shortener.dev" : undefined;
+
+const saveSession = (res: AuthResponse) => {
+  const options = {
+    // Same lifetime as the API's tokens
+    expires: 15,
+    path: "/",
+    sameSite: "lax" as const,
+    secure: window.location.protocol === "https:",
+    domain: cookieDomain(),
+  };
+  Cookies.set(TOKEN_COOKIE, res.token, options);
+  Cookies.set(USER_COOKIE, JSON.stringify({ name: res.name, email: res.email }), options);
 };
 
 /** API returns 428 when the signed in user has not verified their email */
@@ -49,7 +63,7 @@ async function request<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = Cookies.get("token");
+  const token = api.auth.getToken();
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -93,7 +107,7 @@ export const api = {
         method: "POST",
         body: JSON.stringify(data),
       }).then((res) => {
-        Cookies.set("token", res.token, { expires: 7 });
+        saveSession(res);
         return res;
       });
     },
@@ -103,7 +117,7 @@ export const api = {
         method: "POST",
         body: JSON.stringify(data),
       }).then((res) => {
-        Cookies.set("token", res.token, { expires: 7 });
+        saveSession(res);
         return res;
       });
     },
@@ -122,7 +136,7 @@ export const api = {
         method: "POST",
         body: JSON.stringify({ purpose: "signup", code }),
       }).then((res) => {
-        Cookies.set("token", res.token, { expires: 7 });
+        saveSession(res);
         return res;
       });
     },
@@ -135,24 +149,23 @@ export const api = {
       window.location.href = url.toString();
     },
 
-    /** Adopts the `auth_token` cookie set by the API's Google sign in, false when missing */
-    completeOAuth() {
-      const token = Cookies.get(OAUTH_TOKEN_COOKIE);
-      if (!token) return false;
-      Cookies.set("token", token, { expires: 7 });
-      return true;
+    getToken() {
+      return Cookies.get(TOKEN_COOKIE);
     },
 
     logout() {
-      Cookies.remove("token");
-      // Google sign in session, shared with the website on the parent domain
-      for (const name of [OAUTH_TOKEN_COOKIE, OAUTH_USER_COOKIE]) {
-        Cookies.remove(name, { path: "/", domain: oauthCookieDomain() });
+      for (const name of [TOKEN_COOKIE, USER_COOKIE]) {
+        Cookies.remove(name, { path: "/", domain: cookieDomain() });
+        // The API's Google sign in sets `domain=localhost` in development
+        Cookies.remove(name, { path: "/", domain: window.location.hostname });
       }
+      // App only cookie from before the session was shared
+      Cookies.remove("token");
     },
 
+    /** Signed in here, on the website or with Google, they share the session cookies */
     isAuthenticated() {
-      return !!Cookies.get("token");
+      return !!this.getToken();
     },
   },
 

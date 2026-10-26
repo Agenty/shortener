@@ -1,0 +1,6 @@
+# Dashboard app, only the auth pages are public
+User-agent: *
+Allow: /$
+Allow: /login
+Allow: /signup
+Disallow: /

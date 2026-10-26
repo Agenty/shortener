@@ -18,7 +18,7 @@ export default function OAuthCallback() {
     if (done.current) return;
     done.current = true;
 
-    if (!api.auth.completeOAuth()) {
+    if (!api.auth.isAuthenticated()) {
       toast.error(t.google.failed);
       navigate("/login", { replace: true });
       return;
