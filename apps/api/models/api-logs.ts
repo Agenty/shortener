@@ -1,5 +1,5 @@
 export interface ApiLogs {
-    /** project identifier (ex: agenty.com, dayschedule.com etc) */
+    /** project identifier (ex: shortener.dev) */
     project: string;
 
     /** request metadata */
@@ -11,6 +11,11 @@ export interface ApiLogs {
     /** geo */
     country?: string;
     city?: string;
+    region?: string;
+
+    /** network (useful to investigate/block abusive networks) */
+    asn?: number;
+    as_organization?: string;
 
     /** auth */
     account_id?: number;
