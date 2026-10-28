@@ -20,5 +20,15 @@
     "apps/*",
     "packages/*"
   ],
-  "license": "AGPL-3.0-or-later"
+  "license": "AGPL-3.0-or-later",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/Agenty"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/agenty"
+    }
+  ]
 }
