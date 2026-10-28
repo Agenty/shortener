@@ -84,7 +84,7 @@ The API only creates short links to destinations on a domain that the account ha
 - Blocklist: [`data/blocked.ts`](data/blocked.ts) plus domains blocked by admins in D1
 - Verification: email OTP to an address on the domain, or Google Search Console ownership
 
-If you self-host, please keep this check in place. See [Responsible link shortening](../../README.md#responsible-link-shortening).
+If you self-host, please keep this check in place. See [Safety](../../README.md#safety).
 
 ## Cloudflare bindings
 

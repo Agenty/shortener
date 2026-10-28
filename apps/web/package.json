@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
-    "build": "node scripts/agent-skills-index.mjs && vite build",
+    "build": "node scripts/agent-skills-index.mjs && node scripts/funding-manifest.mjs && vite build",
     "preview": "vite preview",
     "deploy": "npm run build && wrangler deploy",
     "check-types": "tsc --noEmit",

@@ -48,18 +48,21 @@ You can use the hosted version at [shortener.dev](https://shortener.dev) or run 
 - **Password-protected links**
 - **iOS and Android targeting** to send mobile visitors to your app
 - **Geo targeting** to send visitors from a country to a different URL
-- **Domain verification** by email code or Google Search Console (see [Responsible link shortening](#responsible-link-shortening))
+- **Domain verification** by email code or Google Search Console (see [Safety](#safety))
 - **Teams** with roles, projects and API keys
 - **REST API** with an OpenAPI spec and examples in cURL, JavaScript and Python
 - **Docs for AI agents** at [`/llms.txt`](https://shortener.dev/llms.txt), and every docs page as markdown by adding `.md` to its URL
 
-## Responsible link shortening
+## Safety
 
-Short links hide their destination, which makes them a favorite tool for phishing. So Shortener.dev only shortens links to **domains you've verified** or to trusted sites on a whitelist.
+Short links hide their destination, which makes them a favorite tool for phishing and spam. Shortener.dev has several checks so its links stay trustworthy:
 
-- **Verify first.** Prove ownership with an email code or Google Search Console. Subdomains are included.
-- **Popular sites just work.** YouTube, LinkedIn, Amazon and other trusted sites need no verification.
+- **Each domain is verified before creating a short link.** Prove ownership with an email code or Google Search Console. Subdomains are included.
+- **Popular sites just work.** YouTube, LinkedIn, Amazon and other trusted sites are whitelisted and need no verification.
 - **Abused destinations are blocked.** Free hosts, tunnels, other shorteners and risky TLDs like `.zip` are denied ([list](apps/api/data/blocked.ts)).
+- **Disposable emails are rejected at signup**, and signups are protected by reCAPTCHA and limited per IP address.
+- **API requests are rate limited** to stop bulk abuse.
+- **Accounts and links that break the rules are suspended**, and the links stop redirecting - taking customers back to safety.
 - **Anyone can [report a link](https://shortener.dev/report).**
 
 The result: visitors can trust every link, your brand can't be misused, and the short domain stays off spam blocklists.

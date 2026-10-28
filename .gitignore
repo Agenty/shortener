@@ -41,3 +41,6 @@ yarn-error.log*
 # Wrangler local secrets
 .dev.vars*
 apps/extension*
+
+# Copied from the root funding.json at build time
+apps/web/public/funding.json
