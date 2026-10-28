@@ -311,6 +311,15 @@ Then add a custom domain to each Worker in the Cloudflare dashboard, and update:
 - the API URL in [`apps/app/src/env.ts`](apps/app/src/env.ts) and [`apps/web/src/lib/site.ts`](apps/web/src/lib/site.ts)
 - the short link domain (`SHORT_DOMAIN`) in [`apps/api/services/links.service.ts`](apps/api/services/links.service.ts) and [`apps/app/src/env.ts`](apps/app/src/env.ts)
 
+## Sponsoring
+
+Shortener.dev is free to use and free to self-host. Sponsorships pay for maintainer time, security fixes, abuse prevention on the hosted service and the infrastructure behind the free tier.
+
+- [GitHub Sponsors](https://github.com/sponsors/Agenty)
+- [Open Collective](https://opencollective.com/agenty)
+
+Funding details for foundations and grant programs are published in [`funding.json`](funding.json), following the [funding.json](https://fundingjson.org) standard.
+
 ## Contributing
 
 Issues and pull requests are welcome.

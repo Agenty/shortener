@@ -1,0 +1,102 @@
+{
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+  "version": "v1.1.0",
+  "entity": {
+    "type": "organisation",
+    "role": "owner",
+    "name": "Agenty Analytics Pvt. Ltd.",
+    "email": "support@shortener.dev",
+    "description": "Agenty Analytics builds and maintains Shortener.dev, an open-source URL shortener with click analytics. Funding pays for maintainer time, security work, abuse and spam prevention on the hosted service, and the infrastructure behind the free tier.",
+    "webpageUrl": {
+      "url": "https://shortener.dev",
+      "wellKnown": "https://shortener.dev/.well-known/funding-manifest-urls"
+    }
+  },
+  "projects": [
+    {
+      "guid": "shortener",
+      "name": "Shortener.dev",
+      "description": "An open-source URL shortener with click analytics, custom back-halves, UTM tracking, password-protected links, and geo and app targeting, built on Cloudflare Workers. It includes a REST API with an OpenAPI spec, a dashboard, a browser extension and a marketing site, and can be self-hosted or used at shortener.dev.",
+      "webpageUrl": {
+        "url": "https://shortener.dev",
+        "wellKnown": "https://shortener.dev/.well-known/funding-manifest-urls"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/Agenty/shortener",
+        "wellKnown": "https://github.com/Agenty/shortener/blob/main/.well-known/funding-manifest-urls"
+      },
+      "licenses": ["spdx:AGPL-3.0-or-later"],
+      "tags": [
+        "url-shortener",
+        "link-management",
+        "analytics",
+        "utm",
+        "cloudflare-workers",
+        "self-hosted",
+        "api",
+        "privacy",
+        "web",
+        "typescript"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "github-sponsors",
+        "type": "payment-provider",
+        "address": "https://github.com/sponsors/Agenty",
+        "description": "Monthly or one-time sponsorship through GitHub Sponsors."
+      },
+      {
+        "guid": "open-collective",
+        "type": "payment-provider",
+        "address": "https://opencollective.com/agenty",
+        "description": "Monthly, yearly or one-time contributions through Open Collective, with invoices and a public ledger."
+      }
+    ],
+    "plans": [
+      {
+        "guid": "backer",
+        "status": "active",
+        "name": "Backer",
+        "description": "For individuals who use Shortener.dev and want to keep it maintained.",
+        "amount": 10,
+        "currency": "USD",
+        "frequency": "monthly",
+        "channels": ["github-sponsors", "open-collective"]
+      },
+      {
+        "guid": "sponsor",
+        "status": "active",
+        "name": "Sponsor",
+        "description": "For teams and small companies. Your logo is listed in the README.",
+        "amount": 100,
+        "currency": "USD",
+        "frequency": "monthly",
+        "channels": ["github-sponsors", "open-collective"]
+      },
+      {
+        "guid": "maintainer",
+        "status": "active",
+        "name": "Maintainer funding",
+        "description": "Funds about one week of maintainer time a month for security fixes, dependency updates and reviewing contributions.",
+        "amount": 2000,
+        "currency": "USD",
+        "frequency": "monthly",
+        "channels": ["github-sponsors", "open-collective"]
+      },
+      {
+        "guid": "one-time",
+        "status": "active",
+        "name": "One-time contribution",
+        "description": "Any amount, once.",
+        "amount": 0,
+        "currency": "USD",
+        "frequency": "one-time",
+        "channels": ["github-sponsors", "open-collective"]
+      }
+    ],
+    "history": []
+  }
+}
