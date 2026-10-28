@@ -1,0 +1,3 @@
+# floss.fund matches these lines byte for byte, so keep them LF on every checkout
+**/.well-known/funding-manifest-urls text eol=lf
+funding.json text eol=lf

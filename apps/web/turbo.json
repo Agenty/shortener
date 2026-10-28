@@ -2,6 +2,7 @@
   "extends": ["//"],
   "tasks": {
     "build": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "$TURBO_ROOT$/funding.json"],
       "outputs": ["dist/**"]
     }
   }

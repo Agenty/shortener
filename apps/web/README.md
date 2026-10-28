@@ -44,9 +44,9 @@ In dev the site calls `http://localhost:8787/v1`, in production `https://api.sho
 
 `docs/*.md` are the help pages at [shortener.dev/docs](https://shortener.dev/docs), with screenshots in `public/docs/images/`. `/docs/api` renders the API's OpenAPI spec with Scalar, and `/llms.txt` and `/llms-full.txt` expose the docs to AI agents.
 
-## Responsible link shortening
+## Safety
 
-Short links only point to verified or whitelisted domains, and the `/report` page lets anyone report a harmful link so it can be disabled. See [Responsible link shortening](../../README.md#responsible-link-shortening).
+Short links only point to verified or whitelisted domains, and the `/report` page lets anyone report a harmful link so it can be disabled. See [Safety](../../README.md#safety).
 
 ## License
 

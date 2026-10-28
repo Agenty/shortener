@@ -51,7 +51,7 @@ Run the [API](../api/README.md) alongside it, or run everything from the reposit
 
 ## Domain verification
 
-Links can only point to verified or whitelisted domains, which keeps short links from being used for phishing and protects domain owners. The **Domains** page lets users add a domain and verify it. See [Responsible link shortening](../../README.md#responsible-link-shortening) and [Verify a domain](https://shortener.dev/docs/verify-domain).
+Links can only point to verified or whitelisted domains, which keeps short links from being used for phishing and protects domain owners. The **Domains** page lets users add a domain and verify it. See [Safety](../../README.md#safety) and [Verify a domain](https://shortener.dev/docs/verify-domain).
 
 ## License
 
