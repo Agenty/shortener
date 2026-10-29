@@ -60,7 +60,7 @@ Short links hide their destination, which makes them a favorite tool for phishin
 - **Each domain is verified before creating a short link.** Prove ownership with an email code or Google Search Console. Subdomains are included.
 - **Popular sites just work.** YouTube, LinkedIn, Amazon and other trusted sites are whitelisted and need no verification.
 - **Abused destinations are blocked.** Free hosts, tunnels, other shorteners and risky TLDs like `.zip` are denied ([list](apps/api/data/blocked.ts)).
-- **Disposable emails are rejected at signup**, and signups are protected by reCAPTCHA and limited per IP address.
+- **Disposable emails are rejected at signup**, and signups and password resets are protected by Cloudflare Turnstile and limited per IP address.
 - **API requests are rate limited** to stop bulk abuse.
 - **Accounts and links that break the rules are suspended**, and the links stop redirecting - taking customers back to safety.
 - **Anyone can [report a link](https://shortener.dev/report).**

@@ -107,6 +107,7 @@ const th: Messages = {
     sendFailed: 'ส่งรหัสไม่สำเร็จ',
     verifyFailed: 'รหัสไม่ถูกต้อง',
     tooMany: 'ลองหลายครั้งเกินไป รอหนึ่งนาทีแล้วลองอีกครั้ง',
+    captchaRequired: 'โปรดทำการตรวจสอบความปลอดภัยให้เสร็จ',
   },
   mailForm: {
     send: 'ส่งอีเมล',

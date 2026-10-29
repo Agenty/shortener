@@ -107,6 +107,7 @@ const de: Messages = {
     sendFailed: 'Code konnte nicht gesendet werden',
     verifyFailed: 'Ungültiger Code',
     tooMany: 'Zu viele Versuche. Warte eine Minute und versuche es erneut.',
+    captchaRequired: 'Bitte schließe die Sicherheitsprüfung ab',
   },
   mailForm: {
     send: 'E-Mail senden',

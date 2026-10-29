@@ -96,7 +96,7 @@ auth.openapi(
     const ip = ctx.req.header('CF-Connecting-IP');
 
     // Captcha validation
-    await captchaGuard(ctx.env, data.recaptcha);
+    await captchaGuard(ctx.env, data.turnstile, ip);
 
     // Block spam names silently, don't share the reason
     if (isSpamName(data.name)) {
@@ -115,7 +115,7 @@ auth.openapi(
     if (existingUser) {
       throw new HTTPException(400, {
         message:
-          'User with this email already exist, please sign in or use the forgot password option',
+          'Unable to create an account with this email, please sign in or use the forgot password option',
       });
     }
 
@@ -234,12 +234,17 @@ auth.openapi(
   }),
   async (ctx) => {
     const data = ctx.req.valid('json');
+    await captchaGuard(
+      ctx.env,
+      data.turnstile,
+      ctx.req.header('CF-Connecting-IP')
+    );
+    // Same response whether or not the email is registered
+    const message =
+      'If an account exists for this email, you will receive a link to reset your password';
     const authUser = await getUserByEmail(ctx.env, data.email);
     if (!authUser) {
-      throw new HTTPException(400, {
-        message:
-          'If you are a registered client, you will receive an email to reset your password',
-      });
+      return ctx.json({ message }, 200);
     }
     const token = await sign(
       {
@@ -251,7 +256,7 @@ auth.openapi(
     );
 
     await sendPasswordResetEmail(ctx.env, authUser, token);
-    return ctx.json({ message: 'Password reset email sent' }, 200);
+    return ctx.json({ message }, 200);
   }
 );
 
@@ -336,7 +341,7 @@ auth.openapi(
     path: '/identify',
     summary: 'Sign in with email code',
     description:
-      'Send a one-time 6-digit code to the email address. Works for new and existing users, a new account is created when the code is verified. Returns a short-lived token to send with `POST /auth/verify`.',
+      'Send a one-time 6-digit code to the email address. Works for new and existing users, a new account is created when the code is verified. Requires a Cloudflare Turnstile token. Returns a short-lived token to send with `POST /auth/verify`.',
     request: {
       body: {
         required: true,
@@ -361,7 +366,13 @@ auth.openapi(
     } as any,
   }),
   async (ctx) => {
-    const email = ctx.req.valid('json').email.trim().toLowerCase();
+    const data = ctx.req.valid('json');
+    await captchaGuard(
+      ctx.env,
+      data.turnstile,
+      ctx.req.header('CF-Connecting-IP')
+    );
+    const email = data.email.trim().toLowerCase();
     const existingUser = await getUserByEmail(ctx.env, email);
     if (!existingUser && (await isDisposableEmail(ctx.env, email))) {
       throw new HTTPException(400, {

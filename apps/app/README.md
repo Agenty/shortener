@@ -30,11 +30,11 @@ Deploy with `npm run build && npx wrangler deploy`. [`wrangler.json`](wrangler.j
 
 [`src/env.ts`](src/env.ts) holds the settings that differ between environments:
 
-| Setting         | Development                | Production                     |
-| --------------- | -------------------------- | ------------------------------ |
-| `API_URL`       | `http://localhost:8787/v1` | `https://api.shortener.dev/v1` |
-| `RECAPTCHA_KEY` | reCAPTCHA site key         | reCAPTCHA site key             |
-| `SHORT_DOMAIN`  | `srt1.link`                | `srt1.link`                    |
+| Setting              | Development                | Production                     |
+| -------------------- | -------------------------- | ------------------------------ |
+| `API_URL`            | `http://localhost:8787/v1` | `https://api.shortener.dev/v1` |
+| `TURNSTILE_SITE_KEY` | Turnstile test site key    | Turnstile site key             |
+| `SHORT_DOMAIN`       | `srt1.link`                | `srt1.link`                    |
 
 Run the [API](../api/README.md) alongside it, or run everything from the repository root with `npm run dev`.
 
@@ -46,7 +46,7 @@ Run the [API](../api/README.md) alongside it, or run everything from the reposit
 | `src/app/domains/`    | Add and verify domains (email code or Google Search Console)              |
 | `src/components/ui/`  | shadcn/ui components                                                      |
 | `src/lib/api.ts`      | API client                                                                |
-| `src/hooks/`          | Auth, reCAPTCHA and view preference hooks                                 |
+| `src/hooks/`          | Auth and view preference hooks                                            |
 | `src/types/`          | API response types                                                        |
 
 ## Domain verification

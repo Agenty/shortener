@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { ApiError, EMAIL_NOT_VERIFIED, api } from '@/lib/api';
-import { useRecaptcha } from '@/hooks/use-recaptcha';
 import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useI18n } from '@/i18n';
@@ -26,7 +25,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { executeRecaptcha } = useRecaptcha();
   const { t } = useI18n();
   // Already signed in here or on the website, checked before showing the form
   const [checking, setChecking] = useState(() => api.auth.isAuthenticated());
@@ -63,12 +61,7 @@ export default function Login() {
     }
     setLoading(true);
     try {
-      const recaptcha = await executeRecaptcha('login');
-      if (!recaptcha) {
-        toast.error(t.common.recaptchaLoading);
-        return;
-      }
-      const user = await api.auth.signin({ email, password, recaptcha });
+      const user = await api.auth.signin({ email, password });
       if (!user.is_verified) {
         navigate('/onboarding', { replace: true, state: { email } });
         return;

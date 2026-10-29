@@ -107,6 +107,7 @@ const nl: Messages = {
     sendFailed: 'De code kon niet worden verstuurd',
     verifyFailed: 'Ongeldige code',
     tooMany: 'Te veel pogingen. Wacht een minuut en probeer het opnieuw.',
+    captchaRequired: 'Voltooi de beveiligingscontrole',
   },
   mailForm: {
     send: 'E-mail versturen',

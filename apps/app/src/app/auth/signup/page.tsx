@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
-import { useRecaptcha } from '@/hooks/use-recaptcha';
+import { Turnstile } from '@/components/Turnstile';
 import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useI18n } from '@/i18n';
@@ -27,7 +27,9 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { executeRecaptcha } = useRecaptcha();
+  const [turnstile, setTurnstile] = useState<string | null>(null);
+  // Remounts the widget, its tokens are single use
+  const [captchaKey, setCaptchaKey] = useState(0);
   const { t } = useI18n();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -36,18 +38,19 @@ export default function Signup() {
       toast.error(t.common.fillAllFields);
       return;
     }
+    if (!turnstile) {
+      toast.error(t.common.captchaRequired);
+      return;
+    }
     setLoading(true);
     try {
-      const recaptcha = await executeRecaptcha('signup');
-      if (!recaptcha) {
-        toast.error(t.common.recaptchaLoading);
-        return;
-      }
-      await api.auth.signup({ name, email, password, recaptcha });
+      await api.auth.signup({ name, email, password, turnstile });
       toast.success(t.signup.created);
       navigate('/onboarding', { replace: true, state: { email } });
     } catch (err: any) {
       toast.error(err.message || t.signup.failed);
+      setTurnstile(null);
+      setCaptchaKey((key) => key + 1);
     } finally {
       setLoading(false);
     }
@@ -97,6 +100,7 @@ export default function Signup() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+            <Turnstile key={captchaKey} action="signup" onToken={setTurnstile} />
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={loading}>

@@ -107,6 +107,7 @@ const sv: Messages = {
     sendFailed: 'Koden kunde inte skickas',
     verifyFailed: 'Ogiltig kod',
     tooMany: 'För många försök. Vänta en minut och försök igen.',
+    captchaRequired: 'Slutför säkerhetskontrollen',
   },
   mailForm: {
     send: 'Skicka e-post',

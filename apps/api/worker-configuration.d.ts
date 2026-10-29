@@ -29,7 +29,7 @@ interface __BaseEnv_CloudflareBindings {
 	VIRUSTOTAL_APIKEY: string;
 	STRIPE_SECRET_KEY: string;
 	STRIPE_WEBHOOK_SECRET: string;
-	RECAPTCHA_KEY: string;
+	TURNSTILE_SECRET_KEY: string;
     AGENTY_KEY: string;
 	PAYPAL_CLIENT_ID: string;
 	PAYPAL_CLIENT_SECRET: string;
@@ -47,7 +47,7 @@ type StringifyValues<EnvType extends Record<string, unknown>> = {
 	[Binding in keyof EnvType]: EnvType[Binding] extends string ? EnvType[Binding] : string;
 };
 declare namespace NodeJS {
-	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "ENVIRONMENT" | "JWT_SECRET" | "CF_ACCOUNT_ID" | "CF_API_KEY" | "GOOGLE_SAFEBROWSE_KEY" | "APP_URL" | "API_URL" | "DOMAIN" | "GOOGLE_CLIENT_ID" | "GOOGLE_CLIENT_SECRET" | "GITHUB_CLIENT_ID" | "GITHUB_CLIENT_SECRET" | "VIRUSTOTAL_APIKEY" | "STRIPE_SECRET_KEY" | "RECAPTCHA_KEY">> {}
+	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "ENVIRONMENT" | "JWT_SECRET" | "CF_ACCOUNT_ID" | "CF_API_KEY" | "GOOGLE_SAFEBROWSE_KEY" | "APP_URL" | "API_URL" | "DOMAIN" | "GOOGLE_CLIENT_ID" | "GOOGLE_CLIENT_SECRET" | "GITHUB_CLIENT_ID" | "GITHUB_CLIENT_SECRET" | "VIRUSTOTAL_APIKEY" | "STRIPE_SECRET_KEY" | "TURNSTILE_SECRET_KEY">> {}
 }
 declare module "*.txt" {
 	const value: string;

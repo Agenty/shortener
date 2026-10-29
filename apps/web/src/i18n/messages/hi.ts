@@ -107,6 +107,7 @@ const hi: Messages = {
     sendFailed: 'कोड नहीं भेजा जा सका',
     verifyFailed: 'गलत कोड',
     tooMany: 'बहुत ज़्यादा कोशिशें। एक मिनट रुककर फिर कोशिश करें।',
+    captchaRequired: 'कृपया सुरक्षा जांच पूरी करें',
   },
   mailForm: {
     send: 'ईमेल भेजें',

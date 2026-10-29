@@ -102,7 +102,7 @@ function toClickQuery(params: AnalyticsParams & ReportsParams) {
 
 export const api = {
   auth: {
-    signin(data: { email: string; password: string; recaptcha: string }) {
+    signin(data: { email: string; password: string }) {
       return request<AuthResponse>("/auth/signin", {
         method: "POST",
         body: JSON.stringify(data),
@@ -112,13 +112,29 @@ export const api = {
       });
     },
 
-    signup(data: { name: string; email: string; password: string; recaptcha: string }) {
+    signup(data: { name: string; email: string; password: string; turnstile: string }) {
       return request<AuthResponse>("/auth/signup", {
         method: "POST",
         body: JSON.stringify(data),
       }).then((res) => {
         saveSession(res);
         return res;
+      });
+    },
+
+    /** Emails a link to `/reset-password?token=...`, valid for 15 minutes */
+    forgotPassword(data: { email: string; turnstile: string }) {
+      return request<{ message: string }>("/auth/forgot-password", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+    },
+
+    /** Sets a new password with the token from the reset email */
+    resetPassword(data: { password: string; confirm_password: string; token: string }) {
+      return request<{ message: string }>("/auth/reset-password", {
+        method: "POST",
+        body: JSON.stringify(data),
       });
     },
 

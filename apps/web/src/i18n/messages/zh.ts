@@ -107,6 +107,7 @@ const zh: Messages = {
     sendFailed: '验证码发送失败',
     verifyFailed: '验证码无效',
     tooMany: '尝试次数过多，请一分钟后再试。',
+    captchaRequired: '请完成安全验证',
   },
   mailForm: {
     send: '发送邮件',

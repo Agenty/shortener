@@ -1,47 +1,55 @@
 import { HTTPException } from 'hono/http-exception';
 
-const objectToUrlEncoded = (obj: any) => {
-  const urlSearchParams = new URLSearchParams();
-  for (const [key, value] of Object.entries(obj)) {
-    urlSearchParams.append(key, value as string);
-  }
-  return urlSearchParams.toString();
+type TurnstileResult = {
+  success: boolean;
+  'error-codes'?: string[];
+  hostname?: string;
+  action?: string;
 };
 
-export const captchaVerify = async (env: CloudflareBindings, recaptchaToken: string) => {
-  const r = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-    method: 'POST',
-    body: objectToUrlEncoded({
-      secret: env.RECAPTCHA_KEY,
-      response: recaptchaToken,
-    }),
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+/** Cloudflare Turnstile, the token is single use and valid for 5 minutes */
+export const captchaVerify = async (
+  env: CloudflareBindings,
+  token: string,
+  ip?: string
+): Promise<TurnstileResult> => {
+  const body = new URLSearchParams({
+    secret: env.TURNSTILE_SECRET_KEY,
+    response: token,
   });
+  if (ip) body.set('remoteip', ip);
 
-  if (r.status == 200) {
-    return (await r.json()) as any;
+  const r = await fetch(
+    'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+    { method: 'POST', body }
+  );
+  if (r.status !== 200) {
+    return { success: false, 'error-codes': [`http-${r.status}`] };
   }
+  return (await r.json()) as TurnstileResult;
 };
 
-export const captchaGuard = async (env: CloudflareBindings, recaptchaToken: string) => {
-  // Bypass captcha validation for Android/iOS app, dev env
+export const captchaGuard = async (
+  env: CloudflareBindings,
+  token: string | undefined,
+  ip?: string
+) => {
+  // Bypass captcha validation for dev env
   if (env.ENVIRONMENT !== 'production') {
     return;
   }
 
-  const capthcaResult = await captchaVerify(env, recaptchaToken);
-  if (!capthcaResult.success) {
+  if (!token) {
     throw new HTTPException(400, {
-      message: `Recaptcha error: ${capthcaResult['error-codes']?.join()}`,
+      message: 'Please complete the security check and try again',
     });
   }
 
-  if (capthcaResult.score < 0.3) {
+  const result = await captchaVerify(env, token, ip);
+  if (!result.success) {
     throw new HTTPException(400, {
-      message: `Are you a human? Our system detected you as a bot and access denied. Contact support if you think this is a mistake.`,
+      message: `Security check failed (${result['error-codes']?.join() || 'unknown'}), please try again`,
     });
   }
-  return capthcaResult;
+  return result;
 };

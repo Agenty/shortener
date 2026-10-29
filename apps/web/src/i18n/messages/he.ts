@@ -107,6 +107,7 @@ const he: Messages = {
     sendFailed: 'לא ניתן לשלוח את הקוד',
     verifyFailed: 'קוד שגוי',
     tooMany: 'יותר מדי ניסיונות. המתינו דקה ונסו שוב.',
+    captchaRequired: 'יש להשלים את בדיקת האבטחה',
   },
   mailForm: {
     send: 'שליחת אימייל',

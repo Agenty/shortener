@@ -107,6 +107,7 @@ const ja: Messages = {
     sendFailed: 'コードを送信できませんでした',
     verifyFailed: 'コードが正しくありません',
     tooMany: '試行回数が多すぎます。1 分待ってから再試行してください。',
+    captchaRequired: 'セキュリティチェックを完了してください',
   },
   mailForm: {
     send: 'メールを送信',

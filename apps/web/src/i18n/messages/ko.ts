@@ -107,6 +107,7 @@ const ko: Messages = {
     sendFailed: '코드를 보낼 수 없습니다',
     verifyFailed: '잘못된 코드입니다',
     tooMany: '시도 횟수가 너무 많습니다. 1분 후 다시 시도하세요.',
+    captchaRequired: '보안 확인을 완료해 주세요',
   },
   mailForm: {
     send: '이메일 보내기',

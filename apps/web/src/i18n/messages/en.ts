@@ -110,6 +110,7 @@ const en = {
     sendFailed: 'Could not send the code',
     verifyFailed: 'Invalid code',
     tooMany: 'Too many attempts. Wait a minute and try again.',
+    captchaRequired: 'Please complete the security check',
   },
   mailForm: {
     send: 'Send email',
