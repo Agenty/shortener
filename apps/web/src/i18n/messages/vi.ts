@@ -32,6 +32,8 @@ const vi: Messages = {
     shortLinksDescription: 'Đuôi tùy chỉnh, UTM, hết hạn, mật khẩu và nhắm mục tiêu',
     lifetimeDeal: 'Ưu đãi trọn đời',
     lifetimeDealDescription: 'Trả một lần cho {links}',
+    extension: 'Tiện ích trình duyệt',
+    extensionDescription: 'Rút gọn trang đang mở ngay từ Chrome hoặc Firefox',
     comparisons: 'So sánh',
     comparisonsDescription: 'So sánh với Bitly, Rebrandly, Dub và các dịch vụ khác',
     whatsapp: 'Tạo liên kết WhatsApp',

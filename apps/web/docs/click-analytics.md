@@ -43,7 +43,7 @@ Below the chart, each list shows the top entries for one dimension:
 - **Top Links**, your most clicked short links
 - **Browsers**, **Operating Systems** and **Devices** (desktop, mobile or tablet)
 
-For a click-by-click log, see [Click reports](/docs/click-reports).
+For a click-by-click log, see [Click reports](/docs/click-reports). The same numbers are in the side panel of the [browser extension](/docs/browser-extension) if you want a quick look without opening the dashboard.
 
 ## Get analytics through the API
 

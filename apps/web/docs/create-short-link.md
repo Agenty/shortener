@@ -47,6 +47,8 @@ Click **Create Short Link**. You'll see "Short link created successfully!" and t
 
 Click the copy icon next to the short link to copy it, or click **View** in the **Clicks** column to open its [analytics](/docs/click-analytics).
 
+If you shorten pages while browsing, the [browser extension](/docs/browser-extension) does the same thing from the toolbar: it fills in the tab's URL and copies the short link for you.
+
 ## Plan limits
 
 The Free plan includes 50 short links. Paid plans count the links you create in the last 30 days. When you reach the limit, the builder shows an error asking you to upgrade, and links you've already created keep redirecting. See [pricing](/pricing) for the limits on each plan.

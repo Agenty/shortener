@@ -32,6 +32,8 @@ const he: Messages = {
     shortLinksDescription: 'סיומות מותאמות, UTM, תפוגה, סיסמאות וטירגוט',
     lifetimeDeal: 'עסקה לכל החיים',
     lifetimeDealDescription: 'תשלום חד-פעמי עבור {links}',
+    extension: 'תוסף לדפדפן',
+    extensionDescription: 'קיצור הדף שבו אתם נמצאים ישירות מ-Chrome או מ-Firefox',
     comparisons: 'השוואות',
     comparisonsDescription: 'איך אנחנו בהשוואה ל-Bitly, ‏Rebrandly, ‏Dub ואחרים',
     whatsapp: 'מחולל קישורי WhatsApp',

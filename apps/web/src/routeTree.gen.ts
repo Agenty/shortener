@@ -30,6 +30,9 @@ import { Route as DocsIndexRouteImport } from './routes/docs/index'
 import { Route as DocsSlugRouteImport } from './routes/docs/$slug'
 import { Route as DocsApiRouteImport } from './routes/docs/api'
 import { Route as DocsChar123slugChar125DotmdRouteImport } from './routes/docs/{$slug}[.]md'
+import { Route as ExtensionIndexRouteImport } from './routes/extension/index'
+import { Route as ExtensionInstalledRouteImport } from './routes/extension/installed'
+import { Route as ExtensionUninstalledRouteImport } from './routes/extension/uninstalled'
 import { Route as ToolsIndexRouteImport } from './routes/tools/index'
 import { Route as ToolsSlugRouteImport } from './routes/tools/$slug'
 import { Route as ToolsSocialSharePreviewRouteImport } from './routes/tools/social-share-preview'
@@ -141,6 +144,21 @@ const DocsChar123slugChar125DotmdRoute =
     path: '/docs/{$slug}.md',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ExtensionIndexRoute = ExtensionIndexRouteImport.update({
+  id: '/extension/',
+  path: '/extension/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExtensionInstalledRoute = ExtensionInstalledRouteImport.update({
+  id: '/extension/installed',
+  path: '/extension/installed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExtensionUninstalledRoute = ExtensionUninstalledRouteImport.update({
+  id: '/extension/uninstalled',
+  path: '/extension/uninstalled',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsIndexRoute = ToolsIndexRouteImport.update({
   id: '/tools/',
   path: '/tools/',
@@ -183,11 +201,14 @@ export interface FileRoutesByFullPath {
   '/docs/$slug': typeof DocsSlugRoute
   '/docs/api': typeof DocsApiRoute
   '/docs/{$slug}.md': typeof DocsChar123slugChar125DotmdRoute
+  '/extension/installed': typeof ExtensionInstalledRoute
+  '/extension/uninstalled': typeof ExtensionUninstalledRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/tools/social-share-preview': typeof ToolsSocialSharePreviewRoute
   '/tools/whatsapp-link-generator': typeof ToolsWhatsappLinkGeneratorRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/docs/': typeof DocsIndexRoute
+  '/extension/': typeof ExtensionIndexRoute
   '/tools/': typeof ToolsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -210,11 +231,14 @@ export interface FileRoutesByTo {
   '/docs/$slug': typeof DocsSlugRoute
   '/docs/api': typeof DocsApiRoute
   '/docs/{$slug}.md': typeof DocsChar123slugChar125DotmdRoute
+  '/extension/installed': typeof ExtensionInstalledRoute
+  '/extension/uninstalled': typeof ExtensionUninstalledRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/tools/social-share-preview': typeof ToolsSocialSharePreviewRoute
   '/tools/whatsapp-link-generator': typeof ToolsWhatsappLinkGeneratorRoute
   '/alternatives': typeof AlternativesIndexRoute
   '/docs': typeof DocsIndexRoute
+  '/extension': typeof ExtensionIndexRoute
   '/tools': typeof ToolsIndexRoute
 }
 export interface FileRoutesById {
@@ -238,11 +262,14 @@ export interface FileRoutesById {
   '/docs/$slug': typeof DocsSlugRoute
   '/docs/api': typeof DocsApiRoute
   '/docs/{$slug}.md': typeof DocsChar123slugChar125DotmdRoute
+  '/extension/installed': typeof ExtensionInstalledRoute
+  '/extension/uninstalled': typeof ExtensionUninstalledRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/tools/social-share-preview': typeof ToolsSocialSharePreviewRoute
   '/tools/whatsapp-link-generator': typeof ToolsWhatsappLinkGeneratorRoute
   '/alternatives/': typeof AlternativesIndexRoute
   '/docs/': typeof DocsIndexRoute
+  '/extension/': typeof ExtensionIndexRoute
   '/tools/': typeof ToolsIndexRoute
 }
 export interface FileRouteTypes {
@@ -267,11 +294,14 @@ export interface FileRouteTypes {
     | '/docs/$slug'
     | '/docs/api'
     | '/docs/{$slug}.md'
+    | '/extension/installed'
+    | '/extension/uninstalled'
     | '/tools/$slug'
     | '/tools/social-share-preview'
     | '/tools/whatsapp-link-generator'
     | '/alternatives/'
     | '/docs/'
+    | '/extension/'
     | '/tools/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -294,11 +324,14 @@ export interface FileRouteTypes {
     | '/docs/$slug'
     | '/docs/api'
     | '/docs/{$slug}.md'
+    | '/extension/installed'
+    | '/extension/uninstalled'
     | '/tools/$slug'
     | '/tools/social-share-preview'
     | '/tools/whatsapp-link-generator'
     | '/alternatives'
     | '/docs'
+    | '/extension'
     | '/tools'
   id:
     | '__root__'
@@ -321,11 +354,14 @@ export interface FileRouteTypes {
     | '/docs/$slug'
     | '/docs/api'
     | '/docs/{$slug}.md'
+    | '/extension/installed'
+    | '/extension/uninstalled'
     | '/tools/$slug'
     | '/tools/social-share-preview'
     | '/tools/whatsapp-link-generator'
     | '/alternatives/'
     | '/docs/'
+    | '/extension/'
     | '/tools/'
   fileRoutesById: FileRoutesById
 }
@@ -349,11 +385,14 @@ export interface RootRouteChildren {
   DocsSlugRoute: typeof DocsSlugRoute
   DocsApiRoute: typeof DocsApiRoute
   DocsChar123slugChar125DotmdRoute: typeof DocsChar123slugChar125DotmdRoute
+  ExtensionInstalledRoute: typeof ExtensionInstalledRoute
+  ExtensionUninstalledRoute: typeof ExtensionUninstalledRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   ToolsSocialSharePreviewRoute: typeof ToolsSocialSharePreviewRoute
   ToolsWhatsappLinkGeneratorRoute: typeof ToolsWhatsappLinkGeneratorRoute
   AlternativesIndexRoute: typeof AlternativesIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
+  ExtensionIndexRoute: typeof ExtensionIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
 }
 
@@ -506,6 +545,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsChar123slugChar125DotmdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/extension/': {
+      id: '/extension/'
+      path: '/extension'
+      fullPath: '/extension/'
+      preLoaderRoute: typeof ExtensionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/extension/installed': {
+      id: '/extension/installed'
+      path: '/extension/installed'
+      fullPath: '/extension/installed'
+      preLoaderRoute: typeof ExtensionInstalledRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/extension/uninstalled': {
+      id: '/extension/uninstalled'
+      path: '/extension/uninstalled'
+      fullPath: '/extension/uninstalled'
+      preLoaderRoute: typeof ExtensionUninstalledRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/': {
       id: '/tools/'
       path: '/tools'
@@ -557,11 +617,14 @@ const rootRouteChildren: RootRouteChildren = {
   DocsSlugRoute: DocsSlugRoute,
   DocsApiRoute: DocsApiRoute,
   DocsChar123slugChar125DotmdRoute: DocsChar123slugChar125DotmdRoute,
+  ExtensionInstalledRoute: ExtensionInstalledRoute,
+  ExtensionUninstalledRoute: ExtensionUninstalledRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   ToolsSocialSharePreviewRoute: ToolsSocialSharePreviewRoute,
   ToolsWhatsappLinkGeneratorRoute: ToolsWhatsappLinkGeneratorRoute,
   AlternativesIndexRoute: AlternativesIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
+  ExtensionIndexRoute: ExtensionIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
 }
 export const routeTree = rootRouteImport

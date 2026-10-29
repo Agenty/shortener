@@ -32,6 +32,8 @@ const sv: Messages = {
     shortLinksDescription: 'Egna länkslut, UTM, utgångsdatum, lösenord och målgruppsstyrning',
     lifetimeDeal: 'Livstidserbjudande',
     lifetimeDealDescription: 'Betala en gång för {links}',
+    extension: 'Webbläsartillägg',
+    extensionDescription: 'Förkorta sidan du är på direkt i Chrome eller Firefox',
     comparisons: 'Jämförelser',
     comparisonsDescription: 'Så står vi oss mot Bitly, Rebrandly, Dub och andra',
     whatsapp: 'WhatsApp-länkgenerator',

@@ -14,6 +14,7 @@ const footerColumns = (t: Messages) => [
     title: t.common.product,
     links: [
       { label: t.nav.shortLinks, to: '/short-links-builder' },
+      { label: t.nav.extension, to: '/extension' },
       { label: t.common.pricing, to: '/pricing' },
       { label: t.nav.lifetimeDeal, to: '/lifetime-deal' },
       { label: t.footer.enterprise, to: '/enterprise' },

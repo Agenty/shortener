@@ -32,6 +32,8 @@ const hi: Messages = {
     shortLinksDescription: 'कस्टम बैक-हाफ़, UTM, एक्सपायरी, पासवर्ड और टार्गेटिंग',
     lifetimeDeal: 'लाइफ़टाइम डील',
     lifetimeDealDescription: '{links} के लिए एक बार भुगतान करें',
+    extension: 'ब्राउज़र एक्सटेंशन',
+    extensionDescription: 'Chrome या Firefox से खुले हुए पेज को छोटा करें',
     comparisons: 'तुलना',
     comparisonsDescription: 'Bitly, Rebrandly, Dub और दूसरों से हमारी तुलना',
     whatsapp: 'WhatsApp लिंक जनरेटर',

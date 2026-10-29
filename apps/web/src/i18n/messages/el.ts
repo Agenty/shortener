@@ -32,6 +32,8 @@ const el: Messages = {
     shortLinksDescription: 'Προσαρμοσμένες καταλήξεις, UTM, λήξη, κωδικοί και στόχευση',
     lifetimeDeal: 'Προσφορά εφ’ όρου ζωής',
     lifetimeDealDescription: 'Πληρώστε μία φορά για {links}',
+    extension: 'Επέκταση προγράμματος περιήγησης',
+    extensionDescription: 'Συντομεύστε τη σελίδα που βλέπετε από το Chrome ή το Firefox',
     comparisons: 'Συγκρίσεις',
     comparisonsDescription: 'Πώς συγκρινόμαστε με Bitly, Rebrandly, Dub και άλλους',
     whatsapp: 'Δημιουργία συνδέσμου WhatsApp',

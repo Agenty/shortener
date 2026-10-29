@@ -8,7 +8,7 @@ import { docPath, docs } from '@/lib/docs';
 import { SITE_URL } from '@/lib/site';
 
 /** English only, listed once */
-const englishPaths = ['/alternatives', '/tools', '/report', '/terms', '/privacy'];
+const englishPaths = ['/extension', '/alternatives', '/tools', '/report', '/terms', '/privacy'];
 
 const absoluteUrl = (path: string) => `${SITE_URL}${path === '/' ? '' : path}`;
 

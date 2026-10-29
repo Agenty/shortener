@@ -60,6 +60,13 @@ app.onError(async (err, ctx) => {
   return ctx.json(data, 500);
 });
 
+// The Chrome extension calls the API without a host permission (which would
+// trigger an in-depth store review), so its origin must be allowed here.
+// Exact IDs only: `credentials: true` makes allowing every extension unsafe.
+const CHROME_EXTENSION_ORIGINS = [
+  "chrome-extension://ocpliefdcodaeidgjkfppecfbppljhfn",
+];
+
 // CORS Caching for preflight requests
 app.use(
   "*",
@@ -72,7 +79,8 @@ app.use(
         const allowed =
           hostname === "localhost" ||
           hostname === "shortener.dev" ||
-          hostname.endsWith(".shortener.dev");
+          hostname.endsWith(".shortener.dev") ||
+          CHROME_EXTENSION_ORIGINS.includes(origin);
 
         if (allowed || ctx.req.path === "/mcp") {
           return origin;

@@ -16,6 +16,11 @@ export const GITHUB_URL = 'https://github.com/Agenty/shortener';
 export const AGENTY_URL = 'https://agenty.com';
 export const OG_IMAGE = `${SITE_URL}/og.png`;
 
+/** Store listings of the browser extension (apps/extension) */
+export const CHROME_EXTENSION_URL =
+  'https://chromewebstore.google.com/detail/ocpliefdcodaeidgjkfppecfbppljhfn';
+export const FIREFOX_EXTENSION_URL = 'https://addons.mozilla.org/firefox/addon/extension@shortener.dev/';
+
 export const SIGNUP_URL = `${APP_URL}/signup`;
 export const LOGIN_URL = `${APP_URL}/login`;
 

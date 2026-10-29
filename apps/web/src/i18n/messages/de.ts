@@ -32,6 +32,8 @@ const de: Messages = {
     shortLinksDescription: 'Eigene Link-Endungen, UTM, Ablaufdatum, Passwörter und Targeting',
     lifetimeDeal: 'Lifetime-Deal',
     lifetimeDealDescription: 'Einmal zahlen für {links}',
+    extension: 'Browser-Erweiterung',
+    extensionDescription: 'Die aktuelle Seite direkt in Chrome oder Firefox kürzen',
     comparisons: 'Vergleiche',
     comparisonsDescription: 'Wie wir uns mit Bitly, Rebrandly, Dub und anderen vergleichen',
     whatsapp: 'WhatsApp-Link-Generator',

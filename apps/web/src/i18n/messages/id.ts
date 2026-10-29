@@ -32,6 +32,8 @@ const id: Messages = {
     shortLinksDescription: 'Akhiran kustom, UTM, kedaluwarsa, kata sandi, dan penargetan',
     lifetimeDeal: 'Penawaran seumur hidup',
     lifetimeDealDescription: 'Bayar sekali untuk {links}',
+    extension: 'Ekstensi browser',
+    extensionDescription: 'Persingkat halaman yang sedang dibuka dari Chrome atau Firefox',
     comparisons: 'Perbandingan',
     comparisonsDescription: 'Perbandingan kami dengan Bitly, Rebrandly, Dub, dan lainnya',
     whatsapp: 'Pembuat tautan WhatsApp',
