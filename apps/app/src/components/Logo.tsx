@@ -9,12 +9,21 @@ export function LogoMark({ className }: { className?: string }) {
     <svg viewBox="0 0 64 64" aria-hidden="true" className={cn("size-7 shrink-0", className)}>
       <rect width="64" height="64" rx="14" className="fill-foreground" />
       <path
+        transform="translate(-3.5 -3) scale(0.94)"
         d="M43 20.5C39.5 15 25 14 21.5 21.5C18.5 28.5 28 30.5 32 31.5C37.5 33 46 35.5 42.5 43C39 50.5 24 50 20 43.5"
         fill="none"
-        strokeWidth="7.5"
+        strokeWidth="7.6"
         strokeLinecap="round"
         strokeLinejoin="round"
         className="stroke-background"
+      />
+      {/* Pointer on the tail; the tile-colored stroke separates it from the S. */}
+      <path
+        d="M37 35V54.5L42 50L45.4 57.4L49.4 55.6L46 48.4H52.8Z"
+        strokeWidth="3.2"
+        strokeLinejoin="round"
+        paintOrder="stroke"
+        className="fill-background stroke-foreground"
       />
     </svg>
   );

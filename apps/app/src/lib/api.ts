@@ -174,6 +174,8 @@ export const api = {
         Cookies.remove(name, { path: "/", domain: cookieDomain() });
         // The API's Google sign in sets `domain=localhost` in development
         Cookies.remove(name, { path: "/", domain: window.location.hostname });
+        // Host only copy, a cookie with a domain doesn't replace it
+        Cookies.remove(name, { path: "/" });
       }
       // App only cookie from before the session was shared
       Cookies.remove("token");

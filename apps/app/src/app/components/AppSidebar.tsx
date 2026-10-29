@@ -15,7 +15,8 @@ import {
 import { LogoMark, Wordmark } from "@/components/Logo";
 import { NavLink } from "@/components/NavLink";
 import { DOCS_URL } from "@/env";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { api } from "@/lib/api";
 import {
   Sidebar,
   SidebarContent,
@@ -56,6 +57,12 @@ export function AppSidebar() {
   const { t } = useI18n();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    api.auth.logout();
+    navigate("/login", { replace: true });
+  };
   const location = useLocation();
   const isSettingsActive = location.pathname.startsWith("/settings") || location.pathname === "/users";
 
@@ -178,8 +185,7 @@ export function AppSidebar() {
             variant="ghost"
             size="sm"
             className="flex-1 justify-start"
-            nativeButton={false}
-            render={<NavLink to="/login" />}
+            onClick={handleLogout}
           >
             <LogOut />
             {!collapsed && <span>{t.nav.logout}</span>}
