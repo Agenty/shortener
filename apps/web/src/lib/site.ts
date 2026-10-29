@@ -4,6 +4,10 @@ export const APP_URL = 'https://app.shortener.dev';
 export const API_URL = import.meta.env.DEV
   ? 'http://localhost:8787/v1'
   : 'https://api.shortener.dev/v1';
+/** Cloudflare Turnstile, the test key in development always passes */
+export const TURNSTILE_SITE_KEY = import.meta.env.DEV
+  ? '1x00000000000000000000AA'
+  : '0x4AAAAAAFqfpi-_6qVivLe1';
 /** The OpenAPI spec is served from the API root, outside `/v1` */
 export const OPENAPI_URL = `${API_URL.replace(/\/v1$/, '')}/openapi.json`;
 export const DOCS_URL = `${SITE_URL}/docs`;

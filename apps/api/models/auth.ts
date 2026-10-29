@@ -24,8 +24,8 @@ export const signupSchema = z
       example: 'S3cure-Pa55',
       description: 'Account password, minimum 5 characters',
     }),
-    recaptcha: z.string().min(24).openapi({
-      description: 'Google reCAPTCHA token from the sign up form',
+    turnstile: z.string().min(1).openapi({
+      description: 'Cloudflare Turnstile token from the sign up form',
     }),
   })
   .openapi('Signup', {
@@ -56,6 +56,9 @@ export const forgotPasswordSchema = z
     email: z.email().max(100).openapi({
       example: 'jane@example.com',
       description: 'Email address to send the password reset link to',
+    }),
+    turnstile: z.string().min(1).openapi({
+      description: 'Cloudflare Turnstile token from the forgot password form',
     }),
   })
   .openapi('ForgotPassword');
@@ -98,6 +101,9 @@ export const identifySchema = z
         description:
           'Email address to sign in or sign up with. A one-time code is sent to this email',
       }),
+    turnstile: z.string().min(1).openapi({
+      description: 'Cloudflare Turnstile token from the sign in form',
+    }),
   })
   .openapi('Identify', {
     description: 'Passwordless sign in with a one-time email code',

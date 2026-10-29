@@ -107,6 +107,7 @@ const vi: Messages = {
     sendFailed: 'Không thể gửi mã',
     verifyFailed: 'Mã không hợp lệ',
     tooMany: 'Quá nhiều lần thử. Hãy đợi một phút rồi thử lại.',
+    captchaRequired: 'Vui lòng hoàn tất bước kiểm tra bảo mật',
   },
   mailForm: {
     send: 'Gửi email',

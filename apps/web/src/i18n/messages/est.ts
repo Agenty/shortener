@@ -107,6 +107,7 @@ const est: Messages = {
     sendFailed: 'Koodi ei õnnestunud saata',
     verifyFailed: 'Vale kood',
     tooMany: 'Liiga palju katseid. Oota minut ja proovi uuesti.',
+    captchaRequired: 'Palun läbi turvakontroll',
   },
   mailForm: {
     send: 'Saada e-kiri',

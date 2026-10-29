@@ -107,6 +107,7 @@ const id: Messages = {
     sendFailed: 'Kode tidak bisa dikirim',
     verifyFailed: 'Kode tidak valid',
     tooMany: 'Terlalu banyak percobaan. Tunggu semenit lalu coba lagi.',
+    captchaRequired: 'Selesaikan pemeriksaan keamanan',
   },
   mailForm: {
     send: 'Kirim email',

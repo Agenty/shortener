@@ -107,6 +107,7 @@ const tr: Messages = {
     sendFailed: 'Kod gönderilemedi',
     verifyFailed: 'Geçersiz kod',
     tooMany: 'Çok fazla deneme. Bir dakika bekleyip tekrar deneyin.',
+    captchaRequired: 'Lütfen güvenlik doğrulamasını tamamlayın',
   },
   mailForm: {
     send: 'E-posta gönder',

@@ -107,6 +107,7 @@ const da: Messages = {
     sendFailed: 'Koden kunne ikke sendes',
     verifyFailed: 'Ugyldig kode',
     tooMany: 'For mange forsøg. Vent et minut, og prøv igen.',
+    captchaRequired: 'Gennemfør venligst sikkerhedstjekket',
   },
   mailForm: {
     send: 'Send e-mail',

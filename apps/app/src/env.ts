@@ -1,11 +1,12 @@
 const local = {
   API_URL: "http://localhost:8787/v1",
-  RECAPTCHA_KEY: '6LcYGPItAAAAAFKo3ghhnMs4_z-U6w8wuPXDT5p2',
+  // Cloudflare's test key, always passes
+  TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
 };
 
 const prod = {
   API_URL: "https://api.shortener.dev/v1",
-  RECAPTCHA_KEY: '6LcYGPItAAAAAFKo3ghhnMs4_z-U6w8wuPXDT5p2',
+  TURNSTILE_SITE_KEY: '0x4AAAAAAFqfpi-_6qVivLe1',
 };
 
 export const env = import.meta.env.DEV ? local : prod;

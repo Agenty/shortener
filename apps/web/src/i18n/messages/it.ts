@@ -107,6 +107,7 @@ const it: Messages = {
     sendFailed: 'Impossibile inviare il codice',
     verifyFailed: 'Codice non valido',
     tooMany: 'Troppi tentativi. Attendi un minuto e riprova.',
+    captchaRequired: 'Completa il controllo di sicurezza',
   },
   mailForm: {
     send: 'Invia email',

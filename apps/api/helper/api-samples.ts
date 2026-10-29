@@ -8,7 +8,7 @@ export const API_SAMPLES = {
       name: 'Jane Doe',
       email: 'jane@example.com',
       password: 'S3cure-Pa55',
-      recaptcha: '03AFcWeA4m...recaptcha-token',
+      turnstile: '0.zHf3...turnstile-token',
     },
     signin: {
       email: 'jane@example.com',
@@ -16,9 +16,11 @@ export const API_SAMPLES = {
     },
     forgotPassword: {
       email: 'jane@example.com',
+      turnstile: '0.zHf3...turnstile-token',
     },
     identify: {
       email: 'jane@example.com',
+      turnstile: '0.zHf3...turnstile-token',
     },
     verify: {
       code: '482913',

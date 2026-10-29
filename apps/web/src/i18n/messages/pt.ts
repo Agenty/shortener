@@ -107,6 +107,7 @@ const pt: Messages = {
     sendFailed: 'Não foi possível enviar o código',
     verifyFailed: 'Código inválido',
     tooMany: 'Muitas tentativas. Aguarde um minuto e tente novamente.',
+    captchaRequired: 'Conclua a verificação de segurança',
   },
   mailForm: {
     send: 'Enviar e-mail',

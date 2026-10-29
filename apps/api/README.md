@@ -115,7 +115,7 @@ Put these in `.dev.vars` for local development (git-ignored), and add them with 
 | `CF_ACCOUNT_ID`, `CF_API_KEY`                | For analytics | Query Analytics Engine through the Cloudflare SQL API      |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`   | Optional | Google sign-in and Search Console domain verification           |
 | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`   | Optional | GitHub sign-in                                                  |
-| `RECAPTCHA_KEY`                              | Optional | reCAPTCHA secret, checked on sign-up in production              |
+| `TURNSTILE_SECRET_KEY`                       | Optional | Turnstile secret, checked on sign-up, email code sign in and password reset in production |
 | `STRIPE_SECRET_KEY`                          | Optional | Stripe billing                                                  |
 | `STRIPE_WEBHOOK_SECRET`                      | With Stripe | Signing secret (`whsec_...`) of the Stripe webhook endpoint  |
 | `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`   | Optional | PayPal billing, from a PayPal REST app                          |

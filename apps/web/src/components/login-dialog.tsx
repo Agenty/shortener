@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Turnstile } from '@/components/turnstile';
 import { fmt, useI18n } from '@/i18n';
 import { type AuthUser, setAuth } from '@/lib/auth';
 import { API_URL } from '@/lib/site';
@@ -75,6 +76,9 @@ export function LoginDialog({
   const [error, setError] = useState<string | null>(null);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [turnstile, setTurnstile] = useState<string | null>(null);
+  // Remounts the widget, its tokens are single use
+  const [captchaKey, setCaptchaKey] = useState(0);
 
   useEffect(() => {
     if (!open) {
@@ -100,14 +104,21 @@ export function LoginDialog({
       setError(copy.invalidEmail);
       return;
     }
+    if (!turnstile) {
+      setError(copy.captchaRequired);
+      return;
+    }
     try {
       setIsSendingOtp(true);
-      const data = await postJson('/auth/identify', { email }, undefined, copy.tooMany);
+      // The token lets a new email create its account on verify
+      const data = await postJson('/auth/identify', { email, turnstile }, undefined, copy.tooMany);
       setTempToken(data.token);
       setStep('otp');
     } catch (err) {
       setError((err as Error).message || copy.sendFailed);
     } finally {
+      setTurnstile(null);
+      setCaptchaKey((key) => key + 1);
       setIsSendingOtp(false);
     }
   };
@@ -172,6 +183,7 @@ export function LoginDialog({
                   onKeyDown={(e) => e.key === 'Enter' && handleSendOtp()}
                 />
               </div>
+              <Turnstile key={captchaKey} action="identify" onToken={setTurnstile} />
               {errorText}
               <Button onClick={handleSendOtp} disabled={isSendingOtp} className="w-full">
                 {isSendingOtp ? (

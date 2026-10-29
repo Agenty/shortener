@@ -107,6 +107,7 @@ const ar: Messages = {
     sendFailed: 'تعذّر إرسال الرمز',
     verifyFailed: 'رمز غير صالح',
     tooMany: 'محاولات كثيرة جدًا. انتظر دقيقة ثم حاول مجددًا.',
+    captchaRequired: 'يرجى إكمال التحقق الأمني',
   },
   mailForm: {
     send: 'إرسال بريد إلكتروني',
