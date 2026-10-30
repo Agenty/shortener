@@ -32,6 +32,8 @@ const ko: Messages = {
     shortLinksDescription: '맞춤 경로, UTM, 만료, 비밀번호, 타기팅',
     lifetimeDeal: '평생 이용권',
     lifetimeDealDescription: '한 번 결제로 {links}',
+    extension: '브라우저 확장 프로그램',
+    extensionDescription: 'Chrome 또는 Firefox에서 보고 있는 페이지를 바로 단축',
     comparisons: '비교',
     comparisonsDescription: 'Bitly, Rebrandly, Dub 등과의 비교',
     whatsapp: 'WhatsApp 링크 생성기',

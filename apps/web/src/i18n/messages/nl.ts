@@ -32,6 +32,8 @@ const nl: Messages = {
     shortLinksDescription: 'Eigen linkuitgangen, UTM, vervaldatum, wachtwoorden en targeting',
     lifetimeDeal: 'Lifetime deal',
     lifetimeDealDescription: 'Eenmalig betalen voor {links}',
+    extension: 'Browserextensie',
+    extensionDescription: 'Verkort de pagina waar je bent vanuit Chrome of Firefox',
     comparisons: 'Vergelijkingen',
     comparisonsDescription: 'Hoe we ons verhouden tot Bitly, Rebrandly, Dub en anderen',
     whatsapp: 'WhatsApp-linkgenerator',

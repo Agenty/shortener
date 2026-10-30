@@ -36,6 +36,7 @@ Every option sits in the **Options** list of the link builder and is available o
 
 ## Where to go next
 
+- [Browser extension](/docs/browser-extension) shortens the page you are on from Chrome or Firefox, without opening the dashboard.
 - [Create a short link](/docs/create-short-link) explains custom back-halves and the social media preview panel.
 - [QR codes](/docs/qr-codes) turns a short link into a QR code you can download and print.
 - [Click analytics](/docs/click-analytics) shows how to measure one link or a whole campaign.

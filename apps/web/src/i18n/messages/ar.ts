@@ -32,6 +32,8 @@ const ar: Messages = {
     shortLinksDescription: 'نهايات مخصصة وUTM وانتهاء الصلاحية وكلمات المرور والاستهداف',
     lifetimeDeal: 'عرض مدى الحياة',
     lifetimeDealDescription: 'ادفع مرة واحدة مقابل {links}',
+    extension: 'إضافة المتصفح',
+    extensionDescription: 'اختصر الصفحة التي تتصفحها من Chrome أو Firefox',
     comparisons: 'المقارنات',
     comparisonsDescription: 'كيف نقارن مع Bitly وRebrandly وDub وغيرها',
     whatsapp: 'منشئ روابط واتساب',

@@ -32,6 +32,8 @@ const zh: Messages = {
     shortLinksDescription: '自定义后缀、UTM、有效期、密码和定向',
     lifetimeDeal: '终身优惠',
     lifetimeDealDescription: '一次付费，享受{links}',
+    extension: '浏览器扩展',
+    extensionDescription: '在 Chrome 或 Firefox 中直接缩短当前页面',
     comparisons: '产品对比',
     comparisonsDescription: '与 Bitly、Rebrandly、Dub 等的对比',
     whatsapp: 'WhatsApp 链接生成器',

@@ -55,6 +55,10 @@ If you close the dialog before finishing, the domain stays on **My domains** as 
 
 ![A pending domain with the Verify button](/docs/images/domain-pending.png)
 
+## Verify from the browser extension
+
+The Domains tab of the [browser extension](/docs/browser-extension) has the same two options, **Email code** and **Search Console**. When a link fails with `Domain not verified`, the panel shows a **Verify** button that opens the domain there.
+
 ## Verify domains through the API
 
 The same steps are available in the [API reference](/docs/api), under Domains:

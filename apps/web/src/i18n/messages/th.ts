@@ -32,6 +32,8 @@ const th: Messages = {
     shortLinksDescription: 'ท้ายลิงก์แบบกำหนดเอง UTM วันหมดอายุ รหัสผ่าน และการกำหนดเป้าหมาย',
     lifetimeDeal: 'ดีลตลอดชีพ',
     lifetimeDealDescription: 'จ่ายครั้งเดียวสำหรับ {links}',
+    extension: 'ส่วนขยายเบราว์เซอร์',
+    extensionDescription: 'ย่อลิงก์หน้าที่เปิดอยู่จาก Chrome หรือ Firefox',
     comparisons: 'การเปรียบเทียบ',
     comparisonsDescription: 'เทียบกับ Bitly, Rebrandly, Dub และรายอื่น',
     whatsapp: 'ตัวสร้างลิงก์ WhatsApp',

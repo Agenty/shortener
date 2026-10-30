@@ -35,6 +35,8 @@ const en = {
     shortLinksDescription: 'Custom back-halves, UTM, expiration, passwords and targeting',
     lifetimeDeal: 'Lifetime deal',
     lifetimeDealDescription: 'Pay once for {links}',
+    extension: 'Browser extension',
+    extensionDescription: 'Shorten the page you are on from Chrome or Firefox',
     comparisons: 'Comparisons',
     comparisonsDescription: 'How we compare with Bitly, Rebrandly, Dub and others',
     whatsapp: 'WhatsApp link generator',

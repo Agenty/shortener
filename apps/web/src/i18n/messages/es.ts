@@ -32,6 +32,8 @@ const es: Messages = {
     shortLinksDescription: 'Terminaciones personalizadas, UTM, caducidad, contraseñas y segmentación',
     lifetimeDeal: 'Oferta de por vida',
     lifetimeDealDescription: 'Paga una vez por {links}',
+    extension: 'Extensión de navegador',
+    extensionDescription: 'Acorta la página en la que estás desde Chrome o Firefox',
     comparisons: 'Comparativas',
     comparisonsDescription: 'Cómo nos comparamos con Bitly, Rebrandly, Dub y otros',
     whatsapp: 'Generador de enlaces de WhatsApp',

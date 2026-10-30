@@ -32,6 +32,8 @@ const est: Messages = {
     shortLinksDescription: 'Kohandatud lingilõpud, UTM, aegumine, paroolid ja sihtimine',
     lifetimeDeal: 'Eluaegne pakkumine',
     lifetimeDealDescription: 'Maksa üks kord: {links}',
+    extension: 'Brauserilaiendus',
+    extensionDescription: 'Lühenda avatud lehte otse Chrome’is või Firefoxis',
     comparisons: 'Võrdlused',
     comparisonsDescription: 'Kuidas me võrdleme Bitly, Rebrandly, Dubi ja teistega',
     whatsapp: 'WhatsAppi lingi generaator',

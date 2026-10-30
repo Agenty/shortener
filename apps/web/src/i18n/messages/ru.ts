@@ -32,6 +32,8 @@ const ru: Messages = {
     shortLinksDescription: 'Свои окончания ссылок, UTM, срок действия, пароли и таргетинг',
     lifetimeDeal: 'Пожизненный тариф',
     lifetimeDealDescription: 'Одна оплата: {links}',
+    extension: 'Расширение для браузера',
+    extensionDescription: 'Сокращайте открытую страницу прямо в Chrome или Firefox',
     comparisons: 'Сравнения',
     comparisonsDescription: 'Сравнение с Bitly, Rebrandly, Dub и другими',
     whatsapp: 'Генератор ссылок WhatsApp',

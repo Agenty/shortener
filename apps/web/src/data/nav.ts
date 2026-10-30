@@ -8,6 +8,11 @@ export const productNav = (t: Messages) => [
     description: t.nav.shortLinksDescription,
   },
   {
+    label: t.nav.extension,
+    to: '/extension',
+    description: t.nav.extensionDescription,
+  },
+  {
     label: t.nav.lifetimeDeal,
     to: '/lifetime-deal',
     description: fmt(t.nav.lifetimeDealDescription, { links: t.lifetime.links }),

@@ -32,6 +32,8 @@ const tr: Messages = {
     shortLinksDescription: 'Özel uzantılar, UTM, süre sonu, şifreler ve hedefleme',
     lifetimeDeal: 'Ömür boyu fırsat',
     lifetimeDealDescription: 'Bir kez öde: {links}',
+    extension: 'Tarayıcı eklentisi',
+    extensionDescription: 'Açık olan sayfayı Chrome veya Firefox’tan kısaltın',
     comparisons: 'Karşılaştırmalar',
     comparisonsDescription: 'Bitly, Rebrandly, Dub ve diğerleriyle karşılaştırma',
     whatsapp: 'WhatsApp bağlantı oluşturucu',

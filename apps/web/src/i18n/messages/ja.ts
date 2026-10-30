@@ -32,6 +32,8 @@ const ja: Messages = {
     shortLinksDescription: 'カスタムパス、UTM、有効期限、パスワード、ターゲティング',
     lifetimeDeal: '買い切りプラン',
     lifetimeDealDescription: '一度の支払いで{links}',
+    extension: 'ブラウザ拡張機能',
+    extensionDescription: '開いているページを Chrome や Firefox からそのまま短縮',
     comparisons: '比較',
     comparisonsDescription: 'Bitly、Rebrandly、Dub などとの比較',
     whatsapp: 'WhatsApp リンク作成ツール',

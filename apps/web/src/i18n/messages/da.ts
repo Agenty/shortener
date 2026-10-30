@@ -32,6 +32,8 @@ const da: Messages = {
     shortLinksDescription: 'Egne linkendelser, UTM, udløb, adgangskoder og målretning',
     lifetimeDeal: 'Livstidsaftale',
     lifetimeDealDescription: 'Betal én gang for {links}',
+    extension: 'Browserudvidelse',
+    extensionDescription: 'Forkort siden, du er på, fra Chrome eller Firefox',
     comparisons: 'Sammenligninger',
     comparisonsDescription: 'Sådan klarer vi os mod Bitly, Rebrandly, Dub og andre',
     whatsapp: 'WhatsApp-linkgenerator',
