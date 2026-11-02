@@ -28,6 +28,12 @@ const tr: Messages = {
     cta: "GitHub’da yıldız verin",
     dismiss: "Kapat",
   },
+  extensionPromo: {
+    title: "Linkleri tek tıkla kısaltın",
+    body: "Shortener.dev’i Chrome’a ekleyin; bulunduğunuz sayfayı veya herhangi bir linki doğrudan tarayıcınızdan kısaltın.",
+    cta: "Chrome’a ekle",
+    dismiss: "Kapat",
+  },
   nav: {
     menu: "Menü",
     links: "Bağlantılar",

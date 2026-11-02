@@ -28,6 +28,12 @@ const th: Messages = {
     cta: "กดดาวบน GitHub",
     dismiss: "ปิด",
   },
+  extensionPromo: {
+    title: "ย่อลิงก์ได้ในคลิกเดียว",
+    body: "เพิ่ม Shortener.dev ลงใน Chrome แล้วย่อหน้าที่คุณเปิดอยู่ หรือลิงก์ใดก็ได้ จากเบราว์เซอร์ของคุณโดยตรง",
+    cta: "เพิ่มใน Chrome",
+    dismiss: "ปิด",
+  },
   nav: {
     menu: "เมนู",
     links: "ลิงก์",

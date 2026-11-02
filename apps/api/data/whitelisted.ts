@@ -41,6 +41,7 @@ export const WHITELISTED_DOMAINS = new Set([
   'drive.google.com',
   'maps.google.com',
   'play.google.com',
+  'chromewebstore.google.com',
   'meet.google.com',
   'calendar.google.com',
 

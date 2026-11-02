@@ -27,6 +27,12 @@ const he: Messages = {
     cta: 'סמנו בכוכב ב-GitHub',
     dismiss: 'סגירה',
   },
+  extensionPromo: {
+    title: 'קצרו קישורים בלחיצה אחת',
+    body: 'הוסיפו את Shortener.dev ל-Chrome וקצרו את הדף שבו אתם נמצאים, או כל קישור, ישירות מהדפדפן.',
+    cta: 'הוספה ל-Chrome',
+    dismiss: 'סגירה',
+  },
   nav: {
     shortLinks: 'קישורים מקוצרים',
     shortLinksDescription: 'סיומות מותאמות, UTM, תפוגה, סיסמאות וטירגוט',

@@ -27,6 +27,12 @@ const hi: Messages = {
     cta: 'GitHub पर स्टार दें',
     dismiss: 'बंद करें',
   },
+  extensionPromo: {
+    title: 'एक क्लिक में लिंक छोटा करें',
+    body: 'Shortener.dev को Chrome में जोड़ें और जिस पेज पर आप हैं या कोई भी लिंक, सीधे अपने ब्राउज़र से छोटा करें।',
+    cta: 'Chrome में जोड़ें',
+    dismiss: 'बंद करें',
+  },
   nav: {
     shortLinks: 'शॉर्ट लिंक',
     shortLinksDescription: 'कस्टम बैक-हाफ़, UTM, एक्सपायरी, पासवर्ड और टार्गेटिंग',

@@ -27,6 +27,12 @@ const est: Messages = {
     cta: 'Anna GitHubis täht',
     dismiss: 'Sulge',
   },
+  extensionPromo: {
+    title: 'Lühenda linke ühe klõpsuga',
+    body: 'Lisa Shortener.dev Chrome’i ja lühenda avatud lehte või mis tahes linki otse brauserist.',
+    cta: 'Lisa Chrome’i',
+    dismiss: 'Sulge',
+  },
   nav: {
     shortLinks: 'Lühilingid',
     shortLinksDescription: 'Kohandatud lingilõpud, UTM, aegumine, paroolid ja sihtimine',

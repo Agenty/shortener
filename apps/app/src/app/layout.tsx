@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ExtensionToast } from "@/components/ExtensionToast";
 import { GithubStarToast } from "@/components/GithubStarToast";
 import { AppSidebar } from "./components/AppSidebar";
 
@@ -27,6 +28,7 @@ export default function AppLayout() {
         // Clear of the sidebar, which is fixed on the left from md up and narrows when collapsed
         <GithubStarToast className="transition-[left] md:left-[calc(var(--sidebar-width)+1rem)] md:group-has-data-[collapsible=icon]/sidebar-wrapper:left-[calc(var(--sidebar-width-icon)+1.5rem)]" />
       )}
+      <ExtensionToast />
     </SidebarProvider>
   );
 }

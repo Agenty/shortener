@@ -28,6 +28,12 @@ const da: Messages = {
     cta: "Giv en stjerne på GitHub",
     dismiss: "Luk",
   },
+  extensionPromo: {
+    title: "Forkort links med ét klik",
+    body: "Føj Shortener.dev til Chrome, og forkort siden du er på, eller ethvert link, direkte fra din browser.",
+    cta: "Føj til Chrome",
+    dismiss: "Luk",
+  },
   nav: {
     menu: "Menu",
     links: "Links",

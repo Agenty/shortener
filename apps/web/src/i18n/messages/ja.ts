@@ -27,6 +27,12 @@ const ja: Messages = {
     cta: 'GitHub でスターする',
     dismiss: '閉じる',
   },
+  extensionPromo: {
+    title: 'ワンクリックでリンクを短縮',
+    body: 'Shortener.dev を Chrome に追加すると、開いているページや任意のリンクをブラウザからすぐに短縮できます。',
+    cta: 'Chrome に追加',
+    dismiss: '閉じる',
+  },
   nav: {
     shortLinks: '短縮リンク',
     shortLinksDescription: 'カスタムパス、UTM、有効期限、パスワード、ターゲティング',

@@ -28,6 +28,12 @@ const ko: Messages = {
     cta: "GitHub에서 스타 주기",
     dismiss: "닫기",
   },
+  extensionPromo: {
+    title: "클릭 한 번으로 링크 단축",
+    body: "Shortener.dev를 Chrome에 추가하고 보고 있는 페이지나 어떤 링크든 브라우저에서 바로 단축하세요.",
+    cta: "Chrome에 추가",
+    dismiss: "닫기",
+  },
   nav: {
     menu: "메뉴",
     links: "링크",
