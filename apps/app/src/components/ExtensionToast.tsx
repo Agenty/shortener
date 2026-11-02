@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus, Puzzle, X } from "lucide-react";
+import { Puzzle, X } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,20 @@ function wasDismissed() {
   } catch {
     return false;
   }
+}
+
+/** Chrome Web Store favicon, same as the store buttons on the website */
+function BrowserLogo() {
+  return (
+    <img
+      src="https://www.google.com/s2/favicons?domain=chromewebstore.google.com&sz=32"
+      alt=""
+      aria-hidden="true"
+      width={18}
+      height={18}
+      className="size-[18px]"
+    />
+  );
 }
 
 /** Desktop Chrome, Edge, Brave and Opera, which all install from the Chrome Web Store. Mobile Chrome has no extensions */
@@ -71,9 +85,9 @@ export function ExtensionToast() {
             target="_blank"
             rel="noopener"
             onClick={dismiss}
-            className={cn(buttonVariants({ size: "sm" }), "mt-3")}
+            className={cn(buttonVariants({ size: "sm" }), "mt-3 gap-2")}
           >
-            <Plus data-icon="inline-start" /> {t.extensionPromo.cta}
+            <BrowserLogo /> {t.extensionPromo.cta}
           </a>
         </div>
       </div>
