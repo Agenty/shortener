@@ -28,6 +28,12 @@ const de: Messages = {
     cta: "Auf GitHub mit Stern versehen",
     dismiss: "Schließen",
   },
+  extensionPromo: {
+    title: "Links mit einem Klick kürzen",
+    body: "Füge Shortener.dev zu Chrome hinzu und kürze die aktuelle Seite oder jeden Link direkt im Browser.",
+    cta: "Zu Chrome hinzufügen",
+    dismiss: "Schließen",
+  },
   nav: {
     menu: "Menü",
     links: "Links",

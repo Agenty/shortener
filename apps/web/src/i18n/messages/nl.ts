@@ -27,6 +27,12 @@ const nl: Messages = {
     cta: 'Geef een ster op GitHub',
     dismiss: 'Sluiten',
   },
+  extensionPromo: {
+    title: 'Links inkorten met één klik',
+    body: 'Voeg Shortener.dev toe aan Chrome en kort de pagina waarop je bent, of elke link, direct in je browser in.',
+    cta: 'Toevoegen aan Chrome',
+    dismiss: 'Sluiten',
+  },
   nav: {
     shortLinks: 'Korte links',
     shortLinksDescription: 'Eigen linkuitgangen, UTM, vervaldatum, wachtwoorden en targeting',

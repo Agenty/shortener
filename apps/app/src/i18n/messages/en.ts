@@ -30,6 +30,12 @@ const en = {
     cta: "Star on GitHub",
     dismiss: "Dismiss",
   },
+  extensionPromo: {
+    title: "Shorten links in one click",
+    body: "Add Shortener.dev to Chrome and shorten the page you are on, or any link, right from your browser.",
+    cta: "Add to Chrome",
+    dismiss: "Dismiss",
+  },
   nav: {
     menu: "Menu",
     links: "Links",

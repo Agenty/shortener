@@ -27,6 +27,12 @@ const fr: Messages = {
     cta: 'Ajouter une étoile sur GitHub',
     dismiss: 'Fermer',
   },
+  extensionPromo: {
+    title: 'Raccourcissez vos liens en un clic',
+    body: 'Ajoutez Shortener.dev à Chrome et raccourcissez la page que vous consultez, ou n’importe quel lien, depuis votre navigateur.',
+    cta: 'Ajouter à Chrome',
+    dismiss: 'Fermer',
+  },
   nav: {
     shortLinks: 'Liens courts',
     shortLinksDescription: 'Fins de lien personnalisées, UTM, expiration, mots de passe et ciblage',

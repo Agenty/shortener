@@ -27,6 +27,12 @@ const zh: Messages = {
     cta: '在 GitHub 上点星',
     dismiss: '关闭',
   },
+  extensionPromo: {
+    title: '一键缩短链接',
+    body: '将 Shortener.dev 添加到 Chrome，直接在浏览器中缩短当前页面或任意链接。',
+    cta: '添加到 Chrome',
+    dismiss: '关闭',
+  },
   nav: {
     shortLinks: '短链接',
     shortLinksDescription: '自定义后缀、UTM、有效期、密码和定向',

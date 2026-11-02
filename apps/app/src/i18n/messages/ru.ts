@@ -28,6 +28,12 @@ const ru: Messages = {
     cta: "Поставить звезду на GitHub",
     dismiss: "Закрыть",
   },
+  extensionPromo: {
+    title: "Сокращайте ссылки в один клик",
+    body: "Добавьте Shortener.dev в Chrome и сокращайте открытую страницу или любую ссылку прямо из браузера.",
+    cta: "Установить в Chrome",
+    dismiss: "Закрыть",
+  },
   nav: {
     menu: "Меню",
     links: "Ссылки",

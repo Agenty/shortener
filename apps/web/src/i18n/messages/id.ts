@@ -27,6 +27,12 @@ const id: Messages = {
     cta: 'Beri bintang di GitHub',
     dismiss: 'Tutup',
   },
+  extensionPromo: {
+    title: 'Perpendek tautan dengan sekali klik',
+    body: 'Tambahkan Shortener.dev ke Chrome dan perpendek halaman yang sedang dibuka, atau tautan apa pun, langsung dari browser Anda.',
+    cta: 'Tambahkan ke Chrome',
+    dismiss: 'Tutup',
+  },
   nav: {
     shortLinks: 'Tautan pendek',
     shortLinksDescription: 'Akhiran kustom, UTM, kedaluwarsa, kata sandi, dan penargetan',

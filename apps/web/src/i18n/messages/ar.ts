@@ -27,6 +27,12 @@ const ar: Messages = {
     cta: 'أضف نجمة على GitHub',
     dismiss: 'إغلاق',
   },
+  extensionPromo: {
+    title: 'اختصر الروابط بنقرة واحدة',
+    body: 'أضف Shortener.dev إلى Chrome واختصر الصفحة التي تتصفحها أو أي رابط مباشرة من متصفحك.',
+    cta: 'إضافة إلى Chrome',
+    dismiss: 'إغلاق',
+  },
   nav: {
     shortLinks: 'الروابط المختصرة',
     shortLinksDescription: 'نهايات مخصصة وUTM وانتهاء الصلاحية وكلمات المرور والاستهداف',

@@ -28,6 +28,12 @@ const el: Messages = {
     cta: "Αστέρι στο GitHub",
     dismiss: "Κλείσιμο",
   },
+  extensionPromo: {
+    title: "Συντομεύστε συνδέσμους με ένα κλικ",
+    body: "Προσθέστε το Shortener.dev στο Chrome και συντομεύστε τη σελίδα που βλέπετε ή οποιονδήποτε σύνδεσμο, απευθείας από τον browser σας.",
+    cta: "Προσθήκη στο Chrome",
+    dismiss: "Κλείσιμο",
+  },
   nav: {
     menu: "Μενού",
     links: "Σύνδεσμοι",

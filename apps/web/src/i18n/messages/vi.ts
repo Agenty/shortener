@@ -27,6 +27,12 @@ const vi: Messages = {
     cta: 'Gắn sao trên GitHub',
     dismiss: 'Đóng',
   },
+  extensionPromo: {
+    title: 'Rút gọn liên kết chỉ với một cú nhấp',
+    body: 'Thêm Shortener.dev vào Chrome để rút gọn trang bạn đang xem, hoặc bất kỳ liên kết nào, ngay trong trình duyệt.',
+    cta: 'Thêm vào Chrome',
+    dismiss: 'Đóng',
+  },
   nav: {
     shortLinks: 'Liên kết rút gọn',
     shortLinksDescription: 'Đuôi tùy chỉnh, UTM, hết hạn, mật khẩu và nhắm mục tiêu',

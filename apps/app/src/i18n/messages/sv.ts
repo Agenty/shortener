@@ -28,6 +28,12 @@ const sv: Messages = {
     cta: "Ge en stjärna på GitHub",
     dismiss: "Stäng",
   },
+  extensionPromo: {
+    title: "Korta länkar med ett klick",
+    body: "Lägg till Shortener.dev i Chrome och korta sidan du är på, eller valfri länk, direkt i webbläsaren.",
+    cta: "Lägg till i Chrome",
+    dismiss: "Stäng",
+  },
   nav: {
     menu: "Meny",
     links: "Länkar",

@@ -28,6 +28,12 @@ const es: Messages = {
     cta: "Dar estrella en GitHub",
     dismiss: "Cerrar",
   },
+  extensionPromo: {
+    title: "Acorta enlaces con un clic",
+    body: "Añade Shortener.dev a Chrome y acorta la página en la que estás, o cualquier enlace, desde tu navegador.",
+    cta: "Añadir a Chrome",
+    dismiss: "Cerrar",
+  },
   nav: {
     menu: "Menú",
     links: "Enlaces",
