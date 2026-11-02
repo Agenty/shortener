@@ -19,7 +19,7 @@ export const OG_IMAGE = `${SITE_URL}/og.png`;
 /** Store listings of the browser extension (apps/extension) */
 export const CHROME_EXTENSION_URL =
   'https://chromewebstore.google.com/detail/shortenerdev-url-shortene/ocpliefdcodaeidgjkfppecfbppljhfn';
-export const FIREFOX_EXTENSION_URL = 'https://addons.mozilla.org/firefox/addon/extension@shortener.dev/';
+export const FIREFOX_EXTENSION_URL = 'https://addons.mozilla.org/en-GB/firefox/addon/shortener/';
 
 /** Short link to the Chrome Web Store listing, so promo clicks show up in analytics */
 export const CHROME_EXTENSION_SHORT_URL = 'https://srt1.link/extension';
