@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from '@tanstack/react-router';
 import { isbot } from 'isbot';
-import { Plus, Puzzle, X } from 'lucide-react';
+import { Puzzle, X } from 'lucide-react';
+import { BrowserLogo } from '@/components/extension';
 import { buttonVariants } from '@/components/ui/button';
 import { useI18n } from '@/i18n';
 import { CHROME_EXTENSION_SHORT_URL } from '@/lib/site';
@@ -86,9 +87,9 @@ export function ExtensionToast() {
             target="_blank"
             rel="noopener"
             onClick={dismiss}
-            className={cn(buttonVariants({ size: 'sm' }), 'mt-3')}
+            className={cn(buttonVariants({ size: 'sm' }), 'mt-3 gap-2')}
           >
-            <Plus data-icon="inline-start" /> {t.extensionPromo.cta}
+            <BrowserLogo browser="chrome" /> {t.extensionPromo.cta}
           </a>
         </div>
       </div>

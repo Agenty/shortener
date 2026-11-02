@@ -52,7 +52,7 @@ export function StoreButtons({ className }: { className?: string }) {
 }
 
 /** Store favicon, same Google favicon service as `DomainFavicon` */
-function BrowserLogo({ browser }: { browser: ExtensionBrowser }) {
+export function BrowserLogo({ browser }: { browser: ExtensionBrowser }) {
   const domain = new URL(storeLinks[browser].href).hostname;
   return (
     <img

@@ -121,6 +121,15 @@ const Layout: FC<{ title: string; head?: Child; children?: Child }> = ({
   </html>
 );
 
+/** Destination hostname for display, falling back to the raw URL if it can't be parsed */
+const hostOf = (url: string) => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
+};
+
 const RedirectPage: FC<{ url: string }> = ({ url }) => (
   <Layout
     title="Redirecting..."
@@ -130,7 +139,7 @@ const RedirectPage: FC<{ url: string }> = ({ url }) => (
     <h1>You are being redirected</h1>
     <p>Taking you to the destination in {REDIRECT_DELAY} seconds</p>
     <a class="url" href={url} rel="noreferrer">
-      {url}
+      {hostOf(url)}
     </a>
     <p>
       Not redirected?{' '}
