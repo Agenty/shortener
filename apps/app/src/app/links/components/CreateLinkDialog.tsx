@@ -26,6 +26,7 @@ import { SHORT_DOMAIN } from "@/env";
 import type { LinkCreatePayload, LinkFormState, UrlMeta, GeoTarget } from "@/types/link";
 import type { Domain } from "@/types/domain";
 import { initialLinkForm } from "@/types/link";
+import { UnverifiedDomainDialog } from "@/app/domains/components/UnverifiedDomainDialog";
 import { VerifyDomainDialog } from "@/app/domains/components/VerifyDomainDialog";
 
 const KEY_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz";
@@ -46,6 +47,7 @@ export function CreateLinkDialog() {
   const [meta, setMeta] = useState<{ data: UrlMeta | null; loading: boolean }>({ data: null, loading: false });
   const [showPassword, setShowPassword] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [unverified, setUnverified] = useState<string | null>(null);
   const [verifying, setVerifying] = useState<Domain | null>(null);
   const queryClient = useQueryClient();
 
@@ -78,23 +80,28 @@ export function CreateLinkDialog() {
         toast.error(error.message || "Failed to create link");
         return;
       }
-      // Verify the domain right here, adding it first when it's not in the account yet
-      try {
-        const { result } = await queryClient.fetchQuery({
-          queryKey: ["domains"],
-          queryFn: () => api.domains.list({ limit: 100 }),
-        });
-        const existing = result.find((d) => host === d.domain || host.endsWith(`.${d.domain}`));
-        if (existing) {
-          setVerifying(existing);
-        } else {
-          setVerifying(await api.domains.create({ domain: host }));
-          queryClient.invalidateQueries({ queryKey: ["domains"] });
-        }
-      } catch (e) {
-        toast.error((e as Error).message);
-      }
+      setUnverified(host);
     },
+  });
+
+  // Every domain added counts against the plan limit, so add it only on request
+  const startVerify = useMutation({
+    mutationFn: async (host: string) => {
+      const { result } = await queryClient.fetchQuery({
+        queryKey: ["domains"],
+        queryFn: () => api.domains.list({ limit: 100 }),
+      });
+      const existing = result.find((d) => host === d.domain || host.endsWith(`.${d.domain}`));
+      if (existing) return existing;
+      const created = await api.domains.create({ domain: host });
+      queryClient.invalidateQueries({ queryKey: ["domains"] });
+      return created;
+    },
+    onSuccess: (domain) => {
+      setUnverified(null);
+      setVerifying(domain);
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   const fetchMeta = useCallback(async (targetUrl: string) => {
@@ -529,6 +536,12 @@ export function CreateLinkDialog() {
           </div>
         </div>
 
+        <UnverifiedDomainDialog
+          host={unverified}
+          onOpenChange={(v) => !v && setUnverified(null)}
+          onVerify={() => unverified && startVerify.mutate(unverified)}
+          verifying={startVerify.isPending}
+        />
         <VerifyDomainDialog
           domain={verifying}
           onOpenChange={(v) => !v && setVerifying(null)}
