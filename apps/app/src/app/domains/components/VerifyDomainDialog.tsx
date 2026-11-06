@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
+import { whitelistRequestUrl } from '@/lib/whitelist';
 import type { Domain } from '@/types/domain';
 
 interface VerifyDomainDialogProps {
@@ -91,7 +92,8 @@ export function VerifyDomainDialog({ domain, onOpenChange, onVerified }: VerifyD
           <DialogTitle>Verify {domain?.domain}</DialogTitle>
           <DialogDescription>
             Prove that you own the domain to create short links for it and all
-            of its subdomains.
+            of its subdomains. Email or Google Search Console is recommended and
+            works right away.
           </DialogDescription>
         </DialogHeader>
 
@@ -178,6 +180,21 @@ export function VerifyDomainDialog({ domain, onOpenChange, onVerified }: VerifyD
             {google.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Verify with Google Search Console
           </Button>
+
+          {domain && (
+            <p className="text-xs text-muted-foreground">
+              Don't own it? If it's a social site or could help other users too,{' '}
+              <a
+                href={whitelistRequestUrl(domain.domain)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-foreground underline"
+              >
+                request whitelisting
+              </a>{' '}
+              in a public GitHub issue. Requests are reviewed manually.
+            </p>
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -32,6 +32,7 @@ export const WHITELISTED_DOMAINS = new Set([
   'primevideo.com',
   'disneyplus.com',
   'imdb.com',
+  'hotstar.com',
 
   // Messaging & community
   'whatsapp.com',
@@ -40,6 +41,9 @@ export const WHITELISTED_DOMAINS = new Set([
   't.me',
   'discord.com',
   'discord.gg',
+  'messenger.com',
+  'line.me',
+  'viber.com',
 
   // Google first-party apps
   'docs.google.com',
@@ -59,6 +63,7 @@ export const WHITELISTED_DOMAINS = new Set([
   'amazon.co.uk',
   'amazon.com.au',
   'amazon.com.br',
+  'amazon.com.mx',
   'amazon.de',
   'amazon.es',
   'amazon.fr',
@@ -78,6 +83,17 @@ export const WHITELISTED_DOMAINS = new Set([
   'chatgpt.com',
   'openai.com',
   'anthropic.com',
+  'duolingo.com',
+
+  // Apps & games
+  'mozilla.org',
+  'ubuntu.com',
+  'brave.com',
+  'opera.com',
+  'grammarly.com',
+  'capcut.com',
+  'roblox.com',
+  'epicgames.com',
 
   // News & sports
   'bbc.com',
@@ -95,6 +111,8 @@ export const WHITELISTED_DOMAINS = new Set([
   'npr.org',
   'espn.com',
   'cricbuzz.com',
+  'msn.com',
+  'globo.com',
 
   // Shopping & travel
   'ebay.com',
@@ -102,6 +120,16 @@ export const WHITELISTED_DOMAINS = new Set([
   'target.com',
   'bestbuy.com',
   'flipkart.com',
+  'blinkit.com',
+  'swiggy.com',
+  'mercadolibre.com',
+  'mercadolibre.com.mx',
+  'mercadolivre.com.br',
+  'shopee.co.id',
+  'shopee.com.br',
+  'shopee.ph',
+  'lazada.com.ph',
+  'rakuten.co.jp',
   'ikea.com',
   'booking.com',
   'airbnb.com',
