@@ -10,6 +10,7 @@ import { format, subMonths } from 'date-fns';
 import { assertVerifiedDestinations } from './domain.service';
 import { getProjectById } from './projects.service';
 import { waitUntil } from 'cloudflare:workers';
+import { queueLinkScan } from './moderation.service';
 
 /** Host of every short link, kept separate from the main site domain */
 export const SHORT_DOMAIN = 'srt1.link';
@@ -21,7 +22,7 @@ const nanoid = customAlphabet(
 
 /** Columns selected for a link, params and geo are stored as JSON text */
 const LINK_COLUMNS = `key, account_id, user_id, project_id, url, expire_at, params, title, description, image,
-  password, ios, android, geo, is_enabled, created_at, updated_at`;
+  password, ios, android, geo, is_enabled, blocked_at, blocked_reason, created_at, updated_at`;
 
 const parseJson = (value: any) =>
   value && typeof value == 'string' ? JSON.parse(value) : value;
@@ -40,6 +41,7 @@ export const convertToLink = (item: any): Link | undefined => {
     created_at: toISOformat(item.created_at) || new Date(),
     updated_at: toISOformat(item.updated_at),
     expire_at: toISOformat(item.expire_at),
+    blocked_at: toISOformat(item.blocked_at),
   };
 };
 
@@ -68,7 +70,7 @@ const assertOwnProject = async (env: CloudflareBindings, authUser: AuthUser, lin
 };
 
 // Every URL a short link can redirect to
-const getDestinations = (link: Link) => [
+export const getDestinations = (link: Partial<Link>) => [
   link.url,
   link.ios,
   link.android,
@@ -166,6 +168,7 @@ export const createLink = async (
       throw err;
     }
   }
+  queueLinkScan(env, [link.key]);
   return convertToLink(link);
 };
 
@@ -202,7 +205,9 @@ export const updateLink = async (
     )
     .run();
 
-  return meta.changes > 0 ? convertToLink(link) : null;
+  if (meta.changes === 0) return null;
+  queueLinkScan(env, [link.key]);
+  return convertToLink(link);
 };
 
 export const deleteLink = async (
@@ -223,17 +228,19 @@ export const deleteLink = async (
 /** Seconds a link stays cached in KV for redirects (KV minimum TTL is 60) */
 const LINK_CACHE_TTL = 60;
 
+export type RedirectLink = Link & { checked_at?: string | null };
+
 /** Public lookup of a short link for redirect, cached in KV for a minute */
 export const getLinkForRedirect = async (
   env: CloudflareBindings,
   key: string
-): Promise<Link | undefined> => {
-  const cached = await env.LINKS.get<Link>(key, 'json');
+): Promise<RedirectLink | undefined> => {
+  const cached = await env.LINKS.get<RedirectLink>(key, 'json');
   if (cached) return cached;
 
   const row = await env.DB.prepare(
     `
-      SELECT ${LINK_COLUMNS}
+      SELECT ${LINK_COLUMNS}, checked_at
       FROM Links
       WHERE key = ?`
   )

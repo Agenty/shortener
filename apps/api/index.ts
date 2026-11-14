@@ -217,6 +217,18 @@ app.notFound(async (ctx) => {
     return ctx.html(unavailablePage("not-found"), 404);
   }
 
+  // Unsafe destination (Safe Browsing) or blocked domain
+  if (link.blocked_at) {
+    return ctx.html(unavailablePage("blocked"), 403, { "Cache-Control": "no-store" });
+  }
+
+  // Check the destination again with Safe Browsing every few days
+  waitUntil(
+    rescanIfStale(ctx.env, link).catch((err) =>
+      console.error(`Unable to queue rescan of ${key}`, err),
+    ),
+  );
+
   if (link.expire_at && new Date(link.expire_at) <= new Date()) {
     return ctx.html(unavailablePage("expired"), 410);
   }
@@ -255,10 +267,7 @@ showRoutes(app);
 export default {
   fetch: app.fetch,
 
-  async queue(batch: MessageBatch, env: CloudflareBindings, ctx: ExecutionContext) {
-    for (const message of batch.messages) {
-      // Implement message processing 
-      message.ack();
-    }
+  async queue(batch: MessageBatch<QueueMessage>, env: CloudflareBindings) {
+    await processQueue(batch, env);
   }
 }

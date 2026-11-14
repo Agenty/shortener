@@ -4,8 +4,9 @@ import { buttonVariants } from "@/components/ui/button";
 import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
 
-/** Short link to the Chrome Web Store listing, so promo clicks show up in analytics */
-const CHROME_EXTENSION_SHORT_URL = "https://srt1.link/extension";
+/** Chrome Web Store listing of the browser extension (apps/extension) */
+const CHROME_EXTENSION_URL =
+  "https://chromewebstore.google.com/detail/shortenerdev-url-shortene/ocpliefdcodaeidgjkfppecfbppljhfn";
 const STORAGE_KEY = "extension-toast-dismissed-at";
 const HIDE_FOR_MS = 30 * 24 * 60 * 60 * 1000;
 const SHOW_AFTER_MS = 5000;
@@ -81,7 +82,7 @@ export function ExtensionToast() {
           <p className="text-sm font-semibold">{t.extensionPromo.title}</p>
           <p className="mt-0.5 text-sm text-muted-foreground">{t.extensionPromo.body}</p>
           <a
-            href={CHROME_EXTENSION_SHORT_URL}
+            href={CHROME_EXTENSION_URL}
             target="_blank"
             rel="noopener"
             onClick={dismiss}

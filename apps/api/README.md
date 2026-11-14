@@ -86,6 +86,10 @@ The API only creates short links to destinations on a domain that the account ha
 
 If you self-host, please keep this check in place. See [Safety](../../README.md#safety).
 
+## Unsafe link protection
+
+Short links are checked with [Google Safe Browsing](https://developers.google.com/safe-browsing) for malware, phishing and unwanted software. For new and updated links that pass, [Cloudflare URL Scanner](https://developers.cloudflare.com/radar/investigate/url-scanner/) also visits the homepage of each destination domain as a second check. The code is in [`services/moderation.service.ts`](services/moderation.service.ts).
+
 ## Cloudflare bindings
 
 Defined in [`wrangler.json`](wrangler.json). Replace the IDs with your own resources when you deploy.
@@ -97,7 +101,7 @@ Defined in [`wrangler.json`](wrangler.json). Replace the IDs with your own resou
 | `LINKS`                            | KV               | Short link lookups                        |
 | `BUCKET`                           | R2               | Uploaded files such as preview images     |
 | `API_LOGS`, `SHORTENER_ANALYTICS`  | Analytics Engine | Request logs and click analytics          |
-| `QUEUE`                            | Queue            | Background jobs                           |
+| `QUEUE`                            | Queue            | Safe Browsing checks, blocking links of blocked domains |
 | `PUBLIC_RATE_LIMITER`, `PRO_RATE_LIMITER` | Rate limiting | 5 and 150 requests per minute          |
 | `EMAIL`                            | Send Email       | OTP and transactional emails              |
 
@@ -122,6 +126,8 @@ Put these in `.dev.vars` for local development (git-ignored), and add them with 
 | `PAYPAL_WEBHOOK_ID`                          | With PayPal | ID of the app's webhook, used to verify webhook signatures   |
 | `PAYPAL_API_URL`                             | Optional | `https://api-m.sandbox.paypal.com` for sandbox, live by default |
 | `AGENTY_KEY`                                 | Optional | Invoice generation through the Agenty API                      |
+| `GOOGLE_SAFEBROWSE_KEY`                      | Recommended | Google Safe Browsing API key, checks links for malware and phishing |
+| `CF_RADAR_KEY`                               | Optional | Cloudflare API token with the *Account > URL Scanner > Edit* permission, for the second check. Uses `CF_ACCOUNT_ID` |
 
 ## Run locally
 

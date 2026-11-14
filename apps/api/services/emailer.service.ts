@@ -5,6 +5,7 @@ import { otpEmailHtml } from '../emails/otp-email';
 import { domainVerificationEmailHtml } from '../emails/domain-verification-email';
 import { passwordResetEmailHtml } from '../emails/password-reset-email';
 import { dataTableEmailHtml } from '../emails/data-table-email';
+import { BlockedLinkItem, linksBlockedEmailHtml } from '../emails/links-blocked-email';
 import { BRAND, SUPPORT_EMAIL } from '../emails/components/layout';
 
 const NOREPLY = { email: 'noreply@shortener.dev', name: BRAND };
@@ -81,4 +82,19 @@ export const sendPasswordResetEmail = async (
       authUser,
       `${env.APP_URL}/reset-password?token=${token}`
     ),
+  });
+
+export const sendLinksBlockedEmail = async (
+  env: CloudflareBindings,
+  to: { email: string; name?: string },
+  links: Array<BlockedLinkItem>,
+  suspended: boolean
+) =>
+  sendEmail(env, {
+    from: SUPPORT,
+    to: { email: to.email, name: to.name || to.email },
+    subject: suspended
+      ? `Your ${BRAND} account has been suspended`
+      : `Your short links have been blocked on ${BRAND}`,
+    html: await linksBlockedEmailHtml(to.name, links, suspended),
   });

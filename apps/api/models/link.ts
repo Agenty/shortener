@@ -174,6 +174,17 @@ export const linkSchema = z
         example: true,
         description: 'Disabled short links stop redirecting visitors',
       }),
+    blocked_at: z.string().nullable().optional().openapi({
+      example: null,
+      description:
+        'UTC date-time when the short link was blocked for an unsafe destination (malware, phishing) or a blocked domain. Blocked links stop redirecting visitors',
+      readOnly: true,
+    }),
+    blocked_reason: z.string().nullable().optional().openapi({
+      example: null,
+      description: 'Why the short link was blocked',
+      readOnly: true,
+    }),
     created_at: z.string().nullable().optional().openapi({
       example: '2026-01-01T10:00:00Z',
       description: 'UTC date-time when the short link was created',

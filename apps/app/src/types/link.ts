@@ -56,6 +56,9 @@ export interface Link {
   url: string;
   short_url: string;
   is_enabled: boolean;
+  /** Unsafe destination or blocked domain, the link stops redirecting */
+  blocked_at?: string | null;
+  blocked_reason?: string | null;
   created_at: string;
   params: Record<string, string>;
   geo: GeoTarget[];

@@ -1,0 +1,572 @@
+import _ from 'lodash';
+import { getDomain } from 'tldts';
+import { subDays } from 'date-fns';
+import { waitUntil } from 'cloudflare:workers';
+import { Link } from '../models/link';
+import { RoleType, UserStatus } from '../models/auth-user';
+import { DomainType, isBlockedHost, isWhitelistedHost, parseHost } from '../models/domain';
+import { convertToLink, getDestinations } from './links.service';
+import { findThreats, isSafeBrowsingEnabled, THREAT_LABELS } from './safebrowsing.service';
+import {
+  filterUnscannedUrls,
+  getScanVerdict,
+  isUrlScannerEnabled,
+  SCAN_INTERVAL,
+  submitScan,
+  UrlScannerRateLimitError,
+} from './urlscanner.service';
+import { sendLinksBlockedEmail, supportEmail } from './emailer.service';
+import { BlockedLinkItem } from '../emails/links-blocked-email';
+import { defang } from '../helper/utility';
+
+/**
+ * Abuse protection: every short link is checked with Google Safe Browsing in
+ * the queue after it's created or updated, and again from the redirect handler
+ * when the last check is older than `RESCAN_AFTER_DAYS`. The domains of new
+ * and updated links that pass are checked a second time with Cloudflare URL
+ * Scanner, which visits their homepage. When a destination is unsafe, the link and its domain are
+ * blocked, every other link to that domain is blocked too, and the accounts
+ * owning them are suspended and emailed
+ */
+
+export type QueueMessage =
+  | {
+      type: 'scan-links';
+      keys: Array<string>;
+      /** Also check with Cloudflare URL Scanner, for new and updated links */
+      deep?: boolean;
+    }
+  /** Homepage of a destination host, scanned instead of every link */
+  | { type: 'urlscan-submit'; url: string }
+  | {
+      type: 'urlscan-result';
+      scans: Array<{ uuid: string; url: string }>;
+      attempt: number;
+    }
+  | {
+      type: 'block-domain';
+      domain: string;
+      reason: string;
+      /** Suspend the accounts with links to the domain, not for admin blocks */
+      suspend: boolean;
+      /** Cursor, links are processed in pages ordered by key */
+      after?: string;
+    };
+
+/** Links are checked again on redirect when the last check is older than this */
+export const RESCAN_AFTER_DAYS = 3;
+
+/** D1 allows 100 bound parameters per query */
+const MAX_PARAMS = 90;
+
+/** Links processed per block-domain message */
+const BLOCK_PAGE_SIZE = 200;
+
+/** URL Scanner results are polled every 30 seconds, for about 10 minutes */
+const URLSCAN_POLL_DELAY = 30;
+const URLSCAN_MAX_POLLS = 20;
+
+/** Free and self-serve URL Scanner plans allow a request every 10 seconds */
+const URLSCAN_RATE_LIMIT_DELAY = 15;
+
+const SCAN_COLUMNS = `key, account_id, user_id, url, ios, android, geo, blocked_at`;
+
+type ScanLink = Pick<Link, 'key' | 'account_id' | 'user_id' | 'url' | 'ios' | 'android' | 'geo' | 'short_url'>;
+
+type BlockedLink = ScanLink & { reason: string };
+
+/* -------------------------------- Producers ------------------------------- */
+
+/** Queues Safe Browsing and URL Scanner checks of new or updated links */
+export const queueLinkScan = (env: CloudflareBindings, keys: Array<string>) => {
+  if (!keys.length || (!isSafeBrowsingEnabled(env) && !isUrlScannerEnabled(env))) return;
+  waitUntil(
+    env.QUEUE.send({ type: 'scan-links', keys, deep: true } satisfies QueueMessage).catch(
+      (err) => console.error('Unable to queue link scan', err)
+    )
+  );
+};
+
+/** Queues blocking every link to a domain, e.g. blocked by admin */
+export const queueDomainBlock = (
+  env: CloudflareBindings,
+  domain: string,
+  reason: string,
+  suspend = false
+) =>
+  env.QUEUE.send({
+    type: 'block-domain',
+    domain,
+    reason,
+    suspend,
+  } satisfies QueueMessage);
+
+// Keys queued by this isolate recently, saves a D1 write on every click
+// while a stale link is still cached in KV
+const recentlyQueued = new Set<string>();
+
+/**
+ * Called on redirect, queues a check when the link was never checked or the
+ * last check is older than `RESCAN_AFTER_DAYS`. `checked_at` is claimed with a
+ * conditional update so concurrent clicks queue a single check
+ */
+export const rescanIfStale = async (
+  env: CloudflareBindings,
+  link: Link & { checked_at?: string | null }
+) => {
+  if (!isSafeBrowsingEnabled(env) || recentlyQueued.has(link.key)) return;
+
+  const staleBefore = subDays(new Date(), RESCAN_AFTER_DAYS).toISOString();
+  if (link.checked_at && link.checked_at > staleBefore) return;
+
+  if (recentlyQueued.size > 10000) recentlyQueued.clear();
+  recentlyQueued.add(link.key);
+
+  const { meta } = await env.DB.prepare(
+    `UPDATE Links SET checked_at = ?
+     WHERE key = ? AND blocked_at IS NULL AND (checked_at IS NULL OR checked_at <= ?)`
+  )
+    .bind(new Date().toISOString(), link.key, staleBefore)
+    .run();
+  if (meta.changes > 0) {
+    await env.QUEUE.send({ type: 'scan-links', keys: [link.key] } satisfies QueueMessage);
+  }
+};
+
+/* -------------------------------- Consumer -------------------------------- */
+
+type ScanMessage = Extract<QueueMessage, { type: 'scan-links' }>;
+
+export const processQueue = async (
+  batch: MessageBatch<QueueMessage>,
+  env: CloudflareBindings
+) => {
+  // Every link in the batch is checked with a single Safe Browsing request
+  const scans = batch.messages.filter((m) => m.body?.type === 'scan-links');
+  if (scans.length) {
+    try {
+      const bodies = scans.map((m) => m.body as ScanMessage);
+      await scanLinks(
+        env,
+        _.uniq(bodies.flatMap((b) => b.keys)),
+        _.uniq(bodies.filter((b) => b.deep).flatMap((b) => b.keys))
+      );
+      scans.forEach((m) => m.ack());
+    } catch (err) {
+      console.error('Link scan failed', err);
+      scans.forEach((m) => m.retry());
+    }
+  }
+
+  // URL Scanner allows a request every 10 seconds, one submit per batch
+  let submitted = false;
+  for (const message of batch.messages) {
+    const body = message.body;
+    if (body?.type === 'scan-links') continue;
+    try {
+      if (body?.type === 'block-domain') {
+        await blockDomainLinks(env, body);
+      } else if (body?.type === 'urlscan-submit') {
+        if (submitted) {
+          await requeue(env, body, URLSCAN_RATE_LIMIT_DELAY);
+        } else {
+          submitted = true;
+          await submitUrlScans(env, body);
+        }
+      } else if (body?.type === 'urlscan-result') {
+        await checkUrlScans(env, body);
+      } else {
+        console.warn('Unknown queue message', body);
+      }
+      message.ack();
+    } catch (err) {
+      if (err instanceof UrlScannerRateLimitError) {
+        // Sent again instead of retried, so rate limits don't use up retries
+        await requeue(env, body, URLSCAN_RATE_LIMIT_DELAY);
+        message.ack();
+        continue;
+      }
+      console.error(`Queue message ${body?.type} failed`, err);
+      message.retry();
+    }
+  }
+};
+
+/** Adds up to 30 seconds of jitter, so requeued messages don't arrive together */
+const requeue = (env: CloudflareBindings, body: QueueMessage, delaySeconds: number) =>
+  env.QUEUE.send(body, { delaySeconds: delaySeconds + _.random(0, 30) });
+
+const getScanLinks = async (
+  env: CloudflareBindings,
+  keys: Array<string>
+): Promise<Array<ScanLink>> => {
+  const links: Array<ScanLink> = [];
+  for (const chunk of _.chunk(_.uniq(keys), MAX_PARAMS)) {
+    const { results } = await env.DB.prepare(
+      `SELECT ${SCAN_COLUMNS} FROM Links
+       WHERE key IN (${chunk.map(() => '?').join()}) AND blocked_at IS NULL`
+    )
+      .bind(...chunk)
+      .all();
+    links.push(...results.map(convertToLink));
+  }
+  return links;
+};
+
+/**
+ * Checks links with Safe Browsing and blocks the unsafe ones with their
+ * domains. The safe links in `deepKeys` are queued for URL Scanner
+ */
+export const scanLinks = async (
+  env: CloudflareBindings,
+  keys: Array<string>,
+  deepKeys: Array<string> = []
+) => {
+  const links = await getScanLinks(env, keys);
+  if (!links.length) return;
+
+  const threats = await findThreats(
+    env,
+    links.flatMap((link) => getDestinations(link).filter(Boolean))
+  );
+
+  const now = new Date().toISOString();
+  await env.DB.batch(
+    _.chunk(links.map((l) => l.key), MAX_PARAMS).map((chunk) =>
+      env.DB.prepare(
+        `UPDATE Links SET checked_at = ? WHERE key IN (${chunk.map(() => '?').join()})`
+      ).bind(now, ...chunk)
+    )
+  );
+
+  const labels = new Map(
+    [...threats].map(([url, type]): [string, string] => [url, THREAT_LABELS[type] || type])
+  );
+  const blocked = await blockUnsafeUrls(env, links, labels);
+
+  const safe = links.filter((l) => deepKeys.includes(l.key) && !blocked.includes(l.key));
+  await queueUrlScans(env, safe);
+};
+
+/**
+ * Blocks the links to unsafe URLs and suspends their accounts, then blocks
+ * the domains for every account with every other link pointing to them.
+ * `threats` maps each unsafe URL to a label. Returns the blocked keys
+ */
+const blockUnsafeUrls = async (
+  env: CloudflareBindings,
+  links: Array<ScanLink>,
+  threats: Map<string, string>
+): Promise<Array<string>> => {
+  if (!threats.size) return [];
+
+  const unsafe: Array<BlockedLink> = [];
+  for (const link of links) {
+    const url = getDestinations(link).find((u) => u && threats.has(u));
+    if (url) {
+      unsafe.push({ ...link, reason: `Unsafe destination (${threats.get(url)}): ${url}` });
+    }
+  }
+  await blockLinks(env, unsafe, true);
+
+  for (const [url, label] of threats) {
+    const domain = await blockDomainOf(env, url);
+    if (domain) {
+      await queueDomainBlock(env, domain, `Domain blocked (${label}): ${domain}`, true);
+    }
+  }
+  return unsafe.map((l) => l.key);
+};
+
+/* ------------------------- Cloudflare URL Scanner ------------------------- */
+
+/**
+ * Queues the homepage of each destination host, e.g. `https://example.com/`
+ * for `https://example.com/landing?utm=1`, so a domain is scanned once instead
+ * of every link to it. Whitelisted hosts are skipped, their homepage says
+ * nothing about a page a user uploaded (Safe Browsing still checks those
+ * links), and they're never blocked. A host is scanned at most once in 30 days
+ */
+const queueUrlScans = async (env: CloudflareBindings, links: Array<ScanLink>) => {
+  if (!isUrlScannerEnabled(env) || !links.length) return;
+
+  const hosts = _.uniqBy(
+    links
+      .flatMap((link) => getDestinations(link).filter(Boolean))
+      .map(parseHost)
+      .filter((host) => host && !isBlockedHost(host) && !isWhitelistedHost(host)),
+    'hostname'
+  );
+  if (!hosts.length) return;
+
+  // Whitelisted or already blocked by admin
+  const candidates = _.uniq(hosts.flatMap((h) => h.candidates));
+  const globals = new Set<string>();
+  for (const chunk of _.chunk(candidates, MAX_PARAMS)) {
+    const { results } = await env.DB.prepare(
+      `SELECT domain FROM Domains WHERE account_id IS NULL
+       AND domain IN (${chunk.map(() => '?').join()})`
+    )
+      .bind(...chunk)
+      .all<{ domain: string }>();
+    results.forEach((r) => globals.add(r.domain));
+  }
+
+  const homepages = hosts
+    .filter((h) => !h.candidates.some((d) => globals.has(d)))
+    .map((h) => `https://${h.hostname}/`);
+  const urls = await filterUnscannedUrls(env, homepages);
+  if (!urls.length) return;
+  // Spaced out for the rate limit, queue delays are at most 12 hours
+  await env.QUEUE.sendBatch(
+    urls.map((url, i) => ({
+      body: { type: 'urlscan-submit', url } satisfies QueueMessage,
+      delaySeconds: Math.min(i * SCAN_INTERVAL, 43200),
+    }))
+  );
+};
+
+const submitUrlScans = async (
+  env: CloudflareBindings,
+  { url }: Extract<QueueMessage, { type: 'urlscan-submit' }>
+) => {
+  const scan = await submitScan(env, url);
+  if (!scan) return;
+  // Scans take a while, the first poll is after a minute
+  await env.QUEUE.send(
+    { type: 'urlscan-result', scans: [scan], attempt: 1 } satisfies QueueMessage,
+    { delaySeconds: 60 }
+  );
+};
+
+/**
+ * Polls the scan results and polls the pending ones again later. A malicious
+ * homepage blocks its domain, every link to it, and suspends their accounts
+ */
+const checkUrlScans = async (
+  env: CloudflareBindings,
+  message: Extract<QueueMessage, { type: 'urlscan-result' }>
+) => {
+  const threats = new Map<string, string>();
+  const done = new Set<string>();
+  try {
+    for (const scan of message.scans) {
+      const verdict = await getScanVerdict(env, scan.uuid);
+      if (verdict.status === 'pending') continue;
+      done.add(scan.uuid);
+      if (verdict.malicious) {
+        const categories = verdict.categories.join(', ');
+        threats.set(scan.url, `Cloudflare URL Scanner${categories ? `: ${categories}` : ''}`);
+      }
+    }
+  } catch (err) {
+    // Scans not polled yet are polled again with the pending ones
+    if (!(err instanceof UrlScannerRateLimitError)) throw err;
+  }
+
+  for (const [url, label] of threats) {
+    const domain = await blockDomainOf(env, url);
+    if (domain) {
+      await queueDomainBlock(env, domain, `Domain blocked (${label}): ${domain}`, true);
+    }
+  }
+
+  const pending = message.scans.filter((s) => !done.has(s.uuid));
+  if (!pending.length) return;
+  if (message.attempt >= URLSCAN_MAX_POLLS) {
+    console.warn('URL Scanner results not ready, giving up', pending.map((s) => s.uuid));
+    return;
+  }
+  await env.QUEUE.send(
+    { type: 'urlscan-result', scans: pending, attempt: message.attempt + 1 } satisfies QueueMessage,
+    { delaySeconds: URLSCAN_POLL_DELAY }
+  );
+};
+
+/**
+ * Adds the domain of an unsafe URL to the global blocklist, unless it's
+ * whitelisted (e.g. a phishing page on docs.google.com) or already blocked.
+ * Private suffixes are kept, so `evil.github.io` blocks that site only.
+ * Returns the domain when it was newly blocked
+ */
+const blockDomainOf = async (
+  env: CloudflareBindings,
+  url: string
+): Promise<string | undefined> => {
+  const host = parseHost(url);
+  if (!host || isBlockedHost(host) || isWhitelistedHost(host)) return;
+
+  const domain = getDomain(host.hostname, { allowPrivateDomains: true }) || host.domain;
+  const candidates = _.uniq([...host.candidates, domain]);
+  const existing = await env.DB.prepare(
+    `SELECT domain FROM Domains WHERE account_id IS NULL
+     AND domain IN (${candidates.map(() => '?').join()})`
+  )
+    .bind(...candidates)
+    .first();
+  if (existing) return;
+
+  const { meta } = await env.DB.prepare(
+    `INSERT INTO Domains (account_id, user_id, domain, type, created_at)
+     VALUES (NULL, NULL, ?, '${DomainType.blocked}', ?)
+     ON CONFLICT(domain) WHERE account_id IS NULL DO NOTHING`
+  )
+    .bind(domain, new Date().toISOString())
+    .run();
+  return meta.changes > 0 ? domain : undefined;
+};
+
+/** Blocks the links to a blocked domain and its subdomains, a page per message */
+const blockDomainLinks = async (
+  env: CloudflareBindings,
+  message: Extract<QueueMessage, { type: 'block-domain' }>
+) => {
+  const { domain, reason, suspend, after } = message;
+  const pattern = `%${domain}%`;
+  const { results } = await env.DB.prepare(
+    `SELECT ${SCAN_COLUMNS} FROM Links
+     WHERE key > ? AND blocked_at IS NULL
+     AND (url LIKE ?2 OR ios LIKE ?2 OR android LIKE ?2 OR geo LIKE ?2)
+     ORDER BY key LIMIT ?`
+  )
+    .bind(after || '', pattern, BLOCK_PAGE_SIZE)
+    .all();
+
+  // LIKE is a rough filter, e.g. `example.com` also matches `notexample.com`
+  const links = results
+    .map(convertToLink)
+    .filter((link) =>
+      getDestinations(link).some((url) => url && parseHost(url)?.candidates.includes(domain))
+    );
+  await blockLinks(env, links.map((link) => ({ ...link, reason })), suspend);
+
+  if (results.length === BLOCK_PAGE_SIZE) {
+    await env.QUEUE.send({
+      ...message,
+      after: (results[results.length - 1] as { key: string }).key,
+    } satisfies QueueMessage);
+  }
+};
+
+/* ----------------------------- Block & suspend ---------------------------- */
+
+/**
+ * Stops the links from redirecting and notifies the account owners and admins.
+ * With `suspend`, the accounts are suspended in the same transaction, so they
+ * can't sign in, create more links, or delete the account and its evidence
+ */
+export const blockLinks = async (
+  env: CloudflareBindings,
+  links: Array<BlockedLink>,
+  suspend: boolean
+) => {
+  if (!links.length) return;
+  const now = new Date().toISOString();
+  const accountIds = _.uniq(links.map((l) => l.account_id));
+
+  const results = await env.DB.batch([
+    ...links.map((link) =>
+      env.DB.prepare(
+        `UPDATE Links SET blocked_at = ?, blocked_reason = ? WHERE key = ? AND blocked_at IS NULL`
+      ).bind(now, link.reason, link.key)
+    ),
+    ...(suspend ? accountIds.map((id) => suspendStatement(env, id)) : []),
+  ]);
+  const newlySuspended = suspend
+    ? accountIds.filter((_id, i) => results[links.length + i].meta.changes > 0)
+    : [];
+
+  // Redirects read links from KV first, cached for a minute at most
+  await Promise.all(links.map((link) => env.LINKS.delete(link.key)));
+
+  for (const [accountId, accountLinks] of Object.entries(_.groupBy(links, 'account_id'))) {
+    const suspended = newlySuspended.includes(Number(accountId));
+    // An account suspended earlier was already told, skip more emails for it
+    if (suspend && !suspended) continue;
+    await notifyAccount(env, Number(accountId), accountLinks, suspended);
+  }
+
+  await supportEmail(env, suspend ? 'Unsafe links blocked' : 'Links blocked', {
+    links: links.length,
+    accounts: accountIds.join(', '),
+    suspended: newlySuspended.join(', ') || 'none',
+    reason: defang(links[0].reason),
+    examples: links
+      .slice(0, 5)
+      .map((l) => `${defang(l.short_url)} -> ${defang(l.url)}`)
+      .join('\n'),
+  }).catch((err) => console.error('Unable to email support', err));
+};
+
+/**
+ * Suspended users can't sign in or use API keys. Users disabled by the account
+ * owner stay disabled after reactivation. `Accounts.status` isn't used, it's
+ * the billing status and updated by payment webhooks
+ */
+const suspendStatement = (env: CloudflareBindings, accountId: number) =>
+  env.DB.prepare(
+    `UPDATE Users SET status = ?, updated_at = ? WHERE account_id = ? AND status = ?`
+  ).bind(UserStatus.suspended, new Date().toISOString(), accountId, UserStatus.active);
+
+/** Returns true when the account had active users and is suspended now */
+export const suspendAccount = async (env: CloudflareBindings, accountId: number) => {
+  const { meta } = await suspendStatement(env, accountId).run();
+  return meta.changes > 0;
+};
+
+/**
+ * Restores a suspended account and unblocks its links. The links are checked
+ * again on their next click, so remove the blocked domain first
+ */
+export const reactivateAccount = async (env: CloudflareBindings, accountId: number) => {
+  const [users] = await env.DB.batch([
+    env.DB.prepare(
+      `UPDATE Users SET status = ?, updated_at = ? WHERE account_id = ? AND status = ?`
+    ).bind(UserStatus.active, new Date().toISOString(), accountId, UserStatus.suspended),
+    env.DB.prepare(
+      `UPDATE Links SET blocked_at = NULL, blocked_reason = NULL, checked_at = NULL
+       WHERE account_id = ? AND blocked_at IS NOT NULL`
+    ).bind(accountId),
+  ]);
+  return users.meta.changes > 0;
+};
+
+/** Unblocks a single link, it's checked again on the next click */
+export const unblockLink = async (env: CloudflareBindings, key: string) => {
+  const { meta } = await env.DB.prepare(
+    `UPDATE Links SET blocked_at = NULL, blocked_reason = NULL, checked_at = NULL
+     WHERE key = ? AND blocked_at IS NOT NULL`
+  )
+    .bind(key)
+    .run();
+  await env.LINKS.delete(key);
+  return meta.changes > 0;
+};
+
+/** Emails the account owners and admins, and the members who created the links */
+const notifyAccount = async (
+  env: CloudflareBindings,
+  accountId: number,
+  links: Array<BlockedLink>,
+  suspended: boolean
+) => {
+  const creators = _.uniq(links.map((l) => l.user_id)).slice(0, MAX_PARAMS - 3);
+  const { results: users } = await env.DB.prepare(
+    `SELECT name, email FROM Users
+     WHERE account_id = ? AND is_verified = 1
+     AND (role IN (?, ?) OR user_id IN (${creators.map(() => '?').join() || 'NULL'}))`
+  )
+    .bind(accountId, RoleType.Owner, RoleType.Admin, ...creators)
+    .all<{ name: string; email: string }>();
+
+  const items: Array<BlockedLinkItem> = links.map((l) => ({
+    short_url: l.short_url,
+    url: l.url,
+    reason: l.reason,
+  }));
+  for (const user of users) {
+    await sendLinksBlockedEmail(env, user, items, suspended).catch((err) =>
+      console.error(`Unable to email ${user.email} about blocked links`, err)
+    );
+  }
+};
