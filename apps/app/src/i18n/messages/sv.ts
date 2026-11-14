@@ -13,6 +13,8 @@ const sv: Messages = {
     signingIn: "Loggar in",
     verifyEmail: "Verifiera e-post",
     links: "Länkar",
+    projects: "Projekt",
+    admin: "Admin",
     analytics: "Statistik",
     reports: "Rapporter",
     domains: "Domäner",
@@ -37,6 +39,8 @@ const sv: Messages = {
   nav: {
     menu: "Meny",
     links: "Länkar",
+    projects: "Projekt",
+    admin: "Admin",
     analytics: "Statistik",
     reports: "Rapporter",
     domains: "Domäner",

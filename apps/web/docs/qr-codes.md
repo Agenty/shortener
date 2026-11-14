@@ -4,6 +4,7 @@ nav: QR codes
 description: Turn any short link into a QR code in the Shortener.dev dashboard, choose its size and colors, and download it as PNG or SVG. Track scans and change the destination after printing.
 section: Short links
 order: 3
+updated: 2026-10-24
 ---
 
 Every short link in your account can be turned into a QR code. Because the code holds the short link, such as `srt1.link/spring-menu`, and not the final URL, every scan is counted in [click analytics](/docs/click-analytics), and you can change the destination later without reprinting anything.

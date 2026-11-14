@@ -22,6 +22,17 @@ import type {
 } from "@/types/analytics";
 import type { Profile, Account, ApiKey, ApiKeysResponse } from "@/types/account";
 import type { User, UsersResponse, UserCreatePayload, UserUpdatePayload } from "@/types/user";
+import type { Project, ProjectPayload, ProjectsResponse } from "@/types/project";
+import type { AdminLink, AdminTopLinksResponse, AdminUsersResponse } from "@/types/admin";
+
+/** `?offset=&limit=&...` with empty values left out */
+function toQuery(params: Record<string, string | number | undefined>) {
+  const query = new URLSearchParams();
+  for (const [name, value] of Object.entries(params)) {
+    if (value !== undefined && value !== "") query.set(name, String(value));
+  }
+  return query.toString();
+}
 
 const BASE_URL = env.API_URL;
 
@@ -190,12 +201,20 @@ export const api = {
   // ─── Links ──────────────────────────────────────────
 
   links: {
-    list(params: { offset?: number; limit?: number; search?: string } = {}) {
-      const query = new URLSearchParams();
-      if (params.offset !== undefined) query.set("offset", String(params.offset));
-      if (params.limit !== undefined) query.set("limit", String(params.limit));
-      if (params.search) query.set("search", params.search);
-      return request<LinksResponse>(`/links?${query.toString()}`);
+    list(params: { offset?: number; limit?: number; search?: string; project_id?: number } = {}) {
+      return request<LinksResponse>(`/links?${toQuery(params)}`);
+    },
+
+    get(key: string) {
+      return request<Link>(`/links/${encodeURIComponent(key)}`);
+    },
+
+    /** Replaces every setting of the link, send the full link with the changes */
+    update(key: string, data: LinkCreatePayload & { is_enabled?: boolean }) {
+      return request<Link>(`/links/${encodeURIComponent(key)}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      });
     },
 
     create(data: LinkCreatePayload) {
@@ -207,6 +226,30 @@ export const api = {
 
     delete(id: string) {
       return request<void>(`/links/${id}`, { method: "DELETE" });
+    },
+  },
+
+  // ─── Projects ───────────────────────────────────────
+
+  projects: {
+    list(params: { offset?: number; limit?: number } = {}) {
+      return request<ProjectsResponse>(`/projects?${toQuery(params)}`);
+    },
+    create(data: ProjectPayload) {
+      return request<Project>("/projects", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+    },
+    update(id: number, data: ProjectPayload) {
+      return request<Project>(`/projects/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      });
+    },
+    /** Deletes the project and every short link in it */
+    delete(id: number) {
+      return request<{ message: string }>(`/projects/${id}`, { method: "DELETE" });
     },
   },
 
@@ -349,6 +392,26 @@ export const api = {
   // ─── Admin (users with a level) ─────────────────────
 
   admin: {
+    users(params: { offset?: number; limit?: number; search?: string } = {}) {
+      return request<AdminUsersResponse>(`/admin/users?${toQuery(params)}`);
+    },
+    /** Links of any account, newest first */
+    accountLinks(accountId: number, params: { offset?: number; limit?: number; search?: string } = {}) {
+      return request<Link[]>(`/admin/links/${accountId}?${toQuery(params)}`);
+    },
+    /** Most clicked links on the service in the last 24 hours */
+    topLinks(limit = 50) {
+      return request<AdminTopLinksResponse>(`/admin/top-links?${toQuery({ limit })}`);
+    },
+    link(key: string) {
+      return request<AdminLink>(`/admin/link/${encodeURIComponent(key)}`);
+    },
+    setLinkEnabled(key: string, is_enabled: boolean) {
+      return request<{ message: string }>(`/admin/link/${encodeURIComponent(key)}/status`, {
+        method: "PUT",
+        body: JSON.stringify({ is_enabled }),
+      });
+    },
     domains: {
       list(params: { type?: GlobalDomainType; offset?: number; limit?: number } = {}) {
         const query = new URLSearchParams();

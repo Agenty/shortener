@@ -4,6 +4,7 @@ nav: API keys
 description: Create a Shortener.dev API key to create short links and read analytics from your own server, scripts or no-code tools.
 section: Team and API
 order: 2
+updated: 2026-10-18
 ---
 
 An API key lets your code call the [Shortener.dev API](/docs/api) on behalf of your account. Create a separate key for each place you use it, such as "Production server" or "Zapier", so you can revoke one without breaking the others. API access is included on paid plans.

@@ -2,6 +2,8 @@ import GithubSlugger from 'github-slugger';
 
 export type DocHeading = { depth: 2 | 3; text: string; id: string };
 
+export type DocFaq = { q: string; a: string };
+
 export type Doc = {
   slug: string;
   title: string;
@@ -10,13 +12,27 @@ export type Doc = {
   description: string;
   section: string;
   order: number;
+  /** Last reviewed date (`YYYY-MM-DD`) from the `updated` frontmatter, for `dateModified` */
+  updated?: string;
+  /** Questions under a "Frequently asked questions" h2, for FAQPage JSON-LD */
+  faqs: DocFaq[];
   /** Markdown body without the frontmatter */
   body: string;
   headings: DocHeading[];
 };
 
 /** Sidebar sections, in display order */
-export const DOC_SECTIONS = ['Get started', 'Short links', 'Link options', 'Domains', 'Analytics', 'Team and API'];
+export const DOC_SECTIONS = [
+  'Get started',
+  'Short links',
+  'Link options',
+  'Domains',
+  'Analytics',
+  'Team and API',
+  'Integrations',
+  'Guides',
+  'Help',
+];
 
 /** Docs are markdown files in `apps/web/docs`, bundled as raw strings at build time */
 const files = import.meta.glob('../../docs/*.md', {
@@ -60,6 +76,48 @@ function extractHeadings(body: string): DocHeading[] {
   return headings;
 }
 
+/** Inline markdown to plain text, for JSON-LD answers */
+const plainText = (markdown: string) =>
+  markdown
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/(\*\*|__)(.+?)\1/g, '$2')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+/**
+ * Each h3 under a `## Frequently asked questions` heading is a question, and the
+ * text up to the next h2 or h3 is its answer. The FAQ stays visible on the page,
+ * as Google requires for FAQPage markup
+ */
+function extractFaqs(body: string): DocFaq[] {
+  const faqs: DocFaq[] = [];
+  let inFaq = false;
+  let current: { q: string; lines: string[] } | undefined;
+  const flush = () => {
+    if (current) faqs.push({ q: plainText(current.q), a: plainText(current.lines.join(' ')) });
+    current = undefined;
+  };
+  for (const line of body.split(/\r?\n/)) {
+    const h2 = line.match(/^##\s+(.+?)\s*$/);
+    if (h2) {
+      flush();
+      inFaq = /^frequently asked questions$/i.test(h2[1]);
+      continue;
+    }
+    if (!inFaq) continue;
+    const h3 = line.match(/^###\s+(.+?)\s*$/);
+    if (h3) {
+      flush();
+      current = { q: h3[1], lines: [] };
+    } else if (current) {
+      current.lines.push(line);
+    }
+  }
+  flush();
+  return faqs.filter((faq) => faq.a);
+}
+
 export const docs: Doc[] = Object.entries(files)
   .map(([path, raw]) => {
     const { data, body } = parseFrontmatter(raw);
@@ -71,6 +129,8 @@ export const docs: Doc[] = Object.entries(files)
       description: data.description ?? '',
       section: data.section ?? 'Get started',
       order: Number(data.order ?? 99),
+      updated: data.updated || undefined,
+      faqs: extractFaqs(body),
       body,
       headings: extractHeadings(body),
     };

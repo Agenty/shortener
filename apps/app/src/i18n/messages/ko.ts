@@ -13,6 +13,8 @@ const ko: Messages = {
     signingIn: "로그인 중",
     verifyEmail: "이메일 인증",
     links: "링크",
+    projects: "프로젝트",
+    admin: "관리자",
     analytics: "분석",
     reports: "리포트",
     domains: "도메인",
@@ -37,6 +39,8 @@ const ko: Messages = {
   nav: {
     menu: "메뉴",
     links: "링크",
+    projects: "프로젝트",
+    admin: "관리자",
     analytics: "분석",
     reports: "리포트",
     domains: "도메인",

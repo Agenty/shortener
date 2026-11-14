@@ -8,6 +8,7 @@ import { Paged } from '../models/paged';
 import { isEmpty } from 'lodash';
 import { format, subMonths } from 'date-fns';
 import { assertVerifiedDestinations } from './domain.service';
+import { getProjectById } from './projects.service';
 import { waitUntil } from 'cloudflare:workers';
 
 /** Host of every short link, kept separate from the main site domain */
@@ -54,6 +55,18 @@ const linkOptions = (link: Link) => [
   toJson(link.geo),
 ];
 
+/**
+ * A link can only go in a project of the same account. The foreign key alone would accept
+ * another account's project, whose deletion then cascades to this account's link
+ */
+const assertOwnProject = async (env: CloudflareBindings, authUser: AuthUser, link: Link) => {
+  if (!link.project_id) return;
+  const project = await getProjectById(env, link.project_id, authUser);
+  if (!project) {
+    throw new HTTPException(400, { message: `No project found with id: ${link.project_id}` });
+  }
+};
+
 // Every URL a short link can redirect to
 const getDestinations = (link: Link) => [
   link.url,
@@ -62,41 +75,36 @@ const getDestinations = (link: Link) => [
   ...(link.geo || []).map((x) => x.url),
 ];
 
+/** Optional `project_id` narrows the list to one project */
+export type LinksQuery = Paged & { project_id?: number };
+
 export const getLinks = async (
   env: CloudflareBindings,
   authUser: AuthUser,
-  paged: Paged
+  paged: LinksQuery
 ): Promise<Array<Link>> => {
-  let sqlQuery: D1PreparedStatement;
+  const where = ['account_id = ?'];
+  const binds: Array<string | number> = [authUser.account_id];
+  if (paged.project_id) {
+    where.push('project_id = ?');
+    binds.push(paged.project_id);
+  }
   if (!isEmpty(paged.search)) {
     const search = paged.search.includes(`${SHORT_DOMAIN}/`)
       ? paged.search.split('/').pop()
       : paged.search.split('?')[0];
-    sqlQuery = env.DB.prepare(
-      `
-        SELECT ${LINK_COLUMNS}
-        FROM Links
-        Where account_id = ?
-        and (key = ? or url like ?)
-        Order by created_at DESC
-        LIMIT ?, ?`
-    ).bind(
-      authUser.account_id,
-      search,
-      `%${search}%`,
-      paged.offset,
-      paged.limit
-    );
-  } else {
-    sqlQuery = env.DB.prepare(
-      `
-        SELECT ${LINK_COLUMNS}
-        FROM Links
-        Where account_id = ?
-        Order by created_at DESC
-        LIMIT ?, ?`
-    ).bind(authUser.account_id, paged.offset, paged.limit);
+    where.push('(key = ? or url like ?)');
+    binds.push(search, `%${search}%`);
   }
+
+  const sqlQuery = env.DB.prepare(
+    `
+      SELECT ${LINK_COLUMNS}
+      FROM Links
+      Where ${where.join(' and ')}
+      Order by created_at DESC
+      LIMIT ?, ?`
+  ).bind(...binds, paged.offset, paged.limit);
 
   const { results } = await sqlQuery.all();
   return results.map(convertToLink);
@@ -124,6 +132,7 @@ export const createLink = async (
   link: Link
 ): Promise<Link> => {
   await assertVerifiedDestinations(env, authUser, getDestinations(link));
+  await assertOwnProject(env, authUser, link);
 
   link.key = (link.key || nanoid(7)).toLowerCase();
   link.account_id = authUser.account_id;
@@ -167,6 +176,7 @@ export const updateLink = async (
   link: Link
 ): Promise<Link> => {
   await assertVerifiedDestinations(env, authUser, getDestinations(link));
+  await assertOwnProject(env, authUser, link);
 
   link.key = key;
   link.account_id = authUser.account_id;
@@ -262,6 +272,20 @@ export const getRedirectUrl = (
     url.searchParams.set(name, value);
   }
   return url.toString();
+};
+
+/** Number of links in a project, for the pagination total of a filtered list */
+export const getProjectLinkCount = async (
+  env: CloudflareBindings,
+  authUser: AuthUser,
+  projectId: number
+) => {
+  const { total } = await env.DB.prepare(
+    `Select count(1) as total from Links Where account_id = ? and project_id = ?`
+  )
+    .bind(authUser.account_id, projectId)
+    .first();
+  return Number(total);
 };
 
 export const getLinkCount = async (

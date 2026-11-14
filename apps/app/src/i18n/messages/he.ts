@@ -13,6 +13,8 @@ const he: Messages = {
     signingIn: "מתחבר",
     verifyEmail: "אימות אימייל",
     links: "קישורים",
+    projects: "פרויקטים",
+    admin: "ניהול",
     analytics: "נתונים",
     reports: "דוחות",
     domains: "דומיינים",
@@ -37,6 +39,8 @@ const he: Messages = {
   nav: {
     menu: "תפריט",
     links: "קישורים",
+    projects: "פרויקטים",
+    admin: "ניהול",
     analytics: "נתונים",
     reports: "דוחות",
     domains: "דומיינים",

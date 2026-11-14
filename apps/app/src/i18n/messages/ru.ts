@@ -13,6 +13,8 @@ const ru: Messages = {
     signingIn: "Выполняется вход",
     verifyEmail: "Подтверждение email",
     links: "Ссылки",
+    projects: "Проекты",
+    admin: "Администрирование",
     analytics: "Аналитика",
     reports: "Отчёты",
     domains: "Домены",
@@ -37,6 +39,8 @@ const ru: Messages = {
   nav: {
     menu: "Меню",
     links: "Ссылки",
+    projects: "Проекты",
+    admin: "Администрирование",
     analytics: "Аналитика",
     reports: "Отчёты",
     domains: "Домены",

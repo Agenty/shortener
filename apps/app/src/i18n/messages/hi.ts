@@ -13,6 +13,8 @@ const hi: Messages = {
     signingIn: "साइन इन हो रहा है",
     verifyEmail: "ईमेल वेरिफ़ाई करें",
     links: "लिंक",
+    projects: "प्रोजेक्ट",
+    admin: "एडमिन",
     analytics: "एनालिटिक्स",
     reports: "रिपोर्ट",
     domains: "डोमेन",
@@ -37,6 +39,8 @@ const hi: Messages = {
   nav: {
     menu: "मेन्यू",
     links: "लिंक",
+    projects: "प्रोजेक्ट",
+    admin: "एडमिन",
     analytics: "एनालिटिक्स",
     reports: "रिपोर्ट",
     domains: "डोमेन",

@@ -4,6 +4,7 @@ nav: Manage links
 description: Search your short links, switch between list and grid view, copy or open a link, and permanently delete links you no longer need.
 section: Short links
 order: 2
+updated: 2026-11-14
 ---
 
 Every link you create is on the **Links** page. The list shows the short link, its destination, a link to its clicks, the status and the date it was created. It shows 25 links per page, with **Previous** and **Next** buttons at the bottom when you have more.
@@ -42,7 +43,7 @@ The **...** menu at the end of each row has the same **Copy** action, plus **Ope
 
 ![Delete link confirmation](/docs/images/delete-link.png)
 
-Deleting is permanent and can't be undone. The short link stops redirecting right away, so anyone who clicks it afterwards won't reach your page. If the link is printed or shared widely, consider giving it an [expiration date](/docs/link-expiration) instead, so it keeps working until a planned end date.
+Deleting is permanent and can't be undone. The short link stops redirecting within about a minute, so anyone who clicks it afterwards won't reach your page. If you might need the link again, [disable it](/docs/disable-short-link) instead. If it's printed or shared widely, consider an [expiration date](/docs/link-expiration), so it keeps working until a planned end date, or [point it at a new page](/docs/edit-short-link).
 
 ## Create links in bulk
 

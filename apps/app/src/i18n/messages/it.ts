@@ -13,6 +13,8 @@ const it: Messages = {
     signingIn: "Accesso in corso",
     verifyEmail: "Verifica email",
     links: "Link",
+    projects: "Progetti",
+    admin: "Amministrazione",
     analytics: "Statistiche",
     reports: "Report",
     domains: "Domini",
@@ -37,6 +39,8 @@ const it: Messages = {
   nav: {
     menu: "Menu",
     links: "Link",
+    projects: "Progetti",
+    admin: "Amministrazione",
     analytics: "Statistiche",
     reports: "Report",
     domains: "Domini",

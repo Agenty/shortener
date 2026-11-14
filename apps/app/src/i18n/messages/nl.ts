@@ -13,6 +13,8 @@ const nl: Messages = {
     signingIn: "Bezig met inloggen",
     verifyEmail: "E-mail verifiëren",
     links: "Links",
+    projects: "Projecten",
+    admin: "Beheer",
     analytics: "Statistieken",
     reports: "Rapporten",
     domains: "Domeinen",
@@ -37,6 +39,8 @@ const nl: Messages = {
   nav: {
     menu: "Menu",
     links: "Links",
+    projects: "Projecten",
+    admin: "Beheer",
     analytics: "Statistieken",
     reports: "Rapporten",
     domains: "Domeinen",

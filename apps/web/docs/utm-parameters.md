@@ -4,6 +4,7 @@ nav: UTM parameters
 description: Use the UTM Builder to tag short links with utm_source, utm_medium and utm_campaign, so Google Analytics shows which campaign brought each visitor.
 section: Link options
 order: 2
+updated: 2026-10-19
 ---
 
 UTM parameters tell Google Analytics, and most other analytics tools, where a visitor came from. Without them, a click from your newsletter and a click from an Instagram bio can both show up as direct traffic. The **UTM Builder** adds the parameters to the destination URL for you, so the short link stays clean while the page still receives the full tracking string.

@@ -65,6 +65,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="/links" replace /> },
           { path: 'links', ...page(() => import('@/app/links/page'), 'links') },
+          { path: 'projects', ...page(() => import('@/app/projects/page'), 'projects') },
           {
             path: 'analytics',
             ...page(() => import('@/app/analytics/page'), 'analytics'),
@@ -73,6 +74,7 @@ export const router = createBrowserRouter([
           { path: 'domains', ...page(() => import('@/app/domains/page'), 'domains') },
           { path: 'users', ...page(() => import('@/app/users/page'), 'users') },
           { path: 'billings', ...page(() => import('@/app/billings/page'), 'billing') },
+          { path: 'admin', ...page(() => import('@/app/admin/page'), 'admin') },
           {
             path: 'settings',
             ...page(() => import('@/app/settings/page'), 'settings'),

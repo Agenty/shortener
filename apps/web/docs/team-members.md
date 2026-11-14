@@ -4,6 +4,7 @@ nav: Team members
 description: Add colleagues to your Shortener.dev account so they can create and manage short links with you, change their role, or remove them.
 section: Team and API
 order: 1
+updated: 2026-10-20
 ---
 
 Team members share your account's links, domains and analytics. Open **Settings** in the sidebar and choose **Users** to see who has access.

@@ -13,6 +13,8 @@ const ar: Messages = {
     signingIn: "جارٍ تسجيل الدخول",
     verifyEmail: "تأكيد البريد الإلكتروني",
     links: "الروابط",
+    projects: "المشاريع",
+    admin: "الإدارة",
     analytics: "الإحصاءات",
     reports: "التقارير",
     domains: "النطاقات",
@@ -37,6 +39,8 @@ const ar: Messages = {
   nav: {
     menu: "القائمة",
     links: "الروابط",
+    projects: "المشاريع",
+    admin: "الإدارة",
     analytics: "الإحصاءات",
     reports: "التقارير",
     domains: "النطاقات",

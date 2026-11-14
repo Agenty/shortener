@@ -13,6 +13,8 @@ const vi: Messages = {
     signingIn: "Đang đăng nhập",
     verifyEmail: "Xác minh email",
     links: "Liên kết",
+    projects: "Dự án",
+    admin: "Quản trị",
     analytics: "Thống kê",
     reports: "Báo cáo",
     domains: "Tên miền",
@@ -37,6 +39,8 @@ const vi: Messages = {
   nav: {
     menu: "Menu",
     links: "Liên kết",
+    projects: "Dự án",
+    admin: "Quản trị",
     analytics: "Thống kê",
     reports: "Báo cáo",
     domains: "Tên miền",

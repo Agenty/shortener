@@ -4,6 +4,7 @@ nav: Verify a domain
 description: Add your domain to Shortener.dev and verify you own it with an email code or Google Search Console, so you can create short links to any page on it.
 section: Domains
 order: 1
+updated: 2026-10-29
 ---
 
 Shortener.dev only shortens links to domains that are verified in your account or on the global whitelist. That check keeps short links from being used for phishing and spam. Popular sites like YouTube, LinkedIn, Amazon and Google Play are whitelisted already. For your own website, add the domain and prove you own it. It takes a couple of minutes.

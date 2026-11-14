@@ -12,6 +12,8 @@ const zh: Messages = {
     signingIn: "正在登录",
     verifyEmail: "验证邮箱",
     links: "链接",
+    projects: "项目",
+    admin: "管理",
     analytics: "统计",
     reports: "报告",
     domains: "域名",
@@ -36,6 +38,8 @@ const zh: Messages = {
   nav: {
     menu: "菜单",
     links: "链接",
+    projects: "项目",
+    admin: "管理",
     analytics: "统计",
     reports: "报告",
     domains: "域名",

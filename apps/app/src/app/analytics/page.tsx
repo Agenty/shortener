@@ -42,6 +42,8 @@ import {
 } from "recharts";
 import { api } from "@/lib/api";
 import type { AnalyticsParams } from "@/types/analytics";
+import { useProjects } from "@/hooks/use-projects";
+import { ProjectSelect } from "@/app/projects/components/ProjectSelect";
 import { format, parseISO } from "date-fns";
 import { hasFlag } from "country-flag-icons";
 import * as Flags from "country-flag-icons/react/3x2";
@@ -216,6 +218,17 @@ export default function Analytics() {
   const [chartType, setChartType] = useState<"area" | "bar" | "line">("area");
   const [showLabels, setShowLabels] = useState(false);
   const intervalNum = Number(interval);
+  const { projects } = useProjects();
+  const projectId = Number(searchParams.get("project")) || undefined;
+
+  const setProject = (id: number | null) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (id) next.set("project", String(id));
+      else next.delete("project");
+      return next;
+    });
+  };
 
   const filters = useMemo(() => {
     const active: Partial<Record<FilterName, string>> = {};
@@ -252,7 +265,7 @@ export default function Analytics() {
     activeFilters.map(({ name }) => [name, filters[name]!]),
   ).toString()}`;
 
-  const queryParams: AnalyticsParams = { interval: intervalNum, ...filters };
+  const queryParams: AnalyticsParams = { interval: intervalNum, project_id: projectId, ...filters };
 
   const { data: clicksData, isLoading: clicksLoading } = useQuery({
     queryKey: ["analytics", "clicks", queryParams],
@@ -439,7 +452,16 @@ export default function Analytics() {
           <p className="text-muted-foreground">Track your link performance</p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {projects.length > 0 && (
+            <ProjectSelect
+              projects={projects}
+              value={projectId ?? null}
+              onChange={setProject}
+              noneLabel="All projects"
+              className="w-[160px]"
+            />
+          )}
           <Button
             variant="outline"
             size="sm"

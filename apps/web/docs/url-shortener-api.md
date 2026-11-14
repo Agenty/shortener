@@ -4,6 +4,7 @@ nav: Shorten URLs with the API
 description: Create, list, update and delete short links with the Shortener.dev REST API, with examples in cURL, JavaScript and Python.
 section: Team and API
 order: 3
+updated: 2026-11-14
 ---
 
 The Shortener.dev API is a JSON REST API at `https://api.shortener.dev/v1`. Everything you can do in the link builder, you can do with one `POST` request, which makes it easy to shorten URLs from a CMS, a newsletter tool, a spreadsheet script or your own app.
@@ -116,7 +117,7 @@ Every option in the dashboard is a field on the same request. This one uses all 
 | --- | --- | --- |
 | `GET` | `/v1/links?search=spring&limit=50` | List links, newest first. `search` matches the exact back-half or part of the destination. |
 | `GET` | `/v1/links/{key}` | Get one link |
-| `PUT` | `/v1/links/{key}` | Update a link's destination or options |
+| `PUT` | `/v1/links/{key}` | Update a link's destination or options. Send the full link: fields you leave out are cleared. See [Change where a short link goes](/docs/edit-short-link). |
 | `DELETE` | `/v1/links/{key}` | Delete a link permanently |
 
 ## Handle errors

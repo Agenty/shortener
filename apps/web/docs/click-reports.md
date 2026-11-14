@@ -4,6 +4,7 @@ nav: Click reports
 description: The Reports page lists each click on your short links with the time, location, browser, device and referrer of the visitor.
 section: Analytics
 order: 2
+updated: 2026-10-18
 ---
 
 [Click analytics](/docs/click-analytics) shows totals. **Reports** shows the individual clicks behind them, which helps when you want to check a specific click or spot unusual traffic.

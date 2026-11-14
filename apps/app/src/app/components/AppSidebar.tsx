@@ -11,6 +11,8 @@ import {
   CreditCard,
   BookOpen,
   ChevronRight,
+  FolderKanban,
+  ShieldCheck,
 } from "lucide-react";
 import { LogoMark, Wordmark } from "@/components/Logo";
 import { NavLink } from "@/components/NavLink";
@@ -39,9 +41,11 @@ import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useI18n } from "@/i18n";
+import { useAuthUser } from "@/hooks/use-auth-user";
 
 const mainItems = [
   { key: "links", url: "/links", icon: Link2 },
+  { key: "projects", url: "/projects", icon: FolderKanban },
   { key: "analytics", url: "/analytics", icon: BarChart3 },
   { key: "reports", url: "/reports", icon: FileText },
   { key: "domains", url: "/domains", icon: Globe },
@@ -58,6 +62,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const navigate = useNavigate();
+  const { isAdmin } = useAuthUser();
 
   const handleLogout = () => {
     api.auth.logout();
@@ -146,6 +151,24 @@ export function AppSidebar() {
 
       <SidebarFooter className="p-3 space-y-1">
         <SidebarMenu>
+          {isAdmin && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip={t.nav.admin}
+                render={
+                  <NavLink
+                    to="/admin"
+                    end
+                    className="hover:bg-accent/50"
+                    activeClassName="bg-accent text-accent-foreground font-medium"
+                  />
+                }
+              >
+                <ShieldCheck />
+                <span>{t.nav.admin}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip={t.nav.billing}

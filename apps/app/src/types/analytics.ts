@@ -46,4 +46,5 @@ export interface ClickFilter {
 export interface AnalyticsParams extends ClickFilter {
   interval?: number;
   key?: string;
+  project_id?: number;
 }

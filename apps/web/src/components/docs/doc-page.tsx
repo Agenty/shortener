@@ -5,8 +5,17 @@ import { DocsToc } from '@/components/docs/docs-toc';
 import { Markdown } from '@/components/docs/markdown';
 import { Eyebrow } from '@/components/section';
 import { type Doc, docPath, getPager } from '@/lib/docs';
-import { breadcrumbJsonLd, seo } from '@/lib/seo';
+import { breadcrumbJsonLd, faqJsonLd, seo } from '@/lib/seo';
 import { SITE_NAME, SITE_URL } from '@/lib/site';
+
+/** `2026-11-14` as `Nov 14, 2026`, in UTC so server and client render the same text */
+const formatDate = (date: string) =>
+  new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
 
 /** `head()` for a docs page: meta, JSON-LD and a link to its raw markdown for agents */
 export function docHead(doc: Doc) {
@@ -23,12 +32,14 @@ export function docHead(doc: Doc) {
         description: doc.description,
         url: `${SITE_URL}${path}`,
         articleSection: doc.section,
+        ...(doc.updated ? { dateModified: doc.updated } : {}),
         publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
       },
       breadcrumbJsonLd([
         { name: 'Docs', path: '/docs' },
         ...(doc.slug === 'index' ? [] : [{ name: doc.title, path }]),
       ]),
+      ...(doc.faqs.length ? [faqJsonLd(doc.faqs)] : []),
     ],
   });
   return {
@@ -50,6 +61,11 @@ export function DocPage({ doc }: { doc: Doc }) {
         <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] md:text-5xl">{doc.title}</h1>
         {doc.description && (
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{doc.description}</p>
+        )}
+        {doc.updated && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            Updated <time dateTime={doc.updated}>{formatDate(doc.updated)}</time>
+          </p>
         )}
         <div className="mt-10">
           <Markdown>{doc.body}</Markdown>
