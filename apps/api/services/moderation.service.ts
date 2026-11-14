@@ -9,6 +9,7 @@ import { convertToLink, getDestinations } from './links.service';
 import { findThreats, isSafeBrowsingEnabled, THREAT_LABELS } from './safebrowsing.service';
 import { sendLinksBlockedEmail, supportEmail } from './emailer.service';
 import { BlockedLinkItem } from '../emails/links-blocked-email';
+import { defang } from '../helper/utility';
 
 /**
  * Abuse protection: every short link is checked with Google Safe Browsing in
@@ -301,10 +302,10 @@ export const blockLinks = async (
     links: links.length,
     accounts: accountIds.join(', '),
     suspended: newlySuspended.join(', ') || 'none',
-    reason: links[0].reason,
+    reason: defang(links[0].reason),
     examples: links
       .slice(0, 5)
-      .map((l) => `${l.short_url} -> ${l.url}`)
+      .map((l) => `${defang(l.short_url)} -> ${defang(l.url)}`)
       .join('\n'),
   }).catch((err) => console.error('Unable to email support', err));
 };

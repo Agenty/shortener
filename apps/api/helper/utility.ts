@@ -184,3 +184,11 @@ export const cleanUri = (url: string) => {
   if (!url) return;
   return url.replace('https://', '').replace('http://', '').split('?')[0];
 };
+
+/**
+ * Makes a URL or domain non-clickable for emails, so mail clients don't
+ * auto-link it and spam filters don't flag us for linking unsafe sites:
+ * `https://evil.example.com/a.html` => `hxxps://evil[dot]example[dot]com/a[dot]html`
+ */
+export const defang = (text: string | null | undefined) =>
+  (text || '').replace(/\bhttp(s?):\/\//gi, 'hxxp$1://').replace(/\./g, '[dot]');

@@ -1,6 +1,7 @@
 import { render } from '@react-email/render';
 import { Heading, Section, Text } from '@react-email/components';
 import { BRAND, EmailLayout, Paragraph, SUPPORT_EMAIL } from './components/layout';
+import { defang } from '../helper/utility';
 
 export type BlockedLinkItem = {
   short_url: string;
@@ -34,7 +35,8 @@ const LinksBlockedEmailTemplate = ({
     <Paragraph>
       The following short links on {BRAND} point to a destination that is
       reported as unsafe, or to a domain that is blocked. They no longer
-      redirect visitors:
+      redirect visitors. The addresses are written with [dot] so they can't be
+      opened by accident:
     </Paragraph>
     <Section>
       {links.slice(0, MAX_LISTED).map((link) => (
@@ -42,11 +44,11 @@ const LinksBlockedEmailTemplate = ({
           key={link.short_url}
           className="text-black text-[13px] leading-[20px] my-[8px] break-all"
         >
-          <strong>{link.short_url}</strong>
+          <strong>{defang(link.short_url)}</strong>
           <br />
-          {link.url}
+          {defang(link.url)}
           <br />
-          <span className="text-[#b91c1c]">{link.reason}</span>
+          <span className="text-[#b91c1c]">{defang(link.reason)}</span>
         </Text>
       ))}
       {links.length > MAX_LISTED && (
