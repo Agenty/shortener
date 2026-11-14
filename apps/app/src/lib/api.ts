@@ -52,6 +52,9 @@ const saveSession = (res: AuthResponse) => {
 /** API returns 428 when the signed in user has not verified their email */
 export const EMAIL_NOT_VERIFIED = 428;
 
+/** API returns 401 when the token is missing, expired or revoked */
+export const UNAUTHORIZED = 401;
+
 export class ApiError extends Error {
   constructor(message: string, public status: number) {
     super(message);
@@ -80,6 +83,10 @@ async function request<T>(
   });
 
   if (!res.ok) {
+    // The session is no longer valid, drop it so the app treats the user as signed out
+    if (res.status === UNAUTHORIZED && token) {
+      api.auth.logout();
+    }
     const error = await res.json().catch(() => ({ message: res.statusText }));
     throw new ApiError(error.message || res.statusText, res.status);
   }
