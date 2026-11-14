@@ -15,7 +15,7 @@ import { ThemeProvider } from 'next-themes';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import DashboardLayout from '@/app/layout';
-import { ApiError, EMAIL_NOT_VERIFIED } from '@/lib/api';
+import { ApiError, EMAIL_NOT_VERIFIED, UNAUTHORIZED } from '@/lib/api';
 import { DocumentTitle, type TitleKey } from '@/components/DocumentTitle';
 
 type PageModule = { default: React.ComponentType };
@@ -91,14 +91,24 @@ export const router = createBrowserRouter([
   },
 ]);
 
-/** Any API call made before the email is verified sends the user to onboarding */
+/** Auth pages that handle a 401 themselves, e.g. wrong password on sign in */
+const PUBLIC_PATHS = ['/login', '/signup', '/reset-password', '/oauth/callback'];
+
+/**
+ * Any API call made before the email is verified sends the user to onboarding,
+ * and an expired or revoked session (already cleared by `request`) sends them to login
+ */
 const onApiError = (error: Error) => {
-  if (
-    error instanceof ApiError &&
-    error.status === EMAIL_NOT_VERIFIED &&
-    router.state.location.pathname !== '/onboarding'
-  ) {
+  if (!(error instanceof ApiError)) return;
+  const { pathname } = router.state.location;
+
+  if (error.status === EMAIL_NOT_VERIFIED && pathname !== '/onboarding') {
     router.navigate('/onboarding', { replace: true });
+  }
+
+  if (error.status === UNAUTHORIZED && !PUBLIC_PATHS.includes(pathname)) {
+    queryClient.clear();
+    router.navigate('/login', { replace: true });
   }
 };
 
@@ -107,10 +117,12 @@ const queryClient = new QueryClient({
   mutationCache: new MutationCache({ onError: onApiError }),
   defaultOptions: {
     queries: {
-      // Retrying won't help until the email is verified
+      // Retrying won't help until the email is verified or the user signs in again
       retry: (failureCount, error) =>
-        !(error instanceof ApiError && error.status === EMAIL_NOT_VERIFIED) &&
-        failureCount < 3,
+        !(
+          error instanceof ApiError &&
+          (error.status === EMAIL_NOT_VERIFIED || error.status === UNAUTHORIZED)
+        ) && failureCount < 3,
     },
   },
 });
