@@ -5,7 +5,7 @@ import { Puzzle, X } from 'lucide-react';
 import { BrowserLogo } from '@/components/extension';
 import { buttonVariants } from '@/components/ui/button';
 import { useI18n } from '@/i18n';
-import { CHROME_EXTENSION_SHORT_URL } from '@/lib/site';
+import { CHROME_EXTENSION_URL } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
 const STORAGE_KEY = 'extension-toast-dismissed-at';
@@ -83,7 +83,7 @@ export function ExtensionToast() {
           <p className="text-sm font-semibold">{t.extensionPromo.title}</p>
           <p className="mt-0.5 text-sm text-muted-foreground">{t.extensionPromo.body}</p>
           <a
-            href={CHROME_EXTENSION_SHORT_URL}
+            href={CHROME_EXTENSION_URL}
             target="_blank"
             rel="noopener"
             onClick={dismiss}
