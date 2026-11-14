@@ -1,5 +1,5 @@
 import { render } from '@react-email/render';
-import { Heading, Link, Text } from '@react-email/components';
+import { Heading, Link, Text } from 'react-email';
 import { AuthUser } from '../models/auth-user';
 import {
   ActionButton,

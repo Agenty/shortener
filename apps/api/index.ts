@@ -29,6 +29,7 @@ import { getLinkForRedirect, getRedirectUrl } from './services/links.service';
 import { passwordPage, redirectPage, unavailablePage } from './helper/redirect-page';
 import { setAnalytics } from './services/analytics.service';
 import { getPreviewMeta } from './services/preview.service';
+import { processQueue, QueueMessage, rescanIfStale } from './services/moderation.service';
 
 /** Short link paths, e.g. /summer-sale */
 const SHORT_LINK_PATH = /^\/[a-zA-Z0-9_-]{1,32}$/;

@@ -11,7 +11,7 @@ import {
   Section,
   Tailwind,
   Text,
-} from '@react-email/components';
+} from 'react-email';
 
 export const BRAND = 'shortener.dev';
 export const SITE_URL = 'https://shortener.dev';

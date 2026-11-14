@@ -1,5 +1,5 @@
 import { render } from '@react-email/render';
-import { Heading, Section, Text } from '@react-email/components';
+import { Heading, Section, Text } from 'react-email';
 import { BRAND, EmailLayout, Paragraph, SUPPORT_EMAIL } from './components/layout';
 import { defang } from '../helper/utility';
 
