@@ -104,9 +104,12 @@ admin.delete('/domains/:domain', async (ctx) => {
   return ctx.json({ message: `${domain} removed` }, 200);
 });
 
-// Check a link with Safe Browsing now, blocks it (and suspends the account) if unsafe
+// Check a link with Safe Browsing now, and queue a Cloudflare URL Scanner check
+// (skipped when the URL was scanned in the last 30 days). Unsafe links are
+// blocked and their accounts suspended
 admin.post('/links/:key/scan', async (ctx) => {
-  await scanLinks(ctx.env, [ctx.req.param('key').toLowerCase()]);
+  const key = ctx.req.param('key').toLowerCase();
+  await scanLinks(ctx.env, [key], [key]);
   return ctx.json({ message: 'Link checked' }, 200);
 });
 

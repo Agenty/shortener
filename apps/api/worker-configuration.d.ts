@@ -19,6 +19,7 @@ interface __BaseEnv_CloudflareBindings {
 	CF_ACCOUNT_ID: string;
 	CF_API_KEY: string;
 	GOOGLE_SAFEBROWSE_KEY: string;
+	CF_RADAR_KEY: string;
 	APP_URL: string;
 	API_URL: string;
 	DOMAIN: string;
