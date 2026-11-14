@@ -86,6 +86,34 @@ The API only creates short links to destinations on a domain that the account ha
 
 If you self-host, please keep this check in place. See [Safety](../../README.md#safety).
 
+## Unsafe link protection
+
+Short links are checked with [Google Safe Browsing](https://developers.google.com/safe-browsing) for malware, phishing and unwanted software. The code is in [`services/moderation.service.ts`](services/moderation.service.ts).
+
+1. Creating or updating a link queues a `scan-links` message. The queue consumer checks every link in a batch with one API request and sets `Links.checked_at`.
+2. When a link is clicked and its last check is older than 3 days, the redirect handler queues another check. Links that nobody clicks are not checked again.
+3. When a destination is unsafe:
+   - The link is blocked (`Links.blocked_at`). It shows a "link blocked" page instead of redirecting.
+   - The URL's domain is added to the global blocklist, unless it is whitelisted (for example `docs.google.com`). Private suffixes are kept, so `evil.github.io` blocks only that site.
+   - A `block-domain` message blocks every other link to that domain, in all accounts.
+   - Every active user of the affected accounts is suspended, in the same transaction as the link block. Suspended users can't sign in, use API keys, create links or delete the account.
+   - The account owners, admins and link creators get an email. Support gets a summary.
+4. When an admin blocks a domain with `POST /v1/admin/domains`, its links are blocked and their accounts are emailed. The accounts are not suspended, because a domain that was whitelisted before may have many legitimate users.
+
+If the Safe Browsing API fails, the message is retried by the queue. The link keeps redirecting until a check succeeds. Without `GOOGLE_SAFEBROWSE_KEY`, nothing is checked.
+
+To reverse a false positive (for example, a hacked site that has since been cleaned up), use these admin routes:
+
+| Route                                    | Action                                                             |
+| ---------------------------------------- | ------------------------------------------------------------------ |
+| `DELETE /v1/admin/domains/:domain`       | Remove the domain from the blocklist                               |
+| `POST /v1/admin/accounts/:id/reactivate` | Reactivate suspended users and unblock the account's links         |
+| `POST /v1/admin/links/:key/unblock`      | Unblock one link                                                   |
+| `POST /v1/admin/links/:key/scan`         | Check one link now                                                 |
+| `POST /v1/admin/accounts/:id/suspend`    | Suspend an account manually                                        |
+
+Unblocked links are checked again on their next click.
+
 ## Cloudflare bindings
 
 Defined in [`wrangler.json`](wrangler.json). Replace the IDs with your own resources when you deploy.
@@ -97,7 +125,7 @@ Defined in [`wrangler.json`](wrangler.json). Replace the IDs with your own resou
 | `LINKS`                            | KV               | Short link lookups                        |
 | `BUCKET`                           | R2               | Uploaded files such as preview images     |
 | `API_LOGS`, `SHORTENER_ANALYTICS`  | Analytics Engine | Request logs and click analytics          |
-| `QUEUE`                            | Queue            | Background jobs                           |
+| `QUEUE`                            | Queue            | Safe Browsing checks, blocking links of blocked domains |
 | `PUBLIC_RATE_LIMITER`, `PRO_RATE_LIMITER` | Rate limiting | 5 and 150 requests per minute          |
 | `EMAIL`                            | Send Email       | OTP and transactional emails              |
 
@@ -122,6 +150,7 @@ Put these in `.dev.vars` for local development (git-ignored), and add them with 
 | `PAYPAL_WEBHOOK_ID`                          | With PayPal | ID of the app's webhook, used to verify webhook signatures   |
 | `PAYPAL_API_URL`                             | Optional | `https://api-m.sandbox.paypal.com` for sandbox, live by default |
 | `AGENTY_KEY`                                 | Optional | Invoice generation through the Agenty API                      |
+| `GOOGLE_SAFEBROWSE_KEY`                      | Recommended | Google Safe Browsing API key, checks links for malware and phishing |
 
 ## Run locally
 

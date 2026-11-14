@@ -58,6 +58,18 @@ import type { Link } from '@/types/link';
 
 const PER_PAGE = 25;
 
+/** Blocked links (unsafe destination or blocked domain) can't be enabled again */
+const LinkStatusBadge = ({ link, className }: { link: Link; className?: string }) =>
+  link.blocked_at ? (
+    <Badge variant="destructive" className={className} title={link.blocked_reason || undefined}>
+      Blocked
+    </Badge>
+  ) : (
+    <Badge variant={link.is_enabled ? 'default' : 'secondary'} className={className}>
+      {link.is_enabled ? 'Enabled' : 'Disabled'}
+    </Badge>
+  );
+
 function getDomain(url: string) {
   try {
     return new URL(url).hostname;
@@ -168,12 +180,7 @@ function LinksGrid({
               <span>Analytics</span>
             </RouterLink>
             <div className="flex items-center gap-2">
-              <Badge
-                variant={link.is_enabled ? 'default' : 'secondary'}
-                className="text-xs"
-              >
-                {link.is_enabled ? 'Enabled' : 'Disabled'}
-              </Badge>
+              <LinkStatusBadge link={link} className="text-xs" />
               <span className="text-xs text-muted-foreground">
                 {new Date(link.created_at).toLocaleDateString()}
               </span>
@@ -255,11 +262,7 @@ function LinksTable({
                 </RouterLink>
               </TableCell>
               <TableCell className="hidden sm:table-cell">
-                <Badge
-                  variant={link.is_enabled ? 'default' : 'secondary'}
-                >
-                  {link.is_enabled ? 'Enabled' : 'Disabled'}
-                </Badge>
+                <LinkStatusBadge link={link} />
               </TableCell>
               <TableCell className="hidden sm:table-cell text-muted-foreground text-sm">
                 {new Date(link.created_at).toLocaleDateString()}

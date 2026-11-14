@@ -164,12 +164,33 @@ const PasswordPage: FC<{ invalid: boolean }> = ({ invalid }) => (
   </Layout>
 );
 
-const UnavailablePage: FC<{ reason: 'expired' | 'not-found' }> = ({ reason }) => (
-  <Layout title={reason === 'expired' ? 'Link expired' : 'Link not found'}>
-    <h1>{reason === 'expired' ? 'This link has expired' : 'This link is not available'}</h1>
+type UnavailableReason = 'expired' | 'not-found' | 'blocked';
+
+const UNAVAILABLE: Record<UnavailableReason, { title: string; heading: string; detail: string }> = {
+  expired: {
+    title: 'Link expired',
+    heading: 'This link has expired',
+    detail: 'has now expired',
+  },
+  'not-found': {
+    title: 'Link not found',
+    heading: 'This link is not available',
+    detail: 'has been deleted or disabled',
+  },
+  blocked: {
+    title: 'Link blocked',
+    heading: 'This link has been blocked',
+    detail:
+      'has been blocked because its destination was reported as unsafe (malware or phishing), or its domain is blocked',
+  },
+};
+
+const UnavailablePage: FC<{ reason: UnavailableReason }> = ({ reason }) => (
+  <Layout title={UNAVAILABLE[reason].title}>
+    <h1>{UNAVAILABLE[reason].heading}</h1>
     <p>
       This short link was created using <a href={HOME_URL}>shortener.dev</a> and{' '}
-      {reason === 'expired' ? 'has now expired' : 'has been deleted or disabled'}.
+      {UNAVAILABLE[reason].detail}.
     </p>
     <p>
       Create your own branded short links with click analytics, UTM tracking, geo-targeting and
@@ -187,5 +208,5 @@ export const redirectPage = (url: string) => doc(<RedirectPage url={url} />);
 
 export const passwordPage = (invalid: boolean) => doc(<PasswordPage invalid={invalid} />);
 
-export const unavailablePage = (reason: 'expired' | 'not-found') =>
+export const unavailablePage = (reason: UnavailableReason) =>
   doc(<UnavailablePage reason={reason} />);

@@ -121,10 +121,21 @@ CREATE TABLE IF NOT EXISTS Links(
   is_enabled INTEGER NOT NULL DEFAULT 1,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME,
+  -- Last Google Safe Browsing check, links are checked again on redirect every few days
+  checked_at DATETIME,
+  -- Unsafe destination or blocked domain, blocked links stop redirecting
+  -- and can't be enabled by the account, only unblocked by admin
+  blocked_at DATETIME,
+  blocked_reason TEXT,
   FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (project_id) REFERENCES Projects(project_id) ON DELETE CASCADE
 );
+
+-- Migration for existing databases:
+-- ALTER TABLE Links ADD COLUMN checked_at DATETIME;
+-- ALTER TABLE Links ADD COLUMN blocked_at DATETIME;
+-- ALTER TABLE Links ADD COLUMN blocked_reason TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_links_account_created ON Links(account_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_links_project ON Links(project_id);
