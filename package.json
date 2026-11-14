@@ -35,10 +35,5 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0"
   },
-  "devEngines": {
-    "packageManager": {
-      "name": "npm",
-      "version": "11.19.0"
-    }
-  }
+  "packageManager": "npm@11.16.0"
 }
