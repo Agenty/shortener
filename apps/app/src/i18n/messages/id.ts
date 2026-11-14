@@ -13,6 +13,8 @@ const id: Messages = {
     signingIn: "Sedang masuk",
     verifyEmail: "Verifikasi email",
     links: "Tautan",
+    projects: "Proyek",
+    admin: "Admin",
     analytics: "Analitik",
     reports: "Laporan",
     domains: "Domain",
@@ -37,6 +39,8 @@ const id: Messages = {
   nav: {
     menu: "Menu",
     links: "Tautan",
+    projects: "Proyek",
+    admin: "Admin",
     analytics: "Analitik",
     reports: "Laporan",
     domains: "Domain",

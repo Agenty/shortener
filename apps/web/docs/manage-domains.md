@@ -4,6 +4,7 @@ nav: Manage domains
 description: See which domains you can shorten links to, browse the global whitelist of popular sites, set a default domain, and remove domains you no longer use.
 section: Domains
 order: 2
+updated: 2026-10-19
 ---
 
 The **Domains** page has two tabs. **My domains** lists the domains you've added, with their verification status. **Global whitelisted** lists the popular sites everyone can link to without verifying anything.

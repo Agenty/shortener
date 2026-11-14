@@ -11,6 +11,9 @@ export interface AuthUser {
   plan?: string;
   status?: string;
   is_verified?: boolean;
+  /** Plan limits, from `/profile/me` */
+  projects_limit?: number;
+  links_limit?: number;
 }
 
 export interface AuthResponse extends AuthUser {

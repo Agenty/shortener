@@ -4,6 +4,7 @@ nav: Browser extension
 description: Install the Shortener.dev extension for Chrome or Firefox, shorten the page you are on in one click, shorten links with right click and check clicks from the side panel.
 section: Get started
 order: 2
+updated: 2026-10-29
 ---
 
 The Shortener.dev extension puts the link shortener in your browser's side panel. I use it mostly for the boring case: I'm on a page, I want a short link for it, and I don't want to open the dashboard, paste the URL and come back. With the extension it's the toolbar icon, then **Shorten link**, and the short link is already on the clipboard.

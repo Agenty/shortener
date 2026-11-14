@@ -28,6 +28,8 @@ import type { Domain } from "@/types/domain";
 import { initialLinkForm } from "@/types/link";
 import { UnverifiedDomainDialog } from "@/app/domains/components/UnverifiedDomainDialog";
 import { VerifyDomainDialog } from "@/app/domains/components/VerifyDomainDialog";
+import { ProjectSelect } from "@/app/projects/components/ProjectSelect";
+import { useProjects } from "@/hooks/use-projects";
 
 const KEY_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz";
 
@@ -41,8 +43,14 @@ const unverifiedHost = (error: Error) => {
   return hosts?.split(", ")[0].replace(/^www\./, "") || null;
 };
 
-export function CreateLinkDialog() {
+interface CreateLinkDialogProps {
+  /** Project picked when the builder opens, such as the one the links list is filtered by */
+  projectId?: number | null;
+}
+
+export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
   const [open, setOpen] = useState(false);
+  const { projects } = useProjects();
   const [link, setLink] = useState<LinkFormState>({ ...initialLinkForm, params: { ...initialLinkForm.params }, geo: [] });
   const [meta, setMeta] = useState<{ data: UrlMeta | null; loading: boolean }>({ data: null, loading: false });
   const [showPassword, setShowPassword] = useState(false);
@@ -71,6 +79,7 @@ export function CreateLinkDialog() {
         },
       });
       queryClient.invalidateQueries({ queryKey: ["links"] });
+      if (created.project_id) queryClient.invalidateQueries({ queryKey: ["projects"] });
       setOpen(false);
       resetForm();
     },
@@ -129,6 +138,7 @@ export function CreateLinkDialog() {
     const payload: LinkCreatePayload = {
       url: link.url,
       ...(link.key ? { key: link.key } : {}),
+      ...(link.project_id ? { project_id: Number(link.project_id) } : {}),
       ...(link.expire_at ? { expire_at: new Date(link.expire_at).toISOString() } : {}),
       ...(link.password ? { password: link.password } : {}),
       ...(link.title ? { title: link.title } : {}),
@@ -165,7 +175,14 @@ export function CreateLinkDialog() {
   const previewDomain = meta.data?.domain || "example.com";
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        setOpen(v);
+        if (!v) resetForm();
+        else if (projectId) updateLink("project_id", String(projectId));
+      }}
+    >
       <DialogTrigger render={<Button />}>
         <Plus className="mr-2 h-4 w-4" /> Create Link
       </DialogTrigger>
@@ -233,6 +250,21 @@ export function CreateLinkDialog() {
                 <p className="text-xs text-muted-foreground">
                   Customize the back-half, or leave it blank to auto-generate.
                 </p>
+                {projects.length > 0 && (
+                  <div className="space-y-2">
+                    <Label htmlFor="project">
+                      Project <span className="font-normal text-muted-foreground">(optional)</span>
+                    </Label>
+                    <ProjectSelect
+                      id="project"
+                      projects={projects}
+                      value={link.project_id ? Number(link.project_id) : null}
+                      onChange={(id) => updateLink("project_id", id ? String(id) : "")}
+                      noneLabel="No project"
+                      className="w-full"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Options Accordion */}

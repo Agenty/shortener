@@ -13,6 +13,8 @@ const est: Messages = {
     signingIn: "Sisselogimine",
     verifyEmail: "E-posti kinnitamine",
     links: "Lingid",
+    projects: "Projektid",
+    admin: "Admin",
     analytics: "Statistika",
     reports: "Aruanded",
     domains: "Domeenid",
@@ -37,6 +39,8 @@ const est: Messages = {
   nav: {
     menu: "Menüü",
     links: "Lingid",
+    projects: "Projektid",
+    admin: "Admin",
     analytics: "Statistika",
     reports: "Aruanded",
     domains: "Domeenid",

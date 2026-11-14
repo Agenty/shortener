@@ -4,6 +4,7 @@ nav: Introduction
 description: How to create short links, add UTM tracking, expiration, passwords and geo targeting, verify your domains and read click analytics in Shortener.dev.
 section: Get started
 order: 1
+updated: 2026-10-29
 ---
 
 Shortener.dev turns a long URL into a short link like `srt1.link/spring-sale` and records every click: when it happened, where the visitor came from, and which country, browser and device they used. These docs follow the dashboard at [app.shortener.dev](https://app.shortener.dev) screen by screen, and the [API reference](/docs/api) covers the same features in code.

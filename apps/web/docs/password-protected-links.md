@@ -4,6 +4,7 @@ nav: Password protection
 description: Restrict a short link with a password, so only people you share the password with can open the destination page.
 section: Link options
 order: 4
+updated: 2026-10-18
 ---
 
 A password protected short link asks for a password before it lets visitors through to the destination. Use one when you share a private document, a pre-release page or a client deliverable through a public channel and only a few people should open it.

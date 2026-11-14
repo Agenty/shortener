@@ -13,6 +13,8 @@ const el: Messages = {
     signingIn: "Γίνεται σύνδεση",
     verifyEmail: "Επαλήθευση email",
     links: "Σύνδεσμοι",
+    projects: "Έργα",
+    admin: "Διαχείριση",
     analytics: "Στατιστικά",
     reports: "Αναφορές",
     domains: "Τομείς",
@@ -37,6 +39,8 @@ const el: Messages = {
   nav: {
     menu: "Μενού",
     links: "Σύνδεσμοι",
+    projects: "Έργα",
+    admin: "Διαχείριση",
     analytics: "Στατιστικά",
     reports: "Αναφορές",
     domains: "Τομείς",

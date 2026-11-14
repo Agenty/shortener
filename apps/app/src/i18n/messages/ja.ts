@@ -13,6 +13,8 @@ const ja: Messages = {
     signingIn: "ログイン中",
     verifyEmail: "メールアドレスの確認",
     links: "リンク",
+    projects: "プロジェクト",
+    admin: "管理",
     analytics: "分析",
     reports: "レポート",
     domains: "ドメイン",
@@ -37,6 +39,8 @@ const ja: Messages = {
   nav: {
     menu: "メニュー",
     links: "リンク",
+    projects: "プロジェクト",
+    admin: "管理",
     analytics: "分析",
     reports: "レポート",
     domains: "ドメイン",

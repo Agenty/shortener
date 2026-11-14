@@ -13,6 +13,8 @@ const th: Messages = {
     signingIn: "กำลังเข้าสู่ระบบ",
     verifyEmail: "ยืนยันอีเมล",
     links: "ลิงก์",
+    projects: "โปรเจกต์",
+    admin: "ผู้ดูแลระบบ",
     analytics: "สถิติ",
     reports: "รายงาน",
     domains: "โดเมน",
@@ -37,6 +39,8 @@ const th: Messages = {
   nav: {
     menu: "เมนู",
     links: "ลิงก์",
+    projects: "โปรเจกต์",
+    admin: "ผู้ดูแลระบบ",
     analytics: "สถิติ",
     reports: "รายงาน",
     domains: "โดเมน",

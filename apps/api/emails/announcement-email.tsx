@@ -1,5 +1,5 @@
 import { render } from '@react-email/render';
-import { Link, Section } from '@react-email/components';
+import { Link, Section } from 'react-email';
 import { BRAND, EmailLayout, Paragraph } from './components/layout';
 
 const AnnouncementEmailTemplate = ({

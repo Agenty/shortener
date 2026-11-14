@@ -1,4 +1,5 @@
-import { Loader2 } from 'lucide-react';
+import { ExternalLink, Loader2 } from 'lucide-react';
+import { GithubIcon } from '@/components/GithubIcon';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -49,7 +50,9 @@ export function UnverifiedDomainDialog({
               nativeButton={false}
               render={<a href={whitelistRequestUrl(host)} target="_blank" rel="noopener noreferrer" />}
             >
+              <GithubIcon data-icon="inline-start" />
               Request whitelisting
+              <ExternalLink data-icon="inline-end" className="text-muted-foreground" />
             </Button>
           )}
           <Button onClick={onVerify} disabled={verifying}>

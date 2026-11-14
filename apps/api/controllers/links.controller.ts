@@ -4,6 +4,7 @@ import {
   getLinkByKey,
   getLinkCount,
   getLinks,
+  getProjectLinkCount,
   updateLink,
 } from '../services/links.service';
 import { Link, linkSchema } from '../models/link';
@@ -16,6 +17,13 @@ import { createApi, errorResponses, messageSchema } from '../helper/openapi';
 import { API_SAMPLES } from '../helper/api-samples';
 
 const links = createApi();
+
+const linksQuerySchema = pagedSchema.extend({
+  project_id: z.coerce.number().int().positive().optional().openapi({
+    example: 1,
+    description: 'Only list the short links in this project',
+  }),
+});
 
 const keyParamSchema = z.object({
   key: z.string().max(32).openapi({
@@ -32,9 +40,9 @@ links.openapi(
     path: '/',
     summary: 'List short links',
     description:
-      'Get a paginated list of short links in your account, newest first. Use `search` to find a short link by its key or long destination URL.',
+      'Get a paginated list of short links in your account, newest first. Use `search` to find a short link by its key or long destination URL, and `project_id` to list one project.',
     request: {
-      query: pagedSchema,
+      query: linksQuerySchema,
     },
     responses: {
       200: {
@@ -54,7 +62,9 @@ links.openapi(
     const result = await getLinks(ctx.env, authUser, paged);
     let total = result.length;
     if (paged.offset > 0 || total >= paged.limit) {
-      total = await getLinkCount(ctx.env, authUser, true);
+      total = paged.project_id
+        ? await getProjectLinkCount(ctx.env, authUser, paged.project_id)
+        : await getLinkCount(ctx.env, authUser, true);
     }
     return ctx.json(
       toTableResult(result, paged.offset, paged.limit, total),

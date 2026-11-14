@@ -1,6 +1,8 @@
 import { Hono } from 'hono';
 import {
   getAllUsers,
+  getLinkWithOwner,
+  setLinkEnabled,
 } from '../services/admin.service';
 import { AuthUser, LevelType } from '../models/auth-user';
 import { getLinks, SHORT_DOMAIN } from '../services/links.service';
@@ -30,7 +32,8 @@ import {
 const admin = new Hono<{ Bindings: CloudflareBindings }>();
 
 admin.get('/users', async (ctx) => {
-  const users = await getAllUsers(ctx.env);
+  const { offset, limit, search } = pagedSchema.parse(ctx.req.query());
+  const users = await getAllUsers(ctx.env, offset, Math.min(limit, 100), search?.trim() || undefined);
   if (!users) {
     throw new HTTPException(404, { message: 'No users found' });
   }
@@ -52,6 +55,28 @@ admin.get('/links/:id', async (ctx) => {
     throw new HTTPException(404, { message: 'No links found' });
   }
   return ctx.json(links, 200);
+});
+
+// Look up any short link by its back-half, e.g. from an abuse report
+admin.get('/link/:key', async (ctx) => {
+  const link = await getLinkWithOwner(ctx.env, ctx.req.param('key'));
+  if (!link) {
+    throw new HTTPException(404, { message: `No short link found with key: ${ctx.req.param('key')}` });
+  }
+  return ctx.json(link, 200);
+});
+
+// Disable a reported link, or enable it again, for every visitor
+admin.put('/link/:key/status', async (ctx) => {
+  const { is_enabled } = await ctx.req.json<{ is_enabled?: unknown }>();
+  if (typeof is_enabled !== 'boolean') {
+    throw new HTTPException(400, { message: 'is_enabled must be true or false' });
+  }
+  const key = ctx.req.param('key');
+  if (!(await setLinkEnabled(ctx.env, key, is_enabled))) {
+    throw new HTTPException(404, { message: `No short link found with key: ${key}` });
+  }
+  return ctx.json({ message: `${key} ${is_enabled ? 'enabled' : 'disabled'}` }, 200);
 });
 
 admin.get('/top-links', async (ctx) => {

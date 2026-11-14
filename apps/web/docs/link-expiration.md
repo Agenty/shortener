@@ -4,6 +4,7 @@ nav: Expiration
 description: Make a short link stop working automatically at a date and time, for limited-time offers, event registrations and temporary campaigns.
 section: Link options
 order: 1
+updated: 2026-10-18
 ---
 
 An expiring link works until the date you choose and then stops redirecting, so you don't have to remember to delete it. Use it for flash sales, event sign-ups, beta invites or any URL that shouldn't work after a deadline.

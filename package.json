@@ -30,5 +30,10 @@
       "type": "opencollective",
       "url": "https://opencollective.com/agenty"
     }
-  ]
+  ],
+  "overrides": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0"
+  },
+  "packageManager": "npm@11.16.0"
 }

@@ -4,6 +4,7 @@ nav: Geo targeting
 description: Send visitors from specific countries to a localized page, store or currency with one geo-targeted short link.
 section: Link options
 order: 6
+updated: 2026-10-18
 ---
 
 Geo targeting sends visitors to a different URL based on the country they're in. Share one link in a global campaign, and UK visitors land on your `.co.uk` store, German visitors on the German page, and everyone else on the **Original URL**.

@@ -13,6 +13,8 @@ const da: Messages = {
     signingIn: "Logger ind",
     verifyEmail: "Bekræft e-mail",
     links: "Links",
+    projects: "Projekter",
+    admin: "Admin",
     analytics: "Statistik",
     reports: "Rapporter",
     domains: "Domæner",
@@ -37,6 +39,8 @@ const da: Messages = {
   nav: {
     menu: "Menu",
     links: "Links",
+    projects: "Projekter",
+    admin: "Admin",
     analytics: "Statistik",
     reports: "Rapporter",
     domains: "Domæner",

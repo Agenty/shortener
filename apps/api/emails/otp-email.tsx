@@ -1,5 +1,5 @@
 import { render } from '@react-email/render';
-import { Heading } from '@react-email/components';
+import { Heading } from 'react-email';
 import { AuthUser } from '../models/auth-user';
 import { BRAND, EmailLayout, OtpCode, Paragraph } from './components/layout';
 

@@ -14,6 +14,8 @@ import {
   Link2,
   SearchX,
   QrCode,
+  FolderInput,
+  Check,
 } from 'lucide-react';
 import { Link as RouterLink } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -31,6 +33,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -55,6 +61,10 @@ import { QrCodeDialog } from './components/QrCodeDialog';
 import { api } from '@/lib/api';
 import { useViewPreference } from '@/hooks/use-view-preference';
 import type { Link } from '@/types/link';
+import type { Project } from '@/types/project';
+import { useProjects } from '@/hooks/use-projects';
+import { ProjectBadge, ProjectDot } from '@/app/projects/components/ProjectBadge';
+import { ProjectSelect } from '@/app/projects/components/ProjectSelect';
 
 const PER_PAGE = 25;
 
@@ -82,17 +92,23 @@ function LinkFavicon({ url }: { url: string }) {
   return <DomainFavicon domain={getDomain(url)} size="sm" />;
 }
 
+type RowActions = {
+  onCopy: (key: string) => void;
+  onQr: (key: string) => void;
+  onDelete: (key: string) => void;
+  onMove: (link: Link, projectId: number | null) => void;
+  projects: Project[];
+  projectsById: Map<number, Project>;
+};
+
 function LinkActions({
   link,
   onCopy,
   onQr,
   onDelete,
-}: {
-  link: Link;
-  onCopy: (key: string) => void;
-  onQr: (key: string) => void;
-  onDelete: (key: string) => void;
-}) {
+  onMove,
+  projects,
+}: { link: Link } & Omit<RowActions, 'projectsById'>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8" />}>
@@ -108,6 +124,34 @@ function LinkActions({
         <DropdownMenuItem render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}>
           <ExternalLink className="mr-2 h-4 w-4" /> Open
         </DropdownMenuItem>
+        {projects.length > 0 && (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <FolderInput className="mr-2 h-4 w-4" /> Move to project
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem onClick={() => onMove(link, null)}>
+                <span className="mr-2 inline-flex w-4 justify-center">
+                  {!link.project_id && <Check className="h-4 w-4" />}
+                </span>
+                No project
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {projects.map((p) => (
+                <DropdownMenuItem key={p.project_id} onClick={() => onMove(link, p.project_id)}>
+                  <span className="mr-2 inline-flex w-4 justify-center">
+                    {link.project_id === p.project_id ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <ProjectDot color={p.color} />
+                    )}
+                  </span>
+                  <span className="truncate">{p.name}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+        )}
         <DropdownMenuItem
           className="text-destructive"
           onClick={() => onDelete(link.key)}
@@ -119,17 +163,8 @@ function LinkActions({
   );
 }
 
-function LinksGrid({
-  links,
-  onCopy,
-  onQr,
-  onDelete,
-}: {
-  links: Link[];
-  onCopy: (key: string) => void;
-  onQr: (key: string) => void;
-  onDelete: (key: string) => void;
-}) {
+function LinksGrid({ links, ...actions }: { links: Link[] } & RowActions) {
+  const { onCopy, onQr, projectsById } = actions;
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
       {links.map((link) => (
@@ -161,7 +196,7 @@ function LinksGrid({
                 <QrCode className="h-3 w-3" />
               </Button>
             </div>
-            <LinkActions link={link} onCopy={onCopy} onQr={onQr} onDelete={onDelete} />
+            <LinkActions link={link} {...actions} />
           </div>
           <a
             href={link.url}
@@ -179,8 +214,16 @@ function LinksGrid({
               <BarChart3 className="h-3.5 w-3.5" />
               <span>Analytics</span>
             </RouterLink>
-            <div className="flex items-center gap-2">
-              <LinkStatusBadge link={link} className="text-xs" />
+            <div className="flex items-center gap-2 min-w-0">
+              {link.project_id && projectsById.get(link.project_id) && (
+                <ProjectBadge project={projectsById.get(link.project_id)!} />
+              )}
+              <Badge
+                variant={link.is_enabled ? 'default' : 'secondary'}
+                className="text-xs"
+              >
+                {link.is_enabled ? 'Enabled' : 'Disabled'}
+              </Badge>
               <span className="text-xs text-muted-foreground">
                 {new Date(link.created_at).toLocaleDateString()}
               </span>
@@ -192,17 +235,8 @@ function LinksGrid({
   );
 }
 
-function LinksTable({
-  links,
-  onCopy,
-  onQr,
-  onDelete,
-}: {
-  links: Link[];
-  onCopy: (key: string) => void;
-  onQr: (key: string) => void;
-  onDelete: (key: string) => void;
-}) {
+function LinksTable({ links, ...actions }: { links: Link[] } & RowActions) {
+  const { onCopy, onQr, projectsById } = actions;
   return (
     <div className="border rounded-lg">
       <Table>
@@ -251,6 +285,9 @@ function LinksTable({
                 >
                   {link.url}
                 </a>
+                {link.project_id && projectsById.get(link.project_id) && (
+                  <ProjectBadge project={projectsById.get(link.project_id)!} className="mt-1" />
+                )}
               </TableCell>
               <TableCell>
                 <RouterLink
@@ -268,7 +305,7 @@ function LinksTable({
                 {new Date(link.created_at).toLocaleDateString()}
               </TableCell>
               <TableCell>
-                <LinkActions link={link} onCopy={onCopy} onQr={onQr} onDelete={onDelete} />
+                <LinkActions link={link} {...actions} />
               </TableCell>
             </TableRow>
           ))}
@@ -281,6 +318,9 @@ function LinksTable({
 export default function Links() {
   const [search, setSearch] = useQueryState('q', { defaultValue: '' });
   const [page, setPage] = useQueryState('page', { defaultValue: '1' });
+  const [project, setProject] = useQueryState('project');
+  const projectId = Number(project) || null;
+  const { projects, byId: projectsById } = useProjects();
   const [deleteKey, setDeleteKey] = useState<string | null>(null);
   const [qrKey, setQrKey] = useState<string | null>(null);
   const [view, setView] = useViewPreference('links-view');
@@ -290,10 +330,39 @@ export default function Links() {
   const offset = (currentPage - 1) * PER_PAGE;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['links', search, currentPage],
+    queryKey: ['links', search, currentPage, projectId],
     queryFn: () =>
-      api.links.list({ offset, limit: PER_PAGE, search: search || undefined }),
+      api.links.list({
+        offset,
+        limit: PER_PAGE,
+        search: search || undefined,
+        project_id: projectId ?? undefined,
+      }),
   });
+
+  // An update replaces every setting, so the full link goes back with the new project
+  const moveMutation = useMutation({
+    mutationFn: ({ link, projectId }: { link: Link; projectId: number | null }) =>
+      api.links.update(link.key, { ...link, project_id: projectId }),
+    onSuccess: (_, { link, projectId }) => {
+      queryClient.invalidateQueries({ queryKey: ['links'] });
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      const name = projectId ? projectsById.get(projectId)?.name : null;
+      toast.success(name ? `Moved ${link.key} to ${name}` : `Removed ${link.key} from its project`);
+    },
+    onError: (error: Error) => toast.error(error.message || 'Failed to move link'),
+  });
+  const moveLink = (link: Link, projectId: number | null) => {
+    if (link.project_id !== projectId) moveMutation.mutate({ link, projectId });
+  };
+  const rowActions = {
+    onCopy: (key: string) => copyLink(key),
+    onQr: setQrKey,
+    onDelete: setDeleteKey,
+    onMove: moveLink,
+    projects,
+    projectsById,
+  };
 
   const deleteMutation = useMutation({
     mutationFn: (key: string) => api.links.delete(key),
@@ -351,8 +420,20 @@ export default function Links() {
                 }}
               />
             </div>
+            {projects.length > 0 && (
+              <ProjectSelect
+                projects={projects}
+                value={projectId}
+                onChange={(id) => {
+                  setProject(id ? String(id) : null);
+                  setPage('1');
+                }}
+                noneLabel="All projects"
+                className="w-[160px]"
+              />
+            )}
             <ApiExamplesSheet />
-            <CreateLinkDialog />
+            <CreateLinkDialog projectId={projectId} />
           </div>
         </div>
       </div>
@@ -398,6 +479,20 @@ export default function Links() {
               </Button>
             }
           />
+        ) : projectId ? (
+          <EmptyState
+            icon={Link2}
+            title={`No links in ${projectsById.get(projectId)?.name ?? 'this project'}`}
+            description="Create a link in this project, or move existing links here from their ... menu."
+            action={
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setProject(null)}>
+                  Show all links
+                </Button>
+                <CreateLinkDialog projectId={projectId} />
+              </div>
+            }
+          />
         ) : (
           <EmptyState
             icon={Link2}
@@ -412,9 +507,9 @@ export default function Links() {
         !error &&
         links.length > 0 &&
         (view === 'grid' ? (
-          <LinksGrid links={links} onCopy={copyLink} onQr={setQrKey} onDelete={setDeleteKey} />
+          <LinksGrid links={links} {...rowActions} />
         ) : (
-          <LinksTable links={links} onCopy={copyLink} onQr={setQrKey} onDelete={setDeleteKey} />
+          <LinksTable links={links} {...rowActions} />
         ))}
 
       {/* Pagination */}

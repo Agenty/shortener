@@ -15,6 +15,8 @@ const en = {
     signingIn: "Signing In",
     verifyEmail: "Verify Email",
     links: "Links",
+    projects: "Projects",
+    admin: "Admin",
     analytics: "Analytics",
     reports: "Reports",
     domains: "Domains",
@@ -39,6 +41,8 @@ const en = {
   nav: {
     menu: "Menu",
     links: "Links",
+    projects: "Projects",
+    admin: "Admin",
     analytics: "Analytics",
     reports: "Reports",
     domains: "Domains",

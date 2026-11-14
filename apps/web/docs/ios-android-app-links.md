@@ -4,6 +4,7 @@ nav: iOS and Android targeting
 description: Use iOS Targeting and Android Targeting to send mobile visitors to the App Store or Google Play, while desktop visitors go to your website.
 section: Link options
 order: 5
+updated: 2026-10-18
 ---
 
 One short link can go to three places depending on the visitor's device. iPhone and iPad users go to your App Store listing, Android users go to Google Play, and everyone else goes to the **Original URL**. That's useful for a "download our app" link in an email, a QR code on packaging or a bio link.

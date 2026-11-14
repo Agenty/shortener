@@ -4,6 +4,7 @@ nav: Click analytics
 description: See how many clicks your short links get over time, and which countries, referrers, browsers, operating systems and devices they come from.
 section: Analytics
 order: 1
+updated: 2026-10-29
 ---
 
 The **Analytics** page shows every click on your short links, broken down by when, where and how people clicked. Use it to see which campaign is working, which channel sends the most traffic, and whether your audience is mostly on mobile.

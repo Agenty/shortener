@@ -13,6 +13,8 @@ const tr: Messages = {
     signingIn: "Giriş yapılıyor",
     verifyEmail: "E-postayı doğrula",
     links: "Bağlantılar",
+    projects: "Projeler",
+    admin: "Yönetim",
     analytics: "Analitik",
     reports: "Raporlar",
     domains: "Alan adları",
@@ -37,6 +39,8 @@ const tr: Messages = {
   nav: {
     menu: "Menü",
     links: "Bağlantılar",
+    projects: "Projeler",
+    admin: "Yönetim",
     analytics: "Analitik",
     reports: "Raporlar",
     domains: "Alan adları",

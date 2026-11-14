@@ -4,6 +4,7 @@ nav: Social preview
 description: Set a custom Open Graph title, description and image for a short link, and check how it looks on Twitter / X, Facebook and LinkedIn before you share it.
 section: Link options
 order: 3
+updated: 2026-11-14
 ---
 
 When you paste a link into a post, Twitter / X, Facebook, LinkedIn and messaging apps show a preview card with a title, a short description and an image. That card usually comes from the destination page's Open Graph tags. If those tags are missing or don't suit the campaign, override them with **Social Preview**.
@@ -28,7 +29,7 @@ The panel is hidden on narrow screens. Widen the browser window if you don't see
 | Description | 155 characters |
 | Image URL | Must end with `.jpg`, `.jpeg`, `.png`, `.gif`, `.bmp` or `.webp` |
 
-Any field you leave empty falls back to what the destination page provides.
+Any field you leave empty falls back to what the destination page provides. [Password-protected links](/docs/password-protected-links) are the exception: they only show the preview you set here, so the destination stays private until someone enters the password.
 
 ## Image size
 

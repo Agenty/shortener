@@ -28,6 +28,7 @@ import { logger } from './middleware/logger';
 import { getLinkForRedirect, getRedirectUrl } from './services/links.service';
 import { passwordPage, redirectPage, unavailablePage } from './helper/redirect-page';
 import { setAnalytics } from './services/analytics.service';
+import { getPreviewMeta } from './services/preview.service';
 import { processQueue, QueueMessage, rescanIfStale } from './services/moderation.service';
 
 /** Short link paths, e.g. /summer-sale */
@@ -233,25 +234,30 @@ app.notFound(async (ctx) => {
     return ctx.html(unavailablePage("expired"), 410);
   }
 
-  // Password protected link, ask for password and verify on form post
+  const userAgent = ctx.req.header("user-agent");
+
+  // Password protected link, ask for password and verify on form post.
+  // Only the link's own preview tags are shown, never the destination's
   if (link.password) {
+    const meta = await getPreviewMeta(ctx.env, link, userAgent, false);
     if (ctx.req.method !== "POST") {
-      return ctx.html(passwordPage(false), 200, { "Cache-Control": "no-store" });
+      return ctx.html(passwordPage(false, link.short_url, meta), 200, { "Cache-Control": "no-store" });
     }
     const { password } = await ctx.req.parseBody();
     if (password !== link.password) {
-      return ctx.html(passwordPage(true), 401, { "Cache-Control": "no-store" });
+      return ctx.html(passwordPage(true, link.short_url, meta), 401, { "Cache-Control": "no-store" });
     }
   }
 
   const url = getRedirectUrl(
     link,
-    ctx.req.header("user-agent"),
+    userAgent,
     ctx.req.raw.cf?.country as string | undefined,
   );
   setAnalytics(ctx.env, link, ctx.req.raw, url);
 
-  return ctx.html(redirectPage(url), 200, {
+  const meta = await getPreviewMeta(ctx.env, link, userAgent);
+  return ctx.html(redirectPage(url, link.short_url, meta), 200, {
     "Cache-Control": "no-store",
   });
 });

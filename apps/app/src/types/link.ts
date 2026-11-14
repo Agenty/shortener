@@ -6,6 +6,8 @@ export interface GeoTarget {
 export interface LinkFormState {
   url: string;
   key: string;
+  /** Empty string for no project */
+  project_id: string;
   expire_at: string;
   password: string;
   title: string;
@@ -20,6 +22,7 @@ export interface LinkFormState {
 export const initialLinkForm: LinkFormState = {
   url: "",
   key: "",
+  project_id: "",
   expire_at: "",
   password: "",
   title: "",
@@ -33,6 +36,7 @@ export const initialLinkForm: LinkFormState = {
 
 export interface LinkCreatePayload {
   url: string;
+  project_id?: number | null;
   key?: string;
   expire_at?: string;
   password?: string;
@@ -47,7 +51,7 @@ export interface LinkCreatePayload {
 
 export interface Link {
   key: string;
-  project_id: string | null;
+  project_id: number | null;
   user_id: number;
   url: string;
   short_url: string;

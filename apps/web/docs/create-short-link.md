@@ -3,6 +3,7 @@ title: Create a short link
 description: Shorten a long URL with a custom back-half in the Shortener.dev link builder, preview how it looks on social media, and copy it to share.
 section: Short links
 order: 1
+updated: 2026-10-29
 ---
 
 Open **Links** in the sidebar and click **Create Link** in the top right corner. The **Short Link Builder** opens, with the form on the left and a live social media preview on the right.

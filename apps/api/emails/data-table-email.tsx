@@ -1,5 +1,5 @@
 import { render } from '@react-email/render';
-import { Column, Heading, Row, Section } from '@react-email/components';
+import { Column, Heading, Row, Section } from 'react-email';
 import { capitalize } from 'lodash';
 import { EmailLayout, Paragraph } from './components/layout';
 

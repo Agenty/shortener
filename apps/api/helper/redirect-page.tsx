@@ -1,6 +1,7 @@
 /** @jsxImportSource hono/jsx */
 import type { Child, FC } from 'hono/jsx';
 import { html } from 'hono/html';
+import type { PreviewMeta } from '../services/preview.service';
 
 /** Seconds the visitor sees the redirect page before the browser navigates */
 export const REDIRECT_DELAY = 2;
@@ -130,10 +131,35 @@ const hostOf = (url: string) => {
   }
 };
 
-const RedirectPage: FC<{ url: string }> = ({ url }) => (
+/** Open Graph and Twitter card tags, so a shared short link shows a preview instead of "Redirecting..." */
+const OpenGraph: FC<{ shortUrl: string; meta: PreviewMeta }> = ({ shortUrl, meta }) => (
+  <>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={shortUrl} />
+    {meta.title && <meta property="og:title" content={meta.title} />}
+    {meta.description && <meta property="og:description" content={meta.description} />}
+    {meta.description && <meta name="description" content={meta.description} />}
+    {meta.image && <meta property="og:image" content={meta.image} />}
+    <meta name="twitter:card" content={meta.image ? 'summary_large_image' : 'summary'} />
+    {meta.title && <meta name="twitter:title" content={meta.title} />}
+    {meta.description && <meta name="twitter:description" content={meta.description} />}
+    {meta.image && <meta name="twitter:image" content={meta.image} />}
+  </>
+);
+
+const RedirectPage: FC<{ url: string; shortUrl: string; meta: PreviewMeta }> = ({
+  url,
+  shortUrl,
+  meta,
+}) => (
   <Layout
     title="Redirecting..."
-    head={<meta http-equiv="refresh" content={`${REDIRECT_DELAY};url=${url}`} />}
+    head={
+      <>
+        <meta http-equiv="refresh" content={`${REDIRECT_DELAY};url=${url}`} />
+        <OpenGraph shortUrl={shortUrl} meta={meta} />
+      </>
+    }
   >
     <div class="spinner" />
     <h1>You are being redirected</h1>
@@ -150,8 +176,15 @@ const RedirectPage: FC<{ url: string }> = ({ url }) => (
   </Layout>
 );
 
-const PasswordPage: FC<{ invalid: boolean }> = ({ invalid }) => (
-  <Layout title="Password protected link">
+const PasswordPage: FC<{ invalid: boolean; shortUrl: string; meta: PreviewMeta }> = ({
+  invalid,
+  shortUrl,
+  meta,
+}) => (
+  <Layout
+    title="Password protected link"
+    head={<OpenGraph shortUrl={shortUrl} meta={meta} />}
+  >
     <h1>This link is password protected</h1>
     <p>Enter the password to continue to the destination.</p>
     {invalid && <p class="error">Incorrect password, try again.</p>}
@@ -204,9 +237,11 @@ const UnavailablePage: FC<{ reason: UnavailableReason }> = ({ reason }) => (
 
 const doc = (page: Child) => html`<!doctype html>${page}`;
 
-export const redirectPage = (url: string) => doc(<RedirectPage url={url} />);
+export const redirectPage = (url: string, shortUrl: string, meta: PreviewMeta = {}) =>
+  doc(<RedirectPage url={url} shortUrl={shortUrl} meta={meta} />);
 
-export const passwordPage = (invalid: boolean) => doc(<PasswordPage invalid={invalid} />);
+export const passwordPage = (invalid: boolean, shortUrl: string, meta: PreviewMeta = {}) =>
+  doc(<PasswordPage invalid={invalid} shortUrl={shortUrl} meta={meta} />);
 
 export const unavailablePage = (reason: UnavailableReason) =>
   doc(<UnavailablePage reason={reason} />);
