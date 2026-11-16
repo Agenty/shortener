@@ -8,7 +8,7 @@ updated: 2026-10-29
 
 Open **Links** in the sidebar and click **Create Link** in the top right corner. The **Short Link Builder** opens, with the form on the left and a live social media preview on the right.
 
-![Short Link Builder with an empty form](/docs/images/create-link-dialog.png)
+![Short Link Builder with an empty form](/docs/images/create-link-dialog.webp)
 
 ## Enter the destination URL
 
@@ -27,7 +27,7 @@ The **Short Link** field is the part after `srt1.link/`. Type a name your audien
 
 The copy button next to the field copies the full short URL before you save, which is handy when you're drafting a post at the same time.
 
-![Link builder filled in with a destination URL and custom back-half](/docs/images/create-link-filled.png)
+![Link builder filled in with a destination URL and custom back-half](/docs/images/create-link-filled.webp)
 
 ## Add options
 
@@ -44,7 +44,7 @@ Below the URL fields is the **Options** list. Click any option to expand it. You
 
 Click **Create Short Link**. You'll see "Short link created successfully!" and the builder closes. The new link is added to the top of the **Links** list with the status **Enabled**.
 
-![New short link at the top of the Links list](/docs/images/link-created.png)
+![New short link at the top of the Links list](/docs/images/link-created.webp)
 
 Click the copy icon next to the short link to copy it, or click **View** in the **Clicks** column to open its [analytics](/docs/click-analytics).
 

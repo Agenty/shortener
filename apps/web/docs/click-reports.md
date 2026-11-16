@@ -9,7 +9,7 @@ updated: 2026-10-18
 
 [Click analytics](/docs/click-analytics) shows totals. **Reports** shows the individual clicks behind them, which helps when you want to check a specific click or spot unusual traffic.
 
-![Reports page with the click log](/docs/images/reports.png)
+![Reports page with the click log](/docs/images/reports.webp)
 
 ## What each row shows
 
@@ -20,6 +20,7 @@ updated: 2026-10-18
 | Browser | Browser and operating system |
 | Device | Desktop, mobile or tablet |
 | Referrer | The page the click came from, or **Direct** |
+| IP | The visitor's IP address, shown on wide screens |
 | Time | Date and time of the click |
 
 The header shows the total number of clicks in the log. Use the page numbers at the bottom to go back further. Each page has 25 clicks.

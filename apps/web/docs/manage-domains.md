@@ -9,7 +9,7 @@ updated: 2026-10-19
 
 The **Domains** page has two tabs. **My domains** lists the domains you've added, with their verification status. **Global whitelisted** lists the popular sites everyone can link to without verifying anything.
 
-![My domains tab on the Domains page](/docs/images/domains-list.png)
+![My domains tab on the Domains page](/docs/images/domains-list.webp)
 
 ## Check the global whitelist
 
@@ -17,7 +17,7 @@ Open the **Global whitelisted** tab to see which domains work without verificati
 
 Use **Search domains** to check a specific site. If a domain isn't on the list and it isn't yours to verify, you can't shorten links to it.
 
-![Global whitelisted domains](/docs/images/domains-whitelisted.png)
+![Global whitelisted domains](/docs/images/domains-whitelisted.webp)
 
 ## Set a default domain
 
@@ -28,7 +28,7 @@ Click the menu next to a domain in **My domains** and choose **Set as default**.
 1. Click the menu next to the domain and choose **Remove**.
 2. Confirm with **Remove**.
 
-![Domain actions menu](/docs/images/domain-menu.png)
+![Domain actions menu](/docs/images/domain-menu.webp)
 
 After you remove a domain, you can't create new short links to it until you add and verify it again. Existing short links keep redirecting.
 

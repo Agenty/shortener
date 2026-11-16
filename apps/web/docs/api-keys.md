@@ -17,7 +17,7 @@ An API key lets your code call the [Shortener.dev API](/docs/api) on behalf of y
 4. Click **Create**.
 5. Copy the key from **Copy your API key** and click **Done**.
 
-![Create API Key dialog](/docs/images/create-api-key.png)
+![Create API Key dialog](/docs/images/create-api-key.webp)
 
 The key is shown only once. Store it right away, in your server's environment variables or a secrets manager. If you lose it, delete it and create a new one.
 
@@ -36,6 +36,6 @@ A missing, wrong or deleted key returns `401 Unauthorized`. Keep keys on the ser
 
 Click the trash icon next to the key on the **API Keys** page and confirm with **Delete**. Requests using that key start failing immediately, so switch your integration to a new key first.
 
-![API Keys page](/docs/images/api-keys.png)
+![API Keys page](/docs/images/api-keys.webp)
 
 Next, [create your first short link with the API](/docs/url-shortener-api).

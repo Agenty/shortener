@@ -1,22 +1,26 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 import { Faq } from '@/components/faq';
 import { LinkBuilder } from '@/components/link-builder';
+import { LinkTrackerPage } from '@/components/link-tracker-page';
 import { QrGenerator } from '@/components/qr-generator';
 import { ToolIcon } from '@/components/tool-icon';
 import { PageHero } from '@/components/page-hero';
 import { Eyebrow, NumberedList, Section, Showcase } from '@/components/section';
+import { getLinkTracker, trackerForShortener } from '@/data/link-trackers';
 import { getQrTool, qrTools } from '@/data/qr-tools';
 import { getTool, shortenerTools } from '@/data/tools';
 import { breadcrumbJsonLd, faqJsonLd, seo } from '@/lib/seo';
 
 export const Route = createFileRoute('/tools/$slug')({
   loader: ({ params }) => {
-    const tool = getTool(params.slug) ?? getQrTool(params.slug);
+    const tool = getTool(params.slug) ?? getQrTool(params.slug) ?? getLinkTracker(params.slug);
     if (!tool) throw notFound();
     return { slug: tool.slug };
   },
   head: ({ loaderData }) => {
-    const tool = loaderData && (getTool(loaderData.slug) ?? getQrTool(loaderData.slug));
+    const tool =
+      loaderData &&
+      (getTool(loaderData.slug) ?? getQrTool(loaderData.slug) ?? getLinkTracker(loaderData.slug));
     if (!tool) return {};
     return seo({
       title: tool.title,
@@ -43,12 +47,15 @@ export const Route = createFileRoute('/tools/$slug')({
 
 function ToolPage() {
   const { slug } = Route.useLoaderData();
-  return getQrTool(slug) ? <QrToolPage slug={slug} /> : <ShortenerToolPage slug={slug} />;
+  if (getQrTool(slug)) return <QrToolPage slug={slug} />;
+  if (getLinkTracker(slug)) return <LinkTrackerPage slug={slug} />;
+  return <ShortenerToolPage slug={slug} />;
 }
 
 function ShortenerToolPage({ slug }: { slug: string }) {
   const tool = getTool(slug)!;
   const related = shortenerTools.filter((item) => item.slug !== tool.slug).slice(0, 4);
+  const tracker = trackerForShortener(tool.slug);
 
   return (
     <>
@@ -99,6 +106,40 @@ function ShortenerToolPage({ slug }: { slug: string }) {
           />
         </div>
       </Section>
+
+      {tracker && (
+        <Section>
+          <div className="grid gap-10 md:grid-cols-[1fr_1.2fr] md:gap-16">
+            <div>
+              <Eyebrow tone="amber">Track the clicks</Eyebrow>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em]">
+                Sharing links on {tracker.platform}?
+              </h2>
+            </div>
+            <div className="space-y-4 text-muted-foreground">
+              <p>
+                This page shortens links that point to {tool.platform}. To count clicks on the links you post on{' '}
+                {tracker.platform}, such as your bio, posts and messages, use one short link per placement. The{' '}
+                <Link to="/tools/$slug" params={{ slug: tracker.slug }} className="font-medium text-foreground underline underline-offset-4">
+                  {tracker.headline}
+                </Link>{' '}
+                walks through it, with UTM values and the places {tracker.platform} lets you add a link.
+              </p>
+              <p>
+                For the general method across every network, read{' '}
+                <Link
+                  to="/docs/$slug"
+                  params={{ slug: 'social-media-link-tracking' }}
+                  className="font-medium text-foreground underline underline-offset-4"
+                >
+                  social media link tracking
+                </Link>
+                .
+              </p>
+            </div>
+          </div>
+        </Section>
+      )}
 
       <Section>
         <Faq faqs={tool.faqs} />

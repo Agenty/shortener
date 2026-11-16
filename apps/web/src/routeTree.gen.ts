@@ -35,6 +35,7 @@ import { Route as ExtensionInstalledRouteImport } from './routes/extension/insta
 import { Route as ExtensionUninstalledRouteImport } from './routes/extension/uninstalled'
 import { Route as ToolsIndexRouteImport } from './routes/tools/index'
 import { Route as ToolsSlugRouteImport } from './routes/tools/$slug'
+import { Route as ToolsBulkUrlShortenerRouteImport } from './routes/tools/bulk-url-shortener'
 import { Route as ToolsSocialSharePreviewRouteImport } from './routes/tools/social-share-preview'
 import { Route as ToolsWhatsappLinkGeneratorRouteImport } from './routes/tools/whatsapp-link-generator'
 
@@ -169,6 +170,11 @@ const ToolsSlugRoute = ToolsSlugRouteImport.update({
   path: '/tools/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsBulkUrlShortenerRoute = ToolsBulkUrlShortenerRouteImport.update({
+  id: '/tools/bulk-url-shortener',
+  path: '/tools/bulk-url-shortener',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsSocialSharePreviewRoute = ToolsSocialSharePreviewRouteImport.update({
   id: '/tools/social-share-preview',
   path: '/tools/social-share-preview',
@@ -204,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/extension/installed': typeof ExtensionInstalledRoute
   '/extension/uninstalled': typeof ExtensionUninstalledRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/tools/bulk-url-shortener': typeof ToolsBulkUrlShortenerRoute
   '/tools/social-share-preview': typeof ToolsSocialSharePreviewRoute
   '/tools/whatsapp-link-generator': typeof ToolsWhatsappLinkGeneratorRoute
   '/alternatives/': typeof AlternativesIndexRoute
@@ -234,6 +241,7 @@ export interface FileRoutesByTo {
   '/extension/installed': typeof ExtensionInstalledRoute
   '/extension/uninstalled': typeof ExtensionUninstalledRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/tools/bulk-url-shortener': typeof ToolsBulkUrlShortenerRoute
   '/tools/social-share-preview': typeof ToolsSocialSharePreviewRoute
   '/tools/whatsapp-link-generator': typeof ToolsWhatsappLinkGeneratorRoute
   '/alternatives': typeof AlternativesIndexRoute
@@ -265,6 +273,7 @@ export interface FileRoutesById {
   '/extension/installed': typeof ExtensionInstalledRoute
   '/extension/uninstalled': typeof ExtensionUninstalledRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/tools/bulk-url-shortener': typeof ToolsBulkUrlShortenerRoute
   '/tools/social-share-preview': typeof ToolsSocialSharePreviewRoute
   '/tools/whatsapp-link-generator': typeof ToolsWhatsappLinkGeneratorRoute
   '/alternatives/': typeof AlternativesIndexRoute
@@ -297,6 +306,7 @@ export interface FileRouteTypes {
     | '/extension/installed'
     | '/extension/uninstalled'
     | '/tools/$slug'
+    | '/tools/bulk-url-shortener'
     | '/tools/social-share-preview'
     | '/tools/whatsapp-link-generator'
     | '/alternatives/'
@@ -327,6 +337,7 @@ export interface FileRouteTypes {
     | '/extension/installed'
     | '/extension/uninstalled'
     | '/tools/$slug'
+    | '/tools/bulk-url-shortener'
     | '/tools/social-share-preview'
     | '/tools/whatsapp-link-generator'
     | '/alternatives'
@@ -357,6 +368,7 @@ export interface FileRouteTypes {
     | '/extension/installed'
     | '/extension/uninstalled'
     | '/tools/$slug'
+    | '/tools/bulk-url-shortener'
     | '/tools/social-share-preview'
     | '/tools/whatsapp-link-generator'
     | '/alternatives/'
@@ -388,6 +400,7 @@ export interface RootRouteChildren {
   ExtensionInstalledRoute: typeof ExtensionInstalledRoute
   ExtensionUninstalledRoute: typeof ExtensionUninstalledRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
+  ToolsBulkUrlShortenerRoute: typeof ToolsBulkUrlShortenerRoute
   ToolsSocialSharePreviewRoute: typeof ToolsSocialSharePreviewRoute
   ToolsWhatsappLinkGeneratorRoute: typeof ToolsWhatsappLinkGeneratorRoute
   AlternativesIndexRoute: typeof AlternativesIndexRoute
@@ -580,6 +593,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/bulk-url-shortener': {
+      id: '/tools/bulk-url-shortener'
+      path: '/tools/bulk-url-shortener'
+      fullPath: '/tools/bulk-url-shortener'
+      preLoaderRoute: typeof ToolsBulkUrlShortenerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/social-share-preview': {
       id: '/tools/social-share-preview'
       path: '/tools/social-share-preview'
@@ -620,6 +640,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExtensionInstalledRoute: ExtensionInstalledRoute,
   ExtensionUninstalledRoute: ExtensionUninstalledRoute,
   ToolsSlugRoute: ToolsSlugRoute,
+  ToolsBulkUrlShortenerRoute: ToolsBulkUrlShortenerRoute,
   ToolsSocialSharePreviewRoute: ToolsSocialSharePreviewRoute,
   ToolsWhatsappLinkGeneratorRoute: ToolsWhatsappLinkGeneratorRoute,
   AlternativesIndexRoute: AlternativesIndexRoute,

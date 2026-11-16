@@ -33,7 +33,7 @@ App targeting is checked before geo targeting, so an iPhone visitor from a geo-t
 
 Shortener.dev doesn't answer with an HTTP `301` or `302` redirect. It returns a short page that says "You are being redirected", shows the destination's domain, and moves the browser to the destination after 2 seconds with a meta refresh. The page also has a "Click here" link in case the browser doesn't follow the refresh.
 
-![Shortener.dev redirect page showing the destination domain](/docs/images/redirect-page.png)
+![Shortener.dev redirect page showing the destination domain](/docs/images/redirect-page.webp)
 
 Visitors see where they're going before they get there. That's useful when a short link arrives in a text message or a DM, where people are rightly wary of links that hide their destination. See [How to check where a short link goes](/docs/check-short-link-destination).
 

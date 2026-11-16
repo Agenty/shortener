@@ -15,7 +15,7 @@ An expiring link works until the date you choose and then stops redirecting, so 
 2. Pick a date and time in the field.
 3. Click **Create Short Link**.
 
-![Expiration option with a date and time selected](/docs/images/option-expiration.png)
+![Expiration option with a date and time selected](/docs/images/option-expiration.webp)
 
 Leave the field empty for a link that never expires. That's the default.
 

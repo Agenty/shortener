@@ -9,7 +9,7 @@ updated: 2026-10-29
 
 The **Analytics** page shows every click on your short links, broken down by when, where and how people clicked. Use it to see which campaign is working, which channel sends the most traffic, and whether your audience is mostly on mobile.
 
-![Analytics page with clicks over time and breakdowns](/docs/images/analytics.png)
+![Analytics page with clicks over time and breakdowns](/docs/images/analytics.webp)
 
 ## Analytics for all links or one link
 
@@ -40,7 +40,7 @@ The four cards at the top are **Total Clicks**, the number of **Countries** and 
 Below the chart, each list shows the top entries for one dimension:
 
 - **Countries**, by the visitor's location
-- **Referers**, the site the click came from. Clicks without a referrer, such as links opened from an app, email client or typed into the address bar, show as **Direct**.
+- **Referers**, the site the click came from. Clicks without a referrer, such as links opened from an app, email client or typed into the address bar, show as **Direct**. See [Why social media clicks show as Direct](/docs/social-traffic-direct).
 - **Top Links**, your most clicked short links
 - **Browsers**, **Operating Systems** and **Devices** (desktop, mobile or tablet)
 

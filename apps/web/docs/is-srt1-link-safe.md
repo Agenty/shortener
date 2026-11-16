@@ -23,7 +23,7 @@ Short links hide where they go, which makes them popular with phishing and spam.
 
 A `srt1.link` link doesn't jump straight to the destination. It shows a page with the destination's domain for 2 seconds first, so you can close the tab if it isn't what you expected.
 
-![Shortener.dev redirect page showing the destination domain](/docs/images/redirect-page.png)
+![Shortener.dev redirect page showing the destination domain](/docs/images/redirect-page.webp)
 
 See [How to check where a short link goes](/docs/check-short-link-destination) for ways to see the full URL without opening it.
 

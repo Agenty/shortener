@@ -17,7 +17,7 @@ A verified domain covers all of its subdomains, so verifying `example.com` lets 
 2. Enter the domain name without `https://` or a path, for example `example.com`.
 3. Click **Add Domain**.
 
-![Add Domain dialog](/docs/images/add-domain.png)
+![Add Domain dialog](/docs/images/add-domain.webp)
 
 The domain is added to **My domains** with the status **Pending**, and the verification dialog opens straight away.
 
@@ -30,7 +30,7 @@ This is the quickest option if you have a mailbox on the domain.
 3. Check that inbox for a 6-digit code and enter it in the field. The code is valid for 10 minutes.
 4. Click **Verify**.
 
-![Verify domain dialog with an email on the domain](/docs/images/verify-domain.png)
+![Verify domain dialog with an email on the domain](/docs/images/verify-domain.webp)
 
 The domain's status changes to **Verified**, and you can create short links to it right away.
 
@@ -54,7 +54,7 @@ You're sent back to **Domains**, and the domain is marked **Verified** if the Go
 
 If you close the dialog before finishing, the domain stays on **My domains** as **Pending**. Click **Verify** next to it to pick up where you left off.
 
-![A pending domain with the Verify button](/docs/images/domain-pending.png)
+![A pending domain with the Verify button](/docs/images/domain-pending.webp)
 
 ## Verify from the browser extension
 

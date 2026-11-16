@@ -31,7 +31,7 @@ The panel only signs in with email and password. If you created your account wit
 
 Open the page you want to share and click the toolbar icon. The URL of the tab is already in the form.
 
-![The Shorten tab with the current page filled in and a custom back-half](/docs/images/extension-shorten.png)
+![The Shorten tab with the current page filled in and a custom back-half](/docs/images/extension-shorten.webp)
 
 1. Click **Custom back-half** if you want a readable link, and type something like `open-source` or `summer-sale`. Letters, numbers, `-` and `_` are allowed. Leave it out and you get a random back-half.
 2. Click **Shorten link**, or press Enter.
@@ -54,7 +54,7 @@ Shortener.dev only creates short links to domains that are on the global whiteli
 
 For your own site, the first link you try will fail with a message like `example.com is not verified yet` and a **Verify example.com** button. Click it and the Domains tab opens with the domain ready to verify.
 
-![Adding and verifying a domain in the Domains tab](/docs/images/extension-domains.png)
+![Adding and verifying a domain in the Domains tab](/docs/images/extension-domains.webp)
 
 You have two ways to prove you own the domain:
 
@@ -67,7 +67,7 @@ Once the domain shows as verified, go back to **Shorten** and try again. One dom
 
 Click **Links** at the bottom of the panel to see all your short links. The search box at the top matches the back-half or the destination, so typing `youtube` finds every link to YouTube.
 
-![The Links tab with search and click counts](/docs/images/extension-links.png)
+![The Links tab with search and click counts](/docs/images/extension-links.webp)
 
 The number on the right of each link is its clicks in the last 30 days. Click a link to open it.
 
@@ -75,7 +75,7 @@ The number on the right of each link is its clicks in the last 30 days. Click a 
 
 Opening a link from **Links** or **Recent links** shows its own page: the short link with a **Copy** button, where it points, when it was created, and a clicks chart.
 
-![Analytics for one short link](/docs/images/extension-link-details.png)
+![Analytics for one short link](/docs/images/extension-link-details.webp)
 
 Below the chart you get the same breakdowns as the dashboard: referrers, countries, devices, browsers and operating systems. Pick **7 days**, **30 days** or **90 days** at the top. The free plan keeps 7 days of history, so the longer ranges are locked until you upgrade.
 
@@ -87,7 +87,7 @@ For editing a link, use **Edit UTM, expiry, password & more in the app**. It ope
 
 The **Analytics** tab adds up every link: total clicks per day, your top links, and the same referrer, country and device lists.
 
-![The Analytics tab with clicks per day and top links](/docs/images/extension-analytics.png)
+![The Analytics tab with clicks per day and top links](/docs/images/extension-analytics.webp)
 
 I check it after posting something, to see if the link is getting clicks and from where. For CSV exports or a click by click log, open [Click reports](/docs/click-reports) in the dashboard. [Click analytics](/docs/click-analytics) explains what each chart counts.
 

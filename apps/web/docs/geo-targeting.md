@@ -17,7 +17,7 @@ Geo targeting sends visitors to a different URL based on the country they're in.
 4. Repeat for each country. Click the trash icon to remove a rule.
 5. Click **Create Short Link**.
 
-![Geo Targeting with a rule for Great Britain](/docs/images/option-geo.png)
+![Geo Targeting with a rule for Great Britain](/docs/images/option-geo.webp)
 
 Visitors from countries without a rule go to the **Original URL**.
 

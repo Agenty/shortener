@@ -5,6 +5,7 @@ import {
   Camera,
   Clapperboard,
   FolderOpen,
+  ListPlus,
   MessageCircle,
   Music,
   Share2,
@@ -292,6 +293,14 @@ export const shortenerTools: ShortenerTool[] = [
 
 /** Standalone tools with their own pages */
 export const otherTools = [
+  {
+    slug: 'bulk-url-shortener',
+    to: '/tools/bulk-url-shortener' as const,
+    domain: undefined,
+    title: 'Bulk URL shortener',
+    description: 'Shorten up to 50 links at once and download them as CSV.',
+    icon: ListPlus,
+  },
   {
     slug: 'whatsapp-link-generator',
     to: '/tools/whatsapp-link-generator' as const,
