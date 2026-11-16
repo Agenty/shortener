@@ -50,6 +50,7 @@ const footerColumns = (t: Messages) => [
       { label: t.common.contact, to: '/contact' },
       { label: t.footer.report, to: '/report' },
       { label: t.footer.terms, to: '/terms' },
+      { label: t.footer.safety, to: '/safety' },
       { label: t.footer.privacy, to: '/privacy' },
     ],
   },

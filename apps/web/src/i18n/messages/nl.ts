@@ -63,6 +63,7 @@ const nl: Messages = {
     about: 'Over ons',
     report: 'Link melden',
     terms: 'Gebruiksvoorwaarden',
+    safety: 'Linkveiligheid',
     privacy: 'Privacybeleid',
     rights: '© {year} {company} Alle rechten voorbehouden.',
     madeFor: 'Gemaakt voor marketeers en developers.',

@@ -63,6 +63,7 @@ const vi: Messages = {
     about: 'Giới thiệu',
     report: 'Báo cáo liên kết',
     terms: 'Điều khoản sử dụng',
+    safety: 'An toàn liên kết',
     privacy: 'Chính sách quyền riêng tư',
     rights: '© {year} {company} Bảo lưu mọi quyền.',
     madeFor: 'Dành cho marketer và lập trình viên.',

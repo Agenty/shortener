@@ -20,6 +20,7 @@ import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as SafetyRouteImport } from './routes/safety'
 import { Route as ShortLinksBuilderRouteImport } from './routes/short-links-builder'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -92,6 +93,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const ReportRoute = ReportRouteImport.update({
   id: '/report',
   path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyRoute = SafetyRouteImport.update({
+  id: '/safety',
+  path: '/safety',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShortLinksBuilderRoute = ShortLinksBuilderRouteImport.update({
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
+  '/safety': typeof SafetyRoute
   '/short-links-builder': typeof ShortLinksBuilderRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
+  '/safety': typeof SafetyRoute
   '/short-links-builder': typeof ShortLinksBuilderRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -262,6 +270,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
+  '/safety': typeof SafetyRoute
   '/short-links-builder': typeof ShortLinksBuilderRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/report'
+    | '/safety'
     | '/short-links-builder'
     | '/sitemap.xml'
     | '/terms'
@@ -326,6 +336,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/report'
+    | '/safety'
     | '/short-links-builder'
     | '/sitemap.xml'
     | '/terms'
@@ -357,6 +368,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/report'
+    | '/safety'
     | '/short-links-builder'
     | '/sitemap.xml'
     | '/terms'
@@ -389,6 +401,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ReportRoute: typeof ReportRoute
+  SafetyRoute: typeof SafetyRoute
   ShortLinksBuilderRoute: typeof ShortLinksBuilderRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
@@ -486,6 +499,13 @@ declare module '@tanstack/react-router' {
       path: '/report'
       fullPath: '/report'
       preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety': {
+      id: '/safety'
+      path: '/safety'
+      fullPath: '/safety'
+      preLoaderRoute: typeof SafetyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/short-links-builder': {
@@ -629,6 +649,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ReportRoute: ReportRoute,
+  SafetyRoute: SafetyRoute,
   ShortLinksBuilderRoute: ShortLinksBuilderRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,

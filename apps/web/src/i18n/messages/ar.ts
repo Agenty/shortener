@@ -63,6 +63,7 @@ const ar: Messages = {
     about: 'من نحن',
     report: 'الإبلاغ عن رابط',
     terms: 'شروط الاستخدام',
+    safety: 'أمان الروابط',
     privacy: 'سياسة الخصوصية',
     rights: '© {year} {company} جميع الحقوق محفوظة.',
     madeFor: 'صُمّم للمسوّقين والمطورين.',

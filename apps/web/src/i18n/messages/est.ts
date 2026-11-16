@@ -63,6 +63,7 @@ const est: Messages = {
     about: 'Meist',
     report: 'Teata lingist',
     terms: 'Kasutustingimused',
+    safety: 'Linkide turvalisus',
     privacy: 'Privaatsuspoliitika',
     rights: '© {year} {company} Kõik õigused kaitstud.',
     madeFor: 'Loodud turundajatele ja arendajatele.',

@@ -63,6 +63,7 @@ const sv: Messages = {
     about: 'Om oss',
     report: 'Anmäl en länk',
     terms: 'Användarvillkor',
+    safety: 'Länksäkerhet',
     privacy: 'Integritetspolicy',
     rights: '© {year} {company} Alla rättigheter förbehållna.',
     madeFor: 'Gjord för marknadsförare och utvecklare.',

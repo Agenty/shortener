@@ -63,6 +63,7 @@ const fr: Messages = {
     about: 'À propos',
     report: 'Signaler un lien',
     terms: 'Conditions d’utilisation',
+    safety: 'Sécurité des liens',
     privacy: 'Politique de confidentialité',
     rights: '© {year} {company} Tous droits réservés.',
     madeFor: 'Conçu pour les marketeurs et les développeurs.',

@@ -63,6 +63,7 @@ const tr: Messages = {
     about: 'Hakkımızda',
     report: 'Bağlantı bildir',
     terms: 'Kullanım koşulları',
+    safety: 'Bağlantı güvenliği',
     privacy: 'Gizlilik politikası',
     rights: '© {year} {company} Tüm hakları saklıdır.',
     madeFor: 'Pazarlamacılar ve geliştiriciler için yapıldı.',

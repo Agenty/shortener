@@ -63,6 +63,7 @@ const es: Messages = {
     about: 'Acerca de',
     report: 'Denunciar un enlace',
     terms: 'Términos de uso',
+    safety: 'Seguridad de enlaces',
     privacy: 'Política de privacidad',
     rights: '© {year} {company} Todos los derechos reservados.',
     madeFor: 'Hecho para profesionales de marketing y desarrolladores.',
