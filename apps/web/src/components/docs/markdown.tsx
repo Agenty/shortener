@@ -4,13 +4,13 @@ import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
 const components: Components = {
-  a: ({ href = '', children }) => {
+  a: ({ href = '', title, children }) => {
     if (href.startsWith('/') && !href.startsWith('//')) {
       return <Link to={href}>{children}</Link>;
     }
     if (href.startsWith('#')) return <a href={href}>{children}</a>;
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer">
+      <a href={href} title={title} target="_blank" rel="nofollow noopener noreferrer">
         {children}
       </a>
     );
