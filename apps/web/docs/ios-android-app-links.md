@@ -16,7 +16,7 @@ One short link can go to three places depending on the visitor's device. iPhone 
 3. Click **Android Targeting** and enter your Google Play URL, for example `https://play.google.com/store/apps/details?id=com.example.app`.
 4. Click **Create Short Link**.
 
-![iOS Targeting and Android Targeting options](/docs/images/option-app-targeting.png)
+![iOS Targeting and Android Targeting options](/docs/images/option-app-targeting.webp)
 
 You can set just one of the two. With only **iOS Targeting** set, Android users go to the **Original URL**.
 

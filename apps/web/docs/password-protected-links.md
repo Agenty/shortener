@@ -15,7 +15,7 @@ A password protected short link asks for a password before it lets visitors thro
 2. Type the password. Click the eye icon to check what you typed.
 3. Click **Create Short Link**.
 
-![Password Protection option with a password entered](/docs/images/option-password.png)
+![Password Protection option with a password entered](/docs/images/option-password.webp)
 
 The password can be up to 32 characters long. Send it to your audience separately from the link, for example in a direct message instead of the same public post.
 

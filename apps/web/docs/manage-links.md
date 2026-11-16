@@ -17,7 +17,7 @@ Type into **Search links...** at the top of the page. You can search three ways:
 - The exact back-half, such as `spring-sale`
 - The full short link, such as `srt1.link/spring-sale`, pasted from wherever you shared it
 
-![Searching the links list](/docs/images/links-search.png)
+![Searching the links list](/docs/images/links-search.webp)
 
 The search term is kept in the page URL as `?q=`, so you can bookmark a filtered view or send it to a teammate.
 
@@ -25,7 +25,7 @@ The search term is kept in the page URL as `?q=`, so you can bookmark a filtered
 
 The two buttons next to the search box switch between list view and grid view. Grid view shows each link as a card with its destination, status and a shortcut to **Analytics**. The dashboard remembers your choice the next time you open **Links**.
 
-![Links in grid view](/docs/images/links-grid.png)
+![Links in grid view](/docs/images/links-grid.webp)
 
 ## Copy or open a link
 
@@ -33,7 +33,7 @@ Click the copy icon next to a short link to copy the full URL, such as `https://
 
 The **...** menu at the end of each row has the same **Copy** action, plus **Open**, which opens the destination URL in a new tab so you can check where the link goes, and **QR Code**, which opens the link's QR code. The QR icon next to the copy icon does the same. See [Create a QR code for a short link](/docs/qr-codes).
 
-![Actions menu for a short link](/docs/images/link-actions-menu.png)
+![Actions menu for a short link](/docs/images/link-actions-menu.webp)
 
 ## Delete a short link
 
@@ -41,7 +41,7 @@ The **...** menu at the end of each row has the same **Copy** action, plus **Ope
 2. Click **Delete**.
 3. Check the short link in the confirmation, then click **Delete** again.
 
-![Delete link confirmation](/docs/images/delete-link.png)
+![Delete link confirmation](/docs/images/delete-link.webp)
 
 Deleting is permanent and can't be undone. The short link stops redirecting within about a minute, so anyone who clicks it afterwards won't reach your page. If you might need the link again, [disable it](/docs/disable-short-link) instead. If it's printed or shared widely, consider an [expiration date](/docs/link-expiration), so it keeps working until a planned end date, or [point it at a new page](/docs/edit-short-link).
 
@@ -49,4 +49,4 @@ Deleting is permanent and can't be undone. The short link stops redirecting with
 
 The code icon next to **Create Link** opens **API Examples** with ready-made requests in cURL, JavaScript, Python, PHP and Go. To create many links at once, use those examples with an API key. See [Shorten URLs with the API](/docs/url-shortener-api).
 
-![API Examples panel with a cURL request](/docs/images/api-examples.png)
+![API Examples panel with a cURL request](/docs/images/api-examples.webp)

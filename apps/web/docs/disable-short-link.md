@@ -4,12 +4,14 @@ nav: Disable a link
 description: Disable a short link to stop it redirecting while keeping its back-half, settings and click history, then turn it back on later.
 section: Short links
 order: 5
-updated: 2026-11-14
+updated: 2026-11-15
 ---
 
 Disabling a short link stops it from redirecting but keeps everything else: the back-half, the destination, the options and the click history. Turn it back on and it works exactly as before. Deleting is permanent, so disable a link when you might need it again, for example a seasonal promotion you run every year or a link pointing at a page that's down for maintenance.
 
 The **Status** column on the **Links** page shows **Enabled** or **Disabled** for each link. Switching a link on or off is done with the [API](/docs/url-shortener-api) for now, using an [API key](/docs/api-keys).
+
+![A disabled short link on the Links page](/docs/images/link-disabled.webp)
 
 ## Disable a link
 

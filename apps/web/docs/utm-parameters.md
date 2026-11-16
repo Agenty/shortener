@@ -15,7 +15,7 @@ UTM parameters tell Google Analytics, and most other analytics tools, where a vi
 2. Fill in the fields you need. Empty fields are skipped.
 3. Click **Create Short Link**.
 
-![UTM Builder with source, medium and campaign filled in](/docs/images/option-utm.png)
+![UTM Builder with source, medium and campaign filled in](/docs/images/option-utm.webp)
 
 | Field | Parameter | Example |
 | --- | --- | --- |
@@ -37,6 +37,8 @@ https://example.com/spring?utm_source=newsletter&utm_medium=email&utm_campaign=s
 - Stick to lowercase. Google Analytics treats `Email` and `email` as two different mediums.
 - Use the same `utm_campaign` value on every link in a campaign, and change `utm_source` per channel. You can then compare channels inside one campaign.
 - Use `utm_content` to tell apart two links in the same email or page, such as a header button and a footer link.
+
+For a full plan with one link and one set of UTM values per network and placement, see [Social media link tracking](/docs/social-media-link-tracking).
 
 ## Send UTM parameters through the API
 

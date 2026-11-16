@@ -19,7 +19,7 @@ Short links can only point to domains that are verified in your account or on th
 
 In the dashboard, this opens a dialog that says the domain is not verified, with two buttons.
 
-![The domain is not verified dialog in the link builder](/docs/images/domain-not-verified.png)
+![The domain is not verified dialog in the link builder](/docs/images/domain-not-verified.webp)
 
 If it's your site, click **Verify domain** and confirm ownership with an email code or Google Search Console. It takes a couple of minutes, and your link is created as soon as the domain is verified. Verification covers every subdomain, so `example.com` also covers `blog.example.com` and `shop.example.com`. See [Verify a domain](/docs/verify-domain).
 

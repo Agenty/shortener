@@ -9,7 +9,7 @@ updated: 2026-10-20
 
 Team members share your account's links, domains and analytics. Open **Settings** in the sidebar and choose **Users** to see who has access.
 
-![Team Members page](/docs/images/users.png)
+![Team Members page](/docs/images/users.webp)
 
 ## Invite a member
 

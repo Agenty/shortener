@@ -18,7 +18,7 @@ Shortener.dev turns a long URL into a short link like `srt1.link/spring-sale` an
 
 The new link shows up at the top of your links list. Click the copy icon next to it and share it anywhere.
 
-![The Links page in the Shortener.dev dashboard](/docs/images/links-list.png)
+![The Links page in the Shortener.dev dashboard](/docs/images/links-list.webp)
 
 If the link is rejected with `Domain not verified`, the destination's domain needs to be verified first. Popular sites like YouTube, LinkedIn and Amazon are whitelisted and work right away. For your own website, see [Verify a domain](/docs/verify-domain).
 

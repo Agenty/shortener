@@ -16,13 +16,13 @@ Open **Links** in the sidebar, then use either of these:
 - Click the QR icon next to the copy icon on the short link.
 - Click the **...** menu at the end of the row and choose **QR Code**.
 
-![QR icon next to the copy icon on each short link](/docs/images/qr-code-button.png)
+![QR icon next to the copy icon on each short link](/docs/images/qr-code-button.webp)
 
-![QR Code in the actions menu of a short link](/docs/images/link-actions-menu.png)
+![QR Code in the actions menu of a short link](/docs/images/link-actions-menu.webp)
 
 Both work in list view and grid view. The **QR Code** dialog opens with a preview of the code for the full short URL, for example `https://srt1.link/spring-menu`.
 
-![QR Code dialog with the default size and colors](/docs/images/qr-code-dialog.png)
+![QR Code dialog with the default size and colors](/docs/images/qr-code-dialog.webp)
 
 ## Choose the size and colors
 
@@ -30,7 +30,7 @@ Both work in list view and grid view. The **QR Code** dialog opens with a previe
 - **Foreground** is the color of the dark squares, and **Background** is the color behind them. Pick a color with the color swatch, or type a hex value such as `#1E3A8A`.
 - **Reset** sets the size and both colors back to the defaults.
 
-![QR code with a custom size and brand colors](/docs/images/qr-code-custom.png)
+![QR code with a custom size and brand colors](/docs/images/qr-code-custom.webp)
 
 Keep the foreground dark and the background light. Light squares on a dark background, or two colors close to each other, can fail to scan on some phones. Scan the preview with your own phone before you print.
 

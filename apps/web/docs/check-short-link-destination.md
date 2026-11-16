@@ -13,7 +13,7 @@ A short link hides its destination, and that's what makes it useful for phishing
 
 Open the link. Shortener.dev shows a redirect page with the destination's domain for 2 seconds before it continues. If the domain isn't what you expected, close the tab before the page loads.
 
-![Shortener.dev redirect page showing the destination domain](/docs/images/redirect-page.png)
+![Shortener.dev redirect page showing the destination domain](/docs/images/redirect-page.webp)
 
 To see the full destination without opening it in a browser, request the link with `curl` and look for the URL in the refresh tag:
 

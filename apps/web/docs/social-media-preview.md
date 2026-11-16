@@ -21,7 +21,7 @@ The panel is hidden on narrow screens. Widen the browser window if you don't see
 2. Fill in **Title**, **Description** and **Image URL**. The preview updates as you type.
 3. Click **Create Short Link**.
 
-![Social Preview option with a custom title and description](/docs/images/option-social-preview.png)
+![Social Preview option with a custom title and description](/docs/images/option-social-preview.webp)
 
 | Field | Limit |
 | --- | --- |
