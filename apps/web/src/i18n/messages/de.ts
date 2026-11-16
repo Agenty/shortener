@@ -63,6 +63,7 @@ const de: Messages = {
     about: 'Über uns',
     report: 'Link melden',
     terms: 'Nutzungsbedingungen',
+    safety: 'Link-Sicherheit',
     privacy: 'Datenschutzerklärung',
     rights: '© {year} {company} Alle Rechte vorbehalten.',
     madeFor: 'Gemacht für Marketer und Entwickler.',

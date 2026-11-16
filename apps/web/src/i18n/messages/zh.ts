@@ -63,6 +63,7 @@ const zh: Messages = {
     about: '关于我们',
     report: '举报链接',
     terms: '使用条款',
+    safety: '链接安全',
     privacy: '隐私政策',
     rights: '© {year} {company} 保留所有权利。',
     madeFor: '为营销人员和开发者打造。',

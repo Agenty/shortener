@@ -66,6 +66,7 @@ const en = {
     about: 'About',
     report: 'Report a link',
     terms: 'Terms of use',
+    safety: 'Link safety',
     privacy: 'Privacy policy',
     rights: '© {year} {company} All rights reserved.',
     madeFor: 'Made for marketers and developers.',

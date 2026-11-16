@@ -63,6 +63,7 @@ const da: Messages = {
     about: 'Om os',
     report: 'Anmeld et link',
     terms: 'Brugsvilkår',
+    safety: 'Linksikkerhed',
     privacy: 'Privatlivspolitik',
     rights: '© {year} {company} Alle rettigheder forbeholdes.',
     madeFor: 'Lavet til marketingfolk og udviklere.',

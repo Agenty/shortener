@@ -63,6 +63,7 @@ const pt: Messages = {
     about: 'Sobre',
     report: 'Denunciar um link',
     terms: 'Termos de uso',
+    safety: 'Segurança de links',
     privacy: 'Política de privacidade',
     rights: '© {year} {company} Todos os direitos reservados.',
     madeFor: 'Feito para profissionais de marketing e desenvolvedores.',

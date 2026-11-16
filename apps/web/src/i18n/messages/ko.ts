@@ -63,6 +63,7 @@ const ko: Messages = {
     about: '소개',
     report: '링크 신고',
     terms: '이용약관',
+    safety: '링크 안전',
     privacy: '개인정보처리방침',
     rights: '© {year} {company} All rights reserved.',
     madeFor: '마케터와 개발자를 위해 만들었습니다.',

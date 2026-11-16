@@ -63,6 +63,7 @@ const id: Messages = {
     about: 'Tentang',
     report: 'Laporkan tautan',
     terms: 'Ketentuan penggunaan',
+    safety: 'Keamanan tautan',
     privacy: 'Kebijakan privasi',
     rights: '© {year} {company} Hak cipta dilindungi.',
     madeFor: 'Dibuat untuk pemasar dan developer.',

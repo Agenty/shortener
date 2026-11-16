@@ -63,6 +63,7 @@ const he: Messages = {
     about: 'אודות',
     report: 'דיווח על קישור',
     terms: 'תנאי שימוש',
+    safety: 'בטיחות קישורים',
     privacy: 'מדיניות פרטיות',
     rights: '© {year} {company} כל הזכויות שמורות.',
     madeFor: 'נבנה למשווקים ולמפתחים.',

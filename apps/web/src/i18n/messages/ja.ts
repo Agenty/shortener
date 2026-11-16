@@ -63,6 +63,7 @@ const ja: Messages = {
     about: '私たちについて',
     report: 'リンクを報告',
     terms: '利用規約',
+    safety: 'リンクの安全性',
     privacy: 'プライバシーポリシー',
     rights: '© {year} {company} All rights reserved.',
     madeFor: 'マーケターと開発者のために。',
