@@ -4,6 +4,8 @@ const fr: Messages = {
   common: {
     skipToContent: 'Aller au contenu',
     startFree: 'Commencer gratuitement',
+    watchDemo: 'Voir la démo',
+    playVideo: 'Lire la vidéo',
     signIn: 'Se connecter',
     menu: 'Menu',
     openMenu: 'Ouvrir le menu',
@@ -240,6 +242,10 @@ const fr: Messages = {
     metaTitle: 'Shortener.dev - Raccourcisseur d’URL avec statistiques de clics',
     metaDescription:
       'Raccourcisseur d’URL gratuit pour créer des liens courts sur votre propre domaine, avec statistiques de clics, générateur UTM, expiration, mots de passe, ciblage par appareil et par pays, et une API.',
+    videoEyebrow: 'Visite du produit',
+    videoTitle: 'Voyez comment tout s’assemble.',
+    videoDescription:
+      'L’extension Chrome, le créateur de liens, les statistiques de clics, la sécurité des liens et l’API, en un peu plus d’une minute.',
     heroLine1: 'Raccourcissez tout lien',
     heroLine2: 'Partagez-le partout',
     heroLine3: 'Suivez chaque clic',

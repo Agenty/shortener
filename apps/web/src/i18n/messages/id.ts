@@ -4,6 +4,8 @@ const id: Messages = {
   common: {
     skipToContent: 'Lewati ke konten',
     startFree: 'Mulai gratis',
+    watchDemo: 'Tonton demo',
+    playVideo: 'Putar video',
     signIn: 'Masuk',
     menu: 'Menu',
     openMenu: 'Buka menu',
@@ -224,6 +226,10 @@ const id: Messages = {
     metaTitle: 'Shortener.dev - Pemendek URL dengan analitik klik',
     metaDescription:
       'Pemendek URL gratis untuk membuat tautan pendek di domain Anda sendiri, dengan analitik klik, pembuat UTM, kedaluwarsa, kata sandi, penargetan perangkat dan lokasi, serta API.',
+    videoEyebrow: 'Tur produk',
+    videoTitle: 'Lihat bagaimana semuanya saling terhubung.',
+    videoDescription:
+      'Ekstensi Chrome, pembuat tautan, analitik klik, keamanan tautan, dan API, dalam sedikit lebih dari satu menit.',
     heroLine1: 'Pendekkan tautan apa pun',
     heroLine2: 'Bagikan di mana saja',
     heroLine3: 'Lihat setiap klik',

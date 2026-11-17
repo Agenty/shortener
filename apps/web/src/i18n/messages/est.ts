@@ -4,6 +4,8 @@ const est: Messages = {
   common: {
     skipToContent: 'Liigu sisu juurde',
     startFree: 'Alusta tasuta',
+    watchDemo: 'Vaata demo',
+    playVideo: 'Esita video',
     signIn: 'Logi sisse',
     menu: 'Menüü',
     openMenu: 'Ava menüü',
@@ -230,6 +232,10 @@ const est: Messages = {
     metaTitle: 'Shortener.dev - URL-i lühendaja klikistatistikaga',
     metaDescription:
       'Tasuta URL-i lühendaja lühilinkide loomiseks oma domeenil, koos klikistatistika, UTM-i koostaja, aegumise, paroolide, seadme- ja asukohapõhise sihtimise ning API-ga.',
+    videoEyebrow: 'Tootetutvustus',
+    videoTitle: 'Vaata, kuidas kõik kokku sobib.',
+    videoDescription:
+      'Chrome’i laiendus, lingiehitaja, klikianalüütika, linkide turvalisus ja API veidi enam kui minutiga.',
     heroLine1: 'Lühenda iga link',
     heroLine2: 'Jaga seda kõikjal',
     heroLine3: 'Näe iga klikki',

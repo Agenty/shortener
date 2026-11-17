@@ -1,4 +1,4 @@
-import { filterClause, getAnalytics } from '../services/analytics.service';
+import { filterClause, getAnalytics, toKey } from '../services/analytics.service';
 import { AuthUser } from '../models/auth-user';
 import { createRoute, z } from '@hono/zod-openapi';
 import { AnalyticsQuery, analyticsQuerySchema } from '../models/paged';
@@ -7,17 +7,6 @@ import { createApi, errorResponses } from '../helper/openapi';
 import { SHORT_DOMAIN } from '../services/links.service';
 
 const analytics = createApi();
-
-// Short link keys are interpolated in the Analytics Engine SQL
-const KEY_PATTERN = /^[A-Za-z0-9_-]{1,32}$/;
-
-const toKey = (url: string) => {
-  const key = url.split('?')[0].split('/').pop();
-  if (!KEY_PATTERN.test(key)) {
-    throw new HTTPException(400, { message: `Invalid short link: ${url}` });
-  }
-  return key;
-};
 
 const queryBuilder = (authUser: AuthUser, filter: AnalyticsQuery) => {
   const days = filter.interval || 7;

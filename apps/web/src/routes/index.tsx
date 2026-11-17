@@ -15,6 +15,7 @@ import { ToolIcon } from '@/components/tool-icon';
 import { LinkBuilder } from '@/components/link-builder';
 import { AnalyticsMockup, ApiMockup, TargetingMockup } from '@/components/mockups';
 import { PricingCards } from '@/components/pricing-cards';
+import { NamedPromoVideo, videoJsonLd } from '@/components/promo-video';
 import { Eyebrow, Section, SectionHeader, Showcase } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
 import { qrTools } from '@/data/qr-tools';
@@ -33,7 +34,7 @@ export const Route = createFileRoute('/')({
       description: t.home.metaDescription,
       path: '/',
       locale,
-      jsonLd: [softwareJsonLd, faqJsonLd(t.home.faqs)],
+      jsonLd: [softwareJsonLd, videoJsonLd('tour'), faqJsonLd(t.home.faqs)],
     });
   },
   component: Home,
@@ -119,8 +120,24 @@ function Home() {
         </Showcase>
       </div>
 
+      {/* Product tour */}
+      <Section>
+        <div className="mx-auto max-w-2xl text-center">
+          <Eyebrow tone="amber" className="justify-center">
+            {copy.videoEyebrow}
+          </Eyebrow>
+          <h2 className="mt-3 text-4xl font-semibold tracking-[-0.03em] md:text-5xl">
+            {copy.videoTitle}
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground">{copy.videoDescription}</p>
+        </div>
+        <Showcase className="mx-auto max-w-5xl">
+          <NamedPromoVideo name="tour" />
+        </Showcase>
+      </Section>
+
       {/* Link builder */}
-      <Section surface className="mt-24">
+      <Section surface>
         <SectionHeader
           eyebrow={copy.builderEyebrow}
           tone="blue"

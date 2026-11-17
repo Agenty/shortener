@@ -178,6 +178,19 @@ export const updateLink = async (
   key: string,
   link: Link
 ): Promise<Link> => {
+  // A blocked link stays blocked, so it can't be pointed somewhere else to get around the block
+  const existing = await env.DB.prepare(
+    `SELECT blocked_at FROM Links WHERE key = ? AND account_id = ?`
+  )
+    .bind(key.toLowerCase(), authUser.account_id)
+    .first<{ blocked_at: string | null }>();
+  if (!existing) return null;
+  if (existing.blocked_at) {
+    throw new HTTPException(403, {
+      message: `This link is blocked and can't be edited. Delete it, or contact support if you think it was blocked by mistake.`,
+    });
+  }
+
   await assertVerifiedDestinations(env, authUser, getDestinations(link));
   await assertOwnProject(env, authUser, link);
 
@@ -206,6 +219,8 @@ export const updateLink = async (
     .run();
 
   if (meta.changes === 0) return null;
+  // Redirects read the KV copy first, drop it so the change applies right away
+  await env.LINKS.delete(link.key.toLowerCase());
   queueLinkScan(env, [link.key]);
   return convertToLink(link);
 };
@@ -222,6 +237,7 @@ export const deleteLink = async (
   )
     .bind(key, authUser.account_id)
     .run();
+  if (meta.changes > 0) await env.LINKS.delete(key.toLowerCase());
   return meta.changes > 0;
 };
 

@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { ArrowUpRight } from 'lucide-react';
 import { LogoMark, Wordmark } from '@/components/logo';
+import { WatchVideoButton } from '@/components/promo-video';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { buttonVariants } from '@/components/ui/button';
 import { alternatives, featuredAlternatives } from '@/data/alternatives';
@@ -64,7 +65,7 @@ export function CtaBand({ title, description }: { title?: string; description?: 
       <h2 className="mx-auto max-w-2xl text-4xl font-semibold tracking-[-0.03em] text-balance md:text-6xl">
         {title ?? t.footer.ctaTitle}
       </h2>
-      <div className="mt-8 flex items-center justify-center gap-3">
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <a
           href={withLang(SIGNUP_URL, locale)}
           className={cn(
@@ -74,6 +75,7 @@ export function CtaBand({ title, description }: { title?: string; description?: 
         >
           {t.common.startFree}
         </a>
+        <WatchVideoButton className="h-11 rounded-xl border border-white/20 px-5 text-sm font-medium text-white transition-colors hover:bg-white/10" />
         <a href={withLang(LOGIN_URL, locale)} className="px-3 py-2 text-sm text-white/80 hover:text-white">
           {t.common.signIn}
         </a>

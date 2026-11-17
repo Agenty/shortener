@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { Link as RouterLink } from "react-router";
 import { useQueryState, useQueryStates, parseAsInteger, parseAsString } from "nuqs";
-import { Download, ExternalLink, Lock, Monitor, Smartphone, Tablet, X } from "lucide-react";
+import { Download, ExternalLink, Loader2, Lock, Monitor, Smartphone, Tablet, X } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -21,6 +21,7 @@ import {
 import { toast } from "sonner";
 import { api, ApiError } from "@/lib/api";
 import type { ClickReport } from "@/types/report";
+import { datedFilename, downloadCsv, fetchAllPages, toCsv, type CsvColumn } from "@/lib/csv";
 import * as Flags from "country-flag-icons/react/3x2";
 
 const LIMIT = 25;
@@ -102,6 +103,19 @@ function FilterButton({
   );
 }
 
+const CSV_COLUMNS: CsvColumn<ClickReport>[] = [
+  { header: "time_utc", value: (r) => r.timestamp },
+  { header: "short_link", value: (r) => r.url },
+  { header: "country", value: (r) => r.country },
+  { header: "region", value: (r) => r.region },
+  { header: "city", value: (r) => r.city },
+  { header: "referrer", value: (r) => r.referer },
+  { header: "browser", value: (r) => r.browser },
+  { header: "os", value: (r) => r.os },
+  { header: "device", value: (r) => r.device },
+  { header: "ip", value: (r) => r.ip },
+];
+
 export default function Reports() {
   const [device, setDevice] = useQueryState("device", { defaultValue: "all" });
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
@@ -135,6 +149,28 @@ export default function Reports() {
   };
 
   const activeFilters = FILTERS.filter(({ name }) => filters[name]);
+
+  // Every click that matches the filters, not only the page on screen
+  const [exporting, setExporting] = useState(false);
+  const exportCsv = async () => {
+    setExporting(true);
+    try {
+      const { offset: _offset, limit: _limit, ...filterParams } = params;
+      const clicks = await fetchAllPages((offset, limit) =>
+        api.reports.list({ ...filterParams, offset, limit }),
+      );
+      if (!clicks.length) {
+        toast.info("No clicks to export for these filters");
+        return;
+      }
+      downloadCsv(datedFilename("clicks"), toCsv(clicks, CSV_COLUMNS));
+      toast.success(`Exported ${clicks.length.toLocaleString()} clicks`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Export failed");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   // Paywall overlay starts at the first locked row
   const tableRef = useRef<HTMLDivElement>(null);
@@ -174,8 +210,19 @@ export default function Reports() {
               ))}
             </SelectContent>
           </Select>
-          <Button variant="outline" size="sm" onClick={() => toast.success("Report exported!")}>
-            <Download className="mr-1.5 h-3.5 w-3.5" /> Export
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={exportCsv}
+            disabled={exporting || noAccess || isLoading || total === 0}
+            title="Download every click that matches the filters as CSV"
+          >
+            {exporting ? (
+              <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Download className="mr-1.5 h-3.5 w-3.5" />
+            )}
+            Export CSV
           </Button>
         </div>
       </div>

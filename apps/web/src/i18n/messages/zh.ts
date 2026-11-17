@@ -4,6 +4,8 @@ const zh: Messages = {
   common: {
     skipToContent: '跳到正文',
     startFree: '免费开始',
+    watchDemo: '观看演示',
+    playVideo: '播放视频',
     signIn: '登录',
     menu: '菜单',
     openMenu: '打开菜单',
@@ -219,6 +221,10 @@ const zh: Messages = {
     metaTitle: 'Shortener.dev - 带点击统计的短链接生成器',
     metaDescription:
       '免费短链接生成器，可在自有域名上创建短链接，支持点击统计、UTM 生成器、有效期、密码、设备和地区定向，并提供 API。',
+    videoEyebrow: '产品导览',
+    videoTitle: '看看所有功能如何协同工作。',
+    videoDescription:
+      'Chrome 扩展、链接生成器、点击分析、链接安全和 API，一分钟多一点就能看完。',
     heroLine1: '缩短任意链接',
     heroLine2: '随处分享',
     heroLine3: '洞察每一次点击',

@@ -4,6 +4,8 @@ const de: Messages = {
   common: {
     skipToContent: 'Zum Inhalt springen',
     startFree: 'Kostenlos starten',
+    watchDemo: 'Demo ansehen',
+    playVideo: 'Video abspielen',
     signIn: 'Anmelden',
     menu: 'Menü',
     openMenu: 'Menü öffnen',
@@ -230,6 +232,10 @@ const de: Messages = {
     metaTitle: 'Shortener.dev - URL-Shortener mit Klickstatistiken',
     metaDescription:
       'Kostenloser URL-Shortener für Kurzlinks auf deiner eigenen Domain, mit Klickstatistiken, UTM-Builder, Ablaufdatum, Passwörtern, Geräte- und Geo-Targeting und einer API.',
+    videoEyebrow: 'Produkttour',
+    videoTitle: 'So greift alles ineinander.',
+    videoDescription:
+      'Die Chrome-Erweiterung, der Link-Builder, Klick-Analysen, Link-Sicherheit und die API in gut einer Minute.',
     heroLine1: 'Jeden Link kürzen',
     heroLine2: 'Überall teilen',
     heroLine3: 'Jeden Klick sehen',

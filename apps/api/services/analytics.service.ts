@@ -94,6 +94,17 @@ const FILTER_COLUMNS: Record<keyof ClickFilter, string> = {
   device: 'blob8',
 };
 
+// Short link keys are interpolated in the Analytics Engine SQL
+const KEY_PATTERN = /^[A-Za-z0-9_-]{1,32}$/;
+
+export const toKey = (url: string) => {
+  const key = url.split('?')[0].split('/').pop();
+  if (!KEY_PATTERN.test(key)) {
+    throw new HTTPException(400, { message: `Invalid short link: ${url}` });
+  }
+  return key;
+};
+
 // Filter values are interpolated in the Analytics Engine SQL, so reject
 // anything that could close the string literal
 const FILTER_VALUE_PATTERN = /^[^'\\\x00-\x1f]{1,256}$/;

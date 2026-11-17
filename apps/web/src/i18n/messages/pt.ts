@@ -4,6 +4,8 @@ const pt: Messages = {
   common: {
     skipToContent: 'Pular para o conteúdo',
     startFree: 'Comece grátis',
+    watchDemo: 'Ver a demonstração',
+    playVideo: 'Reproduzir vídeo',
     signIn: 'Entrar',
     menu: 'Menu',
     openMenu: 'Abrir menu',
@@ -240,6 +242,10 @@ const pt: Messages = {
     metaTitle: 'Shortener.dev - Encurtador de URL com análise de cliques',
     metaDescription:
       'Encurtador de URL grátis para criar links curtos no seu próprio domínio, com análise de cliques, gerador de UTM, expiração, senhas, segmentação por dispositivo e localização, e uma API.',
+    videoEyebrow: 'Tour do produto',
+    videoTitle: 'Veja como tudo se encaixa.',
+    videoDescription:
+      'A extensão para Chrome, o criador de links, a análise de cliques, a segurança dos links e a API, em pouco mais de um minuto.',
     heroLine1: 'Encurte qualquer link',
     heroLine2: 'Compartilhe em qualquer lugar',
     heroLine3: 'Veja cada clique',

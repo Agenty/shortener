@@ -4,6 +4,8 @@ const tr: Messages = {
   common: {
     skipToContent: 'İçeriğe geç',
     startFree: 'Ücretsiz başla',
+    watchDemo: 'Demoyu izle',
+    playVideo: 'Videoyu oynat',
     signIn: 'Giriş yap',
     menu: 'Menü',
     openMenu: 'Menüyü aç',
@@ -230,6 +232,10 @@ const tr: Messages = {
     metaTitle: 'Shortener.dev - Tıklama analitiğine sahip URL kısaltıcı',
     metaDescription:
       'Kendi alan adınızda kısa bağlantılar oluşturmak için ücretsiz URL kısaltıcı: tıklama analitiği, UTM oluşturucu, süre sonu, şifreler, cihaz ve konum hedefleme ve bir API.',
+    videoEyebrow: 'Ürün turu',
+    videoTitle: 'Her şeyin nasıl bir araya geldiğini görün.',
+    videoDescription:
+      'Chrome uzantısı, bağlantı oluşturucu, tıklama analitiği, bağlantı güvenliği ve API, bir dakikadan biraz fazla sürede.',
     heroLine1: 'Her bağlantıyı kısaltın',
     heroLine2: 'Her yerde paylaşın',
     heroLine3: 'Her tıklamayı görün',

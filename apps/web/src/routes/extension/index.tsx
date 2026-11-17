@@ -3,6 +3,7 @@ import { ArrowRight, Copy, Globe, LineChart, MousePointerClick, ShieldCheck, Spa
 import { BrowserFrame } from '@/components/browser-frame';
 import { StoreButtons } from '@/components/extension';
 import { Faq } from '@/components/faq';
+import { NamedPromoVideo, videoJsonLd } from '@/components/promo-video';
 import { PageHero } from '@/components/page-hero';
 import { Eyebrow, Section, SectionHeader, Showcase } from '@/components/section';
 import { extensionFaqs } from '@/data/extension';
@@ -29,6 +30,7 @@ export const Route = createFileRoute('/extension/')({
           { name: SITE_NAME, path: '/' },
           { name: 'Browser extension', path: '/extension' },
         ]),
+        videoJsonLd('short'),
         faqJsonLd(extensionFaqs),
       ],
     }),
@@ -132,6 +134,18 @@ function ExtensionPage() {
           </BrowserFrame>
         </Showcase>
       </div>
+
+      <Section surface className="mt-20 md:mt-28">
+        <SectionHeader
+          eyebrow="Demo"
+          tone="violet"
+          title="See it in 30 seconds."
+          description="Shorten a page from the toolbar, add UTM tags, expiry and geo targeting, then watch the clicks come in."
+        />
+        <Showcase className="mx-auto max-w-5xl">
+          <NamedPromoVideo name="short" />
+        </Showcase>
+      </Section>
 
       <Section>
         <SectionHeader

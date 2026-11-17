@@ -1,30 +1,59 @@
-import { Link } from '@tanstack/react-router';
-import ReactMarkdown, { type Components } from 'react-markdown';
-import rehypeSlug from 'rehype-slug';
-import remarkGfm from 'remark-gfm';
+import { Link } from "@tanstack/react-router";
+import ReactMarkdown, { type Components } from "react-markdown";
+import { PromoVideo } from "@/components/promo-video";
+import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
+
+/** `![Title](/videos/name.mp4)` embeds a video instead of an image */
+const isVideo = (src: unknown): src is string =>
+  typeof src === "string" && src.endsWith(".mp4");
 
 const components: Components = {
-  a: ({ href = '', title, children }) => {
-    if (href.startsWith('/') && !href.startsWith('//')) {
+  // A paragraph holding only a video would wrap a block in <p>, so render it bare
+  p: ({ node, children }) => {
+    const only = node?.children.length === 1 ? node.children[0] : undefined;
+    if (
+      only?.type === "element" &&
+      only.tagName === "img" &&
+      isVideo(only.properties.src)
+    ) {
+      return <>{children}</>;
+    }
+    return <p>{children}</p>;
+  },
+  a: ({ href = "", title, children }) => {
+    if (href.startsWith("/") && !href.startsWith("//")) {
       return <Link to={href}>{children}</Link>;
     }
-    if (href.startsWith('#')) return <a href={href}>{children}</a>;
+    if (href.startsWith("#")) return <a href={href}>{children}</a>;
     return (
-      <a href={href} title={title} target="_blank" rel="nofollow noopener noreferrer">
+      <a
+        href={href}
+        title={title}
+        target="_blank"
+        rel="nofollow noopener noreferrer"
+      >
         {children}
       </a>
     );
   },
   // Screenshots, framed so light UI stays distinct from the page
-  img: ({ src, alt }) => (
-    <img
-      src={typeof src === 'string' ? src : undefined}
-      alt={alt ?? ''}
-      loading="lazy"
-      decoding="async"
-      className="rounded-xl border shadow-sm"
-    />
-  ),
+  img: ({ src, alt }) =>
+    isVideo(src) ? (
+      <PromoVideo
+        src={src}
+        title={alt ?? ""}
+        className="not-prose my-8 shadow-sm"
+      />
+    ) : (
+      <img
+        src={typeof src === "string" ? src : undefined}
+        alt={alt ?? ""}
+        loading="lazy"
+        decoding="async"
+        className="rounded-xl border shadow-sm"
+      />
+    ),
   table: ({ children }) => (
     <div className="overflow-x-auto">
       <table>{children}</table>
@@ -35,7 +64,11 @@ const components: Components = {
 export function Markdown({ children }: { children: string }) {
   return (
     <div className="prose prose-neutral max-w-none dark:prose-invert prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-h2:mt-12 prose-h2:text-2xl prose-h3:text-lg prose-a:underline-offset-2 prose-code:rounded prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-code:before:content-none prose-code:after:content-none prose-pre:border prose-pre:bg-muted prose-pre:text-foreground [&_pre_code]:bg-transparent [&_pre_code]:p-0">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSlug]} components={components}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeSlug]}
+        components={components}
+      >
         {children}
       </ReactMarkdown>
     </div>

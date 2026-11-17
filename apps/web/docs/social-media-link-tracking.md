@@ -80,7 +80,7 @@ A few things to keep in mind when you compare:
 - Don't rely on the Referers report alone. Instagram, TikTok and WhatsApp often send no referrer, so their clicks land under **Direct**. The back-half already tells you where the click came from. See [Why social media clicks show as Direct](/docs/social-traffic-direct).
 - Previews aren't clicks. When you paste a link, the network's crawler fetches it to build the preview card. Known crawlers and bots are left out of click analytics.
 
-For click-by-click data with exact times, open **Reports** and click **Export**. See [Click reports](/docs/click-reports).
+For click-by-click data with exact times, open **Reports** and click **Export CSV**. See [Click reports](/docs/click-reports).
 
 ## Rotate the link in a single bio slot
 
@@ -104,4 +104,4 @@ For posts you want to measure, yes. One link reused everywhere gives you a total
 
 ### Can I change where a link points after I post it?
 
-Yes, through the API. The short link stays the same, so links in old posts and printed QR codes start sending people to the new page. See [Change where a short link goes](/docs/edit-short-link).
+Yes. Choose **Edit** in the link's **...** menu on the **Links** page and change the destination. The short link stays the same, so links in old posts and printed QR codes start sending people to the new page. See [Change where a short link goes](/docs/edit-short-link).

@@ -11,6 +11,8 @@ The Shortener.dev extension puts the link shortener in your browser's side panel
 
 It works in Chrome 116 or newer and Firefox 128 or newer. Edge, Brave, Opera and Vivaldi install it from the Chrome Web Store.
 
+![Shortener.dev in 30 seconds: shortening a page from the Chrome toolbar, then adding UTM tags, expiry and geo targeting](/videos/shortener-30s.mp4)
+
 ## Install the extension
 
 1. Open the [extension page](/extension) and click **Add to Chrome** or **Add to Firefox**.

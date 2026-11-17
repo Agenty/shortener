@@ -31,6 +31,7 @@ export const DOC_SECTIONS = [
   'Team and API',
   'Integrations',
   'Guides',
+  'Playbooks',
   'Help',
 ];
 

@@ -4,6 +4,8 @@ const da: Messages = {
   common: {
     skipToContent: 'Gå til indhold',
     startFree: 'Start gratis',
+    watchDemo: 'Se demoen',
+    playVideo: 'Afspil video',
     signIn: 'Log ind',
     menu: 'Menu',
     openMenu: 'Åbn menu',
@@ -230,6 +232,10 @@ const da: Messages = {
     metaTitle: 'Shortener.dev - URL-forkorter med klikstatistik',
     metaDescription:
       'Gratis URL-forkorter til korte links på dit eget domæne, med klikstatistik, UTM-builder, udløb, adgangskoder, målretning efter enhed og geografi samt et API.',
+    videoEyebrow: 'Produktrundvisning',
+    videoTitle: 'Se hvordan det hele hænger sammen.',
+    videoDescription:
+      'Chrome-udvidelsen, linkbyggeren, klikstatistik, linksikkerhed og API’et på lidt over et minut.',
     heroLine1: 'Forkort ethvert link',
     heroLine2: 'Del det overalt',
     heroLine3: 'Se hvert klik',

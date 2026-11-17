@@ -9,6 +9,8 @@ updated: 2026-10-29
 
 Shortener.dev turns a long URL into a short link like `srt1.link/spring-sale` and records every click: when it happened, where the visitor came from, and which country, browser and device they used. These docs follow the dashboard at [app.shortener.dev](https://app.shortener.dev) screen by screen, and the [API reference](/docs/api) covers the same features in code.
 
+![Shortener.dev product tour: the browser extension, link builder, click analytics, link safety and API](/videos/shortener-tour.mp4)
+
 ## Create your first short link
 
 1. Open **Links** in the dashboard sidebar and click **Create Link**.
@@ -42,4 +44,5 @@ Every option sits in the **Options** list of the link builder and is available o
 - [QR codes](/docs/qr-codes) turns a short link into a QR code you can download and print.
 - [Click analytics](/docs/click-analytics) shows how to measure one link or a whole campaign.
 - [Shorten URLs with the API](/docs/url-shortener-api) creates links from your own code with an API key.
+- Playbooks walk through one campaign job from the first link to the report, such as [multi-country campaign links](/docs/multi-country-campaign-links) and [influencer tracking links](/docs/influencer-tracking-links).
 - `https://shortener.dev/llms.txt` lists these pages for AI assistants and agents. Add `.md` to any docs URL to get the page as plain markdown.

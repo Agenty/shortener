@@ -4,6 +4,8 @@ const nl: Messages = {
   common: {
     skipToContent: 'Naar de inhoud',
     startFree: 'Gratis beginnen',
+    watchDemo: 'Bekijk de demo',
+    playVideo: 'Video afspelen',
     signIn: 'Inloggen',
     menu: 'Menu',
     openMenu: 'Menu openen',
@@ -230,6 +232,10 @@ const nl: Messages = {
     metaTitle: 'Shortener.dev - URL-verkorter met klikstatistieken',
     metaDescription:
       'Gratis URL-verkorter om korte links op je eigen domein te maken, met klikstatistieken, UTM-builder, vervaldatum, wachtwoorden, targeting op apparaat en locatie, en een API.',
+    videoEyebrow: 'Productrondleiding',
+    videoTitle: 'Zie hoe alles samenwerkt.',
+    videoDescription:
+      'De Chrome-extensie, de linkbouwer, klikstatistieken, linkveiligheid en de API, in iets meer dan een minuut.',
     heroLine1: 'Verkort elke link',
     heroLine2: 'Deel hem overal',
     heroLine3: 'Zie elke klik',

@@ -45,6 +45,7 @@ Every QR code includes a quiet zone, a blank border around the code that scanner
 
 The QR code only holds the short link, so whatever the short link does, the code does:
 
+- [Edit the link](/docs/edit-short-link) to send scans to a new page, such as next season's menu.
 - Turn the link off and on, or set an [expiration date](/docs/link-expiration) so the code stops working after an event or offer.
 - Send scans from different countries to different pages with [geo targeting](/docs/geo-targeting).
 - Send iPhone and Android scans to your app with [iOS and Android targeting](/docs/ios-android-app-links).

@@ -4,6 +4,8 @@ const sv: Messages = {
   common: {
     skipToContent: 'Hoppa till innehållet',
     startFree: 'Börja gratis',
+    watchDemo: 'Se demon',
+    playVideo: 'Spela upp video',
     signIn: 'Logga in',
     menu: 'Meny',
     openMenu: 'Öppna menyn',
@@ -230,6 +232,10 @@ const sv: Messages = {
     metaTitle: 'Shortener.dev - URL-förkortare med klickstatistik',
     metaDescription:
       'Gratis URL-förkortare för korta länkar på din egen domän, med klickstatistik, UTM-byggare, utgångsdatum, lösenord, styrning efter enhet och plats och ett API.',
+    videoEyebrow: 'Produktrundtur',
+    videoTitle: 'Se hur allt hänger ihop.',
+    videoDescription:
+      'Chrome-tillägget, länkbyggaren, klickstatistik, länksäkerhet och API:t på drygt en minut.',
     heroLine1: 'Korta vilken länk som helst',
     heroLine2: 'Dela den överallt',
     heroLine3: 'Se varje klick',
