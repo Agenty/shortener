@@ -1,10 +1,10 @@
 ---
 title: Change where a short link goes
-nav: Change the destination
-description: Point an existing short link at a new URL without changing the link itself, so printed QR codes and links you already shared keep working.
+nav: Edit a link
+description: Edit an existing short link in the dashboard to point it at a new URL or change its options, without changing the link itself, so printed QR codes and links you already shared keep working.
 section: Short links
 order: 4
-updated: 2026-11-14
+updated: 2026-11-17
 ---
 
 You can change the destination of a short link after you've shared it. The short URL, such as `srt1.link/spring-menu`, stays the same, so a QR code on a printed flyer or a link in last week's newsletter starts sending people to the new page.
@@ -14,44 +14,53 @@ Common reasons to do it:
 - The page moved, for example from `/blog/spring-launch` to `/blog/2026/spring-launch`.
 - A campaign ended and you want the link to land on your current offer instead of an empty page.
 - You printed a QR code before the final URL was ready.
+- A UTM value was wrong and your analytics files the visits in the wrong channel.
 
-The dashboard doesn't have an edit button yet, so changing a link is done with the [API](/docs/url-shortener-api). You need an [API key](/docs/api-keys), which is included on paid plans.
+Editing works on every plan, including Free.
 
-## Send the whole link, not only the field you change
+## Edit a link in the dashboard
 
-`PUT /v1/links/{key}` replaces the link's settings with what you send. If you send only `url`, any expiration, UTM parameters, password, social preview, app targeting, geo targeting or project on the link is removed. The one exception is `is_enabled`, which keeps its current value when you leave it out.
+1. Open **Links** in the sidebar.
+2. Click the **...** menu on the link's row, or on its card in grid view, and choose **Edit**.
+3. The **Edit Short Link** dialog opens with the link's current settings. Change **Original URL**, or any option below it.
+4. Click **Save Changes**.
 
-So the safe way to edit a link is to read it, change the field, and send it back.
+![Edit option in the actions menu of a short link](/docs/images/link-actions-menu.webp)
 
-## Change the destination
+![Edit Short Link dialog with the current destination and options](/docs/images/edit-link-dialog.webp)
 
-1. Get the current link:
+Every option can be changed the same way: [expiration](/docs/link-expiration), [UTM parameters](/docs/utm-parameters), [social preview](/docs/social-media-preview), [password](/docs/password-protected-links), [iOS and Android targeting](/docs/ios-android-app-links), [geo targeting](/docs/geo-targeting) and the [project](/docs/projects). To remove an option, clear its fields before saving. Whether the link is enabled or [disabled](/docs/disable-short-link) doesn't change when you edit it.
 
-   ```bash
-   curl https://api.shortener.dev/v1/links/spring-menu \
-     -H "Authorization: Bearer $SHORTENER_API_KEY"
-   ```
+The back-half is shown but can't be edited. To use a different back-half, [create a new link](/docs/create-short-link) and [disable](/docs/disable-short-link) or delete the old one.
 
-2. Copy the JSON from the response and change `url`:
+## When the change shows up
 
-   ```json
-   {
-     "url": "https://example.com/menu/summer",
-     "project_id": 3,
-     "params": { "utm_source": "flyer", "utm_medium": "print" },
-     "title": "Our summer menu",
-     "geo": []
-   }
-   ```
+New clicks use the new settings within a few seconds. In rare cases, a Cloudflare location that served the link just before your change keeps the old version for up to a minute.
 
-3. Send it back:
+Clicks are recorded against the back-half, so the link's history in [click analytics](/docs/click-analytics) covers both the old and the new destination.
 
-   ```bash
-   curl -X PUT https://api.shortener.dev/v1/links/spring-menu \
-     -H "Authorization: Bearer $SHORTENER_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d @link.json
-   ```
+## Things that can block the update
+
+- The new URL has to be on a [verified domain](/docs/verify-domain) or a whitelisted site, the same as when you create a link. If it isn't, the dashboard offers to verify the domain.
+- A link that was [blocked](/docs/manage-links#blocked-links) for an unsafe destination can't be edited, in the dashboard or with the API. **Edit** is greyed out in its menu, and the API returns `403` with `This link is blocked and can't be edited`.
+- If the link's expiration date is already in the past, saving fails with `Must be greater then current date time + 5 minutes or empty`. Set a new date at least 5 minutes ahead, or clear the expiration. This is also how you bring an expired link back.
+
+## Change a link with the API
+
+On paid plans, you can update links from your own code with `PUT /v1/links/{key}`. You need an [API key](/docs/api-keys).
+
+The update replaces the link's settings with what you send. If you send only `url`, any expiration, UTM parameters, password, social preview, app targeting, geo targeting or project on the link is removed. The one exception is `is_enabled`, which keeps its current value when you leave it out. So read the link first, change the field, and send it all back:
+
+```bash
+curl https://api.shortener.dev/v1/links/spring-menu \
+  -H "Authorization: Bearer $SHORTENER_API_KEY" > link.json
+
+# edit "url" in link.json, then:
+curl -X PUT https://api.shortener.dev/v1/links/spring-menu \
+  -H "Authorization: Bearer $SHORTENER_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d @link.json
+```
 
 The response is the updated link. Read-only fields like `short_url` and `created_at` can stay in the body you send, they're ignored.
 
@@ -78,21 +87,17 @@ async function changeDestination(key, newUrl) {
 await changeDestination('spring-menu', 'https://example.com/menu/summer');
 ```
 
-## When the change shows up
-
-Short links are cached for up to a minute at the edge. Some visitors can still land on the old destination for about 60 seconds after you update the link.
-
-## Things that can block the update
-
-- The new URL has to be on a [verified domain](/docs/verify-domain) or a whitelisted site, the same as when you create a link. Otherwise you get `Domain not verified`.
-- If the link has an `expire_at` that is already in the past, the update fails with `Must be greater then current date time + 5 minutes or empty`. Set a new date at least 5 minutes ahead, or send `null` to remove the expiration. This is also how you bring an expired link back.
-- The back-half can't be changed. To use a different back-half, [create a new link](/docs/create-short-link) and [disable](/docs/disable-short-link) or delete the old one.
+To update many links at once, such as after a website move, see [Website migration](/docs/website-migration-short-links).
 
 ## Frequently asked questions
 
 ### Can I change the destination of a short link after sharing it?
 
-Yes. Update the link's `url` with `PUT /v1/links/{key}` in the Shortener.dev API. The short URL stays the same, so everyone who clicks it, or scans a QR code made from it, reaches the new page.
+Yes. Open the link's **...** menu on the **Links** page, choose **Edit**, change **Original URL** and click **Save Changes**. The short URL stays the same, so everyone who clicks it, or scans a QR code made from it, reaches the new page.
+
+### Can I change the back-half of a short link?
+
+No. The back-half identifies the link everywhere it was shared, so it can't be renamed. Create a new link with the back-half you want instead.
 
 ### Do I need to reprint a QR code when the destination changes?
 

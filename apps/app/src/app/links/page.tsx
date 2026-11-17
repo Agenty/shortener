@@ -16,6 +16,8 @@ import {
   QrCode,
   FolderInput,
   Check,
+  Pencil,
+  Download,
 } from 'lucide-react';
 import { Link as RouterLink } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -61,6 +63,7 @@ import { QrCodeDialog } from './components/QrCodeDialog';
 import { api } from '@/lib/api';
 import { useViewPreference } from '@/hooks/use-view-preference';
 import type { Link } from '@/types/link';
+import { datedFilename, downloadCsv, fetchAllPages, toCsv, type CsvColumn } from '@/lib/csv';
 import type { Project } from '@/types/project';
 import { useProjects } from '@/hooks/use-projects';
 import { ProjectBadge, ProjectDot } from '@/app/projects/components/ProjectBadge';
@@ -88,11 +91,48 @@ function getDomain(url: string) {
   }
 }
 
+const UTM_FIELDS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+
+const linkStatus = (link: Link) => {
+  if (link.blocked_at) return 'blocked';
+  if (!link.is_enabled) return 'disabled';
+  if (link.expire_at && new Date(link.expire_at) <= new Date()) return 'expired';
+  return 'enabled';
+};
+
+/** Columns of the links export. Passwords are never written to the file, only whether a link has one */
+const linkCsvColumns = (projectsById: Map<number, Project>): CsvColumn<Link>[] => [
+  { header: 'short_link', value: (l) => l.short_url },
+  { header: 'back_half', value: (l) => l.key },
+  { header: 'destination', value: (l) => l.url },
+  { header: 'status', value: linkStatus },
+  { header: 'project', value: (l) => (l.project_id ? projectsById.get(l.project_id)?.name ?? l.project_id : '') },
+  { header: 'created_at', value: (l) => l.created_at },
+  { header: 'expire_at', value: (l) => l.expire_at ?? '' },
+  ...UTM_FIELDS.map((name) => ({ header: name, value: (l: Link) => l.params?.[name] ?? '' })),
+  {
+    header: 'other_params',
+    value: (l) =>
+      Object.entries(l.params ?? {})
+        .filter(([name]) => !UTM_FIELDS.includes(name))
+        .map(([name, value]) => `${name}=${value}`)
+        .join('&'),
+  },
+  { header: 'password_protected', value: (l) => (l.password ? 'yes' : 'no') },
+  { header: 'ios_url', value: (l) => l.ios ?? '' },
+  { header: 'android_url', value: (l) => l.android ?? '' },
+  { header: 'geo_targets', value: (l) => (l.geo ?? []).map((g) => `${g.country}=${g.url}`).join(' ') },
+  { header: 'preview_title', value: (l) => l.title ?? '' },
+  { header: 'preview_description', value: (l) => l.description ?? '' },
+  { header: 'preview_image', value: (l) => l.image ?? '' },
+];
+
 function LinkFavicon({ url }: { url: string }) {
   return <DomainFavicon domain={getDomain(url)} size="sm" />;
 }
 
 type RowActions = {
+  onEdit: (link: Link) => void;
   onCopy: (key: string) => void;
   onQr: (key: string) => void;
   onDelete: (key: string) => void;
@@ -103,28 +143,40 @@ type RowActions = {
 
 function LinkActions({
   link,
+  onEdit,
   onCopy,
   onQr,
   onDelete,
   onMove,
   projects,
 }: { link: Link } & Omit<RowActions, 'projectsById'>) {
+  // Blocked for an unsafe destination: no edits, and no shortcut to the flagged page
+  const blocked = !!link.blocked_at;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8" />}>
         <MoreHorizontal className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          onClick={() => onEdit(link)}
+          disabled={blocked}
+          title={blocked ? "Blocked links can't be edited" : undefined}
+        >
+          <Pencil className="mr-2 h-4 w-4" /> Edit
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onCopy(link.key)}>
           <Copy className="mr-2 h-4 w-4" /> Copy
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onQr(link.key)}>
           <QrCode className="mr-2 h-4 w-4" /> QR Code
         </DropdownMenuItem>
-        <DropdownMenuItem render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}>
-          <ExternalLink className="mr-2 h-4 w-4" /> Open
-        </DropdownMenuItem>
-        {projects.length > 0 && (
+        {!blocked && (
+          <DropdownMenuItem render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}>
+            <ExternalLink className="mr-2 h-4 w-4" /> Open
+          </DropdownMenuItem>
+        )}
+        {projects.length > 0 && !blocked && (
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <FolderInput className="mr-2 h-4 w-4" /> Move to project
@@ -323,6 +375,8 @@ export default function Links() {
   const { projects, byId: projectsById } = useProjects();
   const [deleteKey, setDeleteKey] = useState<string | null>(null);
   const [qrKey, setQrKey] = useState<string | null>(null);
+  const [editLink, setEditLink] = useState<Link | null>(null);
+  const [exporting, setExporting] = useState(false);
   const [view, setView] = useViewPreference('links-view');
   const queryClient = useQueryClient();
 
@@ -356,6 +410,7 @@ export default function Links() {
     if (link.project_id !== projectId) moveMutation.mutate({ link, projectId });
   };
   const rowActions = {
+    onEdit: setEditLink,
     onCopy: (key: string) => copyLink(key),
     onQr: setQrKey,
     onDelete: setDeleteKey,
@@ -379,6 +434,31 @@ export default function Links() {
   const links = data?.result ?? [];
   const total = data?.total ?? 0;
   const totalPages = Math.ceil(total / PER_PAGE);
+
+  // Every link that matches the search and project, not only the page on screen
+  const exportCsv = async () => {
+    setExporting(true);
+    try {
+      const all = await fetchAllPages((offset, limit) =>
+        api.links.list({
+          offset,
+          limit,
+          search: search || undefined,
+          project_id: projectId ?? undefined,
+        }),
+      );
+      if (!all.length) {
+        toast.info('No links to export');
+        return;
+      }
+      downloadCsv(datedFilename('links'), toCsv(all, linkCsvColumns(projectsById)));
+      toast.success(`Exported ${all.length.toLocaleString()} links`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Export failed');
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const copyLink = (key: string) => {
     navigator.clipboard.writeText(`https://${SHORT_DOMAIN}/${key}`);
@@ -432,6 +512,19 @@ export default function Links() {
                 className="w-[160px]"
               />
             )}
+            <Button
+              variant="outline"
+              onClick={exportCsv}
+              disabled={exporting || isLoading || links.length === 0}
+              title="Download the links that match the search and project as CSV"
+            >
+              {exporting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Download className="mr-2 h-4 w-4" />
+              )}
+              Export CSV
+            </Button>
             <ApiExamplesSheet />
             <CreateLinkDialog projectId={projectId} />
           </div>
@@ -540,6 +633,7 @@ export default function Links() {
       )}
 
       <QrCodeDialog linkKey={qrKey} onOpenChange={(open) => !open && setQrKey(null)} />
+      <CreateLinkDialog editLink={editLink} onEditClose={() => setEditLink(null)} />
 
       {/* Delete confirmation */}
       <AlertDialog

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Plus, Loader2, Copy, Check, Eye, EyeOff, Trash2, Globe, Smartphone, Tablet, Calendar, Link2, Lock, Share2, ChevronDown, Shuffle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/lib/api";
 import { SHORT_DOMAIN } from "@/env";
-import type { LinkCreatePayload, LinkFormState, UrlMeta, GeoTarget } from "@/types/link";
+import type { Link, LinkCreatePayload, LinkFormState, UrlMeta, GeoTarget } from "@/types/link";
 import type { Domain } from "@/types/domain";
 import { initialLinkForm } from "@/types/link";
 import { UnverifiedDomainDialog } from "@/app/domains/components/UnverifiedDomainDialog";
@@ -46,10 +46,44 @@ const unverifiedHost = (error: Error) => {
 interface CreateLinkDialogProps {
   /** Project picked when the builder opens, such as the one the links list is filtered by */
   projectId?: number | null;
+  /** Edit this link instead of creating one. The dialog is then opened by the parent */
+  editLink?: Link | null;
+  onEditClose?: () => void;
 }
 
-export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
-  const [open, setOpen] = useState(false);
+/** `datetime-local` input value, in the browser's time zone */
+const toLocalInput = (iso?: string | null) => {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "";
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 16);
+};
+
+/** Builder state from a saved link, so an edit starts from every current setting */
+const linkToForm = (link: Link): LinkFormState => ({
+  url: link.url,
+  key: link.key,
+  project_id: link.project_id ? String(link.project_id) : "",
+  expire_at: toLocalInput(link.expire_at),
+  password: link.password ?? "",
+  title: link.title ?? "",
+  description: link.description ?? "",
+  image: link.image ?? "",
+  ios: link.ios ?? "",
+  android: link.android ?? "",
+  params: { ...initialLinkForm.params, ...(link.params ?? {}) },
+  geo: (link.geo ?? []).map((g) => ({ ...g })),
+});
+
+export function CreateLinkDialog({ projectId, editLink, onEditClose }: CreateLinkDialogProps = {}) {
+  const isEdit = editLink !== undefined;
+  const [createOpen, setCreateOpen] = useState(false);
+  const open = isEdit ? !!editLink : createOpen;
+  const setOpen = (v: boolean) => {
+    if (isEdit) {
+      if (!v) onEditClose?.();
+    } else setCreateOpen(v);
+  };
   const { projects } = useProjects();
   const [link, setLink] = useState<LinkFormState>({ ...initialLinkForm, params: { ...initialLinkForm.params }, geo: [] });
   const [meta, setMeta] = useState<{ data: UrlMeta | null; loading: boolean }>({ data: null, loading: false });
@@ -68,9 +102,34 @@ export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
     setMeta({ data: null, loading: false });
   };
 
+  // Load the link being edited each time the dialog opens for one
+  useEffect(() => {
+    if (!editLink) return;
+    setLink(linkToForm(editLink));
+    setMeta({ data: null, loading: false });
+    fetchMeta(editLink.url);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editLink]);
+
   const mutation = useMutation({
-    mutationFn: (data: LinkCreatePayload) => api.links.create(data),
+    // An update replaces every setting, so the payload is the whole form. Options
+    // left empty are cleared, and the enabled status is sent back unchanged
+    mutationFn: (data: LinkCreatePayload) =>
+      editLink
+        ? api.links.update(editLink.key, {
+            ...data,
+            project_id: data.project_id ?? null,
+            is_enabled: editLink.is_enabled,
+          })
+        : api.links.create(data),
     onSuccess: (created) => {
+      if (editLink) {
+        toast.success("Short link updated", { description: created.short_url });
+        queryClient.invalidateQueries({ queryKey: ["links"] });
+        queryClient.invalidateQueries({ queryKey: ["projects"] });
+        setOpen(false);
+        return;
+      }
       toast.success("Short link created successfully!", {
         description: created.short_url,
         action: {
@@ -86,7 +145,7 @@ export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
     onError: async (error: Error) => {
       const host = unverifiedHost(error);
       if (!host) {
-        toast.error(error.message || "Failed to create link");
+        toast.error(error.message || (editLink ? "Failed to update link" : "Failed to create link"));
         return;
       }
       setUnverified(host);
@@ -127,7 +186,7 @@ export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
   const handleUrlBlur = () => {
     if (!link.url) return;
     fetchMeta(link.url);
-    if (!link.key) updateLink("key", randomKey());
+    if (!link.key && !isEdit) updateLink("key", randomKey());
   };
 
   const handleCreate = () => {
@@ -180,16 +239,18 @@ export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
       onOpenChange={(v) => {
         setOpen(v);
         if (!v) resetForm();
-        else if (projectId) updateLink("project_id", String(projectId));
+        else if (projectId && !isEdit) updateLink("project_id", String(projectId));
       }}
     >
-      <DialogTrigger render={<Button />}>
-        <Plus className="mr-2 h-4 w-4" /> Create Link
-      </DialogTrigger>
+      {!isEdit && (
+        <DialogTrigger render={<Button />}>
+          <Plus className="mr-2 h-4 w-4" /> Create Link
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-hidden p-0">
         <div className="flex flex-col h-full max-h-[90vh]">
           <DialogHeader className="px-6 pt-6 pb-4">
-            <DialogTitle className="text-xl">Short Link Builder</DialogTitle>
+            <DialogTitle className="text-xl">{isEdit ? "Edit Short Link" : "Short Link Builder"}</DialogTitle>
           </DialogHeader>
 
           <div className="flex flex-1 overflow-hidden">
@@ -210,7 +271,8 @@ export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="key">
-                    Short Link <span className="font-normal text-muted-foreground">(optional)</span>
+                    Short Link{" "}
+                    {!isEdit && <span className="font-normal text-muted-foreground">(optional)</span>}
                   </Label>
                   <div className="flex items-center gap-0">
                     <span className="inline-flex items-center h-10 px-3 rounded-l-md border border-r-0 bg-muted text-sm text-muted-foreground">
@@ -223,17 +285,21 @@ export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
                       value={link.key}
                       onChange={(e) => updateLink("key", e.target.value.replace(/[^A-Za-z0-9_-]/g, ""))}
                       className="rounded-l-none"
+                      readOnly={isEdit}
+                      disabled={isEdit}
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      className="ml-1 shrink-0"
-                      title="Generate a random key"
-                      onClick={() => updateLink("key", randomKey())}
-                    >
-                      <Shuffle className="h-4 w-4" />
-                    </Button>
+                    {!isEdit && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="ml-1 shrink-0"
+                        title="Generate a random key"
+                        onClick={() => updateLink("key", randomKey())}
+                      >
+                        <Shuffle className="h-4 w-4" />
+                      </Button>
+                    )}
                     <Button
                       type="button"
                       variant="outline"
@@ -248,7 +314,9 @@ export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Customize the back-half, or leave it blank to auto-generate.
+                  {isEdit
+                    ? "The back-half can't be changed, so shared links and printed QR codes keep working with the new settings."
+                    : "Customize the back-half, or leave it blank to auto-generate."}
                 </p>
                 {projects.length > 0 && (
                   <div className="space-y-2">
@@ -471,7 +539,7 @@ export function CreateLinkDialog({ projectId }: CreateLinkDialogProps = {}) {
               <div className="sticky bottom-0 bg-background pt-4 pb-2 border-t">
                 <Button className="w-full" onClick={handleCreate} disabled={mutation.isPending}>
                   {mutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Create Short Link
+                  {isEdit ? "Save Changes" : "Create Short Link"}
                 </Button>
               </div>
             </div>

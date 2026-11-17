@@ -1,4 +1,4 @@
-import { filterClause, getAnalytics } from '../services/analytics.service';
+import { filterClause, getAnalytics, toKey } from '../services/analytics.service';
 import { AuthUser } from '../models/auth-user';
 import { createRoute, z } from '@hono/zod-openapi';
 import { clickFilterSchema, pagedSchema } from '../models/paged';
@@ -61,7 +61,13 @@ reports.openapi(
     request: {
       query: pagedSchema
         .pick({ offset: true, limit: true })
-        .merge(clickFilterSchema),
+        .merge(clickFilterSchema)
+        .extend({
+          url: z.string().optional().openapi({
+            example: `https://${SHORT_DOMAIN}/summer-sale`,
+            description: 'Filter the click log by a short link URL or key',
+          }),
+        }),
     },
     responses: {
       200: {
@@ -91,7 +97,9 @@ reports.openapi(
     }
 
     const whereClause = `double1 = ${Number(authUser.account_id)}
-    AND timestamp >= NOW() - INTERVAL '30' DAY${filterClause(query)}`;
+    AND timestamp >= NOW() - INTERVAL '30' DAY${filterClause(query)}${
+      query.url ? ` AND blob1 = '${toKey(query.url)}'` : ''
+    }`;
 
     const sqlQuery = `SELECT
     timestamp,

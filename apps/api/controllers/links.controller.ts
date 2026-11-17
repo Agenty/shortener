@@ -161,7 +161,7 @@ links.openapi(
     path: '/{key}',
     summary: 'Update a short link',
     description:
-      'Change the destination URL or settings of an existing short link. The short URL stays the same, so printed QR codes and shared links keep working.',
+      'Change the destination URL or settings of an existing short link. The short URL stays the same, so printed QR codes and shared links keep working. Links blocked for an unsafe destination can\'t be updated and return 403.',
     request: {
       params: keyParamSchema,
       body: {
