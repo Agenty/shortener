@@ -4,6 +4,8 @@ const th: Messages = {
   common: {
     skipToContent: 'ข้ามไปยังเนื้อหา',
     startFree: 'เริ่มใช้ฟรี',
+    watchDemo: 'ดูเดโม',
+    playVideo: 'เล่นวิดีโอ',
     signIn: 'เข้าสู่ระบบ',
     menu: 'เมนู',
     openMenu: 'เปิดเมนู',
@@ -230,6 +232,10 @@ const th: Messages = {
     metaTitle: 'Shortener.dev - ย่อลิงก์ URL พร้อมสถิติการคลิก',
     metaDescription:
       'บริการย่อ URL ฟรีสำหรับสร้างลิงก์สั้นบนโดเมนของคุณเอง พร้อมสถิติการคลิก ตัวสร้าง UTM วันหมดอายุ รหัสผ่าน การกำหนดเป้าหมายตามอุปกรณ์และตำแหน่ง และ API',
+    videoEyebrow: 'ทัวร์ผลิตภัณฑ์',
+    videoTitle: 'ดูว่าทุกอย่างทำงานร่วมกันอย่างไร',
+    videoDescription:
+      'ส่วนขยาย Chrome ตัวสร้างลิงก์ การวิเคราะห์คลิก ความปลอดภัยของลิงก์ และ API ในเวลาราวหนึ่งนาที',
     heroLine1: 'ย่อทุกลิงก์',
     heroLine2: 'แชร์ได้ทุกที่',
     heroLine3: 'เห็นทุกการคลิก',

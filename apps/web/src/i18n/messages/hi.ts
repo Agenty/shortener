@@ -4,6 +4,8 @@ const hi: Messages = {
   common: {
     skipToContent: 'सामग्री पर जाएं',
     startFree: 'मुफ़्त शुरू करें',
+    watchDemo: 'डेमो देखें',
+    playVideo: 'वीडियो चलाएं',
     signIn: 'साइन इन करें',
     menu: 'मेन्यू',
     openMenu: 'मेन्यू खोलें',
@@ -224,6 +226,10 @@ const hi: Messages = {
     metaTitle: 'Shortener.dev - क्लिक एनालिटिक्स वाला URL शॉर्टनर',
     metaDescription:
       'अपने डोमेन पर शॉर्ट लिंक बनाने के लिए मुफ़्त URL शॉर्टनर, क्लिक एनालिटिक्स, UTM बिल्डर, एक्सपायरी, पासवर्ड, डिवाइस और लोकेशन टार्गेटिंग और API के साथ।',
+    videoEyebrow: 'प्रोडक्ट टूर',
+    videoTitle: 'देखें सब कुछ एक साथ कैसे काम करता है।',
+    videoDescription:
+      'Chrome एक्सटेंशन, लिंक बिल्डर, क्लिक एनालिटिक्स, लिंक सुरक्षा और API, एक मिनट से थोड़ा ज़्यादा में।',
     heroLine1: 'कोई भी लिंक छोटा करें',
     heroLine2: 'कहीं भी शेयर करें',
     heroLine3: 'हर क्लिक देखें',

@@ -7,6 +7,8 @@ const en = {
   common: {
     skipToContent: 'Skip to content',
     startFree: 'Start free',
+    watchDemo: 'Watch the demo',
+    playVideo: 'Play video',
     signIn: 'Sign in',
     menu: 'Menu',
     openMenu: 'Open menu',
@@ -233,6 +235,10 @@ const en = {
     metaTitle: 'Shortener.dev - URL shortener with click analytics',
     metaDescription:
       'Free URL shortener to create short links on your own domain, with click analytics, UTM builder, expiration, passwords, device and geo targeting, and an API.',
+    videoEyebrow: 'Product tour',
+    videoTitle: 'See how it all fits together.',
+    videoDescription:
+      'The Chrome extension, the link builder, click analytics, link safety and the API, in a little over a minute.',
     heroLine1: 'Shorten any link',
     heroLine2: 'Share it anywhere',
     heroLine3: 'See every click',

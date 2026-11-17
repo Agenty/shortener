@@ -4,6 +4,8 @@ const ko: Messages = {
   common: {
     skipToContent: '본문으로 건너뛰기',
     startFree: '무료로 시작하기',
+    watchDemo: '데모 보기',
+    playVideo: '동영상 재생',
     signIn: '로그인',
     menu: '메뉴',
     openMenu: '메뉴 열기',
@@ -224,6 +226,10 @@ const ko: Messages = {
     metaTitle: 'Shortener.dev - 클릭 분석을 제공하는 URL 단축기',
     metaDescription:
       '내 도메인으로 단축 링크를 만드는 무료 URL 단축기. 클릭 분석, UTM 빌더, 만료, 비밀번호, 기기 및 지역 타기팅, API를 제공합니다.',
+    videoEyebrow: '제품 둘러보기',
+    videoTitle: '모든 기능이 어떻게 연결되는지 확인하세요.',
+    videoDescription:
+      'Chrome 확장 프로그램, 링크 빌더, 클릭 분석, 링크 안전성, API를 1분 남짓에 소개합니다.',
     heroLine1: '어떤 링크든 짧게',
     heroLine2: '어디서든 공유하고',
     heroLine3: '모든 클릭을 확인하세요',

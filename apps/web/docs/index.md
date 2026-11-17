@@ -9,6 +9,8 @@ updated: 2026-10-29
 
 Shortener.dev turns a long URL into a short link like `srt1.link/spring-sale` and records every click: when it happened, where the visitor came from, and which country, browser and device they used. These docs follow the dashboard at [app.shortener.dev](https://app.shortener.dev) screen by screen, and the [API reference](/docs/api) covers the same features in code.
 
+![Shortener.dev product tour: the browser extension, link builder, click analytics, link safety and API](/videos/shortener-tour.mp4)
+
 ## Create your first short link
 
 1. Open **Links** in the dashboard sidebar and click **Create Link**.

@@ -4,6 +4,8 @@ const he: Messages = {
   common: {
     skipToContent: 'דילוג לתוכן',
     startFree: 'התחילו בחינם',
+    watchDemo: 'צפו בהדגמה',
+    playVideo: 'הפעלת וידאו',
     signIn: 'התחברות',
     menu: 'תפריט',
     openMenu: 'פתיחת התפריט',
@@ -230,6 +232,10 @@ const he: Messages = {
     metaTitle: 'Shortener.dev - מקצר קישורים עם נתוני קליקים',
     metaDescription:
       'מקצר קישורים חינמי ליצירת קישורים קצרים על הדומיין שלכם, עם נתוני קליקים, בונה UTM, תפוגה, סיסמאות, טירגוט לפי מכשיר ומיקום, ו-API.',
+    videoEyebrow: 'סיור במוצר',
+    videoTitle: 'ראו איך הכול מתחבר.',
+    videoDescription:
+      'התוסף ל-Chrome, בונה הקישורים, ניתוח הקליקים, אבטחת הקישורים וה-API, בקצת יותר מדקה.',
     heroLine1: 'קצרו כל קישור',
     heroLine2: 'שתפו אותו בכל מקום',
     heroLine3: 'ראו כל קליק',

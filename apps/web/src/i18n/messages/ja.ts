@@ -4,6 +4,8 @@ const ja: Messages = {
   common: {
     skipToContent: 'コンテンツへスキップ',
     startFree: '無料で始める',
+    watchDemo: 'デモを見る',
+    playVideo: '動画を再生',
     signIn: 'ログイン',
     menu: 'メニュー',
     openMenu: 'メニューを開く',
@@ -224,6 +226,10 @@ const ja: Messages = {
     metaTitle: 'Shortener.dev - クリック分析付き URL 短縮サービス',
     metaDescription:
       '独自ドメインで短縮リンクを作成できる無料の URL 短縮サービス。クリック分析、UTM ビルダー、有効期限、パスワード、デバイス・地域ターゲティング、API に対応。',
+    videoEyebrow: '製品ツアー',
+    videoTitle: 'すべてがどうつながるかをご覧ください。',
+    videoDescription:
+      'Chrome 拡張機能、リンクビルダー、クリック分析、リンクの安全性、API を約 1 分で紹介します。',
     heroLine1: 'どんなリンクも短く',
     heroLine2: 'どこへでもシェア',
     heroLine3: 'すべてのクリックを把握',

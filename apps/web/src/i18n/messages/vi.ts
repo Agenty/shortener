@@ -4,6 +4,8 @@ const vi: Messages = {
   common: {
     skipToContent: 'Chuyển đến nội dung',
     startFree: 'Bắt đầu miễn phí',
+    watchDemo: 'Xem demo',
+    playVideo: 'Phát video',
     signIn: 'Đăng nhập',
     menu: 'Menu',
     openMenu: 'Mở menu',
@@ -240,6 +242,10 @@ const vi: Messages = {
     metaTitle: 'Shortener.dev - Rút gọn URL kèm thống kê lượt nhấp',
     metaDescription:
       'Công cụ rút gọn URL miễn phí để tạo liên kết ngắn trên tên miền của bạn, kèm thống kê lượt nhấp, trình tạo UTM, hết hạn, mật khẩu, nhắm mục tiêu theo thiết bị và vị trí, và API.',
+    videoEyebrow: 'Giới thiệu sản phẩm',
+    videoTitle: 'Xem mọi thứ kết hợp với nhau thế nào.',
+    videoDescription:
+      'Tiện ích Chrome, trình tạo liên kết, phân tích lượt nhấp, an toàn liên kết và API, trong hơn một phút.',
     heroLine1: 'Rút gọn mọi liên kết',
     heroLine2: 'Chia sẻ ở mọi nơi',
     heroLine3: 'Theo dõi từng lượt nhấp',
