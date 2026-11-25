@@ -23,6 +23,10 @@
 </p>
 
 <p align="center">
+  <a href="#deploying-to-cloudflare"><img src="https://deploy.workers.cloudflare.com/button" alt="Deploy to Cloudflare"></a>
+</p>
+
+<p align="center">
   <a href="https://shortener.dev">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="apps/web/public/images/app-links-dark.webp">
@@ -264,7 +268,15 @@ npm run format        # format with Prettier
 
 ## Deploying to Cloudflare
 
-Each app deploys as its own Worker. The `wrangler.json` files in this repository point to the resources used by shortener.dev, so replace their IDs with your own.
+Each app deploys as its own Worker. Use the buttons below to deploy one in a few clicks. Cloudflare copies the repository to your GitHub account, creates the D1, KV, R2 and Queue resources the app needs, and sets up builds on every push.
+
+| App | Deploy |
+| --- | --- |
+| API | [![Deploy API to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Agenty/shortener/tree/main/apps/api) |
+| Dashboard | [![Deploy dashboard to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Agenty/shortener/tree/main/apps/app) |
+| Website | [![Deploy website to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Agenty/shortener/tree/main/apps/web) |
+
+Deploy the API first, then add its secrets (step 3) and create its database tables (step 2). To deploy by hand instead, follow the steps below. The `wrangler.json` files in this repository point to the resources used by shortener.dev, so replace their IDs with your own.
 
 ### 1. Create the Cloudflare resources
 
