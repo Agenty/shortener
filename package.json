@@ -1,5 +1,5 @@
 {
-  "name": "shorturl",
+  "name": "shortener.dev",
   "private": true,
   "scripts": {
     "build": "turbo run build",
