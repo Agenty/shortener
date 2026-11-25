@@ -1,0 +1,27 @@
+Use the Shortener.dev URL shortener API to create and manage short links from your own code, in any language that can send an HTTPS request: Node.js, Python, PHP, Go, C#, Java and more.
+
+With the API you can:
+
+- Shorten long URLs with a custom alias (back-half) or an auto-generated one
+- Add [UTM parameters](https://shortener.dev/docs/utm-parameters), an [expiration date](https://shortener.dev/docs/link-expiration), a [password](https://shortener.dev/docs/password-protected-links), [iOS and Android app links](https://shortener.dev/docs/ios-android-app-links) and [geo targeting](https://shortener.dev/docs/geo-targeting)
+- Add and [verify the domains](https://shortener.dev/docs/verify-domain) your links point to
+- Read click analytics by date, referrer, country, browser, OS and device
+
+Step-by-step guides are in the [Shortener.dev docs](https://shortener.dev/docs).
+
+## Base URL
+
+All endpoints are under `https://api.shortener.dev/v1` and are served over HTTPS only.
+
+## Authentication
+
+Send your API key in the `Authorization` header as a bearer token. [Create an API key](https://app.shortener.dev/settings/api-keys) in the dashboard under Settings, then API Keys.
+
+```
+curl https://api.shortener.dev/v1/links \
+  -H 'Authorization: Bearer YOUR_API_KEY'
+```
+
+## Errors
+
+Errors return a JSON body with a `message`, for example `{"message": "Domain not verified: example.com"}`. A `402` means the plan limit is reached, `403` means the destination domain is not verified, and `429` means too many requests.

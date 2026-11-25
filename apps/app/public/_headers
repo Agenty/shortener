@@ -1,0 +1,9 @@
+# Keep dashboard pages out of search results
+/*
+  X-Robots-Tag: noindex, nofollow
+
+/login
+  ! X-Robots-Tag
+
+/signup
+  ! X-Robots-Tag

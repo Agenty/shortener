@@ -1,4 +1,9 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import {
   Navigate,
   Outlet,
@@ -8,14 +13,26 @@ import {
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
 import { ThemeProvider } from 'next-themes';
 import { Toaster as Sonner } from '@/components/ui/sonner';
-import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import AppLayout from '@/components/AppLayout';
+import DashboardLayout from '@/app/layout';
+import { ApiError, EMAIL_NOT_VERIFIED, UNAUTHORIZED } from '@/lib/api';
+import { DocumentTitle, type TitleKey } from '@/components/DocumentTitle';
+
+type PageModule = { default: React.ComponentType };
+
+/** Lazy route for a `page.tsx` in the app directory, `title` is a key of the `titles` messages */
+const page = (load: () => Promise<PageModule>, title: TitleKey) => ({
+  lazy: async () => {
+    const { default: Component } = await load();
+    return { Component, handle: { title } };
+  },
+});
 
 export const router = createBrowserRouter([
   {
     element: (
       <NuqsAdapter>
+        <DocumentTitle />
         <Outlet />
       </NuqsAdapter>
     ),
@@ -23,159 +40,90 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Navigate to="/login" replace />,
-        handle: { title: 'Login' },
+        handle: { title: 'login' },
       },
 
-      {
-        path: 'login',
-        lazy: async () => {
-          const { default: Component } = await import('@/pages/auth/Login');
-
-          return {
-            Component,
-            handle: { title: 'Login' },
-          };
-        },
-      },
-      {
-        path: 'signup',
-        lazy: async () => {
-          const { default: Component } = await import('@/pages/auth/Signup');
-
-          return {
-            Component,
-            handle: { title: 'Sign Up' },
-          };
-        },
-      },
+      // auth
+      { path: 'login', ...page(() => import('@/app/auth/login/page'), 'login') },
+      { path: 'signup', ...page(() => import('@/app/auth/signup/page'), 'signup') },
       {
         path: 'reset-password',
-        lazy: async () => {
-          const { default: Component } =
-            await import('@/pages/auth/ResetPassword');
-
-          return {
-            Component,
-            handle: { title: 'Reset Password' },
-          };
-        },
+        ...page(() => import('@/app/auth/reset-password/page'), 'resetPassword'),
+      },
+      {
+        path: 'oauth/callback',
+        ...page(() => import('@/app/auth/oauth-callback/page'), 'signingIn'),
+      },
+      {
+        path: 'onboarding',
+        ...page(() => import('@/app/auth/onboarding/page'), 'verifyEmail'),
       },
 
+      // dashboard, shares the sidebar layout
       {
-        element: <AppLayout />,
+        element: <DashboardLayout />,
         children: [
-          {
-            index: true,
-            element: <Navigate to="/links" replace />,
-          },
-          {
-            path: 'links',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Links');
-
-              return {
-                Component,
-                handle: { title: 'Links' },
-              };
-            },
-          },
+          { index: true, element: <Navigate to="/links" replace /> },
+          { path: 'links', ...page(() => import('@/app/links/page'), 'links') },
           {
             path: 'analytics',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Analytics');
-
-              return {
-                Component,
-                handle: { title: 'Analytics' },
-              };
-            },
+            ...page(() => import('@/app/analytics/page'), 'analytics'),
           },
-          {
-            path: 'reports',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Reports');
-
-              return {
-                Component,
-                handle: { title: 'Reports' },
-              };
-            },
-          },
-          {
-            path: 'domains',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Domains');
-
-              return {
-                Component,
-                handle: { title: 'Domains' },
-              };
-            },
-          },
-          {
-            path: 'users',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/UsersPage');
-
-              return {
-                Component,
-                handle: { title: 'Users' },
-              };
-            },
-          },
-          {
-            path: 'billings',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Billings');
-
-              return {
-                Component,
-                handle: { title: 'Billing' },
-              };
-            },
-          },
+          { path: 'reports', ...page(() => import('@/app/reports/page'), 'reports') },
+          { path: 'domains', ...page(() => import('@/app/domains/page'), 'domains') },
+          { path: 'users', ...page(() => import('@/app/users/page'), 'users') },
+          { path: 'billings', ...page(() => import('@/app/billings/page'), 'billing') },
           {
             path: 'settings',
-            lazy: async () => {
-              const { default: Component } = await import('@/pages/Settings');
-
-              return {
-                Component,
-                handle: { title: 'Settings' },
-              };
-            },
+            ...page(() => import('@/app/settings/page'), 'settings'),
           },
           {
             path: 'settings/api-keys',
-            lazy: async () => {
-              const { default: Component } =
-                await import('@/pages/settings/ApiKeys');
-
-              return {
-                Component,
-                handle: { title: 'API Keys' },
-              };
-            },
+            ...page(() => import('@/app/settings/api-keys/page'), 'apiKeys'),
           },
         ],
       },
 
-      {
-        path: '*',
-        lazy: async () => {
-          const { default: Component } = await import('@/pages/NotFound');
-
-          return {
-            Component,
-            handle: { title: 'Not Found' },
-          };
-        },
-      },
+      { path: '*', ...page(() => import('@/app/not-found'), 'notFound') },
     ],
   },
 ]);
 
-const queryClient = new QueryClient();
+/** Auth pages that handle a 401 themselves, e.g. wrong password on sign in */
+const PUBLIC_PATHS = ['/login', '/signup', '/reset-password', '/oauth/callback'];
+
+/**
+ * Any API call made before the email is verified sends the user to onboarding,
+ * and an expired or revoked session (already cleared by `request`) sends them to login
+ */
+const onApiError = (error: Error) => {
+  if (!(error instanceof ApiError)) return;
+  const { pathname } = router.state.location;
+
+  if (error.status === EMAIL_NOT_VERIFIED && pathname !== '/onboarding') {
+    router.navigate('/onboarding', { replace: true });
+  }
+
+  if (error.status === UNAUTHORIZED && !PUBLIC_PATHS.includes(pathname)) {
+    queryClient.clear();
+    router.navigate('/login', { replace: true });
+  }
+};
+
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({ onError: onApiError }),
+  mutationCache: new MutationCache({ onError: onApiError }),
+  defaultOptions: {
+    queries: {
+      // Retrying won't help until the email is verified or the user signs in again
+      retry: (failureCount, error) =>
+        !(
+          error instanceof ApiError &&
+          (error.status === EMAIL_NOT_VERIFIED || error.status === UNAUTHORIZED)
+        ) && failureCount < 3,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -186,8 +134,7 @@ const App = () => (
       disableTransitionOnChange
     >
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
+        <Sonner closeButton={true} richColors={true} />
 
         <RouterProvider router={router} />
       </TooltipProvider>

@@ -1,0 +1,22 @@
+# Cloudflare static asset headers for the agent discovery files
+
+# Prerendered pages are served as static assets and skip the Worker, so they miss
+# the discovery `Link` header from src/start.ts. Keep these two lists in sync.
+/*
+  Link: </.well-known/api-catalog>; rel="api-catalog", <https://api.shortener.dev/openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </docs/api>; rel="service-doc"; type="text/html", </llms.txt>; rel="describedby"; type="text/plain", </.well-known/agent-skills/index.json>; rel="describedby"; type="application/json"
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+  Access-Control-Allow-Origin: *
+
+/.well-known/agent-skills/index.json
+  Content-Type: application/json
+  Access-Control-Allow-Origin: *
+
+/.well-known/agent-skills/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/.well-known/funding-manifest-urls
+  Content-Type: text/plain; charset=utf-8
+  Access-Control-Allow-Origin: *

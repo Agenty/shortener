@@ -1,0 +1,38 @@
+name: Whitelist request
+description: Ask to allow short links to a popular site for every account
+title: 'Whitelist request: '
+labels:
+  - whitelist
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If you own the domain, verifying it by email or Google Search Console is recommended and works right away. Use this form for social sites and others that could help other users too. Requests are reviewed manually, and this issue is public.
+  - type: input
+    id: domain
+    attributes:
+      label: Domain
+      placeholder: example.com
+    validations:
+      required: true
+  - type: textarea
+    id: about
+    attributes:
+      label: What is this site?
+    validations:
+      required: true
+  - type: textarea
+    id: benefit
+    attributes:
+      label: How would it help other users?
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Confirm
+      options:
+        - label: Users cannot publish their own pages on its subdomains
+          required: true
+        - label: It is not a link shortener
+          required: true

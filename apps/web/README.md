@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+<p align="center">
+  <a href="https://shortener.dev">
+    <img src="../../.github/assets/logo.svg" alt="shortener.dev" width="480">
+  </a>
+</p>
 
-## Getting Started
+# shortener-web
 
-First, run the development server:
+Marketing website for [shortener.dev](https://shortener.dev): TanStack Start (SSR) on Cloudflare Workers, Tailwind and shadcn (Base UI) with the same theme tokens as `apps/app`.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="public/images/app-links-dark.webp">
+  <img src="public/images/app-links-light.webp" alt="Shortener.dev dashboard screenshot used on the website">
+</picture>
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev          # http://localhost:3000, runs in workerd via @cloudflare/vite-plugin
+npm run build        # dist/client (assets) + dist/server (worker)
+npm run deploy       # build, then wrangler deploy
+npm run check-types
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Layout
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `src/routes/` file routes. Every route sets `head()` through `seo()` in `src/lib/seo.ts` (title, description, canonical, Open Graph, Twitter card, JSON-LD).
+- `src/routes/sitemap[.]xml.ts` serves `/sitemap.xml`; `public/robots.txt` points to it.
+- `src/components/link-builder.tsx` is the public short link form, shared by the home page and every `/tools/*-link-shortener` page.
+- `src/data/` holds page content: `tools.ts` (one entry per `/tools/$slug` page), `qr-tools.ts` (`/tools/*-qr-code-generator` pages, rendered by the same route with `src/components/qr-generator.tsx`), `alternatives.ts` (`/alternatives/$slug`), `plans.ts` (mirrors `apps/api/models/plan.ts`).
+- `public/images/` holds light and dark dashboard screenshots, swapped with the theme by `ThemedScreenshot`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+## Adding a link shortener tool page
 
-## Learn More
+Add an entry to `shortenerTools` in `src/data/tools.ts`. The page, nav, footer and sitemap pick it up.
 
-To learn more about Next.js, take a look at the following resources:
+## API
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+In dev the site calls `http://localhost:8787/v1`, in production `https://api.shortener.dev/v1` (`src/lib/site.ts`):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `POST /links` from the link builder, with the signed-in user's token (the builder opens the login dialog first)
+- `GET /public/meta` from the social share preview tool
+- `POST /public/unsubscribe` from `/unsubscribe`
 
-## Deploy on Vercel
+## Docs
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`docs/*.md` are the help pages at [shortener.dev/docs](https://shortener.dev/docs), with screenshots in `public/docs/images/`. `/docs/api` renders the API's OpenAPI spec with Scalar, and `/llms.txt` and `/llms-full.txt` expose the docs to AI agents.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Safety
+
+Short links only point to verified or whitelisted domains, and the `/report` page lets anyone report a harmful link so it can be disabled. See [Safety](../../README.md#safety).
+
+## License
+
+[AGPLv3](../../LICENSE). Built for [shortener.dev](https://shortener.dev).

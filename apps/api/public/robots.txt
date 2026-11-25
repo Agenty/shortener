@@ -1,0 +1,6 @@
+# API, only the mcp and openapi specs are public
+User-agent: *
+Allow: /$
+Allow: /mcp
+Allow: /openapi.json
+Disallow: /

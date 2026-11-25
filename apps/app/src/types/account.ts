@@ -12,6 +12,8 @@ export interface Account {
 
 export interface ApiKey {
   key_id: number;
+  /** The secret key, returned only once when the key is created */
+  key?: string;
   name: string;
   is_enabled: boolean | number;
   created_at: string;

@@ -1,3 +1,5 @@
+import type { ClickFilter } from "./analytics";
+
 export interface ClickReport {
   timestamp: string;
   url: string;
@@ -9,6 +11,14 @@ export interface ClickReport {
   os: string;
   device: string;
   ip: string;
+  /** Hidden by the plan, identifying fields are masked */
+  locked?: boolean;
+}
+
+export interface ReportsParams extends ClickFilter {
+  offset?: number;
+  limit?: number;
+  key?: string;
 }
 
 export interface ReportsResponse {
